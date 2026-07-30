@@ -1,0 +1,8 @@
+{
+  "last_run_utc": "2026-07-29T17:57:22.571782Z",
+  "outcome": "failure",
+  "status": null,
+  "new_price_rows": null,
+  "duration_s": null,
+  "error": "FATAL Error: Invalid Input Error: Failed to delete all rows from index. Only deleted 0 out of 6 rows.\nChunk: Chunk - [11 Columns]\n- FLAT INTEGER: 6 = [ 2875394, 2875100, 2876786, 2878911, 2876785, 2876165]\n- FLAT VARCHAR: 6 = [ Jammu and Kashmir, Jammu and Kashmir, Jammu and Kashmir, Jammu and Kashmir, Jammu and Kashmir, Jammu and Kashmir]\n- CONSTANT VARCHAR: 6 = [ NULL]\n- FLAT VARCHAR: 6 = [ Kathua (F&V), Rajouri (Phaliana) (F&V), Market Administrative Committee Zazna, Kathua (F&V), Fruit and Vegetable Market Udhampur, MAC F&V Market Narwal Jammu]\n- FLAT VARCHAR: 6 = [ Pear(Marasebu), Pear(Marasebu), Apple, Banana, Raddish, Bhindi(Ladies Finger)]\n- FLAT VARCHAR: 6 = [ Other, Other, Other, Other, Other, Bhindi]\n- FLAT VARCHAR: 6 = [ Grade B, Grade B, Grade B, Grade B, Grade B, FAQ]\n- FLAT DATE: 6 = [ 2026-07-29, 2026-07-29, 2026-07-29, 2026-07-29, 2026-07-29, 2026-07-29]\n- CONSTANT DOUBLE: 6 = [ NULL]\n- CONSTANT DOUBLE: 6 = [ NULL]\n- CONSTANT DOUBLE: 6 = [ NULL]\n"
+}

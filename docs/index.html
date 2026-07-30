@@ -1,0 +1,1205 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MandiIQ — Agricultural Margin Intelligence & Causal RDD System</title>
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Cpath d='M16 2L6 12h6v18h8V12h6L16 2z' fill='%23d7ff00'/%3E%3C/svg%3E">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@300;400;500;600&family=Space+Grotesk:wght@300;400;500;600;700&family=Barlow:wght@300;400;500;600;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.min.js"></script>
+<script src="mandiq-effects.js"></script>
+    <style>
+        /* ==========================================================================
+           1. DESIGN SYSTEM & VARIABLE TOKENS
+           ========================================================================== */
+        :root {
+            --bg-base: #000000; --bg-surface: #0a0a0a;
+            --bg-surface-glass: rgba(255,255,255,0.03); --bg-surface-glass-hover: rgba(255,255,255,0.07);
+            --font-display: "Space Grotesk", system-ui, -apple-system, sans-serif;
+            --font-body: "IBM Plex Sans", "Inter", system-ui, sans-serif;
+            --font-mono: "IBM Plex Mono", "JetBrains Mono", monospace;
+            --font-numeric: "Barlow", "IBM Plex Sans", sans-serif;
+            --color-primary: #d7ff00; --color-paper: #ffffff; --color-text-high: #bababa; --color-text-med: #7e7e7e; --color-text-low: #555555;
+            --color-rust: #D9663B; --color-sage: #8FAE89; --color-success: #2ecc71; --color-warning: #f39c12; --color-danger: #e74c3c;
+            --color-commodity-onion: #8B6BC4; --color-commodity-tomato: #D9663B; --color-commodity-wheat: #D4A94E; --color-commodity-potato: #B98354;
+            --hairline: rgba(255,255,255,0.07); --hairline-strong: rgba(255,255,255,0.14);
+            --duration-base: 350ms; --duration-slow: 600ms;
+            --ease-bounce: cubic-bezier(0.16,1,0.3,1); --ease-soft: cubic-bezier(0.25,0.46,0.45,0.94); --ease-out: cubic-bezier(0.16,1,0.3,1);
+            --space-xs: 0.25rem; --space-sm: 0.5rem; --space-md: 1rem; --space-lg: 2rem; --space-xl: 4rem;
+        }
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        html, body {
+            background: var(--bg-base); color: var(--color-text-high);
+            font-family: var(--font-body); font-size: 15px; line-height: 1.625;
+            -webkit-font-smoothing: antialiased; overflow-x: hidden; scroll-behavior: smooth;
+        }
+        .dot-grid {
+            position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
+            background-image: radial-gradient(rgba(255,255,255,0.04) 1.5px, transparent 2px);
+            background-size: 38px 38px; z-index: 0; pointer-events: none;
+        }
+        .atmosphere { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; overflow: hidden; z-index: 0; pointer-events: none; }
+        .atmosphere-flash { position: absolute; top: -20%; right: -10%; width: 70vw; height: 60vh; background: radial-gradient(circle, rgba(215,255,0,0.04) 0%, transparent 70%); filter: blur(100px); animation: drift-a 45s var(--ease-soft) infinite alternate; }
+        .atmosphere-cloud { position: absolute; bottom: -20%; left: -10%; width: 80vw; height: 70vh; background: radial-gradient(circle, rgba(255,255,255,0.02) 0%, transparent 70%); filter: blur(120px); animation: drift-b 55s var(--ease-soft) infinite alternate; }
+        .atmosphere-drifter { position: absolute; width: var(--s,160px); height: var(--s,160px); left: var(--x,50%); top: var(--y,50%); border-radius: 50%; background: radial-gradient(circle, hsla(var(--hue,100),var(--sat,0.8),var(--lit,0.55),var(--op,0.06)) 0%, transparent 70%); filter: blur(80px); animation: drifter-float var(--d,30s) var(--ease-soft) infinite alternate; will-change: transform; }
+        @keyframes drifter-float { 0%{transform:translate(0,0) scale(1) rotate(0deg)} 25%{transform:translate(5%,-5%) scale(1.15) rotate(8deg)} 50%{transform:translate(-3%,3%) scale(0.95) rotate(-5deg)} 75%{transform:translate(4%,-2%) scale(1.08) rotate(3deg)} 100%{transform:translate(-5%,5%) scale(1.05) rotate(-4deg)} }
+        @keyframes drift-a { from{transform:translate(0,0) scale(1)} to{transform:translate(-8%,10%) scale(1.1)} }
+        @keyframes drift-b { from{transform:translate(0,0) scale(1.1)} to{transform:translate(10%,-8%) scale(0.95)} }
+
+        /* ==========================================================================
+           2. TAB BAR
+           ========================================================================== */
+        .page-wrapper { position: relative; z-index: 1; min-height: 100vh; }
+        .main-content { max-width: 1300px; margin: 0 auto; padding: 0 2rem; }
+        .tab-bar {
+            position: sticky; top: 0; z-index: 90;
+            display: flex; align-items: center; gap: 0.25rem;
+            background: rgba(0,0,0,0.85); backdrop-filter: blur(12px);
+            border-bottom: 1px solid var(--hairline); padding: 0 2rem;
+            height: 56px; overflow-x: auto; flex-shrink: 0;
+        }
+        .tab-bar .logo-area { display: flex; align-items: center; gap: 0.6rem; margin-right: 1.5rem; flex-shrink: 0; }
+        .tab-bar .logo-icon { width: 18px; height: 18px; background: var(--color-primary); clip-path: polygon(0 0,100% 0,100% 50%,50% 100%,0 50%); flex-shrink: 0; }
+        .tab-bar .logo-text { font-family: var(--font-display); font-size: 0.85rem; font-weight: 500; color: var(--color-paper); letter-spacing: 0.1em; text-transform: uppercase; white-space: nowrap; }
+        .tab-btn {
+            font-family: var(--font-mono); font-size: 0.72rem; color: var(--color-text-med);
+            padding: 0.35rem 1rem; border: 1px solid transparent; border-radius: 6px;
+            background: transparent; cursor: pointer; white-space: nowrap;
+            transition: all var(--duration-base) ease; text-transform: uppercase; letter-spacing: 0.06em;
+        }
+        .tab-btn:hover { color: var(--color-paper); border-color: var(--hairline); background: var(--bg-surface-glass); }
+        .tab-btn.active { color: var(--color-primary); border-color: rgba(215,255,0,0.25); background: rgba(215,255,0,0.05); }
+        .tab-btn .num { opacity: 0.5; margin-right: 0.3rem; font-size: 0.65rem; }
+        .tab-actions { margin-left: auto; display: flex; align-items: center; gap: 0.75rem; flex-shrink: 0; }
+        .tab-actions a { font-family: var(--font-mono); font-size: 0.68rem; color: var(--color-text-med); text-decoration: none; text-transform: uppercase; letter-spacing: 0.08em; transition: color var(--duration-base) ease; }
+        .tab-actions a:hover { color: var(--color-primary); }
+        .tab-content { display: none; padding: 2rem 0; }
+        .tab-content.active { display: block; }
+
+        /* ==========================================================================
+           3. SECTION STYLING (shared across tabs)
+           ========================================================================== */
+        section { padding: 4rem 0; border-bottom: 1px solid var(--hairline); }
+        section:last-child { border-bottom: none; }
+        .section-header { margin-bottom: 3rem; }
+        .section-num { font-family: var(--font-mono); font-size: 0.78rem; color: var(--color-primary); letter-spacing: 0.1em; margin-bottom: 0.6rem; display: block; }
+        .section-title { font-family: var(--font-display); font-weight: 400; font-size: 1.5rem; color: var(--color-paper); text-transform: uppercase; letter-spacing: 0.05em; }
+        .section-badge { display: inline-block; font-family: var(--font-mono); font-size: 0.7rem; color: var(--color-text-med); background: rgba(255,255,255,0.04); border: 1px solid var(--hairline); padding: 0.15rem 0.6rem; border-radius: 3px; margin-left: 0.6rem; letter-spacing: 0.02em; vertical-align: middle; }
+        .reveal { opacity: 0; transform: translateY(30px); transition: opacity 0.8s cubic-bezier(0.16,1,0.3,1), transform 0.8s cubic-bezier(0.16,1,0.3,1); will-change: opacity, transform; }
+        .reveal.is-visible { opacity: 1; transform: translateY(0); }
+
+        /* ==========================================================================
+           4. HERO + OVERVIEW SECTIONS (from original index.html)
+           ========================================================================== */
+        .hero-section { display: flex; flex-direction: column; justify-content: center; min-height: calc(80vh - 56px); padding: 2rem 0 4rem; position: relative; }
+        .hero-frame-container { position: relative; padding: 2.5rem; margin-bottom: 2rem; }
+        .hero-frame-svg { position: absolute; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; overflow: visible; }
+        .hero-frame-svg rect { fill: none; stroke: var(--hairline-strong); stroke-width: 1px; stroke-dasharray: 2000; stroke-dashoffset: 2000; animation: drawFrame 2.8s var(--ease-bounce) forwards 0.2s; }
+        .hero-frame-svg line { stroke: var(--color-primary); stroke-width: 1.5px; stroke-dasharray: 100; stroke-dashoffset: 100; animation: drawLine 1.8s var(--ease-bounce) forwards 0.8s; }
+        @keyframes drawFrame { to { stroke-dashoffset: 0; } }
+        @keyframes drawLine { to { stroke-dashoffset: 0; } }
+        .hero-groovy-svg { position: absolute; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; overflow: visible; z-index: 1; }
+        .groovy-path { stroke-linecap: round; transform-origin: center; animation: groovy-flow 12s ease-in-out infinite alternate; }
+        .gp-1 { animation-delay: 0s; } .gp-2 { animation-delay: -4s; opacity: 0.1; } .gp-3 { animation-delay: -8s; opacity: 0.08; }
+        @keyframes groovy-flow { 0%{transform:translateX(0) translateY(0)} 50%{transform:translateX(-15px) translateY(-8px)} 100%{transform:translateX(0) translateY(0)} }
+        .groovy-dot { animation: groovy-dot-float 8s var(--ease-soft) infinite alternate; }
+        .gd-1 { animation-delay: 0s; } .gd-2 { animation-delay: -3s; }
+        @keyframes groovy-dot-float { 0%{transform:translate(0,0);opacity:0.3} 50%{transform:translate(10px,-15px);opacity:0.6} 100%{transform:translate(-5px,8px);opacity:0.2} }
+        .hero-tagline { font-family: var(--font-mono); font-size: 0.82rem; color: var(--color-primary); text-transform: uppercase; letter-spacing: 0.18em; margin-bottom: 1rem; display: inline-flex; align-items: center; gap: 0.5rem; }
+        .hero-tagline::before { content: ""; display: inline-block; width: 6px; height: 6px; background: var(--color-primary); border-radius: 1px; }
+        .hero-title { font-family: var(--font-display); font-weight: 300; font-size: clamp(2rem,4.5vw,4rem); line-height: 1.1; color: var(--color-paper); letter-spacing: 0.03em; text-transform: uppercase; margin-bottom: 1.5rem; }
+        .hero-title span { font-weight: 600; }
+        .hero-desc { font-size: 1.05rem; color: var(--color-text-high); max-width: 700px; line-height: 1.68; margin-bottom: 2.5rem; }
+        .hero-actions { display: flex; align-items: center; gap: 1.2rem; flex-wrap: wrap; }
+
+        .slot-btn { position: relative; display: inline-block; color: var(--color-paper); text-decoration: none; overflow: hidden; padding: 0.55rem 1.4rem; border: 1px solid var(--hairline-strong); border-radius: 999px; background: transparent; cursor: pointer; font-family: var(--font-mono); font-size: 0.78rem; font-weight: 500; letter-spacing: 0.08em; transition: background-color var(--duration-base) var(--ease-soft), border-color var(--duration-base) var(--ease-soft); }
+        .slot-btn:hover { background: var(--color-primary); border-color: var(--color-primary); }
+        .slot-text-wrapper { position: relative; display: block; transition: transform 0.45s var(--ease-bounce); }
+        .slot-text-default { display: block; transition: opacity 0.3s var(--ease-soft), transform 0.45s var(--ease-bounce); }
+        .slot-text-hover { position: absolute; top: 100%; left: 0; width: 100%; display: block; color: var(--bg-base); font-weight: 600; pointer-events: none; opacity: 0; transform: translateY(-50%) scale(0.95); transition: opacity 0.3s var(--ease-soft), transform 0.45s var(--ease-bounce); }
+        .slot-btn:hover .slot-text-wrapper { transform: translateY(-100%); }
+        .slot-btn:hover .slot-text-default { opacity: 0; transform: scale(0.9); }
+        .slot-btn:hover .slot-text-hover { opacity: 1; transform: translateY(-50%) scale(1); }
+        .btn-outline { display: inline-block; font-family: var(--font-mono); font-size: 0.78rem; text-transform: uppercase; letter-spacing: 0.08em; text-decoration: none; color: var(--color-text-high); padding: 0.6rem 1.6rem; border: 1px solid var(--hairline); border-radius: 999px; transition: all var(--duration-base) var(--ease-soft); }
+        .btn-outline:hover { color: var(--color-paper); border-color: var(--color-paper); }
+        .tech-pill-container { display: flex; flex-wrap: wrap; gap: 0.6rem; margin-top: 1.5rem; }
+        .tech-pill { font-family: var(--font-mono); font-size: 0.72rem; padding: 0.3rem 0.8rem; border-radius: 999px; background: rgba(255,255,255,0.03); border: 1px solid var(--hairline); color: var(--color-text-high); text-transform: uppercase; transition: all var(--duration-base) ease; }
+        .tech-pill:hover { border-color: rgba(215,255,0,0.3); color: var(--color-paper); background: rgba(215,255,0,0.04); }
+
+        .kpi-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 1.2rem; margin-bottom: 3rem; }
+        .glass-card { background: linear-gradient(135deg,rgba(255,255,255,0.03) 0%,rgba(255,255,255,0.008) 100%); border: 1px solid var(--hairline); border-radius: 8px; padding: 1.5rem; transition: transform 0.35s var(--ease-bounce), border-color 0.35s ease, box-shadow 0.35s ease; position: relative; }
+        .glass-card:hover { border-color: rgba(215,255,0,0.15); transform: translateY(-2px); box-shadow: 0 8px 24px rgba(0,0,0,0.4); }
+        .glass-card::before { content: ""; position: absolute; top: -1px; left: -1px; width: 12px; height: 12px; border-top: 2px solid var(--color-primary); border-left: 2px solid var(--color-primary); opacity: 0; transition: opacity var(--duration-base) ease; pointer-events: none; }
+        .glass-card::after { content: ""; position: absolute; bottom: -1px; right: -1px; width: 12px; height: 12px; border-bottom: 2px solid var(--color-primary); border-right: 2px solid var(--color-primary); opacity: 0; transition: opacity var(--duration-base) ease; pointer-events: none; }
+        .glass-card:hover::before, .glass-card:hover::after { opacity: 1; }
+        .glass-card .label { font-family: var(--font-mono); font-size: 0.7rem; color: var(--color-text-med); text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 0.5rem; }
+        .glass-card .value { font-family: var(--font-mono); font-size: 2rem; font-weight: 500; color: var(--color-paper); line-height: 1.1; margin-bottom: 0.4rem; }
+        .glass-card .value.accent { color: var(--color-primary); }
+        .glass-card .meta { font-size: 0.78rem; color: var(--color-text-med); }
+
+        .doc-layout { display: grid; grid-template-columns: 3fr 2fr; gap: 3rem; }
+        @media(max-width:992px){ .doc-layout { grid-template-columns: 1fr; gap: 2rem; } }
+        .doc-text h3 { font-family: var(--font-display); font-weight: 400; font-size: 1.2rem; color: var(--color-paper); text-transform: uppercase; letter-spacing: 0.05em; margin: 2rem 0 0.8rem; }
+        .doc-text h3:first-child { margin-top: 0; }
+        .doc-text p { margin-bottom: 1rem; color: var(--color-text-high); font-size: 0.92rem; line-height: 1.65; }
+        .doc-text ul, .doc-text ol { margin-bottom: 1.2rem; margin-left: 1.5rem; color: var(--color-text-high); font-size: 0.92rem; }
+        .doc-text li { margin-bottom: 0.4rem; }
+        .doc-text code { font-family: var(--font-mono); font-size: 0.8rem; background: rgba(255,255,255,0.04); border: 1px solid var(--hairline); padding: 0.1rem 0.35rem; border-radius: 3px; color: var(--color-primary); }
+        .doc-sidebar { display: flex; flex-direction: column; gap: 1.5rem; }
+        .doc-widget { border: 1px solid var(--hairline); background: linear-gradient(135deg,rgba(255,255,255,0.025) 0%,rgba(255,255,255,0.005) 100%); backdrop-filter: blur(8px); border-radius: 8px; padding: 1.5rem; transition: transform 0.35s var(--ease-bounce), border-color 0.35s ease; position: relative; }
+        .doc-widget:hover { border-color: rgba(215,255,0,0.15); transform: translateY(-2px); }
+        .doc-widget::before { content: ""; position: absolute; top: -1px; right: -1px; width: 10px; height: 10px; border-top: 1.5px solid rgba(215,255,0,0.2); border-right: 1.5px solid rgba(215,255,0,0.2); opacity: 0; transition: opacity 0.5s var(--ease-soft); pointer-events: none; }
+        .doc-widget::after { content: ""; position: absolute; bottom: -1px; left: -1px; width: 10px; height: 10px; border-bottom: 1.5px solid rgba(215,255,0,0.2); border-left: 1.5px solid rgba(215,255,0,0.2); opacity: 0; transition: opacity 0.5s var(--ease-soft); pointer-events: none; }
+        .doc-widget:hover::before, .doc-widget:hover::after { opacity: 1; }
+        .doc-widget-title { font-family: var(--font-mono); font-size: 0.75rem; color: var(--color-primary); text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 1rem; display: flex; align-items: center; gap: 0.5rem; }
+        .doc-widget-title::before { content: ""; width: 5px; height: 5px; background: var(--color-primary); }
+
+        .table-responsive { width: 100%; overflow-x: auto; margin: 1.5rem 0; border: 1px solid var(--hairline); background: rgba(10,10,10,0.4); border-radius: 4px; position: relative; }
+        .ledger-table { width: 100%; border-collapse: collapse; font-family: var(--font-body); font-size: 0.85rem; text-align: left; }
+        .ledger-table th { padding: 0.8rem 1.2rem; color: var(--color-paper); border-bottom: 1px solid var(--hairline-strong); font-family: var(--font-mono); font-size: 0.72rem; text-transform: uppercase; letter-spacing: 0.08em; font-weight: 500; background: rgba(0,0,0,0.3); }
+        .ledger-table td { padding: 0.8rem 1.2rem; color: var(--color-text-high); border-bottom: 1px solid var(--hairline); }
+        .ledger-table tbody tr:hover td { background: rgba(255,255,255,0.015); color: var(--color-paper); }
+        .commodity-chip { display: inline-flex; align-items: center; gap: 6px; font-family: var(--font-mono); font-size: 0.72rem; text-transform: uppercase; }
+        .commodity-dot { width: 7px; height: 7px; border-radius: 1px; margin-right: 0; }
+        .stat-badge { font-family: var(--font-mono); font-size: 0.7rem; padding: 0.15rem 0.5rem; border-radius: 2px; font-weight: 500; }
+        .stat-badge.significant { background: rgba(143,174,137,0.12); color: var(--color-sage); border: 1px solid rgba(143,174,137,0.25); }
+        .stat-badge.insignificant { background: rgba(255,255,255,0.04); color: var(--color-text-med); border: 1px solid var(--hairline); }
+        .stat-badge.risk { background: rgba(217,102,59,0.12); color: var(--color-rust); border: 1px solid rgba(217,102,59,0.25); }
+
+        .mermaid-wrapper { background: linear-gradient(135deg,rgba(0,0,0,0.4) 0%,rgba(10,10,10,0.6) 100%); border: 1px solid var(--hairline); border-radius: 12px; padding: 1.5rem; overflow-x: auto; margin: 1rem 0; position: relative; }
+        .mermaid-wrapper .mermaid { max-width: 100%; }
+        .alert-box { background: rgba(217,102,59,0.04); border-left: 2px solid var(--color-rust); padding: 1rem; border-radius: 0 4px 4px 0; margin: 1.5rem 0; }
+        .alert-box-title { font-family: var(--font-mono); font-size: 0.75rem; color: var(--color-rust); text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 0.5rem; }
+        .alert-box-desc { font-size: 0.82rem; color: var(--color-text-high); margin: 0 !important; }
+
+        /* ==========================================================================
+           5. STRUCTURE CARD GRID
+           ========================================================================== */
+        .structure-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 1rem; margin: 1.5rem 0 2.5rem; }
+        .structure-card { background: linear-gradient(135deg,rgba(255,255,255,0.03) 0%,rgba(255,255,255,0.008) 100%); border: 1px solid var(--hairline); border-radius: 10px; padding: 1.2rem; transition: transform 0.35s cubic-bezier(0.16,1,0.3,1), border-color 0.35s ease, box-shadow 0.35s ease; position: relative; cursor: pointer; }
+        .structure-card:hover { border-color: rgba(215,255,0,0.15); transform: translateY(-2px); box-shadow: 0 8px 24px rgba(0,0,0,0.45); }
+        .structure-card .card-inner { position: relative; transition: transform 0.35s cubic-bezier(0.16,1,0.3,1); }
+        .structure-card:hover .card-inner { transform: translateY(-1px); }
+        .structure-card .card-title { font-family: var(--font-mono); font-size: 0.8rem; font-weight: 500; color: var(--color-paper); display: flex; align-items: center; gap: 0.5rem; margin-bottom: 0.5rem; }
+        .structure-card .card-title .folder-icon { display: inline-flex; align-items: center; opacity: 0.5; flex-shrink: 0; }
+        .structure-card .card-title .folder-icon svg { width: 14px; height: 14px; }
+        .structure-card .card-title .ext-badge { font-size: 0.6rem; padding: 0.1rem 0.35rem; border-radius: 2px; background: rgba(255,255,255,0.06); border: 1px solid var(--hairline); color: var(--color-text-med); font-weight: 400; }
+        .structure-card .card-desc { font-size: 0.78rem; color: var(--color-text-med); margin-bottom: 0.7rem; line-height: 1.5; }
+        .structure-card .file-list { list-style: none; display: flex; flex-wrap: wrap; gap: 0.3rem 0.5rem; }
+        .structure-card .file-item { font-family: var(--font-mono); font-size: 0.7rem; color: var(--color-text-high); padding: 0.12rem 0.35rem; background: rgba(255,255,255,0.02); border: 1px solid var(--hairline); border-radius: 3px; transition: all 0.2s ease; cursor: pointer; display: inline-flex; align-items: center; gap: 0.2rem; }
+        .structure-card .file-item:hover { background: rgba(215,255,0,0.06); border-color: rgba(215,255,0,0.2); color: var(--color-primary); }
+        .structure-card .file-item .file-icon { opacity: 0.4; flex-shrink: 0; }
+        .structure-card .file-item .file-icon svg { width: 10px; height: 10px; vertical-align: middle; }
+        .structure-card .file-item .file-comment { color: var(--color-text-low); font-size: 0.62rem; margin-left: 0.1rem; }
+        .step-badge { display: inline-flex; align-items: center; gap: 3px; font-family: var(--font-mono); font-size: 0.58rem; padding: 0.06rem 0.35rem; border-radius: 3px; background: rgba(255,255,255,0.04); border: 1px solid var(--hairline); margin-left: 0.25rem; color: var(--color-text-med); }
+        .step-badge.fast { border-color: rgba(143,174,137,0.3); color: var(--color-sage); background: rgba(143,174,137,0.08); }
+        .step-badge.medium { border-color: rgba(215,255,0,0.25); color: var(--color-primary); background: rgba(215,255,0,0.06); }
+        .step-badge.slow { border-color: rgba(217,102,59,0.3); color: var(--color-rust); background: rgba(217,102,59,0.08); }
+        .root-chips { display: flex; flex-wrap: wrap; gap: 0.5rem; margin-top: 1.5rem; padding-top: 1.2rem; border-top: 1px solid var(--hairline); }
+        .root-chips .chip { display: inline-flex; align-items: center; gap: 0.3rem; font-family: var(--font-mono); font-size: 0.7rem; color: var(--color-text-high); background: rgba(255,255,255,0.02); border: 1px solid var(--hairline); padding: 0.2rem 0.6rem; border-radius: 999px; transition: all 0.2s ease; cursor: pointer; }
+        .root-chips .chip:hover { border-color: rgba(215,255,0,0.2); color: var(--color-primary); background: rgba(215,255,0,0.04); }
+        .root-chips .chip .chip-icon { opacity: 0.5; flex-shrink: 0; }
+        .structure-legend { display: flex; flex-wrap: wrap; gap: 1rem; margin: 0.8rem 0 0; font-family: var(--font-mono); font-size: 0.62rem; color: var(--color-text-med); }
+        .structure-legend span { display: inline-flex; align-items: center; gap: 0.35rem; }
+        .structure-legend .dot { width: 6px; height: 6px; border-radius: 1px; }
+        .structure-legend .dot.dot-fast { background: var(--color-sage); }
+        .structure-legend .dot.dot-medium { background: var(--color-primary); }
+        .structure-legend .dot.dot-slow { background: var(--color-rust); }
+
+        /* ==========================================================================
+           6. PIPELINE TAB (from pipeline-report.html)
+           ========================================================================== */
+        .summary-bar { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: var(--space-md); margin-bottom: var(--space-xl); }
+        .summary-card { background: linear-gradient(135deg,rgba(255,255,255,0.03) 0%,rgba(255,255,255,0.008) 100%); border: 1px solid var(--hairline); border-radius: 12px; padding: var(--space-md) var(--space-lg); transition: all var(--duration-base) var(--ease-out); position: relative; }
+        .summary-card:hover { border-color: rgba(215,255,0,0.15); transform: translateY(-2px); box-shadow: 0 8px 24px rgba(0,0,0,0.45); background: var(--bg-surface-glass-hover); }
+        .summary-card::before, .summary-card::after { content: ""; position: absolute; width: 10px; height: 10px; opacity: 0; transition: opacity var(--duration-base) ease; pointer-events: none; }
+        .summary-card::before { top: -1px; left: -1px; border-top: 1.5px solid var(--color-primary); border-left: 1.5px solid var(--color-primary); }
+        .summary-card::after { bottom: -1px; right: -1px; border-bottom: 1.5px solid var(--color-primary); border-right: 1.5px solid var(--color-primary); }
+        .summary-card:hover::before, .summary-card:hover::after { opacity: 1; }
+        .summary-card .lbl { font-size: 0.65rem; text-transform: uppercase; letter-spacing: 0.08em; color: var(--color-text-low); margin-bottom: var(--space-xs); }
+        .summary-card .val { font-family: var(--font-numeric); font-size: 1.4rem; font-weight: 600; color: var(--color-paper); line-height: 1.2; }
+        .summary-card .sub { font-size: 0.7rem; color: var(--color-text-med); margin-top: 2px; }
+        .summary-card .val.accent { color: var(--color-primary); } .summary-card .val.ok { color: var(--color-success); }
+        .summary-card .val.warn { color: var(--color-warning); } .summary-card .val.fail { color: var(--color-danger); }
+        .diagram-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: var(--space-md); flex-wrap: wrap; gap: var(--space-sm); }
+        .diagram-title { font-family: var(--font-display); font-size: 1rem; font-weight: 500; color: var(--color-paper); display: flex; align-items: center; gap: var(--space-sm); }
+        .diagram-title .badge { font-size: 0.62rem; color: var(--color-text-low); font-family: var(--font-mono); padding: 2px 8px; border: 1px solid var(--hairline); border-radius: 4px; }
+        .diagram-toolbar { display: flex; align-items: center; gap: var(--space-sm); }
+        .diagram-toolbar button { font-family: var(--font-mono); font-size: 0.7rem; padding: 4px 12px; border: 1px solid var(--hairline); border-radius: 6px; background: var(--bg-surface-glass); color: var(--color-text-med); cursor: pointer; transition: all var(--duration-base) ease; }
+        .diagram-toolbar button:hover { border-color: var(--color-primary); color: var(--color-primary); background: rgba(215,255,0,0.04); }
+        .diagram-toolbar .live-indicator { display: flex; align-items: center; gap: 4px; font-size: 0.68rem; color: var(--color-text-low); font-family: var(--font-mono); }
+        .diagram-toolbar .live-indicator .ld { width: 5px; height: 5px; border-radius: 50%; background: var(--color-success); animation: pulse 2s ease-in-out infinite; }
+        @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:.3} }
+        .mermaid-wrapper.loading { display: flex; align-items: center; justify-content: center; gap: var(--space-md); flex-direction: column; min-height: 200px; }
+        .mermaid-wrapper.loading .spinner { width: 24px; height: 24px; border: 2px solid var(--hairline); border-top-color: var(--color-primary); border-radius: 50%; animation: spin .8s linear infinite; }
+        @keyframes spin { to{transform:rotate(360deg)} }
+        .mermaid-wrapper.loading .loading-text { font-size: 0.8rem; color: var(--color-text-low); font-family: var(--font-mono); }
+        .mermaid-wrapper .diagram-error { text-align: center; padding: var(--space-xl); color: var(--color-danger); font-size: 0.82rem; }
+        .mermaid-wrapper .diagram-error .retry { margin-top: var(--space-md); padding: 6px 16px; border: 1px solid rgba(231,76,60,0.4); border-radius: 6px; background: transparent; color: var(--color-danger); cursor: pointer; font-size: 0.78rem; font-family: var(--font-mono); }
+        .mermaid-wrapper .diagram-error .retry:hover { background: rgba(231,76,60,0.1); }
+        .data-header { font-family: var(--font-display); font-size: 0.9rem; font-weight: 500; color: var(--color-paper); margin-bottom: var(--space-md); display: flex; align-items: center; gap: var(--space-sm); }
+        .data-header .count { font-size: 0.7rem; color: var(--color-text-low); font-family: var(--font-mono); }
+        .table-wrap { background: var(--bg-surface-glass); border: 1px solid var(--hairline); border-radius: 12px; overflow: hidden; position: relative; }
+        .table-wrap table { width: 100%; border-collapse: collapse; }
+        .table-wrap th { text-align: left; padding: var(--space-sm) var(--space-md); font-size: 0.65rem; text-transform: uppercase; letter-spacing: 0.08em; color: var(--color-text-low); border-bottom: 1px solid var(--hairline); font-weight: 500; background: rgba(0,0,0,0.2); }
+        .table-wrap td { padding: var(--space-sm) var(--space-md); font-size: 0.75rem; border-bottom: 1px solid var(--hairline); font-family: var(--font-mono); }
+        .table-wrap tr:last-child td { border-bottom: none; }
+        .table-wrap tr:hover td { background: var(--bg-surface-glass-hover); }
+        td.num { text-align: right; font-variant-numeric: tabular-nums; }
+        .error-banner { display: none; background: rgba(231,76,60,0.08); border: 1px solid rgba(231,76,60,0.25); border-radius: 8px; padding: var(--space-md); color: var(--color-danger); font-size: 0.8rem; margin-bottom: var(--space-md); align-items: center; gap: var(--space-md); }
+        .error-banner .ebtn { padding: 3px 12px; border: 1px solid rgba(231,76,60,0.4); border-radius: 4px; background: transparent; color: var(--color-danger); cursor: pointer; font-size: 0.72rem; white-space: nowrap; font-family: var(--font-mono); }
+        .error-banner .ebtn:hover { background: rgba(231,76,60,0.1); }
+        .status-pill { display: inline-flex; align-items: center; gap: 6px; padding: 3px 12px; border-radius: 999px; font-size: 0.72rem; font-family: var(--font-mono); border: 1px solid var(--hairline); background: var(--bg-surface-glass); }
+        .status-pill .pdot { width: 6px; height: 6px; border-radius: 50%; display: inline-block; }
+        .status-pill .pdot.ok { background: var(--color-success); box-shadow: 0 0 8px rgba(46,204,113,0.5); }
+        .status-pill .pdot.fail { background: var(--color-danger); box-shadow: 0 0 8px rgba(231,76,60,0.5); }
+        .status-pill .pdot.unknown { background: var(--color-text-low); }
+
+        /* ==========================================================================
+           7. INTERACTIVE TAB (from pipeline-interactive.html)
+           ========================================================================== */
+        .legend { display: flex; gap: 1.5rem; font-family: var(--font-mono); font-size: 0.68rem; color: var(--color-text-med); margin-bottom: 0.8rem; flex-wrap: wrap; }
+        .legend-item { display: flex; align-items: center; gap: 0.4rem; }
+        .legend-swatch { display: inline-block; width: 18px; height: 3px; border-radius: 2px; }
+        .legend-click { cursor: pointer; border-bottom: 1px dashed var(--color-text-med); transition: color var(--duration-base) ease; }
+        .legend-click:hover { color: var(--color-primary); border-color: var(--color-primary); }
+        .stage-pills { display: flex; gap: 0.5rem; flex-wrap: wrap; margin-bottom: 0.8rem; }
+        .stage-pill { padding: 0.2rem 0.6rem; border-radius: 999px; font-family: var(--font-mono); font-size: 0.62rem; text-transform: uppercase; letter-spacing: 0.05em; border: 1px solid var(--hairline); color: var(--color-text-med); transition: all var(--duration-base) ease; }
+        .stage-pill:hover { color: var(--color-primary); border-color: rgba(215,255,0,0.3); }
+        .mandiiq-node { cursor: pointer; transition: filter 0.2s ease; }
+        .mandiiq-node:hover { filter: brightness(1.3); }
+        .mandiiq-tooltip { position: fixed; background: #111; border: 1px solid var(--color-primary); border-radius: 4px; padding: 0.3rem 0.7rem; font-family: var(--font-mono); font-size: 0.68rem; color: var(--color-primary); pointer-events: none; opacity: 0; transition: opacity 0.15s; z-index: 999; white-space: nowrap; box-shadow: 0 4px 12px rgba(0,0,0,0.6); }
+        .mandiiq-tooltip.show { opacity: 1; }
+        .repo-input { background: var(--bg-surface-glass); border: 1px solid var(--hairline); border-radius: 4px; padding: 0.35rem 0.6rem; font-family: var(--font-mono); font-size: 0.72rem; color: var(--color-text-high); width: 300px; outline: none; transition: border-color var(--duration-base) ease; }
+        .repo-input:focus { border-color: var(--color-primary); }
+
+        /* ==========================================================================
+           8. FOOTER
+           ========================================================================== */
+        footer { height: 70px; display: flex; align-items: center; justify-content: space-between; border-top: 1px solid var(--hairline); margin-top: 4rem; font-family: var(--font-mono); font-size: 0.7rem; color: var(--color-text-low); letter-spacing: 0.05em; }
+        .footer-links { display: flex; gap: 1.5rem; }
+        .footer-link { color: var(--color-text-med); text-decoration: none; text-transform: uppercase; transition: color var(--duration-base) var(--ease-soft); }
+        .footer-link:hover { color: var(--color-primary); }
+
+        /* ==========================================================================
+           9. RESPONSIVE
+           ========================================================================== */
+        @media(max-width:768px){
+            .main-content { padding: 0 1rem; }
+            .tab-bar { padding: 0 1rem; gap: 0.15rem; height: auto; flex-wrap: wrap; padding-top: 0.5rem; padding-bottom: 0.5rem; }
+            .tab-bar .logo-area { margin-right: 0.5rem; }
+            .tab-btn { font-size: 0.65rem; padding: 0.25rem 0.6rem; }
+            .tab-actions { display: none; }
+            section { padding: 2.5rem 0; }
+            .hero-section { min-height: auto; padding: 1.5rem 0; }
+            .hero-frame-container { padding: 1.2rem; }
+            .hero-title { font-size: 1.8rem; }
+            .kpi-grid { grid-template-columns: 1fr 1fr; }
+            .summary-bar { grid-template-columns: 1fr 1fr; }
+            .structure-grid { grid-template-columns: 1fr; }
+            footer { flex-direction: column; gap: 0.8rem; height: auto; padding: 1.5rem 0; }
+        }
+        @media(max-width:480px){
+            .kpi-grid { grid-template-columns: 1fr; }
+            .summary-bar { grid-template-columns: 1fr; }
+            .doc-layout { grid-template-columns: 1fr; }
+        }
+    
+/* ═══ LIVE DATA OVERLAY BADGES for Mermaid diagrams ═══ */
+@keyframes mermaid-pulse { 0%,100%{opacity:1;transform:scale(1)} 50%{opacity:.5;transform:scale(0.85)} }
+::-webkit-scrollbar{display:none}
+html{scrollbar-width:none;-ms-overflow-style:none}
+</style>
+</head>
+<body>
+<div class="dot-grid" aria-hidden="true"></div>
+<div class="atmosphere" aria-hidden="true">
+    <div class="atmosphere-flash"></div>
+    <div class="atmosphere-cloud"></div>
+    <div class="atmosphere-drifter" style="--x:15%;--y:20%;--s:180px;--d:25s;--hue:100;--op:0.06"></div>
+    <div class="atmosphere-drifter" style="--x:75%;--y:30%;--s:140px;--d:35s;--hue:80;--op:0.05"></div>
+    <div class="atmosphere-drifter" style="--x:50%;--y:70%;--s:200px;--d:40s;--hue:60;--sat:0.9;--lit:0.6;--op:0.04"></div>
+    <div class="atmosphere-drifter" style="--x:8%;--y:65%;--s:100px;--d:30s;--op:0.03"></div>
+    <div class="atmosphere-drifter" style="--x:88%;--y:12%;--s:130px;--d:45s;--hue:120;--op:0.035"></div>
+</div>
+
+<div class="page-wrapper">
+    <!-- Tab Bar -->
+    <div class="tab-bar">
+        <a href="../landing/index.html" class="logo-area" style="text-decoration:none;">
+            <div class="logo-icon"></div>
+            <span class="logo-text">MandiIQ</span>
+        </a>
+        <button class="tab-btn active" data-tab="overview"><span class="num">01</span>Overview</button>
+        <button class="tab-btn" data-tab="structure"><span class="num">02</span>Structure</button>
+        <button class="tab-btn" data-tab="pipeline"><span class="num">03</span>Pipeline</button>
+        <button class="tab-btn" data-tab="interactive"><span class="num">04</span>Interactive</button>
+        <div class="tab-actions">
+            <a href="../landing/index.html" data-scramble>Home</a>
+            <a href="https://mandiiq.streamlit.app/" target="_blank" data-scramble>Dashboard</a>
+            <a href="heartbeat-dashboard.html" data-scramble>Status</a>
+            <a href="https://github.com/flawsom/MandiIQ" target="_blank">GitHub</a>
+        </div>
+    </div>
+
+    <main class="main-content">
+
+        <!-- ================================================================
+             TAB 1: OVERVIEW
+        ================================================================ -->
+        <div class="tab-content active" id="tab-overview">
+
+            <!-- Hero -->
+            <section class="hero-section" id="overview">
+                <div class="hero-frame-container">
+                    <svg class="hero-frame-svg" viewBox="0 0 100 100" preserveAspectRatio="none">
+                        <rect x="0" y="0" width="100" height="100" />
+                        <line x1="0" y1="50" x2="6" y2="50" /><line x1="94" y1="50" x2="100" y2="50" />
+                        <line x1="50" y1="0" x2="50" y2="6" /><line x1="50" y1="94" x2="50" y2="100" />
+                    </svg>
+                    <svg class="hero-groovy-svg" viewBox="0 0 800 600" preserveAspectRatio="xMidYMid meet" aria-hidden="true">
+                        <path class="groovy-path gp-1" d="M -50 350 Q 100 200 250 320 T 550 280 T 850 350" fill="none" stroke="rgba(255,255,255,0.3)" stroke-width="0.5" opacity="0.15" />
+                        <path class="groovy-path gp-2" d="M -50 400 Q 150 250 300 370 T 600 330 T 850 400" fill="none" stroke="rgba(255,255,255,0.2)" stroke-width="0.3" opacity="0.1" />
+                        <path class="groovy-path gp-3" d="M -50 300 Q 200 450 350 280 T 500 350 T 850 280" fill="none" stroke="var(--color-primary)" stroke-width="0.4" opacity="0.08" />
+                        <circle class="groovy-dot gd-1" cx="250" cy="320" r="2" fill="var(--color-primary)" opacity="0.3" />
+                        <circle class="groovy-dot gd-2" cx="550" cy="280" r="1.5" fill="var(--color-primary)" opacity="0.2" />
+                    </svg>
+                    <div class="hero-tagline">Causal Agricultural Intelligence</div>
+                    <h1 class="hero-title">Testing Policy Thresholds<br>On <span>Mandi Margins</span></h1>
+                    <p class="hero-desc">MandiIQ is an open-source analytical warehouse and dashboard that applies Causal Regression Discontinuity Designs (RDD) to test whether IMD rainfall-deficit thresholds drive structural margins in national commodity markets.</p>
+                    <div class="hero-actions">
+                        <a href="https://mandiiq.streamlit.app/" target="_blank" class="slot-btn" style="padding:0.7rem 1.8rem;font-size:0.82rem;">
+                            <span class="slot-text-wrapper"><span class="slot-text-default">OPEN DASHBOARD</span><span class="slot-text-hover">MANDIIQ APP ➔</span></span>
+                        </a>
+                        <a href="#causal" class="btn-outline">EXPLORE FINDINGS</a>
+                    </div>
+                </div>
+                <div class="tech-pill-container">
+                    <span class="tech-pill">Regression Discontinuity</span>
+                    <span class="tech-pill">Causal Inference</span>
+                    <span class="tech-pill">DuckDB Analytical Store</span>
+                    <span class="tech-pill">FastAPI inference</span>
+                    <span class="tech-pill">Streamlit Front</span>
+                    <span class="tech-pill">MLflow Models</span>
+                </div>
+            </section>
+
+            <!-- Live Metrics -->
+            <section id="metrics" class="reveal">
+                <!-- ═══ QUICK LINKS WIDGET ═══ -->
+            <div class="reveal" style="margin-bottom:2rem;">
+                <div class="doc-widget">
+                    <div class="doc-widget-title">Quick Navigation</div>
+                    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:0.75rem;">
+                        <a href="../landing/index.html" style="display:flex;align-items:center;gap:0.5rem;padding:0.5rem 0.75rem;border:1px solid var(--hairline);border-radius:6px;text-decoration:none;color:var(--color-text-med);font-family:var(--font-mono);font-size:0.75rem;text-transform:uppercase;letter-spacing:0.05em;transition:all 0.2s ease;" onmouseover="this.style.borderColor='rgba(215,255,0,0.3)';this.style.color='var(--color-primary)'" onmouseout="this.style.borderColor='';this.style.color=''">
+                            <span>🏠</span><span>Landing Page</span>
+                        </a>
+                        <a href="https://mandiiq.streamlit.app/" target="_blank" style="display:flex;align-items:center;gap:0.5rem;padding:0.5rem 0.75rem;border:1px solid var(--hairline);border-radius:6px;text-decoration:none;color:var(--color-text-med);font-family:var(--font-mono);font-size:0.75rem;text-transform:uppercase;letter-spacing:0.05em;transition:all 0.2s ease;" onmouseover="this.style.borderColor='rgba(215,255,0,0.3)';this.style.color='var(--color-primary)'" onmouseout="this.style.borderColor='';this.style.color=''">
+                            <span>📊</span><span>Live Dashboard</span>
+                        </a>
+                        <a href="https://github.com/flawsom/MandiIQ" target="_blank" style="display:flex;align-items:center;gap:0.5rem;padding:0.5rem 0.75rem;border:1px solid var(--hairline);border-radius:6px;text-decoration:none;color:var(--color-text-med);font-family:var(--font-mono);font-size:0.75rem;text-transform:uppercase;letter-spacing:0.05em;transition:all 0.2s ease;" onmouseover="this.style.borderColor='rgba(215,255,0,0.3)';this.style.color='var(--color-primary)'" onmouseout="this.style.borderColor='';this.style.color=''">
+                            <span>💻</span><span>Source Code</span>
+                        </a>
+                        <a href="heartbeat-dashboard.html" style="display:flex;align-items:center;gap:0.5rem;padding:0.5rem 0.75rem;border:1px solid var(--hairline);border-radius:6px;text-decoration:none;color:var(--color-text-med);font-family:var(--font-mono);font-size:0.75rem;text-transform:uppercase;letter-spacing:0.05em;transition:all 0.2s ease;" onmouseover="this.style.borderColor='rgba(215,255,0,0.3)';this.style.color='var(--color-primary)'" onmouseout="this.style.borderColor='';this.style.color=''">
+                            <span>♥</span><span>System Status</span>
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="section-header">
+                    <span class="section-num">01 / REAL-TIME LEDGER</span>
+                    <h2 class="section-title">Warehouse Scale &amp; Coverage</h2>
+                </div>
+                <div class="kpi-grid">
+                    <div class="glass-card"><div class="label">Live Price Records</div><div class="value accent" data-countup="n_prices">—</div><div class="meta">Prices in DuckDB warehouse</div></div>
+                    <div class="glass-card"><div class="label">Commodity Scope</div><div class="value" data-countup="n_commodities">—</div><div class="meta">Unique agricultural commodities</div></div>
+                    <div class="glass-card"><div class="label">District Coverage</div><div class="value" data-countup="n_districts">—</div><div class="meta">Markets across India</div></div>
+                    <div class="glass-card"><div class="label">RDD Estimates</div><div class="value accent" data-countup="n_rdd">—</div><div class="meta">Causal estimates computed</div></div>
+                </div>
+            </section>
+
+            <!-- Causal RDD -->
+            <section id="causal" class="reveal">
+                <div class="section-header">
+                    <span class="section-num">02 / EMPIRICAL FRAMEWORK</span>
+                    <h2 class="section-title">Regression Discontinuity Design</h2>
+                </div>
+                <div class="doc-layout">
+                    <div class="doc-text">
+                        <p>Does the IMD declaring a region as "rain-deficient" drive agricultural market behavior, or is price movement merely a continuous function of physical precipitation?</p>
+                        <p>We test this by placing rain departure on the horizontal axis and modeling the discontinuity at the official <strong>-20% deficit cutoff</strong>.</p>
+                        <h3>Causal RDD Specification</h3>
+                        <p>We estimate local linear regressions on both sides of the -20% threshold:</p>
+                        <code style="display:block;padding:0.8rem;margin-bottom:1.2rem;text-align:center;font-size:0.9rem;">Y<sub>it</sub> = α + β D<sub>it</sub> + γ<sub>1</sub> (X<sub>it</sub> - c) + γ<sub>2</sub> D<sub>it</sub>(X<sub>it</sub> - c) + ε<sub>it</sub></code>
+                        <p>Where <code>Y<sub>it</sub></code> is log market price, <code>X<sub>it</sub></code> is rainfall departure %, <code>c = -20%</code> is the threshold, and <code>D<sub>it</sub></code> is indicator for deficit territory.</p>
+                        <p>Our findings suggest that while physical rainfall levels strongly affect yields, the administrative -20% declaration produces statistically insignificant jumps in most crops, with the notable exception of <strong>Onions</strong> which show active hoarding signals.</p>
+                    </div>
+                    <div class="doc-sidebar">
+                        <div class="doc-widget">
+                            <div class="doc-widget-title">Empirical Results</div>
+                            <div class="table-responsive" style="margin:0;border:none;">
+                                <table class="ledger-table">
+                                    <thead><tr><th>Crop</th><th>Discontinuity</th><th>P-Value</th></tr></thead>
+                                    <tbody>
+                                        <tr><td><span class="commodity-chip"><span class="commodity-dot onion" style="background:var(--color-commodity-onion)"></span>Onion</span></td><td style="color:var(--color-primary);font-family:var(--font-mono);">+0.142</td><td><span class="stat-badge significant">p &lt; 0.05</span></td></tr>
+                                        <tr><td><span class="commodity-chip"><span class="commodity-dot tomato" style="background:var(--color-commodity-tomato)"></span>Tomato</span></td><td style="font-family:var(--font-mono);">-0.024</td><td><span class="stat-badge insignificant">p = 0.74</span></td></tr>
+                                        <tr><td><span class="commodity-chip"><span class="commodity-dot wheat" style="background:var(--color-commodity-wheat)"></span>Wheat</span></td><td style="font-family:var(--font-mono);">+0.009</td><td><span class="stat-badge insignificant">p = 0.89</span></td></tr>
+                                        <tr><td><span class="commodity-chip"><span class="commodity-dot potato" style="background:var(--color-commodity-potato)"></span>Potato</span></td><td style="font-family:var(--font-mono);">+0.053</td><td><span class="stat-badge insignificant">p = 0.31</span></td></tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                        <div class="doc-widget">
+                            <div class="doc-widget-title">McCrary Density Check</div>
+                            <p style="font-size:0.78rem;color:var(--color-text-med);margin:0;">We run a McCrary Density Test to examine manipulation of the running variable around the -20% cutoff boundary, ensuring the validity of our causal estimates.</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Architecture -->
+            <section id="architecture" class="reveal">
+                <div class="section-header">
+                    <span class="section-num">03 / SYSTEM ARCHITECTURE</span>
+                    <h2 class="section-title">Decoupled Processing &amp; Serving</h2>
+                </div>
+                <div class="doc-text">
+                    <p>MandiIQ decouples the analytical warehouse from the customer-facing dashboard. The system runs an automated ELT pipeline using DuckDB, fits locally weighted regressions, tracks models in MLflow, and exposes predictions through FastAPI.</p>
+                    <div class="mermaid-wrapper">
+<pre class="mermaid" style="text-align:center;">
+%%{init: {"theme": "dark", "themeVariables": { "primaryColor": "#1a1a2e", "primaryTextColor": "#fff", "lineColor": "#d7ff00"}}}%%
+flowchart TB
+    subgraph Sources["Data Sources"]
+        A1["Agmarknet API<br/>Daily Mandi Prices"]
+        A2["IMD Weather Grids<br/>Rainfall Departure"]
+        A6["Ashoka CEDA<br/>Historical Price CSV"]
+    end
+    subgraph Ingestion["Ingestion Pipeline"]
+        B1["fetch_prices.py<br/>Pagination + Retry"]
+        B2["fetch_rainfall.py<br/>Sub-division Parser"]
+        B3["fetch_ndvi.py<br/>Sentinel Hub"]
+        B4["scheduler.py<br/>Orchestration"]
+    end
+    subgraph Storage["Analytical Store"]
+        C1["DuckDB<br/>mandi_iq.duckdb<br/>{{n_prices}} rows"]
+        C2["data_lineage<br/>Provenance Tracking"]
+    end
+    subgraph Analysis["Analysis Engine"]
+        D1["Causal RDD<br/>Local-linear + FE"]
+        D2["Forecast<br/>Seasonal Naive"]
+        D3["Classifier<br/>XGBoost + SHAP"]
+    end
+    subgraph Serving["Serving Layer"]
+        F1["FastAPI Gateway<br/>/health /prices /forecast"]
+        F2["Streamlit Dashboard<br/>mandiiq.streamlit.app"]
+    end
+    A1 --> B1; A6 --> B3; A2 --> B2; B4 --> B1; B4 --> B2; B4 --> B3; B1 --> C1; B2 --> C1; B3 --> C1; C1 --> D1; C1 --> D2; C1 --> D3; D1 --> F1; D2 --> F1; D3 --> F1; F1 --> F2;
+</pre>
+                    </div>
+                    <h3>Failure Modes</h3>
+                    <p>If the MLflow registry is unreachable, FastAPI falls back to a local serialized model pickle. Climate variables exceeding 3σ trigger automated retraining on a 90-day window. All forecasting endpoints gracefully fallback to moving-average baselines.</p>
+                    <div class="alert-box"><div class="alert-box-title">Active Fail-Safe</div><p class="alert-box-desc">All endpoints fallback gracefully. If an API call fails, the dashboard swaps to a historical moving-average baseline.</p></div>
+                </div>
+            </section>
+        </div>
+
+        <!-- ================================================================
+             TAB 2: STRUCTURE
+        ================================================================ -->
+        <div class="tab-content" id="tab-structure">
+            <section>
+                <div class="section-header">
+                    <span class="section-num">02 / PROJECT STRUCTURE</span>
+                    <h2 class="section-title">Repository Map <span class="section-badge">87 Python · 10 Modules · 14 Dashboard Pages · 5 SQL</span></h2>
+                    <p style="color:var(--color-text-med);font-size:0.85rem;margin-top:0.5rem;">Click any file to open it on GitHub.</p>
+                </div>
+
+                <div class="structure-grid">
+                    <div class="structure-card"><div class="card-inner">
+                        <div class="card-title"><span class="folder-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M2 6a2 2 0 0 1 2-2h5l2 2h9a2 2 0 0 1 2 2v10a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V6z"/></svg></span>ai/ <span class="ext-badge">3 files</span></div>
+                        <div class="card-desc">Multi-model AI orchestrator with circuit breaker, Gemini/OpenRouter routing, and model config.</div>
+                        <ul class="file-list">
+                            <li class="file-item" data-file="orchestrator.py"><span class="file-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M13 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V9z"/><polyline points="13 2 13 9 20 9"/></svg></span>orchestrator.py</li>
+                            <li class="file-item" data-file="router.py"><span class="file-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M13 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V9z"/><polyline points="13 2 13 9 20 9"/></svg></span>router.py</li>
+                            <li class="file-item" data-file="models.yaml"><span class="file-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg></span>models.yaml</li>
+                        </ul>
+                    </div></div>
+
+                    <div class="structure-card"><div class="card-inner">
+                        <div class="card-title"><span class="folder-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M2 6a2 2 0 0 1 2-2h5l2 2h9a2 2 0 0 1 2 2v10a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V6z"/></svg></span>analysis/ <span class="ext-badge">8 modules</span></div>
+                        <div class="card-desc">RDD causal engine, fixed-effects cross-check, forecast (seasonal naive + LSTM), classifier, prescriptive advice.</div>
+                        <ul class="file-list">
+                            <li class="file-item" data-file="rdd_engine.py"><span class="file-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M13 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V9z"/><polyline points="13 2 13 9 20 9"/></svg></span>rdd_engine.py <span class="file-comment">Causal RDD</span></li>
+                            <li class="file-item" data-file="fixed_effects.py"><span class="file-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M13 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V9z"/><polyline points="13 2 13 9 20 9"/></svg></span>fixed_effects.py <span class="file-comment">FE cross-check</span></li>
+                            <li class="file-item" data-file="forecast.py"><span class="file-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M13 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V9z"/><polyline points="13 2 13 9 20 9"/></svg></span>forecast.py</li>
+                            <li class="file-item" data-file="classifier.py"><span class="file-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M13 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V9z"/><polyline points="13 2 13 9 20 9"/></svg></span>classifier.py</li>
+                            <li class="file-item" data-file="prescriptive.py"><span class="file-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M13 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V9z"/><polyline points="13 2 13 9 20 9"/></svg></span>prescriptive.py</li>
+                        </ul>
+                    </div></div>
+
+                    <div class="structure-card"><div class="card-inner">
+                        <div class="card-title"><span class="folder-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M2 6a2 2 0 0 1 2-2h5l2 2h9a2 2 0 0 1 2 2v10a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V6z"/></svg></span>ingestion/ <span class="ext-badge">6-stage ETL</span></div>
+                        <div class="card-desc">Price fetch (page + variety), rainfall parser, NDVI satellite, historical CSV backfill, scheduler.</div>
+                        <ul class="file-list">
+                            <li class="file-item" data-file="fetch_prices.py"><span class="file-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M13 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V9z"/><polyline points="13 2 13 9 20 9"/></svg></span>fetch_prices.py <span class="step-badge fast">200ms</span></li>
+                            <li class="file-item" data-file="fetch_rainfall.py"><span class="file-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M13 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V9z"/><polyline points="13 2 13 9 20 9"/></svg></span>fetch_rainfall.py <span class="step-badge slow">1m 24s</span></li>
+                            <li class="file-item" data-file="fetch_ndvi.py"><span class="file-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M13 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V9z"/><polyline points="13 2 13 9 20 9"/></svg></span>fetch_ndvi.py <span class="step-badge slow">3m 0s</span></li>
+                            <li class="file-item" data-file="scheduler.py"><span class="file-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M13 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V9z"/><polyline points="13 2 13 9 20 9"/></svg></span>scheduler.py</li>
+                        </ul>
+                    </div></div>
+
+                    <div class="structure-card"><div class="card-inner">
+                        <div class="card-title"><span class="folder-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M2 6a2 2 0 0 1 2-2h5l2 2h9a2 2 0 0 1 2 2v10a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V6z"/></svg></span>dashboard/pages/ <span class="ext-badge">14 core</span></div>
+                        <div class="card-desc">Streamlit multi-page app: executive overview, causal explorer, forecast, risk map, satellite NDVI.</div>
+                        <ul class="file-list">
+                            <li class="file-item" data-file="executive_overview"><span class="file-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M13 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V9z"/><polyline points="13 2 13 9 20 9"/></svg></span>executive_overview</li>
+                            <li class="file-item" data-file="discontinuity"><span class="file-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M13 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V9z"/><polyline points="13 2 13 9 20 9"/></svg></span>discontinuity</li>
+                            <li class="file-item" data-file="forecast"><span class="file-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M13 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V9z"/><polyline points="13 2 13 9 20 9"/></svg></span>forecast</li>
+                            <li class="file-item" data-file="risk_map"><span class="file-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M13 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V9z"/><polyline points="13 2 13 9 20 9"/></svg></span>risk_map</li>
+                            <li class="file-item" data-file="satellite"><span class="file-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M13 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V9z"/><polyline points="13 2 13 9 20 9"/></svg></span>satellite</li>
+                            <li class="file-item" data-file="causal_explorer"><span class="file-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M13 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V9z"/><polyline points="13 2 13 9 20 9"/></svg></span>causal_explorer</li>
+                        </ul>
+                    </div></div>
+
+                    <div class="structure-card"><div class="card-inner">
+                        <div class="card-title"><span class="folder-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M2 6a2 2 0 0 1 2-2h5l2 2h9a2 2 0 0 1 2 2v10a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V6z"/></svg></span>api / storage / styles / tests <span class="ext-badge">infra</span></div>
+                        <div class="card-desc">FastAPI gateway, DuckDB analytical store, design tokens CSS, and data integrity test suite.</div>
+                        <ul class="file-list">
+                            <li class="file-item" data-file="main.py"><span class="file-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M13 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V9z"/><polyline points="13 2 13 9 20 9"/></svg></span>api/main.py</li>
+                            <li class="file-item" data-file="duckdb_store.py"><span class="file-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M13 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V9z"/><polyline points="13 2 13 9 20 9"/></svg></span>storage/duckdb_store.py</li>
+                            <li class="file-item" data-file="design.css"><span class="file-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg></span>styles/design.css</li>
+                            <li class="file-item" data-file="test_verification.py"><span class="file-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M13 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V9z"/><polyline points="13 2 13 9 20 9"/></svg></span>tests/test_verification.py</li>
+                        </ul>
+                    </div></div>
+
+                    <div class="structure-card"><div class="card-inner">
+                        <div class="card-title"><span class="folder-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M2 6a2 2 0 0 1 2-2h5l2 2h9a2 2 0 0 1 2 2v10a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V6z"/></svg></span>dashboard/frontend/ <span class="ext-badge">Vite + React</span></div>
+                        <div class="card-desc">TypeScript React app with FlipBoard KPI count-up, Three.js WebGL hero, and code-split Vite build.</div>
+                        <ul class="file-list">
+                            <li class="file-item" data-file="FlipBoard.tsx"><span class="file-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M13 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V9z"/><polyline points="13 2 13 9 20 9"/></svg></span>FlipBoard.tsx</li>
+                            <li class="file-item" data-file="WebGLHero.tsx"><span class="file-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M13 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V9z"/><polyline points="13 2 13 9 20 9"/></svg></span>WebGLHero.tsx</li>
+                            <li class="file-item" data-file="vite.config.ts"><span class="file-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M13 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V9z"/><polyline points="13 2 13 9 20 9"/></svg></span>vite.config.ts</li>
+                        </ul>
+                    </div></div>
+                </div>
+
+                <div class="structure-legend">
+                    <span><span class="dot dot-fast"></span> &lt;1s (fast)</span>
+                    <span><span class="dot dot-medium"></span> &lt;20s (medium)</span>
+                    <span><span class="dot dot-slow"></span> &ge;20s (slow)</span>
+                </div>
+
+                <div class="root-chips">
+                    <span class="chip" data-file="run_hourly.py"><span class="chip-icon">&#x1f40d;</span> run_hourly.py</span>
+                    <span class="chip" data-file="render.yaml"><span class="chip-icon">&#x1f4cb;</span> render.yaml</span>
+                    <span class="chip" data-file="Dockerfile.northflank"><span class="chip-icon">&#x1f433;</span> Dockerfile.northflank</span>
+                    <span class="chip" data-file="requirements.txt"><span class="chip-icon">&#x1f4c4;</span> requirements.txt</span>
+                    <span class="chip" data-file="mandi_iq.duckdb"><span class="chip-icon">&#x1f5c4;</span> mandi_iq.duckdb</span>
+                </div>
+            </section>
+        </div>
+
+        <!-- ================================================================
+             TAB 3: PIPELINE
+        ================================================================ -->
+        <div class="tab-content" id="tab-pipeline">
+            <section>
+                <div class="section-header">
+                    <span class="section-num">03 / PIPELINE REPORT</span>
+                    <h2 class="section-title">Live Pipeline Status <span class="section-badge" id="liveLabelPipeline">loading...</span></h2>
+                </div>
+
+                <!-- Error banner -->
+                <div class="error-banner" id="errorBannerPipeline">
+                    <span id="errorMessagePipeline">Failed to load data.</span>
+                    <button class="ebtn" onclick="refreshPipeline()">Retry</button>
+                </div>
+
+                <!-- KPI cards -->
+                <div class="summary-bar reveal" id="summaryBarPipeline">
+                    <div class="summary-card"><div class="lbl">Price Rows</div><div class="val" id="kpiPrices">&mdash;</div><div class="sub" id="kpiPricesSub">loading...</div></div>
+                    <div class="summary-card"><div class="lbl">Commodities</div><div class="val" id="kpiCommodities">&mdash;</div><div class="sub" id="kpiCommoditiesSub">loading...</div></div>
+                    <div class="summary-card"><div class="lbl">States / Districts</div><div class="val" id="kpiCoverage">&mdash;</div><div class="sub" id="kpiCoverageSub">loading...</div></div>
+                    <div class="summary-card"><div class="lbl">RDD Results</div><div class="val" id="kpiRdd">&mdash;</div><div class="sub" id="kpiRddSub">loading...</div></div>
+                    <div class="summary-card"><div class="lbl">Forecast Models</div><div class="val" id="kpiForecast">&mdash;</div><div class="sub" id="kpiForecastSub">loading...</div></div>
+                    <div class="summary-card"><div class="lbl">Avg MAPE</div><div class="val" id="kpiMape">&mdash;</div><div class="sub" id="kpiMapeSub">loading...</div></div>
+                    <div class="summary-card"><div class="lbl">Last Run</div><div class="val" id="kpiHourly">&mdash;</div><div class="sub" id="kpiHourlySub">loading...</div></div>
+                    <div class="summary-card"><div class="lbl">NDVI Districts</div><div class="val" id="kpiNdvi">&mdash;</div><div class="sub" id="kpiNdviSub">loading...</div></div>
+                </div>
+
+                <!-- Pipeline Diagram -->
+                <div class="reveal">
+                    <div class="diagram-header">
+                        <div class="diagram-title">Pipeline DAG <span class="badge" id="diagramBadge">auto-refresh 60s</span></div>
+                        <div class="diagram-toolbar">
+                            <span class="live-indicator"><span class="ld"></span><span id="countdown">60</span>s</span>
+                            <button onclick="renderPipelineDiagram()">&#10227; Render</button>
+                        </div>
+                    </div>
+                    <div class="mermaid-wrapper" id="mermaidWrapperPipeline">
+                        <div class="spinner"></div>
+                        <div class="loading-text">Rendering pipeline diagram...</div>
+                    </div>
+                </div>
+
+                <!-- Freshness Table -->
+                <div class="reveal" style="margin-top:2rem;">
+                    <div class="data-header">Commodity Freshness <span class="count" id="freshnessCount"></span></div>
+                    <div class="table-wrap"><table><thead><tr><th>Commodity</th><th>Latest Date</th><th>Earliest Date</th><th class="num">Rows</th><th class="num">Districts</th><th class="num">States</th></tr></thead>
+                        <tbody id="freshnessBody"><tr><td colspan="6" style="text-align:center;color:var(--color-text-low);font-size:0.82rem;">Loading...</td></tr></tbody>
+                    </table></div>
+                </div>
+
+                <div style="margin-top:1.5rem;display:flex;align-items:center;justify-content:space-between;font-size:0.7rem;color:var(--color-text-low);font-family:var(--font-mono);flex-wrap:wrap;gap:0.5rem;">
+                    <span>Last updated: <strong id="lastUpdatedPipeline">just now</strong></span>
+                    <span><a href="#" onclick="refreshPipeline();return false;" style="color:var(--color-primary);text-decoration:none;">&#10227; Refresh</a> &middot; <a href="https://github.com/flawsom/MandiIQ" target="_blank" style="color:var(--color-primary);text-decoration:none;">GitHub</a></span>
+                </div>
+            </section>
+        </div>
+
+        <!-- ================================================================
+             TAB 4: INTERACTIVE
+        ================================================================ -->
+        <div class="tab-content" id="tab-interactive">
+            <section>
+                <div class="section-header">
+                    <span class="section-num">04 / PIPELINE DIAGRAM</span>
+                    <h2 class="section-title">Interactive Pipeline Flow <span class="section-badge" id="liveLabelInteractive">loading metrics...</span></h2>
+                </div>
+
+                <div style="display:flex;align-items:center;gap:0.6rem;flex-wrap:wrap;margin-bottom:0.8rem;">
+                    <label style="font-size:0.7rem;color:var(--color-text-med);font-family:var(--font-mono);">GitHub repo:</label>
+                    <input type="text" id="repo-input" class="repo-input" value="https://github.com/flawsom/MandiIQ/blob/main" placeholder="https://github.com/USER/REPO/blob/main">
+                </div>
+
+                <div class="stage-pills">
+                    <span class="stage-pill">01 Ingestion</span>
+                    <span class="stage-pill">02 Warehouse</span>
+                    <span class="stage-pill">03 Analysis</span>
+                    <span class="stage-pill">04 Orchestrator</span>
+                    <span class="stage-pill">05 Serving</span>
+                </div>
+
+                <div class="legend">
+                    <span class="legend-item"><span class="legend-swatch" style="background:#d7ff00;"></span> primary flow</span>
+                    <span class="legend-item"><span class="legend-swatch" style="background:#533483;"></span> secondary flow</span>
+                    <span class="legend-item"><span class="legend-swatch" style="background:#e94560;"></span> bidirectional</span>
+                    <span class="legend-item"><span class="legend-click" id="legend-click-hint" tabindex="0" role="button">click any node</span> to open source file</span>
+                </div>
+
+                <div id="diagram" class="mermaid reveal" style="background:linear-gradient(135deg,rgba(0,0,0,0.4) 0%,rgba(10,10,10,0.6) 100%);border:1px solid var(--hairline);border-radius:12px;padding:1.5rem;overflow-x:auto;position:relative;"></div>
+                <div id="tooltip" class="mandiiq-tooltip"></div>
+            </section>
+        </div>
+
+        <!-- Footer -->
+        <footer>
+            <div>&copy; 2026 MandiIQ Project</div>
+            <div class="footer-links">
+                <a href="../landing/index.html" class="footer-link" data-scramble>Home</a>
+                <a href="https://mandiiq.streamlit.app/" target="_blank" class="footer-link" data-scramble>Dashboard</a>
+                <a href="https://github.com/flawsom/MandiIQ" target="_blank" class="footer-link" data-scramble>GitHub</a>
+            </div>
+        </footer>
+    </main>
+</div>
+
+<!-- ================================================================
+     JAVASCRIPT
+================================================================ -->
+<script>
+// ── Tab Switching with Hash Routing ──
+(function() {
+    var tabs = ['overview', 'structure', 'pipeline', 'interactive'];
+    var tabContents = {};
+    var tabButtons = {};
+
+    tabs.forEach(function(id) {
+        tabContents[id] = document.getElementById('tab-' + id);
+        tabButtons[id] = document.querySelector('[data-tab="' + id + '"]');
+    });
+
+    var pipelineInitialized = false;
+    var interactiveInitialized = false;
+
+    function switchTab(id) {
+        tabs.forEach(function(t) {
+            if (tabContents[t]) tabContents[t].classList.remove('active');
+            if (tabButtons[t]) tabButtons[t].classList.remove('active');
+        });
+        if (tabContents[id]) tabContents[id].classList.add('active');
+        if (tabButtons[id]) tabButtons[id].classList.add('active');
+        window.location.hash = '#' + id;
+
+        // Lazy init pipeline tab
+        if (id === 'pipeline' && !pipelineInitialized) {
+            pipelineInitialized = true;
+            setTimeout(refreshPipeline, 100);
+        }
+        // Lazy init interactive tab
+        if (id === 'interactive' && !interactiveInitialized) {
+            interactiveInitialized = true;
+            setTimeout(renderInteractiveDiagram, 100);
+        }
+
+        // Refresh reveal elements on visible tab
+        setTimeout(function() {
+            document.querySelectorAll('.tab-content.active .reveal').forEach(function(el) {
+                if (el.getBoundingClientRect().top < window.innerHeight) {
+                    el.classList.add('is-visible');
+                }
+            });
+        }, 50);
+    }
+
+    // Tab button clicks
+    tabs.forEach(function(id) {
+        if (tabButtons[id]) {
+            tabButtons[id].addEventListener('click', function() { switchTab(id); });
+        }
+    });
+
+    // Hash routing on load
+    var hash = window.location.hash.replace('#', '');
+    if (tabs.indexOf(hash) >= 0) {
+        switchTab(hash);
+    }
+
+    // Legend click hint scroll
+    var legendHint = document.getElementById('legend-click-hint');
+    if (legendHint) {
+        legendHint.addEventListener('click', function() {
+            var diagram = document.getElementById('diagram');
+            if (diagram) diagram.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        });
+    }
+
+    window.switchTab = switchTab; // expose for debugging
+
+    // ── Text Scrambler ──
+    (function(){
+        document.querySelectorAll('[data-scramble]').forEach(function(el){
+            var t = el.innerText;
+            var c = '!<>-_\\/[]{}—=+*^?#________';
+            function r(l) { var o=''; for(var i=0;i<l.length;i++) o+=c[Math.floor(Math.random()*c.length)]; return o; }
+            el.addEventListener('mouseenter', function() {
+                var l = t.length, f = 0;
+                var i = setInterval(function() {
+                    if (f > 40) { el.innerText = t; clearInterval(i); return; }
+                    var s = '';
+                    for (var j = 0; j < l; j++) {
+                        if (j < Math.floor(f/2)) s += t[j]; else s += r(t);
+                    }
+                    el.innerText = s;
+                    f++;
+                }, 30);
+            });
+        });
+    })();
+
+    // ── Scroll Reveal (tab-aware) ──
+    (function() {
+        function observeVisible() {
+            document.querySelectorAll('.tab-content.active .reveal:not(.is-visible)').forEach(function(el) {
+                if (el.getBoundingClientRect().top < window.innerHeight * 0.9) {
+                    el.classList.add('is-visible');
+                }
+            });
+        }
+        if ('IntersectionObserver' in window) {
+            var ob = new IntersectionObserver(function(entries) {
+                entries.forEach(function(e) {
+                    if (e.isIntersecting) { e.target.classList.add('is-visible'); ob.unobserve(e.target); }
+                });
+            }, { threshold: 0.1 });
+            // Observe all reveal elements, re-run on tab switch
+            function observeAll() {
+                document.querySelectorAll('.reveal').forEach(function(el) { if (!el.classList.contains('is-visible')) ob.observe(el); });
+            }
+            observeAll();
+            // Re-observe when tabs switch
+            tabs.forEach(function(id) {
+                if (tabButtons[id]) {
+                    tabButtons[id].addEventListener('click', function() { setTimeout(observeAll, 150); });
+                }
+            });
+        } else {
+            observeVisible();
+        }
+    })();
+
+
+    // ── Click-to-GitHub for Structure tab ──
+    (function() {
+        var REPO_BASE = 'https://github.com/flawsom/MandiIQ/blob/main/';
+        var PATH_MAP = {
+            'orchestrator.py': 'mandi_rdd/ai/orchestrator.py', 'router.py': 'mandi_rdd/ai/router.py', 'models.yaml': 'mandi_rdd/ai/models.yaml',
+            'rdd_engine.py': 'mandi_rdd/analysis/rdd_engine.py', 'fixed_effects.py': 'mandi_rdd/analysis/fixed_effects.py', 'forecast.py': 'mandi_rdd/analysis/forecast.py', 'classifier.py': 'mandi_rdd/analysis/classifier.py', 'prescriptive.py': 'mandi_rdd/analysis/prescriptive.py',
+            'fetch_prices.py': 'mandi_rdd/ingestion/fetch_prices.py', 'fetch_rainfall.py': 'mandi_rdd/ingestion/fetch_rainfall.py', 'fetch_ndvi.py': 'mandi_rdd/ingestion/fetch_ndvi.py', 'scheduler.py': 'mandi_rdd/ingestion/scheduler.py',
+            'main.py': 'mandi_rdd/api/main.py', 'duckdb_store.py': 'mandi_rdd/storage/duckdb_store.py', 'design.css': 'mandi_rdd/styles/design.css', 'test_verification.py': 'mandi_rdd/tests/test_verification.py',
+            'FlipBoard.tsx': 'mandi_rdd/dashboard/frontend/src/FlipBoard.tsx', 'WebGLHero.tsx': 'mandi_rdd/dashboard/frontend/src/WebGLHero.tsx', 'vite.config.ts': 'mandi_rdd/dashboard/frontend/vite.config.ts',
+            'executive_overview': 'mandi_rdd/dashboard/pages/executive_overview.py', 'discontinuity': 'mandi_rdd/dashboard/pages/discontinuity.py', 'forecast': 'mandi_rdd/dashboard/pages/forecast.py', 'risk_map': 'mandi_rdd/dashboard/pages/risk_map.py', 'satellite': 'mandi_rdd/dashboard/pages/satellite.py', 'causal_explorer': 'mandi_rdd/dashboard/pages/causal_explorer.py',
+            'run_hourly.py': 'run_hourly.py', 'render.yaml': 'render.yaml', 'Dockerfile.northflank': 'Dockerfile.northflank', 'requirements.txt': 'requirements.txt', 'mandi_iq.duckdb': 'mandi_rdd/data/mandi_iq.duckdb'
+        };
+        document.addEventListener('click', function(e) {
+            var target = e.target.closest('.structure-card .file-item, .structure-card .card-title, .chip');
+            if (!target) return;
+            var name = target.getAttribute('data-file');
+            if (!name && target.classList.contains('card-title')) {
+                for (var n = target.firstChild; n; n = n.nextSibling) { if (n.nodeType === 3) { var txt = n.textContent.trim(); if (txt) { name = txt; break; } } }
+            }
+            if (name) { var path = PATH_MAP[name]; if (path) { e.preventDefault(); e.stopPropagation(); window.open(REPO_BASE + path, '_blank'); } }
+        });
+    })();
+
+    // ================================================================
+    // PIPELINE TAB — Live data fetching (from pipeline-report.html)
+    // ================================================================
+    var API_BASE = 'http://127.0.0.1:18765';
+    var HEALTH_URL = API_BASE + '/health', MMD_URL = API_BASE + '/pipeline.mmd', FRESHNESS_URL = API_BASE + '/freshness';
+    var countdownValue = 60, countdownTimer = null, pipelineMermaidInit = false, pipelineDark = true;
+
+    function fmtNum(n) { if (n === null || n === undefined) return '\u2014'; return Number(n).toLocaleString(); }
+    function fmtDate(ts) { if (!ts) return '\u2014'; var t = new Date(ts); return isNaN(t) ? '\u2014' : t.toLocaleDateString('en-IN', { year:'numeric', month:'short', day:'numeric' }); }
+
+    async function refreshPipeline() {
+        document.getElementById('errorBannerPipeline').style.display = 'none';
+        countdownValue = 60;
+        try {
+            var healthResp = await fetch(HEALTH_URL);
+            if (!healthResp.ok) throw new Error('Health returned ' + healthResp.status);
+            var health = await healthResp.json();
+            var freshnessResp = await fetch(FRESHNESS_URL);
+            var freshness = freshnessResp.ok ? await freshnessResp.json() : [];
+            renderPipelineKpis(health);
+            renderPipelineFreshness(freshness);
+            await renderPipelineDiagram();
+            document.getElementById('lastUpdatedPipeline').textContent = new Date().toLocaleString();
+        } catch (e) {
+            document.getElementById('errorMessagePipeline').textContent = 'Failed: ' + e.message;
+            document.getElementById('errorBannerPipeline').style.display = 'flex';
+        }
+    }
+
+    function renderPipelineKpis(health) {
+        document.getElementById('kpiPrices').textContent = fmtNum(health.n_prices);
+        document.getElementById('kpiPricesSub').textContent = (health.n_commodities || '?') + ' commodities';
+        document.getElementById('kpiCommodities').textContent = fmtNum(health.n_commodities);
+        document.getElementById('kpiCommoditiesSub').textContent = 'tracked across ' + fmtNum(health.n_states) + ' states';
+        document.getElementById('kpiCoverage').textContent = fmtNum(health.n_states) + ' / ' + fmtNum(health.n_districts);
+        document.getElementById('kpiCoverageSub').textContent = 'states / districts';
+        document.getElementById('kpiRdd').textContent = fmtNum(health.n_rdd_results);
+        document.getElementById('kpiRddSub').textContent = 'causal estimates';
+        document.getElementById('kpiForecast').textContent = fmtNum(health.n_forecast_models);
+        document.getElementById('kpiForecastSub').textContent = (health.n_forecast_valid || 0) + ' valid';
+        var mape = health.forecast_avg_mape;
+        var mapeEl = document.getElementById('kpiMape');
+        if (mape !== null && mape !== undefined) { mapeEl.textContent = mape.toFixed(0) + '%'; mapeEl.className = 'val' + (mape > 200 ? ' warn' : mape > 100 ? '' : ' ok'); }
+        else { mapeEl.textContent = '\u2014'; mapeEl.className = 'val'; }
+        document.getElementById('kpiMapeSub').textContent = 'across ' + (health.n_forecast_valid || 0) + ' models';
+        var hrEl = document.getElementById('kpiHourly');
+        if (health.last_hourly_outcome) { hrEl.textContent = health.last_hourly_outcome === 'success' ? 'OK' : 'FAIL'; hrEl.className = 'val ' + (health.last_hourly_outcome === 'success' ? 'ok' : 'fail'); }
+        else { hrEl.textContent = '\u2014'; hrEl.className = 'val'; }
+        document.getElementById('kpiHourlySub').textContent = (health.last_hourly_new_rows || 0) + ' new rows';
+        document.getElementById('kpiNdvi').textContent = fmtNum(health.n_ndvi_districts);
+        document.getElementById('kpiNdviSub').textContent = fmtNum(health.n_ndvi) + ' records';
+        var label = document.getElementById('liveLabelPipeline');
+        if (label) label.textContent = health.status === 'healthy' ? '\u2713 Healthy' : (health.status || 'Unknown');
+    }
+
+    function renderPipelineFreshness(data) {
+        var body = document.getElementById('freshnessBody');
+        var count = document.getElementById('freshnessCount');
+        if (!data || !data.length) { body.innerHTML = '<tr><td colspan="6" style="text-align:center;color:var(--color-text-low);">No data</td></tr>'; count.textContent = '(0)'; return; }
+        count.textContent = '(' + data.length + ' commodities)';
+        var html = '';
+        for (var i = 0; i < Math.min(data.length, 50); i++) {
+            var r = data[i];
+            html += '<tr><td>' + (r.commodity || '\u2014') + '</td><td>' + fmtDate(r.latest_date) + '</td><td>' + fmtDate(r.earliest_date) + '</td><td class="num">' + fmtNum(r.row_count) + '</td><td class="num">' + fmtNum(r.n_districts) + '</td><td class="num">' + fmtNum(r.n_states) + '</td></tr>';
+        }
+        body.innerHTML = html;
+    }
+
+    async function renderPipelineDiagram() {
+        var wrapper = document.getElementById('mermaidWrapperPipeline');
+        wrapper.className = 'mermaid-wrapper loading';
+        wrapper.innerHTML = '<div class="spinner"></div><div class="loading-text">Rendering pipeline diagram...</div>';
+        try {
+            var resp = await fetch(MMD_URL + '?_=' + Date.now());
+            if (!resp.ok) throw new Error('MMD returned ' + resp.status);
+            var mmd = await resp.text();
+            var clean = mmd.replace(/```mermaid\n?/g, '').replace(/```\n?/g, '').trim();
+            var mermaid = window.mermaid;
+            if (!mermaid) throw new Error('Mermaid.js not loaded');
+            if (!pipelineMermaidInit) {
+                await mermaid.initialize({ startOnLoad: false, theme: pipelineDark ? 'dark' : 'default',
+                    themeVariables: pipelineDark ? { primaryColor:'#1a1a2e', primaryTextColor:'#ffffff', lineColor:'#d7ff00', secondaryColor:'#16213e', mainBkg:'#0d0d1a', nodeBorder:'#533483', clusterBkg:'#0a0a12', titleColor:'#d7ff00', nodeTextColor:'#ffffff' } : { primaryColor:'#d7ff00', lineColor:'#333' },
+                    fontFamily: '"Space Grotesk", "Inter", sans-serif' });
+                pipelineMermaidInit = true;
+            }
+            var result = await mermaid.render('pipelineDiagramSvg', clean);
+            wrapper.className = 'mermaid-wrapper';
+            wrapper.innerHTML = result.svg;
+        } catch (e) {
+            wrapper.className = 'mermaid-wrapper';
+            wrapper.innerHTML = '<div class="diagram-error">Failed to render diagram: ' + e.message + '<br><button class="retry" onclick="renderPipelineDiagram()">&#10227; Retry</button></div>';
+        }
+    }
+
+    function startPipelineCountdown() {
+        if (countdownTimer) clearInterval(countdownTimer);
+        countdownValue = 60;
+        var el = document.getElementById('countdown');
+        if (el) el.textContent = countdownValue;
+        countdownTimer = setInterval(function() {
+            countdownValue--;
+            var el2 = document.getElementById('countdown');
+            if (el2) el2.textContent = Math.max(0, countdownValue);
+            if (countdownValue <= 0) refreshPipeline();
+            // Stop countdown if tab is not visible
+            if (!document.getElementById('tab-pipeline').classList.contains('active')) {
+                clearInterval(countdownTimer);
+            }
+        }, 1000);
+    }
+
+    // Auto-start pipeline refresh when switching to pipeline tab
+    var origPipelineSwitch = tabButtons.pipeline ? tabButtons.pipeline.click : null;
+    if (tabButtons.pipeline) {
+        tabButtons.pipeline.addEventListener('click', function() {
+            startPipelineCountdown();
+        });
+    }
+    document.addEventListener('visibilitychange', function() {
+        if (!document.hidden && document.getElementById('tab-pipeline').classList.contains('active')) {
+            refreshPipeline();
+            startPipelineCountdown();
+        }
+    });
+
+    // ================================================================
+    // INTERACTIVE TAB — Clickable Mermaid Diagram
+    // ================================================================
+    var FILE_MAP = {
+        'fetch_prices.py':          'mandi_rdd/ingestion/fetch_prices.py',
+        'prices_varietywise.py':    'mandi_rdd/ingestion/archive_scanner.py',
+        'fetch_rainfall.py':        'mandi_rdd/ingestion/fetch_rainfall.py',
+        'fetch_ndvi.py':            'mandi_rdd/ingestion/fetch_ndvi.py',
+        'ingest_historical_csv.py': 'mandi_rdd/ingestion/ingest_historical_csv.py',
+        'backfill_state.py':        'mandi_rdd/ingestion/backfill_state.py',
+        'rdd_engine.py':            'mandi_rdd/analysis/rdd_engine.py',
+        'fixed_effects.py':         'mandi_rdd/analysis/fixed_effects.py',
+        'forecast.py':              'mandi_rdd/analysis/forecast.py',
+        'classifier.py':            'mandi_rdd/analysis/classifier.py',
+        'prescriptive.py':          'mandi_rdd/analysis/prescriptive.py',
+        'router.py':                'mandi_rdd/ai/router.py',
+        'orchestrator.py':          'mandi_rdd/ai/orchestrator.py',
+        'FastAPI Gateway':          'mandi_rdd/api/main.py',
+        'Streamlit Dashboard':      'mandi_rdd/dashboard/app.py',
+    };
+
+    var DIAGRAM_DEF = [
+        'flowchart TD',
+        '    subgraph S1["01 DATA INGESTION  | API + Archive + Satellite + Backfill"]',
+        '        direction TB',
+        '        A1["fetch_prices.py<br/>data.gov.in API<br/><b>{{n_prices}}</b> records"]',
+        '        A2["fetch_rainfall.py<br/>IMD Grids<br/><b>2,278</b> records<br/><i>34 sub-divisions</i>"]',
+        '        A3["fetch_ndvi.py<br/>Sentinel Hub<br/><b>3,663</b> vegetation records"]',
+        '        A4["ingest_historical_csv.py<br/>CSV backfill"]',
+        '        A5["backfill_state.py<br/>State resolution<br/><b>{{n_prices}}</b> rows"]',
+        '    end',
+        '    subgraph S2["02 DUCKDB WAREHOUSE"]',
+        '        B1["DuckDB Warehouse<br/>mandi_iq.duckdb<br/><b>{{n_prices}}</b> prices"]',
+        '    end',
+        '    subgraph S3["03 ANALYSIS & ML"]',
+        '        direction TB',
+        '        C1["rdd_engine.py<br/>Local linear RDD<br/><b>{{n_rdd}}</b> causal estimates"]',
+        '        C2["fixed_effects.py<br/>FE cross-check<br/><b>52</b> effects"]',
+        '        C3["forecast.py<br/>Seasonal naive<br/><b>84</b> models"]',
+        '        C4["classifier.py<br/>XGBoost + SHAP"]',
+        '        C5["prescriptive.py<br/>Procurement advice"]',
+        '    end',
+        '    subgraph S4["04 AI ORCHESTRATOR"]',
+        '        D1["router.py<br/>Multi-provider LLM"]',
+        '        D2["orchestrator.py<br/>Tool-grounding"]',
+        '    end',
+        '    subgraph S5["05 SERVING"]',
+        '        E1["FastAPI Gateway<br/>/health /prices /forecast"]',
+        '        E2["Streamlit Dashboard<br/>5 interactive pages"]',
+        '    end',
+        '    A1 ==> B1; A2 -.-> B1; A3 -.-> B1; A4 -.-> B1',
+        '    B1 ==> C1; B1 ==> C3; B1 ==> C4',
+        '    C1 ==> C5; C3 ==> C5; C4 ==> C5',
+        '    C5 ==> D1; D1 ==> D2; D2 ==> E1',
+        '    E1 <==> E2',
+        '    linkStyle 0,5,7,8,9,11,12 stroke-width:4px,stroke:#d7ff00,fill:none',
+        '    linkStyle 1,2,3,4,6,10 stroke-width:2px,stroke:#533483,fill:none',
+        '    linkStyle 13 stroke-width:3px,stroke:#e94560,fill:none'
+    ].join('\n');
+
+    var interactiveMermaidInit = false;
+
+    function getRepo() {
+        var input = document.getElementById('repo-input');
+        return (input && input.value || '').replace(/\/+$/, '');
+    }
+
+    function wireInteractiveClicks() {
+        var svg = document.querySelector('#tab-interactive #diagram svg');
+        if (!svg) return;
+        var tooltip = document.getElementById('tooltip');
+        var labels = svg.querySelectorAll('.nodeLabel, .label p, g.node .label');
+        labels.forEach(function(el) {
+            var text = el.textContent || '';
+            var filePath = null;
+            for (var key in FILE_MAP) { if (text.indexOf(key) !== -1) { filePath = FILE_MAP[key]; break; } }
+            var nodeGroup = el.closest('g.node') || el.closest('[class*="node"]');
+            if (!nodeGroup) { var p = el.parentElement; while (p && p.tagName !== 'g') p = p.parentElement; if (p && (p.classList.contains('node') || (p.id && p.id.indexOf('flowchart-') === 0))) nodeGroup = p; }
+            if (!nodeGroup) return;
+            if (filePath) {
+                nodeGroup.classList.add('mandiiq-node');
+                nodeGroup.style.cursor = 'pointer';
+                nodeGroup.setAttribute('aria-label', 'Open: ' + filePath);
+                nodeGroup.setAttribute('tabindex', '0');
+                nodeGroup.addEventListener('click', function(e) {
+                    e.stopPropagation();
+                    var repo = getRepo();
+                    if (!repo || repo.indexOf('github.com') === -1) { tooltip.textContent = 'Set GitHub repo URL'; tooltip.classList.add('show'); setTimeout(function(){ tooltip.classList.remove('show'); }, 1500); return; }
+                    window.open(repo + '/' + filePath, '_blank');
+                    tooltip.textContent = 'Opening ' + filePath; tooltip.classList.add('show');
+                    setTimeout(function(){ tooltip.classList.remove('show'); }, 1200);
+                });
+                nodeGroup.addEventListener('mouseenter', function() { tooltip.textContent = '\ud83d\udcc2 ' + filePath; tooltip.classList.add('show'); });
+                nodeGroup.addEventListener('mousemove', function(e) { var tw = tooltip.offsetWidth; tooltip.style.left = Math.max(8, Math.min(e.clientX + 14, window.innerWidth - tw - 10)) + 'px'; tooltip.style.top = (e.clientY - 8) + 'px'; });
+                nodeGroup.addEventListener('mouseleave', function() { tooltip.classList.remove('show'); });
+            } else if (text.indexOf('DuckDB') !== -1) {
+                nodeGroup.style.cursor = 'copy';
+                nodeGroup.addEventListener('click', function() { tooltip.textContent = 'Copied: mandi_iq.duckdb'; tooltip.classList.add('show'); setTimeout(function(){ tooltip.classList.remove('show'); }, 1500); try { navigator.clipboard.writeText('mandi_iq.duckdb'); } catch(ex) {} });
+                nodeGroup.addEventListener('mouseenter', function() { tooltip.textContent = 'duckdb database'; tooltip.classList.add('show'); });
+                nodeGroup.addEventListener('mousemove', function(e) { var tw = tooltip.offsetWidth; tooltip.style.left = Math.max(8, Math.min(e.clientX + 14, window.innerWidth - tw - 10)) + 'px'; tooltip.style.top = (e.clientY - 8) + 'px'; });
+                nodeGroup.addEventListener('mouseleave', function() { tooltip.classList.remove('show'); });
+            }
+        });
+    }
+
+    async function renderInteractiveDiagram() {
+        var container = document.getElementById('diagram');
+        container.innerHTML = DIAGRAM_DEF;
+        try {
+            if (!interactiveMermaidInit) {
+                await mermaid.initialize({
+                    theme: 'dark', fontFamily: '"Space Grotesk", "Inter", sans-serif',
+                    flowchart: { useMaxWidth: true, htmlLabels: true, curve: 'basis', padding: 20 },
+                    themeVariables: { primaryColor: "#1a1a2e", primaryTextColor: "#ffffff", primaryBorderColor: "#d7ff00", lineColor: "#d7ff00", secondaryColor: "#16213e", mainBkg: "#0d0d1a", nodeBorder: "#533483", clusterBkg: "#0a0a12", clusterBorder: "#2a2a4a", titleColor: "#d7ff00", edgeLabelBackground: "#0d0d1a", nodeTextColor: "#ffffff" }
+                });
+                interactiveMermaidInit = true;
+            }
+            await mermaid.run({ nodes: [container] });
+        } catch(e) {
+            container.innerHTML = '<div style="padding:2rem;text-align:center;color:var(--color-rust);">Failed: ' + e.message + '</div>';
+            return;
+        }
+        wireInteractiveClicks();
+
+        // Update live metrics
+        try {
+            var resp = await fetch(HEALTH_URL, { signal: AbortSignal.timeout(5000) });
+            if (resp.ok) {
+                var data = await resp.json();
+                var label = document.getElementById('liveLabelInteractive');
+                if (label) label.textContent = fmtNum(data.n_prices) + ' prices &middot; ' + fmtNum(data.n_ndvi) + ' NDVI';
+            }
+        } catch(e) {}
+    }
+})();
+</script>
+    <!-- Shared scripts -->
+    <script src="api-config.js"></script>
+<script>
+/* ═══ LIVE DATA FETCH — Auto-refresh KPI cards + Mermaid diagram badges ═══ */
+(function(){
+  var base = (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1')
+    ? 'http://127.0.0.1:18765'
+    : 'https://mandiiq-api.onrender.com';
+  var interval = 60000;
+  window.__metricsCache = {};
+
+  /* ── Patch Mermaid SVGs: replace {{placeholders}} with live values ── */
+  window.__patchMermaidMetrics = function(data){
+    if (!data) return;
+    var svgs = document.querySelectorAll('.mermaid svg, #diagram svg');
+    svgs.forEach(function(svg){
+      var walker = document.createTreeWalker(svg, 4, null, false); // NodeFilter.SHOW_TEXT = 4
+      var nodes = [];
+      while (walker.nextNode()) nodes.push(walker.currentNode);
+      nodes.forEach(function(node){
+        var text = node.textContent || '';
+        var match = text.match(/\{\{(\w+)\}\}/g);
+        if (!match) return;
+        match.forEach(function(ph){
+          var key = ph.replace(/\{\{|\}\}/g, '');
+          if (data[key] === undefined) return;
+          var val = Number(data[key]).toLocaleString();
+          /* Build a live-value badge as a sibling foreignObject */
+          var parent = node.parentElement;
+          if (!parent || parent.tagName === 'foreignObject') return;
+          var fo = document.createElementNS('http://www.w3.org/2000/svg', 'foreignObject');
+          fo.setAttribute('width', (val.length * 9 + 28) + '');
+          fo.setAttribute('height', '22');
+          var fx = parseFloat(parent.getAttribute('x') || 0);
+          var fy = parseFloat(parent.getAttribute('y') || 0);
+          fo.setAttribute('x', (fx + 4) + '');
+          fo.setAttribute('y', (fy - 10) + '');
+          fo.innerHTML = '<span style="display:inline-flex;align-items:center;gap:3px;font-size:11px;font-weight:600;color:#d7ff00;font-family:monospace;background:rgba(0,0,0,0.7);padding:1px 6px;border-radius:3px;border:1px solid rgba(215,255,0,0.3);white-space:nowrap;">' +
+            '<span style="display:inline-block;width:6px;height:6px;border-radius:50%;background:#d7ff00;animation:mermaid-pulse 2s ease-in-out infinite;box-shadow:0 0 6px rgba(215,255,0,0.5);"></span>' +
+            val + '</span>';
+          parent.insertBefore(fo, parent.firstChild);
+          /* Clear the SVG text so only the HTML badge shows */
+          var txt = text.replace(ph, '').replace(/^[\s,;]+/,'');
+          node.textContent = txt;
+        });
+      });
+    });
+  };
+
+  function fetchMetrics(){
+    fetch(base + '/health')
+      .then(function(r){ return r.json(); })
+      .then(function(data){
+        window.__metricsCache = data;
+        document.querySelectorAll('[data-countup]').forEach(function(el){
+          var key = el.dataset.countup;
+          if (data[key] !== undefined) el.textContent = Number(data[key]).toLocaleString();
+        });
+        window.__patchMermaidMetrics(data);
+      })
+      .catch(function(){
+        document.querySelectorAll('[data-countup]').forEach(function(el){
+          if(el.textContent === '—') el.textContent = 'Offline';
+        });
+      });
+  }
+
+  fetchMetrics();
+  setInterval(fetchMetrics, interval);    /* Also patch once Mermaid has finished rendering (deferred) */
+  setTimeout(function(){
+    if (Object.keys(window.__metricsCache).length) window.__patchMermaidMetrics(window.__metricsCache);
+  }, 500);
+
+  /* Watch for SVGs appearing in mermaid wrappers + interactive diagram */
+  var mo = new MutationObserver(function(){
+    if (!Object.keys(window.__metricsCache).length) return;
+    var svgs = document.querySelectorAll('.mermaid svg, #diagram svg');
+    if (svgs.length) window.__patchMermaidMetrics(window.__metricsCache);
+  });
+  mo.observe(document.body, { childList: true, subtree: true });
+
+  /* Cleanup observer after 30s */
+  setTimeout(function(){ mo.disconnect(); }, 30000);
+})();
+</script>
+    </body>
+</html>

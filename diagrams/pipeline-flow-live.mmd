@@ -1,0 +1,139 @@
+---
+title: MandiIQ Pipeline Flow -- Last Successful Cycle<br/><span style='font-size:11px;color:#7e7e7e;'>2026-07-30 14:09 UTC ~ 6m 23s total ~ Outcome: <b style='color:#8FAE89'>success</b></span>
+---
+%%{init: {
+  "theme": "dark",
+  "themeVariables": {
+    "primaryColor": "#1a1a2e",
+    "primaryTextColor": "#ffffff",
+    "primaryBorderColor": "#d7ff00",
+    "lineColor": "#d7ff00",
+    "secondaryColor": "#16213e",
+    "tertiaryColor": "#0f3460",
+    "mainBkg": "#0d0d1a",
+    "nodeBorder": "#533483",
+    "clusterBkg": "#0a0a12",
+    "clusterBorder": "#2a2a4a",
+    "titleColor": "#d7ff00",
+    "edgeLabelBackground": "#0d0d1a",
+    "nodeTextColor": "#ffffff",
+    "fontFamily": "\"Space Grotesk\", \"Inter\", sans-serif"
+  },
+  "flowchart": {
+    "useMaxWidth": true,
+    "htmlLabels": true,
+    "curve": "basis",
+    "padding": 20
+  }
+}%%
+flowchart TD
+    %% Stage 1: DATA INGESTION
+    subgraph S1["01 DATA INGESTION  | API + Archive + Satellite + Backfill + Provenance"]
+        direction TB
+        A1["fetch_prices.py<br/>data.gov.in API <span style='color:#7e7e7e;font-size:10px;'>[-]</span><br/><b>1,334,647</b> records ingested<br/><i>303 commodities ~ 36 states</i>"]
+        A2["prices_varietywise.py<br/>Archive scanner <span style='color:#7e7e7e;font-size:10px;'>[-]</span><br/>Supplementary 60d recent prices<br/><i>Resource 35985678</i>"]
+        A3["fetch_rainfall.py<br/>IMD Grids <span style='color:#7e7e7e;font-size:10px;'>[1m 24s]</span><br/><b>2,278</b> records<br/><i>34 sub-divisions ~ 2021--2026</i>"]
+        A4["fetch_ndvi.py<br/>Sentinel Hub <br/><b>3,663</b> vegetation records<br/><i>605 districts</i>"]
+        A5["ingest_historical_csv.py <span style='color:#7e7e7e;font-size:10px;'>[-]</span><br/>CSV backfill ~ Ashoka archive"]
+        A6["district_map.py<br/>Sub-division mapping <br/><b>860</b> mappings loaded<br/><i>State -> District -> Sub-division</i>"]
+        A7["backfill_state.py <span style='color:#7e7e7e;font-size:10px;'>[1.2s]</span><br/>State name resolution<br/><b>1,334,647</b> rows populated<br/><i>0 rows still empty</i>"]
+        A8["data_lineage.py<br/>Provenance tracking <br/><b>7</b> records<br/><i>2 source types: prices, varietywise, rainfall</i>"]
+    end
+
+    %% Stage 2: DUCKDB WAREHOUSE
+    subgraph S2["02 DUCKDB WAREHOUSE  | Persistent Volume /data"]
+        B1["DuckDB Warehouse<br/>mandi_iq.duckdb<br/><b>1,334,647</b> prices ~ <b>2,278</b> rainfall<br/><b>3,663</b> NDVI ~ <b>144</b> forecast models"]
+    end
+
+    %% Stage 3: ANALYSIS & ML
+    subgraph S3["03 ANALYSIS & ML  | Causal + FE + Forecast + Risk"]
+        direction TB
+        C1["rdd_engine.py <span style='color:#7e7e7e;font-size:10px;'>[34.5s]</span><br/>Local linear RDD<br/><b>117</b> causal estimates<br/>Triangular kernel ~ McCrary test"]
+        C2["fixed_effects.py <br/>FE cross-check<br/><b>84</b> effects with FE<br/>District + month fixed effects"]
+        C3["forecast.py <span style='color:#7e7e7e;font-size:10px;'>[0.0s]</span><br/>Seasonal naive + ensemble<br/><b>144</b> models<br/><span style='color:#8FAE89'>[OK] 144 valid</span> <span style='color:#D9663B'>[!] 10 noisy</span><br/>Best: Maize @ 4.7%"]
+        C4["classifier.py <span style='color:#7e7e7e;font-size:10px;'>[0.1s]</span><br/>XGBoost + SHAP<br/>Price spike risk scoring<br/>ROC-AUC tracking"]
+        C5["prescriptive.py<br/>Procurement recommendations<br/>RDD-grounded ~ Confidence scoring"]
+    end
+
+    %% Stage 4: AI ORCHESTRATOR
+    subgraph S4["04 AI ORCHESTRATOR  | Multi-Model Router"]
+        D1["router.py<br/>Multi-provider LLM<br/>Circuit breaker ~ Fallback chain"]
+        D2["orchestrator.py<br/>Tool-grounding<br/>Endpoint selection"]
+        D3["nightly narratives<br/><b>70</b> commodity reports<br/>AI-generated summaries"]
+    end
+
+    %% Stage 5: SERVING
+    subgraph S5["05 SERVING  | Live Deployment"]
+        E1["FastAPI Gateway<br/>10+ REST endpoints<br/>/health ~ /prices ~ /forecast<br/>/rdd-result ~ /risk-score ~ /ask"]
+        E2["Streamlit Dashboard<br/>5 interactive pages<br/>Executive ~ Forecast ~ Satellite<br/>Discontinuity ~ Risk Map"]
+    end
+
+    %% Main flow: ingestion -> warehouse
+    A1 ==> B1
+    A2 -.-> B1
+    A3 -.-> B1
+    A4 -.-> B1
+    A5 -.-> B1
+    A6 -.-> B1
+    A7 -.-> B1
+
+    %% Main flow: ingestion -> provenance tracking
+    A1 -.-> A8
+    A2 -.-> A8
+    A3 -.-> A8
+    A8 -.-> B1
+
+    %% Main flow: warehouse -> analysis
+    B1 ==> C1
+    B1 -.-> C2
+    B1 ==> C3
+    B1 ==> C4
+
+    %% Main flow: analysis -> prescriptive -> AI
+    C1 ==> C5
+    C2 -.-> C5
+    C3 ==> C5
+    C4 ==> C5
+
+    C5 ==> D1
+    D1 ==> D2
+    D2 ==> D3
+    D3 ==> E1
+
+    E1 <==> E2
+
+    %% Edge styling: thick = primary path
+    linkStyle 0,11,13,14,15,17,18,19 stroke-width:4px,stroke:#d7ff00,fill:none
+    linkStyle 1,2,3,4,5,6,7,8,9,10,12,16,20,21,22 stroke-width:2px,stroke:#533483,fill:none
+    linkStyle 23 stroke-width:3px,stroke:#e94560,fill:none
+
+    %% Stage classes
+    classDef stage1 fill:#1a1a2e,stroke:#e94560,stroke-width:3px,color:#fff
+    classDef stage1Node fill:#1f1f3a,stroke:#e94560,stroke-width:2px,color:#fff
+
+    classDef stage2 fill:#16213e,stroke:#0f3460,stroke-width:2px,color:#fff
+    classDef stage2Node fill:#1a2a4a,stroke:#0f3460,stroke-width:1px,color:#ddd
+
+    classDef stage3 fill:#2d1b69,stroke:#d7ff00,stroke-width:3px,color:#fff
+    classDef stage3Node fill:#3d1b79,stroke:#d7ff00,stroke-width:2px,color:#fff
+
+    classDef stage4 fill:#1a0a2e,stroke:#e94560,stroke-width:2px,color:#fff
+    classDef stage4Node fill:#2a0a3e,stroke:#e94560,stroke-width:2px,color:#ddd
+
+    classDef stage5 fill:#0f1a2e,stroke:#d7ff00,stroke-width:3px,color:#fff
+    classDef stage5Node fill:#1a2a4e,stroke:#d7ff00,stroke-width:2px,color:#fff
+
+    class S1 stage1
+    class A1,A2,A3,A4,A5,A6,A7,A8 stage1Node
+
+    class S2 stage2
+    class B1 stage2Node
+
+    class S3 stage3
+    class C1,C2,C3,C4,C5 stage3Node
+
+    class S4 stage4
+    class D1,D2,D3 stage4Node
+
+    class S5 stage5
+    class E1,E2 stage5Node

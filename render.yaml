@@ -1,0 +1,46 @@
+# Render Blueprints config for the MandiIQ FastAPI server.
+# Deploy: https://dashboard.render.com/blueprints â†’ "New Blueprint Instance"
+# Connect the flawsom/MandiIQ repo. Render reads this file automatically.
+#
+# REQUIRED dashboard env vars (set manually in Render dashboard, not in this file):
+#   DATA_GOV_IN_API_KEY   â€” free key from https://api.data.gov.in/
+#   GEMINI_API_KEY        â€” Google Gemini API key
+#   NVIDIA_API_KEY        â€” NVIDIA NIM API key (for DeepSeek V4 Pro)
+#   OPENROUTER_API_KEY    â€” OpenRouter API key (optional alternative)
+
+services:
+  - type: web
+    name: mandiiq-api
+    runtime: python
+    plan: free
+    region: oregon
+    branch: master
+    buildCommand: |
+      # Fetch the DuckDB from Git LFS before the app starts
+      git lfs install
+      git lfs pull --include 'mandi_rdd/data/mandi_iq.duckdb,mandi_rdd/data/historical/*.csv' --exclude=''
+      pip install -r requirements/api.txt
+    startCommand: uvicorn mandi_rdd.api.main:app --host 0.0.0.0 --port $PORT --workers 1
+    healthCheckPath: /health
+    autoDeploy: true
+    envVars:
+      - key: PYTHON_VERSION
+        value: "3.11"
+      - key: MANDIIQ_DB_PATH
+        value: mandi_rdd/data/mandi_iq.duckdb
+      - key: PORT
+        value: "8000"
+      - key: DATA_GOV_IN_API_KEY
+        sync: false
+      - key: GEMINI_API_KEY
+        sync: false
+      - key: NVIDIA_API_KEY
+        sync: false
+      - key: OPENROUTER_API_KEY
+        sync: false
+      - key: GRAFANA_CLOUD_PROM_URL
+        sync: false
+      - key: GRAFANA_CLOUD_PROM_USER
+        sync: false
+      - key: GRAFANA_CLOUD_PROM_PASSWORD
+        sync: false

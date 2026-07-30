@@ -1,0 +1,295 @@
+name: Nightly Ingestion
+
+# Runs the MandiRDD ingestion pipeline on a schedule and commits the
+# refreshed DuckDB database back to master. Streamlit Cloud auto-deploys
+# from master, so the live dashboard stays current with zero local effort.
+#
+# The Ashoka CEDA historical price import runs autonomously on the Render
+# API server (ashoka_background_import.py) as a daemon thread, kept alive
+# by UptimeRobot pinging /health every 5 minutes.
+#
+# REQUIRED SECRET (repo Settings > Secrets and variables > Actions):
+#   DATA_GOV_IN_API_KEY  - a free key from https://api.data.gov.in/
+
+on:
+  push:
+    branches: [master]
+  schedule:
+    - cron: "30 5 * * *"  # daily at 05:30 UTC (Northflank handles hourly internally)
+  workflow_dispatch: {}   # allow manual "Run workflow" from the Actions tab
+
+permissions:
+  contents: write
+
+jobs:
+  ingest:
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          lfs: true
+
+      - name: Validate render.yaml
+        uses: ./.github/actions/validate-render
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+
+      - name: Bootstrap historical data (optional, one-time)
+        env:
+          DATA_GOV_IN_API_KEY: ${{ secrets.DATA_GOV_IN_API_KEY }}
+          HISTORICAL_SOURCE_URL: ${{ secrets.HISTORICAL_SOURCE_URL }}
+        run: |
+          if [ -n "$HISTORICAL_SOURCE_URL" ]; then
+            python -m mandi_rdd.ingestion.fetch_historical \
+              --url "$HISTORICAL_SOURCE_URL" --out data/historical
+          else
+            echo "HISTORICAL_SOURCE_URL not set; skipping historical bootstrap."
+          fi
+
+      - name: Run daily ingestion + RDD + forecast
+        env:
+          DATA_GOV_IN_API_KEY: ${{ secrets.DATA_GOV_IN_API_KEY }}
+        run: |
+          python -m mandi_rdd.ingestion.scheduler
+
+      - name: Enrich district->state mappings via Ashoka API
+        continue-on-error: true
+        run: |
+          python -m mandi_rdd.ingestion.backfill_state --with-ashoka
+
+      - name: Validate DuckDB LFS object
+        uses: ./.github/actions/validate-duckdb
+
+      - id: commit
+        name: Commit refreshed database
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git lfs install --local 2>/dev/null || true
+          git add mandi_rdd/data/mandi_iq.duckdb \
+            mandi_rdd/data/last_ingest_status.json \
+            mandi_rdd/data/r2_backup_metrics.json 2>/dev/null || true
+          if git diff --cached --quiet; then
+            echo "No database changes to commit."
+            echo "committed=false" >> "$GITHUB_OUTPUT"
+          else
+            git commit -m "chore: nightly ingestion update"
+            # Force-with-lease: safe for bot-only repo. Rebasing binary DuckDB
+            # files causes merge conflicts between concurrent workflow runs.
+            git push --force-with-lease origin master 2>&1
+            git lfs push origin master 2>&1 || echo "LFS push skipped (may not be needed)"
+            echo "committed=true" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Trigger Render deploy
+        if: steps.commit.outputs.committed == 'true'
+        uses: ./.github/actions/trigger-render-deploy
+        with:
+          hook-url: https://p01--mandiiq--x4n8x4gkmzht.code.run/deploy
+
+      - name: Backup DuckDB to Cloudflare R2
+        if: steps.commit.outputs.committed == 'true'
+        continue-on-error: true
+        env:
+          AWS_ACCESS_KEY_ID: ${{ secrets.R2_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.R2_SECRET_ACCESS_KEY }}
+          R2_ACCOUNT_ID: ${{ secrets.R2_ACCOUNT_ID }}
+          R2_BUCKET: ${{ secrets.R2_BUCKET }}
+        run: |
+          if [ -z "$R2_ACCOUNT_ID" ] || [ -z "$R2_BUCKET" ]; then
+            echo "::warning::R2 secrets not configured — skipping backup"
+            exit 0
+          fi
+          BACKUP_FILE="/tmp/mandi_iq.duckdb.gz"
+          METRICS_FILE="mandi_rdd/data/r2_backup_metrics.json"
+          gzip -c mandi_rdd/data/mandi_iq.duckdb > "$BACKUP_FILE"
+          if [ ! -s "$BACKUP_FILE" ]; then
+            echo "::warning::gzip compression failed — skipping backup"
+            rm -f "$BACKUP_FILE"
+            exit 0
+          fi
+          if ! aws s3 cp "$BACKUP_FILE" \
+            "s3://${R2_BUCKET}/mandi_iq.duckdb.gz" \
+            --endpoint-url "https://${R2_ACCOUNT_ID}.r2.cloudflarestorage.com" \
+            --region auto \
+            --content-encoding gzip \
+            --only-show-errors; then
+            echo "::warning::DuckDB R2 backup failed (transient error)"
+          else
+            ORIG_SIZE=$(stat -c%s mandi_rdd/data/mandi_iq.duckdb 2>/dev/null || stat -f%z mandi_rdd/data/mandi_iq.duckdb 2>/dev/null)
+            GZ_SIZE=$(stat -c%s "$BACKUP_FILE" 2>/dev/null || stat -f%z "$BACKUP_FILE" 2>/dev/null)
+            PCT=$(( (ORIG_SIZE - GZ_SIZE) * 100 / ORIG_SIZE ))
+            echo "::notice::DuckDB backed up to s3://${R2_BUCKET}/mandi_iq.duckdb.gz (${PCT}% smaller)"
+            # Compute SHA256 of the source DuckDB for content integrity verification
+            DB_SHA256=$(sha256sum mandi_rdd/data/mandi_iq.duckdb | cut -d' ' -f1)
+            # Write backup metrics for the /metrics endpoint
+            if [ -n "$DB_SHA256" ]; then
+              python3 -c "import json; json.dump({'raw_bytes': ${ORIG_SIZE}, 'compressed_bytes': ${GZ_SIZE}, 'compression_pct': ${PCT}, 'sha256': '${DB_SHA256}', 'timestamp_utc': '$(date -u +%Y-%m-%dT%H:%M:%SZ)', 'timestamp_epoch': $(date +%s)}, open('${METRICS_FILE}', 'w'))"
+            else
+              echo "::warning::sha256sum returned empty — writing metrics without integrity hash"
+              python3 -c "import json; json.dump({'raw_bytes': ${ORIG_SIZE}, 'compressed_bytes': ${GZ_SIZE}, 'compression_pct': ${PCT}, 'timestamp_utc': '$(date -u +%Y-%m-%dT%H:%M:%SZ)', 'timestamp_epoch': $(date +%s)}, open('${METRICS_FILE}', 'w'))"
+            fi
+            echo "::notice::R2 backup metrics written to ${METRICS_FILE}"
+
+          fi
+          rm -f "$BACKUP_FILE"
+
+      - name: Verify DuckDB backup on R2
+        if: steps.commit.outputs.committed == 'true'
+        continue-on-error: true
+        uses: ./.github/actions/verify-r2-backup
+        with:
+          bucket: ${{ secrets.R2_BUCKET }}
+          account-id: ${{ secrets.R2_ACCOUNT_ID }}
+          key: "mandi_iq.duckdb.gz"
+          aws-access-key-id: ${{ secrets.R2_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.R2_SECRET_ACCESS_KEY }}
+
+      - name: Re-render pipeline SVG with fresh data
+        if: steps.commit.outputs.committed == 'true'
+        uses: ./.github/workflows/render-pipeline-svg.yml
+        with:
+          ref_name: master
+
+  ashoka-import:
+    needs: ingest
+    runs-on: ubuntu-latest
+    timeout-minutes: 360
+    if: always()
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          lfs: true
+
+      - name: Validate render.yaml
+        uses: ./.github/actions/validate-render
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+
+      - name: Run full Ashoka CEDA historical fetch (all 453 commodities)
+        continue-on-error: true
+        run: |
+          echo "Fetching multi-year monthly history for ALL 453 commodities..."
+          echo "Partial results saved incrementally."
+          python -m mandi_rdd.ingestion.fetch_historical_ashoka \
+            --commodities "" \
+            --workers 16 \
+            --out mandi_rdd/data/historical/agmarknet_ashoka.csv 2>&1
+          echo "Ashoka fetch completed or timed out."
+          wc -l mandi_rdd/data/historical/agmarknet_ashoka.csv
+
+      - name: Ingest Ashoka CSV into DuckDB
+        continue-on-error: true
+        run: |
+          if [ -f mandi_rdd/data/historical/agmarknet_ashoka.csv ]; then
+            python -m mandi_rdd.ingestion.ashoka_background_import --backfill-only 2>&1 || \
+              echo "Backfill may have failed"
+          else
+            echo "No Ashoka CSV found; skipping."
+          fi
+
+      - name: Validate DuckDB LFS object
+        uses: ./.github/actions/validate-duckdb
+
+      - id: commit-ashoka
+        name: Commit enriched DuckDB
+        continue-on-error: true
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git lfs install --local 2>/dev/null || true
+          git add mandi_rdd/data/mandi_iq.duckdb \
+            mandi_rdd/data/historical/agmarknet_ashoka.csv \
+            mandi_rdd/data/r2_backup_metrics.json 2>/dev/null || true
+          if git diff --cached --quiet; then
+            echo "No database changes to commit."
+            echo "committed=false" >> "$GITHUB_OUTPUT"
+          else
+            git commit -m "chore: ashoka historical ingest update"
+            git push --force-with-lease origin master 2>&1
+            git lfs push origin master 2>&1 || echo "LFS push skipped"
+            echo "committed=true" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Backup DuckDB to Cloudflare R2
+        if: steps.commit-ashoka.outputs.committed == 'true'
+        continue-on-error: true
+        env:
+          AWS_ACCESS_KEY_ID: ${{ secrets.R2_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.R2_SECRET_ACCESS_KEY }}
+          R2_ACCOUNT_ID: ${{ secrets.R2_ACCOUNT_ID }}
+          R2_BUCKET: ${{ secrets.R2_BUCKET }}
+        run: |
+          if [ -z "$R2_ACCOUNT_ID" ] || [ -z "$R2_BUCKET" ]; then
+            echo "::warning::R2 secrets not configured — skipping backup"
+            exit 0
+          fi
+          BACKUP_FILE="/tmp/mandi_iq.duckdb.gz"
+          METRICS_FILE="mandi_rdd/data/r2_backup_metrics.json"
+          gzip -c mandi_rdd/data/mandi_iq.duckdb > "$BACKUP_FILE"
+          if [ ! -s "$BACKUP_FILE" ]; then
+            echo "::warning::gzip compression failed — skipping backup"
+            rm -f "$BACKUP_FILE"
+            exit 0
+          fi
+          if ! aws s3 cp "$BACKUP_FILE" \
+            "s3://${R2_BUCKET}/mandi_iq.duckdb.gz" \
+            --endpoint-url "https://${R2_ACCOUNT_ID}.r2.cloudflarestorage.com" \
+            --region auto \
+            --content-encoding gzip \
+            --only-show-errors; then
+            echo "::warning::DuckDB R2 backup failed (transient error)"
+          else
+            ORIG_SIZE=$(stat -c%s mandi_rdd/data/mandi_iq.duckdb 2>/dev/null || stat -f%z mandi_rdd/data/mandi_iq.duckdb 2>/dev/null)
+            GZ_SIZE=$(stat -c%s "$BACKUP_FILE" 2>/dev/null || stat -f%z "$BACKUP_FILE" 2>/dev/null)
+            PCT=$(( (ORIG_SIZE - GZ_SIZE) * 100 / ORIG_SIZE ))
+            echo "::notice::DuckDB backed up to s3://${R2_BUCKET}/mandi_iq.duckdb.gz (${PCT}% smaller)"
+            # Compute SHA256 of the source DuckDB for content integrity verification
+            DB_SHA256=$(sha256sum mandi_rdd/data/mandi_iq.duckdb | cut -d' ' -f1)
+            # Write backup metrics for the /metrics endpoint
+            if [ -n "$DB_SHA256" ]; then
+              python3 -c "import json; json.dump({'raw_bytes': ${ORIG_SIZE}, 'compressed_bytes': ${GZ_SIZE}, 'compression_pct': ${PCT}, 'sha256': '${DB_SHA256}', 'timestamp_utc': '$(date -u +%Y-%m-%dT%H:%M:%SZ)', 'timestamp_epoch': $(date +%s)}, open('${METRICS_FILE}', 'w'))"
+            else
+              echo "::warning::sha256sum returned empty — writing metrics without integrity hash"
+              python3 -c "import json; json.dump({'raw_bytes': ${ORIG_SIZE}, 'compressed_bytes': ${GZ_SIZE}, 'compression_pct': ${PCT}, 'timestamp_utc': '$(date -u +%Y-%m-%dT%H:%M:%SZ)', 'timestamp_epoch': $(date +%s)}, open('${METRICS_FILE}', 'w'))"
+            fi
+            echo "::notice::R2 backup metrics written to ${METRICS_FILE}"
+
+          fi
+          rm -f "$BACKUP_FILE"
+
+      - name: Verify DuckDB backup on R2
+        if: steps.commit-ashoka.outputs.committed == 'true'
+        continue-on-error: true
+        uses: ./.github/actions/verify-r2-backup
+        with:
+          bucket: ${{ secrets.R2_BUCKET }}
+          account-id: ${{ secrets.R2_ACCOUNT_ID }}
+          key: "mandi_iq.duckdb.gz"
+          aws-access-key-id: ${{ secrets.R2_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.R2_SECRET_ACCESS_KEY }}
+
+      - name: Re-render pipeline SVG with fresh data
+        if: steps.commit-ashoka.outputs.committed == 'true'
+        uses: ./.github/workflows/render-pipeline-svg.yml
+        with:
+          ref_name: master

@@ -1,0 +1,135 @@
+name: Render Pipeline SVG
+
+# Renders the pipeline DAG diagram to SVG on every push and uploads it as a
+# downloadable artifact.  The SVG is also committed back to the repo so the
+# README always shows the latest diagram without needing the live server.
+#
+# The source .mmd file is regenerated from live DuckDB data by the hourly
+# pipeline (run_hourly.py) or nightly ingest (nightly-ingest.yml) and committed
+# to the repo.  This action only re-renders the SVG — it does NOT re-query
+# DuckDB (none available in CI).
+#
+# Usage in README:
+#   ![Pipeline DAG](diagrams/pipeline-flow-live.svg)
+
+on:
+  push:
+    branches: [master, develop]
+  pull_request:
+    branches: [master]
+    paths:
+      - 'diagrams/pipeline-flow-live.mmd'
+  workflow_dispatch:
+    # Allow manual re-render from the Actions tab
+  workflow_call:
+    # Called by nightly-ingest.yml after DuckDB update to keep SVG in sync.
+    # When called, the commit push targets the provided ref_name.
+    inputs:
+      ref_name:
+        description: "Branch to commit the rendered SVG to"
+        required: false
+        default: "master"
+        type: string
+
+permissions:
+  contents: write
+
+jobs:
+  render:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          lfs: true
+          fetch-depth: 0
+
+      - name: Set up Node.js
+        id: node
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+
+      - name: Cache npm global packages
+        id: npm-cache
+        uses: actions/cache@v4
+        with:
+          path: ~/.npm
+          key: npm-global-${{ runner.os }}-${{ steps.node.outputs.node-version }}-${{ hashFiles('puppeteer.json') }}
+          restore-keys: |
+            npm-global-${{ runner.os }}-${{ steps.node.outputs.node-version }}-
+            npm-global-${{ runner.os }}-
+
+      - name: Install Mermaid CLI
+        run: |
+          npm install -g @mermaid-js/mermaid-cli
+          echo "mmdc $(mmdc --version)"
+
+      - name: Render pipeline MMD to SVG
+        run: |
+          MMD="diagrams/pipeline-flow-live.mmd"
+          SVG="diagrams/pipeline-flow-live.svg"
+
+          if [ ! -f "$MMD" ]; then
+            echo "::warning::No pipeline diagram source found at $MMD"
+            echo "has_diagram=false" >> "$GITHUB_OUTPUT"
+            exit 0
+          fi
+
+          echo "Rendering $MMD -> $SVG ..."
+          mmdc \
+            -i "$MMD" \
+            -o "$SVG" \
+            -p puppeteer.json \
+            -b transparent \
+            -w 1200
+          echo "::notice::SVG rendered: $(wc -c < "$SVG") bytes -> $SVG"
+          echo "has_diagram=true" >> "$GITHUB_OUTPUT"
+        id: render
+
+      - name: Validate SVG output
+        if: steps.render.outputs.has_diagram == 'true'
+        run: |
+          SVG="diagrams/pipeline-flow-live.svg"
+          if grep -q '</svg>' "$SVG"; then
+            echo "::notice::SVG well-formed: $(wc -c < "$SVG") bytes"
+          else
+            echo "::error::SVG is missing closing </svg> tag — render may be truncated"
+            exit 1
+          fi
+
+      - name: Upload SVG as artifact
+        if: steps.render.outputs.has_diagram == 'true'
+        uses: actions/upload-artifact@v4
+        with:
+          name: pipeline-diagram
+          path: diagrams/pipeline-flow-live.svg
+          compression-level: 0
+          if-no-files-found: error
+
+      - name: Commit rendered SVG back to repo
+        if: |
+          steps.render.outputs.has_diagram == 'true' &&
+          github.event_name != 'pull_request'
+        run: |
+          SVG="diagrams/pipeline-flow-live.svg"
+
+          if ! git diff --quiet "$SVG"; then
+            git config user.name "github-actions[bot]"
+            git config user.email "github-actions[bot]@users.noreply.github.com"
+            git add "$SVG"
+            git commit -m "chore: update pipeline diagram SVG"
+
+            # Plain push (no --force). SVG and DuckDB are different files,
+            # so concurrent pushes from other workflows don't conflict on
+            # content. If the push fails due to non-fast-forward, the SVG
+            # is still available from the uploaded artifact.
+            # Use caller-provided ref_name when triggered via workflow_call,
+            # otherwise fall back to the push event's ref_name.
+            BRANCH="${{ inputs.ref_name || github.ref_name }}"
+            git push origin "$BRANCH" 2>&1 || \
+              echo "::warning::Could not push SVG commit (non-fast-forward). SVG is available as an artifact from this run."
+          else
+            echo "SVG unchanged — nothing to commit"
+          fi

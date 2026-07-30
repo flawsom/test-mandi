@@ -1,0 +1,54 @@
+# Northflank Cron Job Dockerfile for MandiIQ Hourly Ingestion
+#
+# Builds a lightweight image that runs `python run_hourly.py` every hour.
+# Shares the same Persistent Volume (/data) as the API server so both
+# read/write the same DuckDB file.
+#
+# Build:
+#   docker build -t mandiiq-cron -f Dockerfile.cronjob .
+#
+# Run (manual test):
+#   docker run --rm -v mandiiq_data:/data -e DATA_GOV_IN_API_KEY=xxx mandiiq-cron
+#
+# Northflank setup:
+#   1. Create a "Cron Job" service
+#   2. Schedule: 0 * * * *
+#   3. Dockerfile: Dockerfile.cronjob
+#   4. Mount the SAME Persistent Volume as the API server at /data
+#   5. Set environment variables (DATA_GOV_IN_API_KEY, etc.)
+
+FROM python:3.12-slim
+
+WORKDIR /app
+
+# Install system deps for numpy, scipy, xgboost, duckdb
+# (NO node.js, NO mermaid-cli — this image is for the pipeline only)
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    gcc g++ libgomp1 \
+    && apt-get clean && rm -rf /var/lib/apt/lists/*
+
+# Install Python deps — use api.txt (lightweight) + httpx + python-dotenv
+# (dotenv is used by run_hourly.py for optional .env loading)
+COPY requirements/api.txt /app/requirements.txt
+RUN pip install --no-cache-dir -r /app/requirements.txt httpx>=0.27.0 python-dotenv>=1.0.0
+
+# Copy application code
+COPY mandi_rdd/ /app/mandi_rdd/
+
+# Copy data files (district coordinates, NDVI cache, etc.)
+COPY data/ /app/data/
+
+# Copy root scripts (run_hourly.py, diagram generator)
+COPY run_hourly.py /app/
+COPY scripts/generate_pipeline_diagram.py /app/scripts/generate_pipeline_diagram.py
+
+# No template needed — the diagram generator creates the .mmd file at runtime
+# (_run_diagram_generator() in run_hourly.py writes it on the first successful run)
+
+ENV PYTHONPATH=/app
+ENV MANDIIQ_DB_PATH=/data/mandi_iq.duckdb
+
+# Run the hourly ingestion script
+# Smart logic: price fetch every hour, full analysis (RDD+FE+Forecast) every 24h
+# Pass --force-full to force a full analysis run on the next cron tick
+CMD ["python", "run_hourly.py"]

@@ -1,0 +1,81 @@
+nvidia:
+  models:
+  - id: deepseek-ai/deepseek-v4-pro
+    name: DeepSeek V4 Pro
+    description: 1M-token context MoE for coding and reasoning. Disables thinking
+      mode for cleaner output.
+    max_retries: 1
+    timeout_seconds: 60
+    cool_down_minutes: 3
+    extra_body:
+      chat_template_kwargs:
+        thinking: false
+    max_tokens: 8192
+  - id: nvidia/nemotron-3-ultra-550b-a55b
+    name: Nemotron 3 Ultra 550B
+    description: 550B MoE with 1M context, agentic reasoning, coding, planning
+    max_retries: 1
+    timeout_seconds: 60
+    cool_down_minutes: 3
+    max_tokens: 4096
+  - id: moonshotai/kimi-k2.6
+    name: Kimi K2.6
+    description: 1T multimodal MoE for coding, agentic tool use, reasoning
+    max_retries: 1
+    timeout_seconds: 60
+    cool_down_minutes: 3
+    max_tokens: 4096
+  - id: z-ai/glm-5.2
+    name: GLM-5.2
+    description: Flagship LLM for agentic workflows, coding, reasoning
+    max_retries: 1
+    timeout_seconds: 60
+    cool_down_minutes: 3
+    max_tokens: 4096
+gemini:
+  models:
+  - id: gemini-2.5-flash
+    name: Gemini 2.5 Flash (free)
+    description: Fastest free Gemini, strong instruction-following, ideal for narratives
+    max_retries: 1
+    timeout_seconds: 30
+    cool_down_minutes: 3
+  - id: gemini-2.0-flash
+    name: Gemini 2.0 Flash (free)
+    description: Reliable free fallback with good reasoning
+    max_retries: 1
+    timeout_seconds: 30
+    cool_down_minutes: 3
+  - id: gemini-2.0-flash-lite
+    name: Gemini 2.0 Flash Lite (free)
+    description: Lightest free model, highest rate limits, last resort
+    max_retries: 1
+    timeout_seconds: 30
+    cool_down_minutes: 3
+openrouter:
+  models:
+  - id: openrouter/free
+    name: OpenRouter Free Auto-Router
+    description: Dynamically routes to the active, healthy free model (e.g. llama-3.3-70b,
+      gemma-4-31b). Never goes deprecated.
+    max_retries: 1
+    timeout_seconds: 30
+    cool_down_minutes: 5
+  - id: meta-llama/llama-3.3-70b-instruct:free
+    name: Llama 3.3 70B Instruct
+    description: Excellent natural prose & narrative generation, high-quality storytelling
+    max_retries: 1
+    timeout_seconds: 45
+    cool_down_minutes: 5
+  - id: google/gemma-4-31b-it:free
+    name: Gemma 4 31B IT
+    description: Great multilingual narrative generation with built-in thinking/reasoning
+    max_retries: 1
+    timeout_seconds: 45
+    cool_down_minutes: 5
+  - id: openai/gpt-oss-120b:free
+    name: GPT-OSS 120B
+    description: Massive free model, great for structured outputs and complex lore-tracking
+    max_retries: 1
+    timeout_seconds: 60
+    cool_down_minutes: 5

@@ -1,0 +1,117 @@
+# Build both Docker images on every push to master.
+#
+# Catches COPY path errors, missing files, and dependency breakage
+# before they reach Northflank deployment.
+#
+# Two builds:
+#   1. Dockerfile.northflank — API server (uvicorn + mermaid-cli)
+#   2. Dockerfile.cronjob   — hourly ingestion (python run_hourly.py)
+#
+# Also runs the Northflank config validator before building to catch
+# stale ENV / COPY / volume-mount mismatches.
+
+name: Docker Build
+
+on:
+  push:
+    branches: [master]
+  workflow_dispatch:
+
+concurrency:
+  group: docker-build-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  validate-config:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          lfs: true
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install validation deps
+        run: pip install --quiet --upgrade pip
+
+      - name: Validate Northflank config
+        run: python scripts/validate_northflank_config.py
+
+  build-api:
+    needs: validate-config
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          lfs: true
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Cache Docker layers
+        uses: actions/cache@v4
+        with:
+          path: /tmp/.buildx-cache-api
+          key: docker-buildx-api-${{ hashFiles('Dockerfile.northflank', 'requirements/api.txt') }}
+          restore-keys: |
+            docker-buildx-api-
+
+      - name: Build Dockerfile.northflank (API server)
+        uses: docker/build-push-action@v5
+        with:
+          context: .
+          file: Dockerfile.northflank
+          push: false
+          load: true
+          tags: mandiiq-api:ci
+          cache-from: type=local,src=/tmp/.buildx-cache-api
+          cache-to: type=local,dest=/tmp/.buildx-cache-api-new,mode=max
+
+      - name: Move cache
+        run: |
+          rm -rf /tmp/.buildx-cache-api
+          mv /tmp/.buildx-cache-api-new /tmp/.buildx-cache-api 2>/dev/null || true
+
+      - name: Verify image exists
+        run: docker image inspect mandiiq-api:ci
+
+  build-cron:
+    needs: validate-config
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          lfs: true
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Cache Docker layers
+        uses: actions/cache@v4
+        with:
+          path: /tmp/.buildx-cache-cron
+          key: docker-buildx-cron-${{ hashFiles('Dockerfile.cronjob', 'requirements/api.txt') }}
+          restore-keys: |
+            docker-buildx-cron-
+
+      - name: Build Dockerfile.cronjob (hourly ingestion)
+        uses: docker/build-push-action@v5
+        with:
+          context: .
+          file: Dockerfile.cronjob
+          push: false
+          load: true
+          tags: mandiiq-cron:ci
+          cache-from: type=local,src=/tmp/.buildx-cache-cron
+          cache-to: type=local,dest=/tmp/.buildx-cache-cron-new,mode=max
+
+      - name: Move cache
+        run: |
+          rm -rf /tmp/.buildx-cache-cron
+          mv /tmp/.buildx-cache-cron-new /tmp/.buildx-cache-cron 2>/dev/null || true
+
+      - name: Verify image exists
+        run: docker image inspect mandiiq-cron:ci

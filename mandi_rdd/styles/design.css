@@ -1,0 +1,1246 @@
+/* ============================================
+   DESIGN TOKENS — Alche Studio (alche.studio) Inspired
+   ============================================
+   This file captures the design system of Alche, Inc.
+   A dark, immersive, Japanese creative studio aesthetic.
+   ============================================ */
+
+:root {
+    /* Background & Surface */
+    --color-bg-base: #000000;
+    --color-bg-radial-end: #0a0a0a;
+    --color-surface: #111111;
+    --color-surface-glass: rgba(255, 255, 255, 0.04);
+    --color-surface-glass-hover: rgba(255, 255, 255, 0.08);
+
+    /* Accents */
+    --color-primary: #d7ff00;      /* Alche Lime Accent */
+    --color-primary-rgb: 215, 255, 0;
+    --color-rust: #D9663B;         /* Deficit Rust - price spike/risk */
+    --color-sage: #8FAE89;         /* Monsoon Sage - healthy NDVI */
+
+    /* Commodity Colors - Second functional color layer */
+    --color-commodity-onion: #8B6BC4;  /* Dusty violet - onion skin */
+    --color-commodity-tomato: #D9663B; /* Tomato */
+    --color-commodity-wheat: #D4A94E;  /* Dry gold - ripened wheat */
+    --color-commodity-potato: #B98354; /* Clay - tuber/soil */
+
+    /* Typography */
+    --font-display: "Space Grotesk", system-ui, -apple-system, sans-serif;
+    --font-body: "IBM Plex Sans", "Inter", system-ui, sans-serif;
+    --font-mono: "IBM Plex Mono", "JetBrains Mono", "Fira Code", monospace;
+    --font-numeric: "Barlow", "IBM Plex Sans", sans-serif;
+
+    /* Semantic surface tokens */
+    --color-ink: #000000;
+    --color-slate: #111111;
+    --color-paper: #ffffff;
+    --color-muted: #bababa;          /* secondary text */
+    --color-faint: #7e7e7e;          /* low-emphasis text */
+    --hairline: rgba(255, 255, 255, 0.08);
+    --hairline-strong: rgba(255, 255, 255, 0.15);
+
+    /* Spacing */
+    --radius: 12px;
+    --radius-pill: 999px;
+    --duration-base: 300ms;
+    --ease-bounce: cubic-bezier(0.16, 1, 0.3, 1);
+    --ease-soft: cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+
+/* ============================================
+   Typography
+   ============================================ */
+
+.font-display {
+    font-family: var(--font-display);
+    letter-spacing: 0.05em;
+}
+
+.font-body {
+    font-family: var(--font-body);
+}
+
+.font-mono {
+    font-family: var(--font-mono);
+}
+
+.font-numeric {
+    font-family: var(--font-numeric);
+    font-variant-numeric: tabular-nums;
+    letter-spacing: 0.02em;
+}
+
+/* ============================================
+   Visual Effects & Atmosphere
+   ============================================ */
+
+.atmosphere {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    overflow: hidden;
+    z-index: 0;
+    pointer-events: none;
+}
+
+.atmosphere-flash {
+    position: fixed;
+    top: -15%;
+    right: -10%;
+    width: 70vw;
+    height: 50vh;
+    background: radial-gradient(circle, rgba(215, 255, 0, 0.06) 0%, transparent 70%);
+    filter: blur(90px);
+    animation: drift-a 30s var(--ease-soft) infinite alternate;
+}
+
+.atmosphere-cloud {
+    position: fixed;
+    bottom: -20%;
+    left: -10%;
+    width: 80vw;
+    height: 60vh;
+    background: radial-gradient(circle, rgba(255, 255, 255, 0.03) 0%, transparent 70%);
+    filter: blur(100px);
+    animation: drift-b 40s var(--ease-soft) infinite alternate;
+}
+
+  /* Drifter layer -- Alche Studio multi-blob ambient system */
+  .atmosphere-drifter {
+      position: absolute;
+      width: var(--s, 160px);
+      height: var(--s, 160px);
+      left: var(--x, 50%);
+      top: var(--y, 50%);
+      border-radius: 50%;
+      background: radial-gradient(circle,
+          hsla(var(--hue, 100), var(--sat, 0.8), var(--lit, 0.55), var(--op, 0.06)) 0%,
+          transparent 70%);
+      filter: blur(80px);
+      animation: drifter-float var(--d, 30s) var(--ease-soft) infinite alternate;
+      will-change: transform;
+      pointer-events: none;
+  }
+
+  @keyframes drifter-float {
+      0%   { transform: translate(0, 0) scale(1) rotate(0deg); }
+      25%  { transform: translate(5%, -5%) scale(1.15) rotate(8deg); }
+      50%  { transform: translate(-3%, 3%) scale(0.95) rotate(-5deg); }
+      75%  { transform: translate(4%, -2%) scale(1.08) rotate(3deg); }
+      100% { transform: translate(-5%, 5%) scale(1.05) rotate(-4deg); }
+  }
+
+
+@keyframes drift-a {
+    from { transform: translate(0, 0); }
+    to { transform: translate(-5%, 8%); }
+}
+
+@keyframes drift-b {
+    from { transform: translate(0, 0); }
+    to { transform: translate(6%, -5%); }
+}
+
+.dot-grid {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-image: radial-gradient(rgba(255, 255, 255, 0.04) 1.5px, transparent 2px);
+    background-size: 38px 38px;
+    z-index: 0;
+    pointer-events: none;
+}
+
+/* ============================================
+   Crosshair & Wireframe Panels
+   ============================================ */
+
+.crosshair-panel {
+    position: relative;
+    border: 1px solid var(--hairline);
+    background: var(--color-surface-glass);
+    padding: 1.5rem;
+    border-radius: 4px;
+}
+
+.crosshair-panel::before,
+.crosshair-panel::after {
+    content: "";
+    position: absolute;
+    width: 8px;
+    height: 8px;
+    border-color: var(--color-primary);
+    border-style: solid;
+    pointer-events: none;
+}
+
+.crosshair-panel::before {
+    top: 0; left: 0;
+    border-width: 1px 0 0 1px;
+}
+.crosshair-panel::after {
+    top: 0; right: 0;
+    border-width: 1px 1px 0 0;
+}
+
+/* Inner corner pair for bottom edges — add .crosshair-panel-inner element */
+.crosshair-panel-inner::before,
+.crosshair-panel-inner::after {
+    content: "";
+    position: absolute;
+    width: 8px;
+    height: 8px;
+    border-color: var(--color-primary);
+    border-style: solid;
+    pointer-events: none;
+}
+.crosshair-panel-inner::before {
+    bottom: 0; left: 0;
+    border-width: 0 0 1px 1px;
+}
+.crosshair-panel-inner::after {
+    bottom: 0; right: 0;
+    border-width: 0 1px 1px 0;
+}
+
+/* Crosshair Card — glass card with animated corner brackets on hover */
+.crosshair-card {
+    position: relative;
+    overflow: hidden;
+}
+
+.crosshair-card::before {
+    content: "";
+    position: absolute;
+    top: -1px;
+    left: -1px;
+    width: 12px;
+    height: 12px;
+    border-top: 2px solid var(--color-primary);
+    border-left: 2px solid var(--color-primary);
+    opacity: 0;
+    transition: opacity var(--duration-base) var(--ease-soft);
+    pointer-events: none;
+}
+
+.crosshair-card::after {
+    content: "";
+    position: absolute;
+    bottom: -1px;
+    right: -1px;
+    width: 12px;
+    height: 12px;
+    border-bottom: 2px solid var(--color-primary);
+    border-right: 2px solid var(--color-primary);
+    opacity: 0;
+    transition: opacity var(--duration-base) var(--ease-soft),
+                transform 0.5s var(--ease-bounce);
+    pointer-events: none;
+}
+
+.crosshair-card:hover::before,
+.crosshair-card:hover::after {
+    opacity: 1;
+}
+
+/* ============================================
+   SlotButton Transition Styling
+   ============================================ */
+
+.slot-btn {
+    position: relative;
+    display: inline-block;
+    color: inherit;
+    text-decoration: none;
+    overflow: hidden;
+    padding: 0.6rem 1.4rem;
+    border: 1px solid var(--hairline);
+    border-radius: var(--radius-pill);
+    background: transparent;
+    cursor: pointer;
+    font-weight: 500;
+    transition: background-color var(--duration-base) var(--ease-soft),
+                border-color var(--duration-base) var(--ease-soft);
+}
+
+.slot-btn:hover {
+    background-color: var(--color-primary);
+    border-color: var(--color-primary);
+}
+
+.slot-btn:hover .slot-text-wrapper {
+    transform: translateY(-100%);
+}
+
+.slot-text-wrapper {
+    position: relative;
+    display: block;
+    transition: transform var(--duration-base) var(--ease-soft);
+}
+
+.slot-text-default {
+    display: block;
+    color: var(--color-paper);
+    transition: opacity var(--duration-base) var(--ease-soft),
+                transform 0.45s var(--ease-bounce);
+}
+
+.slot-text-hover {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    width: 100%;
+    display: block;
+    color: var(--color-ink);
+    font-weight: 600;
+    pointer-events: none;
+    opacity: 0;
+    transform: translateY(-50%) scale(0.95);
+    transition: opacity 0.3s var(--ease-soft),
+                transform 0.45s var(--ease-bounce);
+}
+
+.slot-btn:hover .slot-text-default {
+    opacity: 0;
+    transform: scale(0.9);
+}
+
+.slot-btn:hover .slot-text-hover {
+    opacity: 1;
+    transform: translateY(-50%) scale(1);
+}
+
+/* Slot-button underline accent */
+.slot-btn::after {
+    content: "";
+    position: absolute;
+    bottom: -1px;
+    left: 50%;
+    width: 0;
+    height: 1px;
+    background: var(--color-primary);
+    transition: width 0.4s var(--ease-bounce), left 0.4s var(--ease-bounce);
+    pointer-events: none;
+}
+
+.slot-btn:hover::after {
+    width: 80%;
+    left: 10%;
+}
+
+/* ============================================
+   Commodity UI Components
+   ============================================ */
+
+.commodity-pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 6px 14px;
+    border-radius: 999px;
+    font-family: var(--font-body);
+    font-size: 0.875rem;
+    font-weight: 500;
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid var(--hairline);
+    transition: all 0.2s ease;
+    text-decoration: none;
+}
+
+.commodity-pill.onion { color: var(--color-commodity-onion); border-color: rgba(139, 107, 196, 0.2); }
+.commodity-pill.tomato { color: var(--color-commodity-tomato); border-color: rgba(217, 102, 59, 0.2); }
+.commodity-pill.wheat { color: var(--color-commodity-wheat); border-color: rgba(212, 169, 78, 0.2); }
+.commodity-pill.potato { color: var(--color-commodity-potato); border-color: rgba(185, 131, 84, 0.2); }
+
+.commodity-pill:hover {
+    background: var(--color-surface-glass-hover);
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
+    border-color: var(--color-primary);
+}
+
+.commodity-badge {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 16px;
+    height: 16px;
+    border-radius: 4px;
+}
+
+.commodity-badge.onion  { background: var(--color-commodity-onion); }
+.commodity-badge.tomato { background: var(--color-commodity-tomato); }
+.commodity-badge.wheat  { background: var(--color-commodity-wheat); }
+.commodity-badge.potato { background: var(--color-commodity-potato); }
+
+/* ============================================
+   Risk Indicators
+   ============================================ */
+
+.risk-badge-safe {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 4px 12px;
+    border-radius: 4px;
+    font-family: var(--font-body);
+    font-size: 0.75rem;
+    font-weight: 600;
+    background: rgba(143, 174, 137, 0.1);
+    color: var(--color-sage);
+    border: 1px solid rgba(143, 174, 137, 0.2);
+}
+
+.risk-badge-risk {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 4px 12px;
+    border-radius: 4px;
+    font-family: var(--font-body);
+    font-size: 0.75rem;
+    font-weight: 600;
+    background: rgba(217, 102, 59, 0.1);
+    color: var(--color-rust);
+    border: 1px solid rgba(217, 102, 59, 0.2);
+}
+
+.risk-badge-neutral {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 4px 12px;
+    border-radius: 4px;
+    font-family: var(--font-body);
+    font-size: 0.75rem;
+    font-weight: 600;
+    background: rgba(255, 255, 255, 0.03);
+    color: var(--color-muted);
+    border: 1px solid var(--hairline);
+}
+
+/* ============================================
+   Tables & Ledgers
+   ============================================ */
+
+.ledger-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-family: var(--font-body);
+    font-size: 0.9rem;
+}
+
+.ledger-table th {
+    text-align: left;
+    padding: 12px 16px;
+    color: var(--color-paper);
+    border-bottom: 1px solid var(--hairline-strong);
+    font-weight: 600;
+}
+
+.ledger-table td {
+    padding: 12px 16px;
+    color: var(--color-muted);
+    border-bottom: 1px solid var(--hairline);
+}
+
+.ledger-table tbody tr:hover td {
+    color: var(--color-paper);
+    background: rgba(255, 255, 255, 0.02);
+}
+
+/* ============================================
+   Animation Utilities — Alche Studio Motion
+   ============================================ */
+
+.fade-in-left {
+    opacity: 0;
+    transform: translateX(-20px);
+    transition: opacity 0.6s var(--ease-soft),
+                transform 0.6s var(--ease-bounce);
+}
+
+.fade-in-right {
+    opacity: 0;
+    transform: translateX(20px);
+    transition: opacity 0.6s var(--ease-soft),
+                transform 0.6s var(--ease-bounce);
+}
+
+.scale-in {
+    opacity: 0;
+    transform: scale(0.92);
+    transition: opacity 0.5s var(--ease-soft),
+                transform 0.5s var(--ease-bounce);
+}
+
+.fade-in-left.is-visible,
+.fade-in-right.is-visible,
+.scale-in.is-visible {
+    opacity: 1;
+    transform: none;
+}
+
+/* Staggered reveal delay helpers */
+.stagger-1 { transition-delay: 0.05s; }
+.stagger-2 { transition-delay: 0.1s; }
+.stagger-3 { transition-delay: 0.15s; }
+.stagger-4 { transition-delay: 0.2s; }
+
+/* ============================================
+   Page Hero Section — reusable dashboard hero headers
+   ============================================ */
+
+.page-hero {
+    margin-bottom: 2rem;
+}
+
+.page-hero .page-kicker,
+.page-hero .hero-kicker {
+    font-family: var(--font-mono);
+    font-size: 0.75rem;
+    color: var(--color-primary);
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    margin-bottom: 0.5rem;
+}
+
+.page-hero .page-title,
+.page-hero .hero-title {
+    font-family: var(--font-display);
+    font-weight: 300;
+    font-size: clamp(1.5rem, 3vw, 2.4rem);
+    color: var(--color-paper);
+    letter-spacing: 0.03em;
+    text-transform: uppercase;
+    margin-bottom: 0.5rem;
+}
+
+.page-hero .page-sub,
+.page-hero .hero-sub {
+    color: var(--color-faint);
+    max-width: 720px;
+    line-height: 1.7;
+    font-size: 0.9rem;
+}
+
+.page-hero .page-title .hl,
+.page-hero .hero-title .hl {
+    font-weight: 600;
+    color: var(--color-primary);
+}
+
+/* ============================================
+   GSAP SplitText Character Reveal
+   Inspired by alche.studio WorksItemController
+   ============================================ */
+
+/* SplitText wraps each character in a div.char with display:inline-block by default.
+   Ensure characters flow inline and inherit font properties. */
+.hero-title .char {
+    display: inline-block;
+    will-change: transform, opacity;
+    font-kerning: normal;
+    white-space: pre;
+}
+
+/* Fallback if GSAP fails to load — show content immediately */
+.hero-title {
+    visibility: visible;
+    opacity: 1;
+}
+
+/* Characters rendered by GSAP SplitText inherit display:inline-block.
+   GSAP creates these dynamically — no additional styling needed.
+   The stagger animation itself is the visual highlight. */
+
+/* ============================================
+   Enhanced Dynamics — scroll reveal + glass cards
+   ============================================ */
+
+.reveal {
+    opacity: 0;
+    transform: translateY(28px);
+    transition: opacity 0.7s cubic-bezier(0.16, 1, 0.3, 1),
+                transform 0.7s cubic-bezier(0.16, 1, 0.3, 1);
+    will-change: opacity, transform;
+}
+.reveal.is-visible {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+.glass {
+    background: linear-gradient(135deg,
+        rgba(255, 255, 255, 0.03) 0%,
+        rgba(255, 255, 255, 0.01) 100%);
+    backdrop-filter: blur(14px) saturate(140%);
+    -webkit-backdrop-filter: blur(14px) saturate(140%);
+    border: 1px solid var(--hairline);
+    border-radius: var(--radius);
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5);
+    position: relative;
+    overflow: hidden;
+    transition: transform 0.35s var(--ease-bounce),
+                box-shadow 0.35s ease,
+                border-color 0.35s ease;
+}
+
+.glass::before,
+.glass::after {
+    content: "";
+    position: absolute;
+    width: 10px;
+    height: 10px;
+    opacity: 0;
+    transition: opacity 0.35s ease;
+    pointer-events: none;
+}
+
+.glass::before {
+    top: -1px;
+    left: -1px;
+    border-top: 1.5px solid var(--color-primary);
+    border-left: 1.5px solid var(--color-primary);
+}
+
+.glass::after {
+    bottom: -1px;
+    right: -1px;
+    border-bottom: 1.5px solid var(--color-primary);
+    border-right: 1.5px solid var(--color-primary);
+}
+
+.glass:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 14px 44px rgba(0, 0, 0, 0.7),
+                0 0 0 1px rgba(215, 255, 0, 0.15);
+    border-color: var(--color-primary);
+}
+
+.glass:hover::before,
+.glass:hover::after {
+    opacity: 1;
+    box-shadow: 0 0 4px 2px rgba(215, 255, 0, 0.25);
+}
+
+.gradient-text {
+    background: linear-gradient(110deg,
+        var(--color-primary) 0%,
+        var(--color-paper) 50%,
+        var(--color-primary) 100%);
+    background-size: 200% 200%;
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    color: transparent;
+    animation: gradient-pan 9s ease infinite;
+}
+
+@keyframes gradient-pan {
+    0%   { background-position: 0% 50%; }
+    50%  { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+}
+
+.live-dot {
+    display: inline-block;
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: var(--color-sage);
+    box-shadow: 0 0 0 0 rgba(143, 174, 137, 0.6);
+    animation: live-pulse 2.4s ease-out infinite;
+    margin-right: 6px;
+    vertical-align: middle;
+}
+
+@keyframes live-pulse {
+    0%   { box-shadow: 0 0 0 0 rgba(143, 174, 137, 0.6); }
+    70%  { box-shadow: 0 0 0 10px rgba(143, 174, 137, 0); }
+    100% { box-shadow: 0 0 0 0 rgba(143, 174, 137, 0); }
+}
+
+/* ============================================
+   Theme: Surface Mode — lighter dark background (#111111 → #1a1a1a)
+   Swaps pure black (#000000) for a dark-gray surface to reduce
+   eye strain during daytime use. Applied via body.theme-surface
+   or injected with !important overrides from the toggle.
+   ============================================ */
+
+.theme-surface {
+    --color-bg-base: #111111;
+    --color-bg-radial-end: #1a1a1a;
+    --color-surface: #1a1a1a;
+    --color-surface-glass: rgba(255, 255, 255, 0.03);
+    --color-surface-glass-hover: rgba(255, 255, 255, 0.06);
+    --hairline: rgba(255, 255, 255, 0.06);
+    --hairline-strong: rgba(255, 255, 255, 0.12);
+}
+
+.theme-surface .atmosphere-flash {
+    background: radial-gradient(circle, rgba(215, 255, 0, 0.04) 0%, transparent 70%);
+}
+.theme-surface .atmosphere-cloud {
+    background: radial-gradient(circle, rgba(255, 255, 255, 0.02) 0%, transparent 70%);
+}
+.theme-surface .dot-grid {
+    background-image: radial-gradient(rgba(255, 255, 255, 0.035) 1.5px, transparent 2px);
+}
+.theme-surface .glass {
+    background: linear-gradient(135deg,
+        rgba(255, 255, 255, 0.025) 0%,
+        rgba(255, 255, 255, 0.008) 100%);
+}
+
+
+
+@media (max-width: 640px) {
+    .glass { border-radius: var(--radius); }
+    .reveal { transform: translateY(16px); }
+}
+
+/* Glass treatment for Streamlit native metric tiles + KPI grid cells */
+.kpi-grid > div,
+div[data-testid="stMetric"] {
+    background: linear-gradient(135deg,
+        rgba(255, 255, 255, 0.03) 0%,
+        rgba(255, 255, 255, 0.01) 100%) !important;
+    backdrop-filter: blur(12px) saturate(140%) !important;
+    -webkit-backdrop-filter: blur(12px) saturate(140%) !important;
+    border: 1px solid var(--hairline) !important;
+    border-radius: var(--radius) !important;
+    padding: 14px 18px !important;
+    box-shadow: 0 6px 24px rgba(0, 0, 0, 0.5) !important;
+    transition: transform 0.3s var(--ease-bounce), box-shadow 0.3s ease, border-color 0.3s ease !important;
+}
+
+.kpi-grid > div:hover,
+div[data-testid="stMetric"]:hover {
+    transform: translateY(-3px) !important;
+    box-shadow: 0 12px 34px rgba(0, 0, 0, 0.7), 0 0 0 1px rgba(215, 255, 0, 0.15) !important;
+    border-color: var(--color-primary) !important;
+}
+
+.live-indicator::before {
+    content: "";
+    display: inline-block;
+    width: 8px; height: 8px;
+    border-radius: 50%;
+    background: var(--color-sage);
+    margin-right: 6px;
+    box-shadow: 0 0 0 0 rgba(143, 174, 137, 0.6);
+    animation: live-pulse 2.4s ease-out infinite;
+}
+
+/* ============================================
+   Lenis Smooth Scroll — alche.studio inspired
+   ============================================ */
+
+html.lenis, html.lenis body {
+    height: auto;
+}
+
+.lenis.lenis-smooth {
+    scroll-behavior: auto !important;
+}
+
+.lenis.lenis-smooth [data-lenis-prevent] {
+    overscroll-behavior: contain;
+}
+
+.lenis.lenis-stopped {
+    overflow: hidden;
+}
+
+.lenis.lenis-smooth iframe {
+    pointer-events: none;
+}
+
+/* ============================================
+   Sound Toggle Equalizer — alche.studio inspired
+   ============================================ */
+
+.mandiq-sound-toggle {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 2px;
+    width: 32px;
+    height: 32px;
+    border: 1px solid var(--hairline);
+    border-radius: 50%;
+    background: transparent;
+    cursor: pointer;
+    transition: all 0.3s var(--ease-soft);
+    outline: none;
+    position: relative;
+}
+
+.mandiq-sound-toggle:hover {
+    border-color: var(--color-primary);
+    background: rgba(215, 255, 0, 0.05);
+}
+
+.mandiq-sound-toggle:focus-visible {
+    outline: 2px solid var(--color-primary);
+    outline-offset: 2px;
+}
+
+.mandiq-sound-bars {
+    display: flex;
+    align-items: center;
+    gap: 2px;
+    height: 16px;
+}
+
+.mandiq-sound-bar {
+    width: 2px;
+    background: var(--color-muted);
+    border-radius: 1px;
+    transition: height 0.2s ease, background 0.3s ease;
+}
+
+/* When unmuted — animate the equalizer bars */
+.mandiq-sound-toggle[data-muted="false"] .mandiq-sound-bar {
+    background: var(--color-primary);
+    animation: sound-bar 0.6s var(--ease-soft) infinite alternate;
+}
+
+.mandiq-sound-toggle[data-muted="false"] .mandiq-sound-bar:nth-child(1) {
+    animation-delay: 0s;
+}
+.mandiq-sound-toggle[data-muted="false"] .mandiq-sound-bar:nth-child(2) {
+    animation-delay: 0.15s;
+}
+.mandiq-sound-toggle[data-muted="false"] .mandiq-sound-bar:nth-child(3) {
+    animation-delay: 0.3s;
+}
+
+@keyframes sound-bar {
+    0%   { height: 6px; }
+    50%  { height: 16px; }
+    100% { height: 8px; }
+}
+
+/* ============================================
+   Card Stagger Reveal — alche.studio inspired
+   ============================================ */
+
+.stagger-ready {
+    opacity: 0;
+    transform: translateY(20px);
+    transition: opacity 0.5s cubic-bezier(0.16, 1, 0.3, 1),
+                transform 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+    will-change: opacity, transform;
+}
+
+.stagger-ready.is-visible {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+/* Delay helpers for staggered children */
+.stagger-d1 { transition-delay: 0.04s; }
+.stagger-d2 { transition-delay: 0.08s; }
+.stagger-d3 { transition-delay: 0.12s; }
+.stagger-d4 { transition-delay: 0.16s; }
+.stagger-d5 { transition-delay: 0.2s; }
+.stagger-d6 { transition-delay: 0.24s; }
+
+/* ============================================
+   Page Loader — cinematic overlay
+   ============================================ */
+
+.page-loader {
+    position: fixed;
+    inset: 0;
+    z-index: 9998;
+    background: var(--color-ink);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    pointer-events: all;
+    transition: opacity 0.6s cubic-bezier(0.16, 1, 0.3, 1),
+                visibility 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.page-loader.is-hidden {
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+}
+
+.page-loader .loader-line {
+    width: 60px;
+    height: 2px;
+    background: var(--color-primary);
+    border-radius: 2px;
+    animation: loader-contract 0.9s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+@keyframes loader-contract {
+    0%   { width: 0; opacity: 1; }
+    60%  { width: 60px; opacity: 1; }
+    100% { width: 60px; opacity: 0; }
+}
+
+/* ============================================
+   Scroll Progress Bar — thin lime bar at viewport top
+   ============================================ */
+
+.scroll-progress {
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: 2px;
+    background: var(--color-primary);
+    transform-origin: left;
+    transform: scaleX(0);
+    z-index: 9997;
+    pointer-events: none;
+    will-change: transform;
+}
+
+/* ============================================
+   Underline Sweep — ::after pseudo-element scaleX(0->1)
+   ============================================ */
+
+.underline-sweep {
+    position: relative;
+    display: inline-block;
+    text-decoration: none;
+}
+
+.underline-sweep::after {
+    content: "";
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 1px;
+    background: var(--color-primary);
+    transform: scaleX(0);
+    transform-origin: right;
+    transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+    pointer-events: none;
+}
+
+.underline-sweep:hover::after {
+    transform: scaleX(1);
+    transform-origin: left;
+}
+
+/* ============================================
+   Marker Wipe — highlighter sweep on headings
+   ============================================ */
+
+.marker-wipe {
+    position: relative;
+    display: inline;
+    background: linear-gradient(120deg, rgba(215, 255, 0, 0.15) 0%, rgba(215, 255, 0, 0.15) 100%);
+    background-repeat: no-repeat;
+    background-size: 0% 100%;
+    background-position: 0 100%;
+    transition: background-size 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+    will-change: background-size;
+}
+
+.marker-wipe.is-visible {
+    background-size: 100% 100%;
+}
+
+/* ============================================
+   Section Contrast Inversion — black->white->black
+   ============================================ */
+
+.invert-section {
+    --section-bg: var(--color-ink);
+    --section-text: var(--color-paper);
+    --section-muted: var(--color-muted);
+    background: var(--section-bg);
+    color: var(--section-text);
+    transition: background 0.8s var(--ease-soft), color 0.8s var(--ease-soft);
+}
+
+.invert-section.is-inverted {
+    --section-bg: var(--color-paper);
+    --section-text: var(--color-ink);
+    --section-muted: #555555;
+}
+
+/* ============================================
+   Reveal Variants — scroll-triggered entry animations
+   Extends the existing .reveal pattern
+   ============================================ */
+
+/* Left reveal — slides in from left */
+.reveal-left {
+    opacity: 0;
+    transform: translateX(-30px);
+    transition: opacity 0.7s cubic-bezier(0.16, 1, 0.3, 1),
+                transform 0.7s cubic-bezier(0.16, 1, 0.3, 1);
+    will-change: opacity, transform;
+}
+.reveal-left.is-visible {
+    opacity: 1;
+    transform: translateX(0);
+}
+
+/* Right reveal — slides in from right */
+.reveal-right {
+    opacity: 0;
+    transform: translateX(30px);
+    transition: opacity 0.7s cubic-bezier(0.16, 1, 0.3, 1),
+                transform 0.7s cubic-bezier(0.16, 1, 0.3, 1);
+    will-change: opacity, transform;
+}
+.reveal-right.is-visible {
+    opacity: 1;
+    transform: translateX(0);
+}
+
+/* Scale reveal — zooms in */
+.reveal-scale {
+    opacity: 0;
+    transform: scale(0.88);
+    transition: opacity 0.6s cubic-bezier(0.16, 1, 0.3, 1),
+                transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+    will-change: opacity, transform;
+}
+.reveal-scale.is-visible {
+    opacity: 1;
+    transform: scale(1);
+}
+
+/* Blur reveal — unblurs while fading in */
+.reveal-blur {
+    opacity: 0;
+    filter: blur(6px);
+    transition: opacity 0.7s cubic-bezier(0.16, 1, 0.3, 1),
+                filter 0.7s cubic-bezier(0.16, 1, 0.3, 1);
+    will-change: opacity, filter;
+}
+.reveal-blur.is-visible {
+    opacity: 1;
+    filter: blur(0);
+}
+
+/* Stagger variant — combines with .stagger-d1..d6 for cascading children */
+.reveal-stagger {
+    opacity: 0;
+    transform: translateY(24px);
+    transition: opacity 0.6s cubic-bezier(0.16, 1, 0.3, 1),
+                transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+    will-change: opacity, transform;
+}
+.reveal-stagger.is-visible {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+/* ============================================
+   Chart Frame — lighter glass alternative for Plotly charts
+   ============================================ */
+
+.chart-frame {
+    background: rgba(255, 255, 255, 0.02);
+    border: 1px solid var(--hairline);
+    border-radius: var(--radius);
+    transition: border-color 0.35s ease,
+                box-shadow 0.35s ease;
+}
+
+.chart-frame:hover {
+    border-color: rgba(215, 255, 0, 0.2);
+    box-shadow: 0 0 0 1px rgba(215, 255, 0, 0.06);
+}
+
+/* ============================================
+   Blend Mode Utilities — mix-blend-mode helpers
+   ============================================ */
+
+.blend-difference {
+    mix-blend-mode: difference;
+}
+
+.blend-exclusion {
+    mix-blend-mode: exclusion;
+}
+
+
+/* ============================================
+   Plotly Chart Animations — clip-path reveal, hover glow, crosshair frames
+   ============================================ */
+
+/* Chart reveal — clip-path transition triggered by IntersectionObserver */
+.chart-reveal {
+    clip-path: inset(0 100% 0 0);
+    transition: clip-path 1.1s cubic-bezier(0.16, 1, 0.3, 1);
+    will-change: clip-path;
+}
+
+.chart-reveal.is-visible {
+    clip-path: inset(0 0% 0 0);
+}
+
+/* Chart hover glow — gradient lime box-shadow on hover */
+.chart-hover-glow {
+    transition: box-shadow 0.4s cubic-bezier(0.16, 1, 0.3, 1),
+                border-color 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.chart-hover-glow:hover {
+    border-color: rgba(215, 255, 0, 0.3);
+    box-shadow:
+        0 0 20px rgba(215, 255, 0, 0.06),
+        0 0 40px rgba(215, 255, 0, 0.03),
+        0 0 0 1px rgba(215, 255, 0, 0.1);
+}
+
+/* Chart crosshair — corner marker frames on chart containers */
+.chart-crosshair {
+    position: relative;
+}
+
+.chart-crosshair::before {
+    content: "";
+    position: absolute;
+    top: -1px;
+    left: -1px;
+    width: 12px;
+    height: 12px;
+    border-top: 2px solid var(--color-primary);
+    border-left: 2px solid var(--color-primary);
+    opacity: 0;
+    transition: opacity 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+    pointer-events: none;
+    z-index: 1;
+}
+
+.chart-crosshair::after {
+    content: "";
+    position: absolute;
+    bottom: -1px;
+    right: -1px;
+    width: 12px;
+    height: 12px;
+    border-bottom: 2px solid var(--color-primary);
+    border-right: 2px solid var(--color-primary);
+    opacity: 0;
+    transition: opacity 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+    pointer-events: none;
+    z-index: 1;
+}
+
+.chart-crosshair:hover::before,
+.chart-crosshair:hover::after {
+    opacity: 1;
+}
+
+@media (prefers-reduced-motion: reduce) {
+    /* Original overrides */
+    .reveal { opacity: 1 !important; transform: none !important; transition: none !important; }
+    .gradient-text { animation: none; }
+    .live-dot { animation: none; }
+    .glass::before,
+    .glass::after {
+        opacity: 0 !important;
+        transition: none !important;
+    }
+    .glass:hover::before,
+    .glass:hover::after {
+        opacity: 0 !important;
+    }
+    .glass:hover { transform: none; }
+
+    /* Chart animation overrides */
+    .chart-reveal {
+        clip-path: inset(0 0% 0 0) !important;
+        transition: none !important;
+    }
+    .chart-hover-glow {
+        transition: none !important;
+    }
+    .chart-hover-glow:hover {
+        box-shadow: none;
+        border-color: var(--hairline);
+    }
+    .chart-crosshair::before,
+    .chart-crosshair::after {
+        transition: none !important;
+        opacity: 0 !important;
+    }
+
+    /* Stagger + sound overrides */
+    .stagger-ready {
+        opacity: 1 !important;
+        transform: none !important;
+        transition: none !important;
+    }
+    .mandiq-sound-bar {
+        animation: none !important;
+    }
+    .mandiq-sound-toggle {
+        display: none;
+    }
+
+    /* New animation class overrides */
+    .page-loader {
+        display: none;
+    }
+    .page-loader .loader-line {
+        animation: none;
+    }
+    .scroll-progress {
+        display: none;
+    }
+    .underline-sweep::after {
+        transform: scaleX(0);
+        transition: none;
+    }
+    .marker-wipe {
+        background-size: 100% 100% !important;
+        transition: none;
+    }
+    .invert-section {
+        transition: none !important;
+    }
+    .reveal-left,
+    .reveal-right,
+    .reveal-scale,
+    .reveal-blur,
+    .reveal-stagger {
+        opacity: 1 !important;
+        transform: none !important;
+        filter: none !important;
+        transition: none !important;
+    }
+    .chart-frame {
+        transition: none !important;
+    }
+    .chart-frame:hover {
+        border-color: var(--hairline);
+        box-shadow: none;
+    }
+}
+
+@media (max-width: 640px) {
+    .page-loader .loader-line {
+        width: 40px;
+    }
+    .reveal-left {
+        transform: translateX(-16px);
+    }
+    .reveal-right {
+        transform: translateX(16px);
+    }
+    .reveal-stagger {
+        transform: translateY(12px);
+    }
+}

@@ -1,0 +1,471 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>MandiIQ — Heartbeat &amp; Dashboard Monitor</title>
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Cpath d='M16 2L6 12h6v18h8V12h6L16 2z' fill='%23d7ff00'/%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&amp;family=IBM+Plex+Sans:wght@300;400;500;600&amp;family=Space+Grotesk:wght@300;400;500;600;700&amp;family=Barlow:wght@300;400;500;600;700&amp;family=Inter:wght@300;400;500;600&amp;display=swap" rel="stylesheet">
+<style>
+/* ═══════════════════════════════════════════════════════════
+   1. DESIGN TOKENS — Alche Studio Inspired
+   ═══════════════════════════════════════════════════════════ */
+:root {
+    --bg-base: #000000;
+    --bg-surface: #0a0a0a;
+    --bg-surface-glass: rgba(255,255,255,0.03);
+    --bg-surface-glass-hover: rgba(255,255,255,0.07);
+    --font-display: "Space Grotesk",system-ui,-apple-system,sans-serif;
+    --font-body: "IBM Plex Sans","Inter",system-ui,sans-serif;
+    --font-mono: "IBM Plex Mono","JetBrains Mono",monospace;
+    --font-numeric: "Barlow","IBM Plex Sans",sans-serif;
+    --color-primary: #d7ff00;
+    --color-paper: #ffffff;
+    --color-text-high: #bababa;
+    --color-text-med: #7e7e7e;
+    --color-text-low: #555555;
+    --color-rust: #D9663B;
+    --color-sage: #8FAE89;
+    --color-success: #2ecc71;
+    --color-warning: #f39c12;
+    --color-danger: #e74c3c;
+    --hairline: rgba(255,255,255,0.07);
+    --hairline-strong: rgba(255,255,255,0.14);
+    --duration-base: 350ms;
+    --duration-slow: 600ms;
+    --ease-bounce: cubic-bezier(0.16,1,0.3,1);
+    --ease-soft: cubic-bezier(0.25,0.46,0.45,0.94);
+    --space-sm: .5rem;
+    --space-md: 1rem;
+    --space-lg: 2rem;
+    --space-xl: 4rem;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{background:var(--bg-base);color:var(--color-text-high);font-family:var(--font-body);font-size:15px;line-height:1.625;-webkit-font-smoothing:antialiased;overflow-x:hidden}
+
+/* ── Dot Grid ── */
+.dot-grid{position:fixed;top:0;left:0;width:100vw;height:100vh;background-image:radial-gradient(rgba(255,255,255,0.04) 1.5px,transparent 2px);background-size:38px 38px;z-index:0;pointer-events:none}
+
+/* ── Atmosphere Blobs ── */
+.atmosphere{position:fixed;top:0;left:0;width:100vw;height:100vh;overflow:hidden;z-index:0;pointer-events:none}
+.atmosphere-flash{position:absolute;top:-20%;right:-10%;width:70vw;height:60vh;background:radial-gradient(circle,rgba(215,255,0,0.04) 0%,transparent 70%);filter:blur(100px);animation:drift-a 45s var(--ease-soft) infinite alternate}
+.atmosphere-cloud{position:absolute;bottom:-20%;left:-10%;width:80vw;height:70vh;background:radial-gradient(circle,rgba(255,255,255,0.02) 0%,transparent 70%);filter:blur(120px);animation:drift-b 55s var(--ease-soft) infinite alternate}
+.atmosphere-drifter{position:absolute;width:var(--s,160px);height:var(--s,160px);left:var(--x,50%);top:var(--y,50%);border-radius:50%;background:radial-gradient(circle,hsla(var(--hue,100),var(--sat,0.8),var(--lit,0.55),var(--op,0.06)) 0%,transparent 70%);filter:blur(80px);animation:drifter-float var(--d,30s) var(--ease-soft) infinite alternate;will-change:transform}
+@keyframes drifter-float{0%{transform:translate(0,0) scale(1) rotate(0deg)}25%{transform:translate(5%,-5%) scale(1.15) rotate(8deg)}50%{transform:translate(-3%,3%) scale(0.95) rotate(-5deg)}75%{transform:translate(4%,-2%) scale(1.08) rotate(3deg)}100%{transform:translate(-5%,5%) scale(1.05) rotate(-4deg)}}
+@keyframes drift-a{from{transform:translate(0,0) scale(1)}to{transform:translate(-8%,10%) scale(1.1)}}
+@keyframes drift-b{from{transform:translate(0,0) scale(1.1)}to{transform:translate(10%,-8%) scale(0.95)}}
+
+/* ═══════════════════════════════════════════════════════════
+   2. UNIVERSAL HEADER — mandiq-header
+   ═══════════════════════════════════════════════════════════ */
+.page-wrapper{position:relative;z-index:1;min-height:100vh}
+.mandiq-header{
+    display:flex;align-items:center;justify-content:space-between;
+    padding:1.5rem 2rem;
+    border-bottom:1px solid var(--hairline);
+    max-width:1300px;margin:0 auto;
+}
+.logo-container{display:flex;align-items:center;gap:0.75rem;text-decoration:none}
+.logo-icon{width:20px;height:20px;background:var(--color-primary);clip-path:polygon(0 0,100% 0,100% 50%,50% 100%,0 50%);flex-shrink:0}
+.logo-text{font-family:var(--font-display);font-weight:500;font-size:1rem;letter-spacing:0.12em;color:var(--color-paper);text-transform:uppercase}
+.header-nav{display:flex;align-items:center;gap:2rem}
+.header-actions{display:flex;align-items:center;gap:1rem}
+.nav-link{
+    font-family:var(--font-mono);font-size:0.75rem;color:var(--color-text-med);
+    text-decoration:none;text-transform:uppercase;letter-spacing:0.08em;
+    transition:color var(--duration-base) var(--ease-soft);cursor:pointer
+}
+.nav-link:hover{color:var(--color-primary)}
+.nav-link.active{color:var(--color-paper)}
+.live-dot{
+    display:inline-block;width:7px;height:7px;border-radius:50%;
+    background:var(--color-sage);
+    box-shadow:0 0 0 0 rgba(143,174,137,0.6);
+    animation:live-pulse 2.4s ease-out infinite;
+    margin-right:4px;vertical-align:middle
+}
+@keyframes live-pulse{0%{box-shadow:0 0 0 0 rgba(143,174,137,0.6)}70%{box-shadow:0 0 0 10px rgba(143,174,137,0)}100%{box-shadow:0 0 0 0 rgba(143,174,137,0)}}
+.pipeline-status{display:flex;align-items:center;gap:4px;font-family:var(--font-mono);font-size:0.7rem;color:var(--color-text-med);cursor:default}
+
+/* ── Slot Button ── */
+.slot-btn{
+    position:relative;display:inline-block;color:var(--color-paper);text-decoration:none;
+    overflow:hidden;padding:0.55rem 1.4rem;
+    border:1px solid var(--hairline-strong);border-radius:999px;background:transparent;cursor:pointer;
+    font-family:var(--font-mono);font-size:0.78rem;font-weight:500;letter-spacing:0.08em;
+    transition:background-color var(--duration-base) var(--ease-soft),border-color var(--duration-base) var(--ease-soft)
+}
+.slot-btn:hover{background-color:var(--color-primary);border-color:var(--color-primary)}
+.slot-text-wrapper{position:relative;display:block;transition:transform 0.45s var(--ease-bounce)}
+.slot-text-default{display:block;transition:opacity 0.3s var(--ease-soft),transform 0.45s var(--ease-bounce)}
+.slot-text-hover{
+    position:absolute;top:100%;left:0;width:100%;display:block;
+    color:var(--bg-base);font-weight:600;pointer-events:none;opacity:0;
+    transform:translateY(-50%) scale(0.95);
+    transition:opacity 0.3s var(--ease-soft),transform 0.45s var(--ease-bounce)
+}
+.slot-btn:hover .slot-text-wrapper{transform:translateY(-100%)}
+.slot-btn:hover .slot-text-default{opacity:0;transform:scale(0.9)}
+.slot-btn:hover .slot-text-hover{opacity:1;transform:translateY(-50%) scale(1)}
+
+/* ── Theme Toggle Button ── */
+.theme-toggle-btn{
+    display:inline-flex;align-items:center;justify-content:center;
+    width:32px;height:32px;
+    border:1px solid var(--hairline);border-radius:50%;
+    background:transparent;cursor:pointer;
+    color:var(--color-text-med);text-decoration:none;
+    transition:all 0.3s var(--ease-soft);outline:none;flex-shrink:0
+}
+.theme-toggle-btn:hover{border-color:var(--color-primary);color:var(--color-primary);background:rgba(215,255,0,0.05)}
+.theme-toggle-btn:focus-visible{outline:2px solid var(--color-primary);outline-offset:2px}
+.theme-toggle-btn svg{width:16px;height:16px;transition:transform 0.45s var(--ease-bounce)}
+.theme-toggle-btn:hover svg{transform:rotate(30deg)}
+
+/* ── Surface Mode ── */
+.theme-surface{--bg-base:#111111;--bg-surface:#1a1a1a;--bg-surface-glass:rgba(255,255,255,0.025);--bg-surface-glass-hover:rgba(255,255,255,0.05);--hairline:rgba(255,255,255,0.06);--hairline-strong:rgba(255,255,255,0.12)}
+.theme-surface .atmosphere-flash{background:radial-gradient(circle,rgba(215,255,0,0.04) 0%,transparent 70%)}
+.theme-surface .atmosphere-cloud{background:radial-gradient(circle,rgba(255,255,255,0.02) 0%,transparent 70%)}
+.theme-surface .dot-grid{background-image:radial-gradient(rgba(255,255,255,0.035) 1.5px,transparent 2px)}
+
+/* ═══════════════════════════════════════════════════════════
+   3. HEARTBEAT CONTENT
+   ═══════════════════════════════════════════════════════════ */
+.container{position:relative;z-index:1;max-width:1200px;margin:0 auto;padding:var(--space-xl) var(--space-lg)}
+.header{margin-bottom:var(--space-xl)}
+.header h1{font-family:var(--font-display);font-size:2.2rem;font-weight:600;color:var(--color-paper);letter-spacing:-0.02em;margin-bottom:var(--space-sm)}
+.header h1 .accent{color:var(--color-primary)}
+.header p{color:var(--color-text-med);font-size:.95rem}
+.status-badge{display:inline-flex;align-items:center;gap:6px;padding:4px 14px;border-radius:999px;font-size:.8rem;font-weight:500;font-family:var(--font-mono);border:1px solid var(--hairline);background:var(--bg-surface-glass)}
+.status-badge .dot{width:8px;height:8px;border-radius:50%;display:inline-block}
+.status-badge .dot.green{background:var(--color-success);box-shadow:0 0 8px rgba(46,204,113,0.5)}
+.status-badge .dot.yellow{background:var(--color-warning);box-shadow:0 0 8px rgba(243,156,18,0.5)}
+.status-badge .dot.red{background:var(--color-danger);box-shadow:0 0 8px rgba(231,76,60,0.5)}
+.status-badge .dot.gray{background:var(--color-text-low)}
+.summary-bar{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:var(--space-md);margin-bottom:var(--space-xl)}
+.summary-card{background:var(--bg-surface-glass);border:1px solid var(--hairline);border-radius:12px;padding:var(--space-lg);transition:all var(--duration-base) var(--ease-out)}
+.summary-card:hover{background:var(--bg-surface-glass-hover);border-color:var(--hairline-strong)}
+.summary-card .label{font-size:.75rem;text-transform:uppercase;letter-spacing:.08em;color:var(--color-text-low);margin-bottom:var(--space-sm)}
+.summary-card .value{font-family:var(--font-numeric);font-size:1.6rem;font-weight:600;color:var(--color-paper);line-height:1.2}
+.summary-card .value.accent{color:var(--color-primary)}
+.summary-card .sub{font-size:.8rem;color:var(--color-text-med);margin-top:4px}
+.section{margin-bottom:var(--space-xl)}
+.section-title{font-family:var(--font-display);font-size:1.1rem;font-weight:500;color:var(--color-paper);margin-bottom:var(--space-md);display:flex;align-items:center;gap:var(--space-sm)}
+.section-title .count{font-size:.8rem;color:var(--color-text-low);font-family:var(--font-mono)}
+.table-wrap{background:var(--bg-surface-glass);border:1px solid var(--hairline);border-radius:12px;overflow:hidden}
+table{width:100%;border-collapse:collapse}
+th{text-align:left;padding:var(--space-md);font-size:.7rem;text-transform:uppercase;letter-spacing:.08em;color:var(--color-text-low);border-bottom:1px solid var(--hairline);font-weight:500}
+td{padding:var(--space-md);font-size:.85rem;border-bottom:1px solid var(--hairline);font-family:var(--font-mono)}
+tr:last-child td{border-bottom:none}
+tr:hover td{background:var(--bg-surface-glass-hover)}
+td .hash{color:var(--color-text-med);font-size:.75rem}
+td .ok{color:var(--color-success)}td .fail{color:var(--color-danger)}td .pending{color:var(--color-warning)}
+.hash-timeline{background:var(--bg-surface-glass);border:1px solid var(--hairline);border-radius:12px;padding:var(--space-lg);min-height:200px}
+.hash-timeline .empty{text-align:center;color:var(--color-text-low);font-size:.9rem}
+.hash-row{display:flex;align-items:center;gap:var(--space-md);font-family:var(--font-mono);font-size:.8rem;padding:4px 0}
+.hash-row .ht{color:var(--color-text-low);min-width:80px;font-size:.75rem}
+.hash-row .hv{color:var(--color-text-med);word-break:break-all}
+.hash-row .hd{width:12px;height:12px;border-radius:50%;flex-shrink:0}
+.hash-row .hd.same{background:var(--color-text-low);opacity:.3}
+.hash-row .hd.diff{background:var(--color-primary);box-shadow:0 0 8px rgba(215,255,0,0.5)}
+.loading{text-align:center;padding:var(--space-xl);color:var(--color-text-low)}
+.loading .spinner{width:24px;height:24px;border:2px solid var(--hairline);border-top-color:var(--color-primary);border-radius:50%;animation:spin .8s linear infinite;margin:0 auto var(--space-md)}
+@keyframes spin{to{transform:rotate(360deg)}}
+.error-banner{background:rgba(231,76,60,0.1);border:1px solid rgba(231,76,60,0.3);border-radius:8px;padding:var(--space-md);color:var(--color-danger);font-size:.85rem;margin-bottom:var(--space-md);display:none}
+.error-banner .retry{display:inline-block;margin-left:var(--space-md);padding:2px 12px;border:1px solid rgba(231,76,60,0.4);border-radius:4px;background:transparent;color:var(--color-danger);cursor:pointer;font-size:.8rem}
+.error-banner .retry:hover{background:rgba(231,76,60,0.15)}
+.last-updated{text-align:right;font-size:.75rem;color:var(--color-text-low);margin-top:var(--space-md);font-family:var(--font-mono)}
+
+/* ── Footer ── */
+footer{
+    max-width:1200px;margin:0 auto;
+    padding:2.5rem 2rem;display:flex;
+    align-items:center;justify-content:space-between;
+    border-top:1px solid var(--hairline);margin-top:2rem;
+    font-family:var(--font-mono);font-size:0.7rem;
+    color:var(--color-text-low);letter-spacing:0.05em;
+    position:relative;z-index:1;
+}
+.footer-links{display:flex;gap:1.5rem}
+.footer-link{
+    color:var(--color-text-med);text-decoration:none;
+    text-transform:uppercase;
+    transition:color var(--duration-base) var(--ease-soft)
+}
+.footer-link:hover{color:var(--color-primary)}
+
+@media(max-width:768px){
+    .mandiq-header{flex-direction:column;gap:1rem;align-items:flex-start;padding:1.5rem 1rem}
+    .header-nav{width:100%;justify-content:flex-start;gap:1rem;flex-wrap:wrap}
+    .container{padding:var(--space-lg) var(--space-md)}
+    .header h1{font-size:1.6rem}
+    .summary-bar{grid-template-columns:1fr 1fr}
+    .summary-card .value{font-size:1.2rem}
+    .summary-card{padding:var(--space-md)}
+    footer{flex-direction:column;gap:0.8rem;padding:1.5rem 1rem;text-align:center}
+}
+@media(max-width:480px){
+    .summary-bar{grid-template-columns:1fr}
+    th,td{padding:var(--space-sm)}
+    .header-actions .pipeline-status{display:none}
+}
+@media(prefers-reduced-motion:reduce){
+    .atmosphere-flash,.atmosphere-cloud,.atmosphere-drifter{animation:none!important}
+}
+</style>
+
+<!-- MandiIQ Canvas Effects -->
+<script src="../docs/mandiq-effects.js"></script>
+<style>
+::-webkit-scrollbar{display:none}
+html{scrollbar-width:none;-ms-overflow-style:none}
+</style>
+</head>
+<body>
+<!-- Atmosphere & Dot Grid -->
+<div class="dot-grid" aria-hidden="true"></div>
+<div class="atmosphere" aria-hidden="true">
+    <div class="atmosphere-flash"></div>
+    <div class="atmosphere-cloud"></div>
+    <div class="atmosphere-drifter" style="--x:15%;--y:20%;--s:180px;--d:25s;--hue:100;--op:0.06"></div>
+    <div class="atmosphere-drifter" style="--x:75%;--y:30%;--s:140px;--d:35s;--hue:80;--op:0.05"></div>
+    <div class="atmosphere-drifter" style="--x:50%;--y:70%;--s:200px;--d:40s;--hue:60;--sat:0.9;--lit:0.6;--op:0.04"></div>
+    <div class="atmosphere-drifter" style="--x:8%;--y:65%;--s:100px;--d:30s;--op:0.03"></div>
+    <div class="atmosphere-drifter" style="--x:88%;--y:12%;--s:130px;--d:45s;--hue:120;--op:0.035"></div>
+</div>
+
+<div class="page-wrapper">
+    <!-- ═══ UNIVERSAL HEADER ═══ -->
+    <header class="mandiq-header">
+        <a href="../landing/index.html" class="logo-container">
+            <div class="logo-icon"></div>
+            <span class="logo-text">MandiIQ</span>
+        </a>
+        <nav class="header-nav" aria-label="Main Navigation">
+            <a class="nav-link" href="../landing/index.html" data-scramble>Home</a>
+            <a class="nav-link" href="index.html" data-scramble>Documentation</a>
+            <a class="nav-link" href="https://github.com/flawsom/MandiIQ" target="_blank" data-scramble>GitHub</a>
+        </nav>
+        <div class="header-actions">
+            <button class="theme-toggle-btn" id="theme-toggle-btn" aria-label="Toggle surface mode" title="Toggle surface mode">
+                <svg id="theme-toggle-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <circle cx="12" cy="12" r="5"/>
+                    <line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/>
+                    <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/>
+                    <line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/>
+                    <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/>
+                </svg>
+            </button>
+            <div class="pipeline-status">
+                <span class="live-dot"></span>
+                <span>Live System</span>
+            </div>
+            <a href="https://mandiiq.streamlit.app/" target="_blank" class="slot-btn">
+                <span class="slot-text-wrapper">
+                    <span class="slot-text-default">Launch Dashboard</span>
+                    <span class="slot-text-hover">Open App →</span>
+                </span>
+            </a>
+        </div>
+    </header>
+
+    <!-- ═══ HEARTBEAT CONTENT ═══ -->
+    <div class="container">
+    <div class="header">
+        <h1><span class="accent">&hearts;</span> Heartbeat &amp; Dashboard Monitor</h1>
+        <p>Live status from the hourly heartbeat workflow, dashboard cache freshness, and <code>md5_hash</code> stability tracking.</p>
+        <span class="status-badge" id="liveBadge"><span class="dot gray"></span><span id="liveLabel">Checking...</span></span>
+    </div>
+    <div class="error-banner" id="errorBanner"><span id="errorMessage">Failed to fetch data.</span><button class="retry" onclick="refreshAll()">Retry</button></div>
+    <div class="summary-bar" id="summaryBar">
+    <div class="summary-card"><div class="label">Dashboard Cache</div><div class="value" id="cacheStatus">&mdash;</div><div class="sub" id="cacheSub">loading...</div></div>
+    <div class="summary-card"><div class="label">md5 Hash</div><div class="value" id="hashDisplay" style="font-size:.9rem;font-family:var(--font-mono);word-break:break-all;">&mdash;</div><div class="sub" id="hashSub">loading...</div></div>
+    <div class="summary-card"><div class="label">Last Refresh</div><div class="value" id="lastRefresh">&mdash;</div><div class="sub" id="refreshSub">loading...</div></div>
+    <div class="summary-card"><div class="label">File Age</div><div class="value" id="fileAge">&mdash;</div><div class="sub" id="ageSub">loading...</div></div>
+    </div>
+    <div class="section"><div class="section-title"><span>&#128202; md5 Hash Stability</span><span class="count" id="hashCount"></span></div>
+    <div class="hash-timeline" id="hashTimeline"><div class="empty">&#9203; Waiting for data...</div></div></div>
+    <div class="section"><div class="section-title"><span>&#128203; Workflow Run History</span><span class="count" id="runCount"></span></div>
+    <div class="table-wrap" id="workflowTable">
+    <table><thead><tr><th>Run</th><th>Status</th><th>Event</th><th>Commit</th><th>Triggered</th></tr></thead>
+    <tbody id="workflowBody"><tr><td colspan="5" style="text-align:center;color:var(--color-text-low);">Loading...</td></tr></tbody></table>
+    </div></div>
+    <!-- ═══ PIPELINE METRICS ═══ -->
+    <div class="section" style="margin-top:var(--space-xl);">
+    <div class="section-title"><span>&#128200;</span> Live Pipeline Metrics</div>
+    <div class="summary-bar pipeline-metrics" id="pipelineMetricsBar">
+    <div class="summary-card"><div class="label">Price Records</div><div class="value accent" id="pmPrices">&mdash;</div><div class="sub">in DuckDB warehouse</div></div>
+    <div class="summary-card"><div class="label">Commodities</div><div class="value" id="pmCommodities">&mdash;</div><div class="sub">unique tracked</div></div>
+    <div class="summary-card"><div class="label">Districts</div><div class="value" id="pmDistricts">&mdash;</div><div class="sub">markets covered</div></div>
+    <div class="summary-card"><div class="label">RDD Results</div><div class="value accent" id="pmRdd">&mdash;</div><div class="sub">causal estimates</div></div>
+    <div class="summary-card"><div class="label">Rainfall Records</div><div class="value" id="pmRainfall">&mdash;</div><div class="sub">IMD weather joins</div></div>
+    <div class="summary-card"><div class="label">Forecast Models</div><div class="value" id="pmForecast">&mdash;</div><div class="sub">avg MAPE: <span id="pmMape">&mdash;</span></div></div>
+    </div>
+    <div class="summary-bar" style="grid-template-columns:repeat(auto-fit,minmax(240px,1fr));">
+    <div class="summary-card"><div class="label">Last Hourly Ingest</div><div class="value" id="pmIngestStatus" style="font-size:1.2rem;">&mdash;</div><div class="sub"><span id="pmIngestRows"></span><span id="pmIngestDuration"></span></div></div>
+    <div class="summary-card"><div class="label">NDVI Records</div><div class="value" id="pmNdvi">&mdash;</div><div class="sub">satellite vegetation data</div></div>
+    <div class="summary-card"><div class="label">States Covered</div><div class="value" id="pmStates">&mdash;</div><div class="sub">with price data</div></div>
+    </div>
+    </div>
+
+    <div class="section" style="margin-top:var(--space-xl);">
+    <div class="section-title">&#8505;&#65039; About This Monitor</div>
+    <div style="background:var(--bg-surface-glass);border:1px solid var(--hairline);border-radius:12px;padding:var(--space-lg);font-size:.85rem;color:var(--color-text-med);line-height:1.8;">
+    <p>This page fetches live data from the MandiIQ API and GitHub Actions API every 30 seconds.</p>
+    <ul style="margin-top:var(--space-sm);padding-left:var(--space-lg);">
+    <li><strong>Dashboard Cache</strong> &mdash; Status of the in-memory Grafana dashboard JSON cache (fresh / stale / error).</li>
+    <li><strong>md5 Hash</strong> &mdash; Hash of the loaded dashboard JSON. Changes when the file on disk is updated.</li>
+    <li><strong>Last Refresh</strong> &mdash; When the cache was last cleared and reloaded via webhook or admin endpoint.</li>
+    <li><strong>File Age</strong> &mdash; How long since the dashboard JSON file was last modified on disk.</li>
+    </ul>
+    <p style="margin-top:var(--space-sm);"><strong>Data sources:</strong> <code style="color:var(--color-text-high);">GET /admin/dashboard-status</code> and <code>GET /repos/flawsom/MandiIQ/actions/workflows/dashboard-heartbeat.yml/runs</code>.</p>
+    <p style="margin-top:var(--space-sm);">&#8902; A green dot means the last heartbeat checked in within 70 minutes.<br>&#8902; The hash timeline shows stability: repeated identical hashes = no changes; a new hash = dashboard was updated.</p>
+    <p style="margin-top:var(--space-sm);color:var(--color-warning);font-size:0.8rem;">&#x26a0;&#xfe0f; <strong>CORS note:</strong> If you see a persistent error banner, the Render API may not be sending <code>Access-Control-Allow-Origin</code> headers. The API must allow requests from your domain for this page to work.</p></div></div>
+    <div class="last-updated"><span class="live-dot"></span>Last updated: <span id="lastUpdated">just now</span> &middot; <a href="#" onclick="refreshAll();return false;" style="color:var(--color-primary);text-decoration:none;">&#10227; Refresh</a></div>
+    </div>
+
+    <!-- ═══ FOOTER ═══ -->
+    <footer>
+        <div>&copy; 2026 MandiIQ Project</div>
+        <div class="footer-links">
+            <a href="../landing/index.html" class="footer-link" data-scramble>Home</a>
+            <a href="index.html" class="footer-link" data-scramble>Documentation</a>
+            <a href="https://mandiiq.streamlit.app/" target="_blank" class="footer-link" data-scramble>Dashboard</a>
+            <a href="https://github.com/flawsom/MandiIQ" target="_blank" class="footer-link" data-scramble>GitHub</a>
+        </div>
+    </footer>
+</div>
+
+<!-- Shared scripts -->
+<script src="api-config.js"></script>
+
+<!-- Heartbeat Logic -->
+<script>
+/* ── Dynamic API base + GitHub proxy (proxy avoids CORS) ── */
+const A = (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1')
+  ? 'http://127.0.0.1:18765'
+  : 'https://mandiiq-api.onrender.com';
+const G = A + '/proxy/github/repos/flawsom/MandiIQ', W='dashboard-heartbeat.yml', IV=3e4, STALE=70;
+let hist=[],lastFetch=null;
+function ago(d){if(!d)return'never';let t=new Date(d);if(isNaN(t))return'never';let s=Math.floor((Date.now()-t)/1e3);if(s<60)return s+'s';if(s<3600)return Math.floor(s/60)+'m';if(s<86400)return Math.floor(s/3600)+'h';return Math.floor(s/86400)+'d';}
+function fmt(d){if(!d)return'\u2014';let t=new Date(d);return isNaN(t)?'\u2014':t.toLocaleString();}
+async function gs(){let r=await fetch(A+'/admin/dashboard-status');if(!r.ok)throw Error('Status '+r.status);return r.json();}
+async function gr(){try{let r=await fetch(G+'/actions/workflows/'+W+'/runs?per_page=20',{headers:{Accept:'application/vnd.github.v3+json'}});if(!r.ok)return[];let d=await r.json();return d.workflow_runs||[];}catch(e){return[];}}
+function render(d){
+ let cs=document.getElementById('cacheStatus'),csu=document.getElementById('cacheSub');
+ if(d.cache_size!==void 0&&d.cache_size!==null){cs.textContent=d.cache_size>0?'Fresh':'Empty';cs.style.color=d.cache_size>0?'var(--color-success)':'var(--color-warning)';csu.textContent=d.cache_size+' entries';}
+ else if(d.error){cs.textContent='Error';cs.style.color='var(--color-danger)';csu.textContent=d.error;}
+ else{cs.textContent='Unknown';cs.style.color='var(--color-text-med)';csu.textContent='No cache info';}
+ let he=document.getElementById('hashDisplay'),hs=document.getElementById('hashSub');
+ if(d.md5_hash){he.textContent=d.md5_hash;hs.textContent=d.md5_hash==='00000000000000000000000000000000'?'empty':'hash';let n=new Date().toISOString();if(!hist.length||hist[hist.length-1].hash!==d.md5_hash)hist.push({hash:d.md5_hash,time:n});if(hist.length>100)hist.shift();}
+ else{he.textContent='\u2014';hs.textContent='No hash';}
+ let re=document.getElementById('lastRefresh'),rs=document.getElementById('refreshSub');
+ if(lastFetch){re.textContent=fmt(lastFetch.toISOString());rs.textContent=ago(lastFetch.toISOString());}else if(d.last_refresh_utc){re.textContent=fmt(d.last_refresh_utc);rs.textContent=ago(d.last_refresh_utc);}else{re.textContent='\u2014';rs.textContent='Never';}
+ let ae=document.getElementById('fileAge'),as_=document.getElementById('ageSub');
+ if(d.file_mtime_utc){ae.textContent=fmt(d.file_mtime_utc);as_.textContent=ago(d.file_mtime_utc);}else{ae.textContent='\u2014';as_.textContent='No info';}
+ let badge=document.getElementById('liveBadge'),dot=badge.querySelector('.dot'),label=document.getElementById('liveLabel');
+ if(d.last_refresh_utc){let df=(Date.now()-new Date(d.last_refresh_utc))/6e4;if(df<=STALE){dot.className='dot green';label.textContent='Live \u00b7 '+Math.floor(df)+'m ago';}else if(df<=STALE*2){dot.className='dot yellow';label.textContent='Warning \u00b7 '+Math.floor(df)+'m';}else{dot.className='dot red';label.textContent='Stale \u00b7 '+Math.floor(df)+'m';}}
+ else{dot.className='dot gray';label.textContent='No data';}
+ let tc=document.getElementById('hashTimeline'),hc=document.getElementById('hashCount');hc.textContent='('+hist.length+' snapshots)';
+ if(!hist.length){tc.innerHTML='<div class="empty">&#9203; Waiting...</div>';}else{let h='<div class="hash-list">',r2=hist.slice(-20).reverse();for(let i=0;i<r2.length;i++){let e=r2[i],ch=i<r2.length-1&&e.hash!==r2[i+1].hash,sh=e.hash.length>16?e.hash.slice(0,8)+'\u2026'+e.hash.slice(-8):e.hash;h+='<div class="hash-row"><span class="ht">'+ago(e.time)+'</span><span class="hd '+(ch?'diff':'same')+'" title="'+(ch?'Changed':'Same')+'"></span><span class="hv" title="'+e.hash+'">'+sh+'</span></div>';}h+='</div>';tc.innerHTML=h;}
+ let body=document.getElementById('workflowBody'),rc=document.getElementById('runCount');
+ if(!d._runs||!d._runs.length){rc.textContent='(no data)';body.innerHTML='<tr><td colspan="5" style="text-align:center;color:var(--color-text-low);">No workflow runs found.</td></tr>';return;}
+ rc.textContent='(last '+d._runs.length+')';let h2='';
+ for(let r of d._runs){let cls=r.conclusion==='success'?'ok':r.conclusion==='failure'?'fail':'pending',ic=r.conclusion==='success'?'\u2713':r.conclusion==='failure'?'\u2717':'\u25CC';h2+='<tr><td><a href="'+r.html_url+'" target="_blank" style="color:var(--color-primary);text-decoration:none;">#'+r.run_number+'</a></td><td class="'+cls+'">'+ic+' '+(r.conclusion||'running')+'</td><td>'+r.event+'</td><td class="hash">'+(r.head_commit?r.head_commit.id.slice(0,12):'\u2014')+'</td><td title="'+fmt(r.created_at)+'">'+ago(r.created_at)+'</td></tr>';}
+ body.innerHTML=h2;}
+async function gp(){try{let r=await fetch(A+'/pipeline/metrics.json');if(!r.ok)throw Error('Status '+r.status);return r.json();}catch(e){return null;}}
+function renderPipeline(d){
+  if(!d)return;
+  setText('pmPrices',d.n_prices!==void 0?Number(d.n_prices).toLocaleString():'\u2014');
+  setText('pmCommodities',d.n_commodities!==void 0?Number(d.n_commodities).toLocaleString():'\u2014');
+  setText('pmDistricts',d.n_districts!==void 0?Number(d.n_districts).toLocaleString():'\u2014');
+  setText('pmRdd',d.n_rdd_results!==void 0?Number(d.n_rdd_results).toLocaleString():'\u2014');
+  setText('pmRainfall',d.n_rainfall!==void 0?Number(d.n_rainfall).toLocaleString():'\u2014');
+  setText('pmStates',d.n_states!==void 0?Number(d.n_states).toLocaleString():'\u2014');
+  setText('pmNdvi',d.n_ndvi!==void 0?Number(d.n_ndvi).toLocaleString():'\u2014');
+  if(d.n_forecast_models!==void 0){setText('pmForecast',String(d.n_forecast_models));document.getElementById('pmForecast').style.color=d.n_forecast_models>0?'var(--color-paper)':'var(--color-text-med)';}else{setText('pmForecast','\u2014');}
+  if(d.forecast_avg_mape!==void 0&&d.forecast_avg_mape!==null){setText('pmMape',d.forecast_avg_mape+'%');}else{setText('pmMape','\u2014');}
+  var isEl=document.getElementById('pmIngestStatus'),irEl=document.getElementById('pmIngestRows'),idEl=document.getElementById('pmIngestDuration');
+  if(d.last_hourly_outcome){var ok=d.last_hourly_outcome==='success';isEl.textContent=ok?'\u2713 Success':'\u2717 '+d.last_hourly_outcome;isEl.style.color=ok?'var(--color-success)':'var(--color-danger)';irEl.textContent=d.last_hourly_new_rows!==void 0?d.last_hourly_new_rows+' new rows':' ';idEl.textContent=d.last_hourly_duration_s!==void 0?' \u00b7 '+d.last_hourly_duration_s+'s':' ';}else{isEl.textContent='No data';isEl.style.color='var(--color-text-med)';irEl.textContent='';idEl.textContent='';}
+  if(d.last_hourly_run_utc){var agoStr=ago(d.last_hourly_run_utc);if(agoStr!=='never'){document.getElementById('pmIngestDuration').textContent+=' \u00b7 '+agoStr;}}
+}
+function setText(id,v){var el=document.getElementById(id);if(el)el.textContent=v;}
+async function refreshAll(){document.getElementById('errorBanner').style.display='none';document.getElementById('workflowBody').innerHTML='<tr><td colspan="5" style="text-align:center;color:var(--color-text-low);"><div class="loading"><div class="spinner"></div>Loading...</div></td></tr>';document.getElementById('hashTimeline').innerHTML='<div class="empty"><div class="loading"><div class="spinner"></div>Fetching...</div></div>';try{let[s,r,m]=await Promise.all([gs(),gr(),gp()]);s._runs=r;lastFetch=new Date();render(s);renderPipeline(m);document.getElementById('lastUpdated').textContent=lastFetch.toLocaleString();}catch(e){console.error(e);document.getElementById('errorMessage').textContent='Failed: '+e.message;document.getElementById('errorBanner').style.display='block';}}
+let timer;async function tick(){if(document.hidden)return;await refreshAll();timer=setTimeout(tick,IV);}document.addEventListener("visibilitychange",()=>{if(document.hidden&&timer)clearTimeout(timer);else tick();});tick();
+</script>
+
+<!-- Surface Mode Toggle & Text Scramble -->
+<script>
+(function() {
+    var btn = document.getElementById('theme-toggle-btn');
+    var icon = document.getElementById('theme-toggle-icon');
+    if (!btn) return;
+
+    var STORAGE_KEY = 'mandiiq_surface_mode';
+    var isSurface = false;
+
+    try {
+        var saved = localStorage.getItem(STORAGE_KEY);
+        if (saved === 'true') isSurface = true;
+    } catch(e) {}
+
+    function apply(mode) {
+        isSurface = mode;
+        document.body.classList.toggle('theme-surface', mode);
+        if (mode) {
+            icon.innerHTML = '<path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>';
+        } else {
+            icon.innerHTML = '<circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/>';
+        }
+        try { localStorage.setItem(STORAGE_KEY, mode ? 'true' : 'false'); } catch(e) {}
+        btn.setAttribute('aria-label', mode ? 'Switch to ink mode' : 'Switch to surface mode');
+        btn.setAttribute('title', mode ? 'Switch to ink mode' : 'Switch to surface mode');
+    }
+
+    apply(isSurface);
+
+    btn.addEventListener('click', function() {
+        apply(!isSurface);
+    });
+
+    try {
+        window.addEventListener('storage', function(e) {
+            if (e.key === STORAGE_KEY && e.newValue !== null) {
+                apply(e.newValue === 'true');
+            }
+        });
+    } catch(e) {}
+})();
+
+// Text Scramble
+(function() {
+    var TextScrambler = function(el) {
+        this.el = el;
+        this.chars = '!<>-_\\/[]{}---=+*^?#________';
+        this.originalText = el.innerText;
+    };
+    TextScrambler.prototype.scramble = function() {
+        var self = this;
+        var iteration = 0;
+        var interval = setInterval(function() {
+            self.el.innerText = self.originalText
+                .split('')
+                .map(function(char, index) {
+                    if (index < iteration) return self.originalText[index];
+                    return self.chars[Math.floor(Math.random() * self.chars.length)];
+                })
+                .join('');
+            if (iteration >= self.originalText.length) clearInterval(interval);
+            iteration += 1/3;
+        }, 30);
+    };
+    document.querySelectorAll('[data-scramble]').forEach(function(el) {
+        var scrambler = new TextScrambler(el);
+        el.addEventListener('mouseenter', function() { scrambler.scramble(); });
+    });
+})();
+</script>
+</body>
+</html>
