@@ -108,14 +108,9 @@ streamlit_stderr.log
 verify_dashboard.mjs
 .test_integration.py
 
-# DuckDB artifacts
+# DuckDB artifacts (tracked via Git LFS due to size)
 *.duckdb.wal
-*.duckdb.backup
 
 # IDE/agent directories
 .qoder/
-*.duckdb.pre_fix_backup
-*.duckdb
-*.duckdb
-*.duckdb.pre_fix_backup
 .freebuff/
