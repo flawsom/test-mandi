@@ -1184,6 +1184,8 @@ flowchart TB
         window.__metricsCache = data;
         document.querySelectorAll('[data-countup]').forEach(function(el){
           var key = el.dataset.countup;
+          // /health exposes the RDD count as n_rdd_results — accept both names.
+          if (key === 'n_rdd' && data['n_rdd_results'] !== undefined) key = 'n_rdd_results';
           if (data[key] !== undefined) el.textContent = Number(data[key]).toLocaleString();
         });
         window.__patchMermaidMetrics(data);
