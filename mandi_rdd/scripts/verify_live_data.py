@@ -24,7 +24,7 @@ import urllib.request
 SITES = [
     {"name": "API (Northflank)", "url": "https://p01--mandiiq--zbvjrztgjqgw.code.run/health", "expected_status": 200, "is_api": True, "stale_threshold_hours": 48},
     {"name": "Landing Page (mandiiq.unifies.codes)", "url": "https://mandiiq.unifies.codes", "expected_status": 200, "is_api": False},
-    {"name": "Streamlit Dashboard (mandiiq.streamlit.app)", "url": "https://mandiiq.streamlit.app", "expected_status": [200, 302, 303], "is_api": False},
+    {"name": "Streamlit Dashboard (test-mandi-keae7eruks2n4cqvumjfu8)", "url": "https://test-mandi-keae7eruks2n4cqvumjfu8.streamlit.app", "expected_status": [200, 302, 303], "is_api": False},
     {"name": "GitHub Repo (github.com/flawsom/MandiIQ)", "url": "https://github.com/flawsom/MandiIQ", "expected_status": [200, 301, 302], "is_api": False},
 ]
 

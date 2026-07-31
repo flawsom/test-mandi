@@ -19,7 +19,7 @@ PAGES = {
 }
 
 EXTERNAL_DOMAINS = {
-    "mandiiq.streamlit.app",
+    "test-mandi-keae7eruks2n4cqvumjfu8.streamlit.app",
     "github.com",
     "flawsom.github.io",
     "mandiiq-api.onrender.com",
