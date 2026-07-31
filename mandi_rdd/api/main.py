@@ -635,31 +635,61 @@ async def forecast(
     commodity: str,
     state: Optional[str] = None,
     compare: bool = Query(False, description="If true, returns Prophet vs LSTM side-by-side comparison"),
+    lightweight: bool = Query(False, description="Force pure-numpy forecast (no scipy) — used by Vercel"),
 ):
     """
-    Get a Prophet forecast for a commodity's modal price.
-    
+    Get a forecast for a commodity's modal price.
+
     When `compare=true`, returns Prophet vs LSTM side-by-side metrics
     with an honest winner callout and explanation.
+
+    When `lightweight=true` (or scipy is unavailable), uses the pure-numpy
+    forecast engine (no scipy, no prophet, no sklearn) — suitable for Vercel
+    where the 500 MB function cap excludes heavy ML deps.
     """
     conn = get_connection()
     init_schema(conn)
-    
+
+    # Auto-detect lightweight mode: use the pure-numpy engine when scipy is
+    # not available (Vercel's trimmed bundle) or when the caller asks for it.
+    _use_light = lightweight
+    if not _use_light:
+        try:
+            import scipy  # noqa: F401
+        except ImportError:
+            _use_light = True
+
     if compare:
+        if _use_light:
+            conn.close()
+            return {
+                "status": "unavailable",
+                "commodity": commodity,
+                "reason": "Full model comparison (Prophet vs LSTM) requires scipy, which is "
+                          "not bundled on this deployment. Use the Northflank API for the "
+                          "full comparison, or call /forecast without ?compare=true for the "
+                          "lightweight forecast.",
+                "forecast": [],
+                "metrics": {},
+            }
         from mandi_rdd.analysis.forecast import compare_forecast_models
         result = compare_forecast_models(conn, commodity=commodity, state=state)
         conn.close()
         if "error" in result:
             return {"status": "unavailable", "commodity": commodity, "reason": result["error"], "forecast": [], "metrics": {}}
         return result
-    
-    from mandi_rdd.analysis.forecast import get_forecast_summary
-    result = get_forecast_summary(conn, commodity=commodity)
+
+    if _use_light:
+        from mandi_rdd.analysis.lightweight_forecast import get_forecast_summary_lightweight
+        result = get_forecast_summary_lightweight(conn, commodity=commodity)
+    else:
+        from mandi_rdd.analysis.forecast import get_forecast_summary
+        result = get_forecast_summary(conn, commodity=commodity)
     conn.close()
-    
+
     if "error" in result:
         return {"status": "unavailable", "commodity": commodity, "reason": result["error"], "forecast": [], "metrics": {}}
-    
+
     return result
 
 
