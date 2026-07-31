@@ -276,7 +276,7 @@ footer{padding:2.5rem 0;display:flex;align-items:center;justify-content:space-be
                 </svg>
             </button>
             <div class="pipeline-status"><span class="live-dot"></span><span>Live System</span></div>
-            <a href="https://mandiiq.streamlit.app/" target="_blank" class="slot-btn">
+            <a href="https://test-mandi-keae7eruks2n4cqvumjfu8.streamlit.app/" target="_blank" class="slot-btn">
                 <span class="slot-text-wrapper">
                     <span class="slot-text-default">Launch Dashboard</span>
                     <span class="slot-text-hover">Open App →</span>
@@ -296,7 +296,7 @@ footer{padding:2.5rem 0;display:flex;align-items:center;justify-content:space-be
             <h1 class="hero-title" id="hero-title">Testing Policy Thresholds<br>On <span>Mandi Margins</span></h1>
             <p class="hero-desc">MandiIQ applies Causal Regression Discontinuity Designs (RDD) to test whether IMD rainfall-deficit thresholds drive structural margins in national commodity markets. Live metrics for price records, commodities, districts, and causal estimates are fetched in real-time from the pipeline below.</p>
             <div class="hero-actions">
-                <a href="https://mandiiq.streamlit.app/" target="_blank" class="slot-btn slot-btn-primary">
+                <a href="https://test-mandi-keae7eruks2n4cqvumjfu8.streamlit.app/" target="_blank" class="slot-btn slot-btn-primary">
                     <span class="slot-text-wrapper"><span class="slot-text-default">Explore Live Dashboard</span><span class="slot-text-hover">Launch App →</span></span>
                 </a>
                 <a href="docs/index.html" class="btn-outline">Read Documentation</a>
@@ -385,7 +385,7 @@ flowchart TB
         <h2 class="section-title">Explore the Platform</h2>
         <div class="nav-card-grid">
             <a href="docs/index.html" class="nav-card stagger-ready stagger-d1"><div class="nav-card-icon">📚</div><h3>Documentation</h3><p>Technical docs, API reference, and system architecture</p><span class="nav-card-arrow">→</span></a>
-            <a href="https://mandiiq.streamlit.app/" target="_blank" class="nav-card stagger-ready stagger-d2"><div class="nav-card-icon">📊</div><h3>Dashboard</h3><p>Interactive exploration of prices, forecasts, and RDD results</p><span class="nav-card-arrow">→</span></a>
+            <a href="https://test-mandi-keae7eruks2n4cqvumjfu8.streamlit.app/" target="_blank" class="nav-card stagger-ready stagger-d2"><div class="nav-card-icon">📊</div><h3>Dashboard</h3><p>Interactive exploration of prices, forecasts, and RDD results</p><span class="nav-card-arrow">→</span></a>
             <a href="https://github.com/flawsom/test-mandi" target="_blank" class="nav-card stagger-ready stagger-d3"><div class="nav-card-icon">💻</div><h3>Source Code</h3><p>Open source on GitHub. Fork, contribute, deploy.</p><span class="nav-card-arrow">→</span></a>
             <a href="docs/heartbeat-dashboard.html" class="nav-card stagger-ready stagger-d4"><div class="nav-card-icon">♥</div><h3>System Status</h3><p>Live pipeline status, health checks, and metrics</p><span class="nav-card-arrow">→</span></a>
         </div>
@@ -395,7 +395,7 @@ flowchart TB
         <div>© 2026 MandiIQ Project · Open Source</div>
         <div class="footer-links">
             <a href="docs/index.html" class="footer-link" data-scramble>Documentation</a>
-            <a href="https://mandiiq.streamlit.app/" target="_blank" class="footer-link" data-scramble>Dashboard</a>
+            <a href="https://test-mandi-keae7eruks2n4cqvumjfu8.streamlit.app/" target="_blank" class="footer-link" data-scramble>Dashboard</a>
             <a href="https://github.com/flawsom/test-mandi" target="_blank" class="footer-link" data-scramble>GitHub</a>
         </div>
     </footer>
@@ -417,7 +417,7 @@ const API_CONFIG = {
     const h = window.location.hostname;
     return (h === 'localhost' || h === '127.0.0.1') ? 'http://127.0.0.1:18765' : 'https://p01--mandiiq--zbvjrztgjqgw.code.run';
   },
-  get dashboardUrl() { return 'https://mandiiq.streamlit.app'; },
+  get dashboardUrl() { return 'https://test-mandi-keae7eruks2n4cqvumjfu8.streamlit.app'; },
   endpoints: { health: '/health', freshness: '/freshness', pipeline: '/pipeline.mmd' },
 };
 
