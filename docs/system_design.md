@@ -20,8 +20,20 @@
   <img src="assets/svg/icon-e22ec59e46bc.svg" width="25" height="25" alt="" style="vertical-align:middle; max-width:100%;" /> 1. Current Architecture
 </h2>
 
+<div align="center">
+<img src="assets/svg/system-design-architecture.svg" width="100%" alt="Current Architecture" />
+<br />
+<em style="color:#94A3B8;">Pre-rendered pipeline diagram — crisp at any zoom, identical on every platform</em>
+</div>
+
+<details>
+<summary><strong>Architecture source (Mermaid)</strong> — click to expand</summary>
+
+<!-- Keep in sync with docs/assets/mermaid/system-design-architecture.mmd (regenerate the SVG with:
+     npx mmdc -i docs/assets/mermaid/system-design-architecture.mmd -o docs/assets/svg/system-design-architecture.svg \
+       -c docs/assets/mermaid/alche-config.json -p puppeteer.json -b "#0B0F1E" -s 2 -w 1600) -->
+
 ```mermaid
-%%{init: {"theme": "dark", "themeVariables": { "primaryColor": "#1a1a2e", "primaryTextColor": "#fff", "lineColor": "#d7ff00", "secondaryColor": "#16213e", "tertiaryColor": "#0f3460", "clusterBkg": "#0d0d1a", "clusterBorder": "#533483"}}}%%
 graph TD
     subgraph Data[Data Sources]
         A1[Raw CSV / Agmarknet API]
@@ -49,6 +61,8 @@ graph TD
     D1 --> D2
     D1 --> D3
 ```
+
+</details>
 
 ### Current tech stack
 - **Data layer:** DuckDB (embedded analytical database), Python (pandas, numpy)

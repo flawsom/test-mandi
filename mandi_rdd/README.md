@@ -140,6 +140,19 @@ Live services (auto-checks via shields.io — badges turn green when services re
   <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:middle"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg> Architecture
 </h2>
 
+<div align="center">
+<img src="../docs/assets/svg/mandi-rdd-architecture.svg" width="100%" alt="MandiIQ Architecture" />
+<br />
+<em style="color:#94A3B8;">Pre-rendered pipeline diagram — crisp at any zoom, identical on every platform</em>
+</div>
+
+<details>
+<summary><strong>Architecture source (Mermaid)</strong> — click to expand</summary>
+
+<!-- Keep in sync with docs/assets/mermaid/mandi-rdd-architecture.mmd (regenerate the SVG with:
+     npx mmdc -i docs/assets/mermaid/mandi-rdd-architecture.mmd -o docs/assets/svg/mandi-rdd-architecture.svg \
+       -c docs/assets/mermaid/alche-config.json -p puppeteer.json -b "#0B0F1E" -s 2 -w 1600) -->
+
 ```mermaid
 flowchart TD
     A["data.gov.in<br/>Mandi Prices (Paginated)"]
@@ -154,7 +167,7 @@ flowchart TD
     J["AI Orchestrator<br/>Multi-model Router (free tier)<br/>Circuit-breaker Fallback"]
     K["FastAPI Gateway<br/>10 Endpoints"]
     L["Streamlit Dashboard<br/>5 Pages (Chat-first UX)"]
-    M["CI/CD · Docker · Nightly Cron"]
+    M["CI/CD - Docker - Nightly Cron"]
 
     A --> C
     B --> C
@@ -172,6 +185,8 @@ flowchart TD
     K --> L
     L --> M
 ```
+
+</details>
 
 ---
 

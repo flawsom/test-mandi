@@ -80,14 +80,28 @@ Where:
 
 
 
+<div align="center">
+<img src="docs/assets/svg/rdd-discontinuity-chart.svg" width="100%" alt="RDD Discontinuity at -20% Rainfall Departure" />
+<br />
+<em style="color:#94A3B8;">Pre-rendered chart — crisp at any zoom, identical on every platform</em>
+</div>
+
+<details>
+<summary><strong>Chart source (Mermaid)</strong> — click to expand</summary>
+
+<!-- Keep in sync with docs/assets/mermaid/rdd-discontinuity-chart.mmd (regenerate the SVG with:
+     npx mmdc -i docs/assets/mermaid/rdd-discontinuity-chart.mmd -o docs/assets/svg/rdd-discontinuity-chart.svg \
+       -c docs/assets/mermaid/alche-config.json -p puppeteer.json -b "#0B0F1E" -s 2 -w 1600) -->
+
 ```mermaid
-%%{init: {'theme': 'dark', 'themeVariables': { 'backgroundColor': '#1a1a2e', 'primaryColor': '#d7ff00', 'lineColor': '#d7ff00', 'textColor': '#ffffff'}}}%%
 xychart-beta
     title "RDD Discontinuity at -20% Rainfall Departure"
     x-axis "Rainfall Departure (%)" ["-50%", "-40%", "-30%", "-20% (c)", "-10%", "0%", "+10%", "+20%"]
     y-axis "Log Modal Price" 6.5 --> 9.0
     line [6.8, 7.1, 7.4, 7.6, 8.1, 8.2, 8.3, 8.4]
 ```
+
+</details>
 
 ### Bandwidth and Kernel Selection
 - **Optimal Bandwidth:** Estimated dynamically using cross-validation or the Imbens-Kalyanaraman (IK) optimal bandwidth selector, ensuring the local linear assumption holds.
@@ -141,8 +155,20 @@ To augment the causal analysis, MandiIQ includes a forecasting engine to predict
 
 The MandiIQ prototype is built using a decoupled architecture:
 
+<div align="center">
+<img src="docs/assets/svg/architecture-blueprint.svg" width="100%" alt="System Architecture &amp; High-Scale Blueprint" />
+<br />
+<em style="color:#94A3B8;">Pre-rendered blueprint — crisp at any zoom, identical on every platform</em>
+</div>
+
+<details>
+<summary><strong>Blueprint source (Mermaid)</strong> — click to expand</summary>
+
+<!-- Keep in sync with docs/assets/mermaid/architecture-blueprint.mmd (regenerate the SVG with:
+     npx mmdc -i docs/assets/mermaid/architecture-blueprint.mmd -o docs/assets/svg/architecture-blueprint.svg \
+       -c docs/assets/mermaid/alche-config.json -p puppeteer.json -b "#0B0F1E" -s 2 -w 1600) -->
+
 ```mermaid
-%%{init: {'theme': 'dark', 'themeVariables': { 'primaryColor': '#1a1a2e', 'primaryTextColor': '#fff', 'lineColor': '#d7ff00', 'secondaryColor': '#16213e', 'tertiaryColor': '#0f3460', 'clusterBkg': '#0d0d1a', 'clusterBorder': '#533483'}}}%%
 graph LR
     subgraph Sources[Data Sources]
         A[Agmarknet API / IMD Weather Grids]
@@ -163,8 +189,9 @@ graph LR
     B --> C
     C --> D
     D <--> E
-    linkStyle default stroke-width:2px,fill:none,stroke:#d7ff00
 ```
+
+</details>
 - **Database:** DuckDB acts as an embedded analytical warehouse containing 26,994 transaction records joined with spatial IMD indices.
 - **Serving Layer:** FastAPI exposes endpoints for model predictions, RDD calculations, and raw ledger data.
 - **Frontend:** Streamlit renders Plotly charts and metrics.
