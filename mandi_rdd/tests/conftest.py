@@ -15,7 +15,12 @@ from pathlib import Path
 
 import pytest
 import pytest_asyncio
-from playwright.async_api import async_playwright
+
+# `routes` lives in this directory, which pytest does not put on sys.path
+# when the tests package is imported as mandi_rdd.tests.*.
+_TESTS_DIR = Path(__file__).resolve().parent
+if str(_TESTS_DIR) not in sys.path:
+    sys.path.insert(0, str(_TESTS_DIR))
 
 from routes import STREAMLIT_PORT, STREAMLIT_URL, BOOT_TIMEOUT
 
@@ -149,7 +154,14 @@ def streamlit_server():
 
 @pytest_asyncio.fixture(scope="session")
 async def browser():
-    """Create a Playwright Chromium browser instance (session-scoped)."""
+    """Create a Playwright Chromium browser instance (session-scoped).
+
+    Playwright is only installed in the dedicated E2E job
+    (dashboard-integration.yml), so import it lazily and skip the screenshot
+    tests when it is unavailable instead of failing collection for the whole
+    test directory (which also hosts plain unit tests).
+    """
+    async_playwright = pytest.importorskip("playwright.async_api")
     async with async_playwright() as pw:
         browser = await pw.chromium.launch(
             headless=True,

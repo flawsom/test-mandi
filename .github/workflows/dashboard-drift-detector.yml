@@ -28,7 +28,7 @@ on:
         type: string
 
 env:
-  API_URL: ${{ github.event.inputs.api_url || 'https://p01--mandiiq--x4n8x4gkmzht.code.run' }}
+  API_URL: ${{ github.event.inputs.api_url || 'https://p01--mandiiq--zbvjrztgjqgw.code.run' }}
 
 jobs:
   detect-drift:
@@ -113,6 +113,17 @@ jobs:
     timeout-minutes: 5
 
     steps:
+      - name: Ensure issue labels exist
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          # gh issue create fails with 422 if the label doesn't exist on the
+          # repo. Create idempotently (--force updates an existing label
+          # instead of erroring) before querying/filing.
+          gh label create dashboard-drift --color FF8C00 --force 2>/dev/null || true
+          gh label create automated --color 0E8A16 --force 2>/dev/null || true
+          echo "Labels ensured."
+
       - name: Check for existing open drift issues
         id: existing
         env:

@@ -486,8 +486,12 @@ def build_mermaid(facts, hourly_status, ingest_status, integrity, step_timings):
     )
 
     # ---- Assemble the Mermaid diagram ----
+    # YAML front-matter title must be double-quoted: the title embeds HTML
+    # with a colon-space ("Outcome: <b>...</b>") which is an illegal plain
+    # scalar in YAML and makes mermaid-cli throw a YAMLException.
+    yaml_title = title.replace('\\', '\\\\').replace('"', '\\"')
     mermaid = f"""---
-title: {title}
+title: "{yaml_title}"
 ---
 %%{{init: {{
   "theme": "dark",

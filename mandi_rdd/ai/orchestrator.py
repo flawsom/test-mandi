@@ -16,11 +16,10 @@ Design principles:
 
 import json
 import logging
-from typing import Optional
 
 import numpy as np
 
-from mandi_rdd.ai.router import call_llm, get_api_key
+from mandi_rdd.ai.router import call_llm
 
 logger = logging.getLogger(__name__)
 
@@ -54,7 +53,7 @@ When asked to summarize "what changed" or provide a "nightly update", structure 
 
 # ── Tool definitions ──
 
-def tool_get_rdd_result(commodity: str, state: Optional[str] = None) -> dict:
+def tool_get_rdd_result(commodity: str, state: str | None = None) -> dict:
     """Get the causal RDD estimate for a commodity at the -19% rainfall cutoff."""
     try:
         from mandi_rdd.analysis.rdd_engine import run_rdd
@@ -64,12 +63,12 @@ def tool_get_rdd_result(commodity: str, state: Optional[str] = None) -> dict:
         result = run_rdd(conn, commodity=commodity, state=state)
         conn.close()
         return _sanitize(result)
-    except Exception as e:
+    except Exception as e:  # noqa: BLE001 - tool boundary must never crash
         logger.error(f"tool_get_rdd_result failed: {e}")
         return {"error": str(e)}
 
 
-def tool_get_forecast(commodity: str, district: Optional[str] = None) -> dict:
+def tool_get_forecast(commodity: str, district: str | None = None) -> dict:
     """Get a Prophet price forecast for a commodity."""
     try:
         from mandi_rdd.analysis.forecast import get_forecast_summary
@@ -79,12 +78,12 @@ def tool_get_forecast(commodity: str, district: Optional[str] = None) -> dict:
         result = get_forecast_summary(conn, commodity=commodity)
         conn.close()
         return _sanitize(result)
-    except Exception as e:
+    except Exception as e:  # noqa: BLE001 - tool boundary must never crash
         logger.error(f"tool_get_forecast failed: {e}")
         return {"error": str(e)}
 
 
-def tool_get_risk_score(commodity: str, district: Optional[str] = None) -> dict:
+def tool_get_risk_score(commodity: str, district: str | None = None) -> dict:
     """Get the XGBoost price-spike risk probability (0-100) for a commodity."""
     try:
         from mandi_rdd.analysis.classifier import predict_spike_risk
@@ -94,12 +93,12 @@ def tool_get_risk_score(commodity: str, district: Optional[str] = None) -> dict:
         result = predict_spike_risk(conn, commodity=commodity, district=district)
         conn.close()
         return _sanitize(result)
-    except Exception as e:
+    except Exception as e:  # noqa: BLE001 - tool boundary must never crash
         logger.error(f"tool_get_risk_score failed: {e}")
         return {"error": str(e)}
 
 
-def tool_get_recommendation(commodity: str, district: Optional[str] = None) -> dict:
+def tool_get_recommendation(commodity: str, district: str | None = None) -> dict:
     """Get a combined procurement recommendation (RDD + risk + forecast)."""
     try:
         from mandi_rdd.analysis.prescriptive import compute_recommendation
@@ -109,7 +108,7 @@ def tool_get_recommendation(commodity: str, district: Optional[str] = None) -> d
         result = compute_recommendation(conn, commodity=commodity, district=district)
         conn.close()
         return _sanitize(result)
-    except Exception as e:
+    except Exception as e:  # noqa: BLE001 - tool boundary must never crash
         logger.error(f"tool_get_recommendation failed: {e}")
         return {"error": str(e)}
 
@@ -130,7 +129,7 @@ def tool_get_robustness(commodity: str) -> dict:
             "density_test": result.get("density_test", {}),
             "covariate_balance": result.get("covariate_balance", {}),
         })
-    except Exception as e:
+    except Exception as e:  # noqa: BLE001 - tool boundary must never crash
         logger.error(f"tool_get_robustness failed: {e}")
         return {"error": str(e)}
 
@@ -170,8 +169,8 @@ TOOLS = {
 
 def answer_question(
     query: str,
-    commodity: Optional[str] = None,
-    district: Optional[str] = None,
+    commodity: str | None = None,
+    district: str | None = None,
     temperature: float = 0.3,
 ) -> dict:
     """
@@ -222,7 +221,7 @@ def answer_question(
             elif result and "error" in result:
                 tool_results[name] = {"note": result["error"]}
                 endpoints_used.append(f"{name} (error: {result['error']})")
-        except Exception as e:
+        except Exception as e:  # noqa: BLE001 - tool boundary must never crash
             tool_results[name] = {"note": f"Error: {e}"}
             endpoints_used.append(f"{name} (error)")
 
@@ -343,7 +342,7 @@ def _detect_commodity(query: str) -> str:
     return "Onion"
 
 
-def _detect_district(query: str) -> Optional[str]:
+def _detect_district(query: str) -> str | None:
     """Detect district from query text."""
     # Common mandi districts in Maharashtra, Karnataka, etc.
     known = ["nashik", "pune", "ahmednagar", "solapur", "mumbai",
@@ -395,7 +394,7 @@ def _select_tools(query: str) -> list[str]:
 def _build_structured_answer(
     tool_results: dict,
     commodity: str,
-    district: Optional[str],
+    district: str | None,
 ) -> str:
     """
     Build a plain-text answer from tool results directly (no LLM).
