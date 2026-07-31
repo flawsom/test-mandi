@@ -266,54 +266,7 @@ Every successful ingestion cycle — whether hourly quick-fetch or the daily ful
 <em style="color:#94A3B8;">Pre-rendered pipeline flow — crisp at any zoom, identical on every platform</em>
 </div>
 
-<details>
-<summary><strong>Pipeline source (Mermaid)</strong> — click to expand</summary>
-
-<!-- SNAPSHOT of a past run. docs/assets/mermaid/pipeline-flow-live.mmd is now
-     auto-generated with LIVE counts by the hourly pipeline (run_hourly.py ->
-     scripts/generate_pipeline_diagram.py), and docs/assets/svg/pipeline-flow-live.svg
-     is re-rendered from it on every data change (hourly-duckdb-sync.yml). The source
-     below is only a historical snapshot; the embedded SVG above is the live one.
-     Manual re-render: npx mmdc -i docs/assets/mermaid/pipeline-flow-live.mmd \
-       -o docs/assets/svg/pipeline-flow-live.svg -c docs/assets/mermaid/alche-config.json \
-       -p puppeteer.json -b "#0B0F1E" -s 2 -w 1600 -->
-
-```mermaid
-graph LR
-    subgraph Ingest["01 DATA INGESTION | Live API + Satellite + Archive"]
-        A["data.gov.in API<br/>1,333,993 records<br/>303 commodities - 36 states"]
-        B["IMD Rainfall Grids<br/>2,278 records<br/>34 sub-divisions - 2021-2026"]
-        C["Sentinel Hub NDVI<br/>3,663 vegetation records<br/>605 districts"]
-    end
-    subgraph Store["02 DUCKDB WAREHOUSE | Persistent Volume /data"]
-        D["mandi_iq.duckdb<br/>1,333,993 prices - 2,278 rainfall<br/>3,663 NDVI - 15 forecast models"]
-    end
-    subgraph Analyze["03 ANALYSIS AND ML | Causal + Forecast + Risk"]
-        E["RDD Engine<br/>26 causal estimates<br/>Triangular kernel - McCrary test"]
-        F["Forecast Engine<br/>15 models - 15 valid, 2 noisy<br/>Best: Bajra @ 36.4%"]
-        G["Spike Classifier<br/>XGBoost + SHAP<br/>Risk scoring"]
-        H["Prescriptive<br/>Procurement recommendations"]
-    end
-    subgraph Serve["04 SERVING | Live Deployment"]
-        I["FastAPI Gateway<br/>10+ REST endpoints"]
-        J["Streamlit Dashboard<br/>5 interactive pages"]
-    end
-    A --> D
-    B --> D
-    C --> D
-    D --> E
-    D --> F
-    D --> G
-    E --> H
-    F --> H
-    G --> H
-    H --> I
-    I <--> J
-```
-
-</details>
-
-**Last run:** 2026-07-30 14:09 UTC · 383s total · Outcome: **success**
+**Live Mermaid source:** [`assets/mermaid/pipeline-flow-live.mmd`](assets/mermaid/pipeline-flow-live.mmd) — auto-generated with live DuckDB counts after every successful ingestion cycle (`run_hourly.py` → `_run_diagram_generator()` → `scripts/generate_pipeline_diagram.py --docs-output`) and re-rendered to the SVG above by CI (`hourly-duckdb-sync.yml`) whenever the data changes. The numbers in the diagram always reflect the latest run — there is no hardcoded snapshot to drift.
 
 ### What each run refreshes
 
@@ -331,7 +284,7 @@ graph LR
 | `data_integrity` — 10 quality checks | ✅ | ✅ |
 | `pipeline_diagram` — Mermaid DAG | ✅ | ✅ |
 
-### Current data snapshot (from `diagrams/pipeline-flow-live.mmd`)
+### Data snapshot at last write (live values are regenerated into `assets/mermaid/pipeline-flow-live.mmd` each cycle)
 
 | Metric | Value |
 |--------|-------|
@@ -384,6 +337,9 @@ To inspect the latest diagram locally:
 ```bash
 python scripts/generate_pipeline_diagram.py
 # Writes to diagrams/pipeline-flow-live.mmd
+
+python scripts/generate_pipeline_diagram.py --docs-output
+# Also writes the GitHub-safe docs variant to docs/assets/mermaid/pipeline-flow-live.mmd
 
 python scripts/generate_pipeline_diagram.py --stdout
 # Prints the Mermaid source to stdout (pipe to a file viewer or Mermaid editor)
