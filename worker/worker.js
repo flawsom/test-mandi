@@ -13,16 +13,16 @@
 // Upstream Streamlit origin (the real app behind this zone).
 // Set via wrangler.toml `vars.UPSTREAM` or `wrangler secret put UPSTREAM`.
 const UPSTREAM = (typeof UPSTREAM !== "undefined" && UPSTREAM) ||
-  "https://mandiiq.streamlit.app";
+  "https://test-mandi-keae7eruks2n4cqvumjfu8.streamlit.app";
 
 // Where the canonical landing HTML lives (GitHub Pages). Single source of truth.
-const LANDING_URL = "https://flawsom.github.io/MandiIQ/";
+const LANDING_URL = "https://flawsom.github.io/test-mandi/";
 
 // Inline fallback if the landing page is unreachable.
 const FALLBACK_HTML = `<!DOCTYPE html><html><head><title>MandiIQ</title>`
   + `<link rel="canonical" href="https://mandiiq.unifies.codes/" />`
   + `<meta property="og:title" content="MandiIQ" />`
-  + `<meta property="og:image" content="https://flawsom.github.io/MandiIQ/seo/og-image.png" />`
+  + `<meta property="og:image" content="https://flawsom.github.io/test-mandi/seo/og-image.png" />`
   + `</head><body><a href="https://mandiiq.unifies.codes/">MandiIQ</a></body></html>`;
 
 // Paths that look like static assets should always proxy (never get the shell).
