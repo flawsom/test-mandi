@@ -92,6 +92,12 @@ jobs:
             fi
           fi
 
+      - name: Strip .git before build (LFS objects exceed Vercel's 500 MB bundle cap)
+        run: |
+          du -sh .git 2>/dev/null || true
+          rm -rf .git
+          echo ".git removed — LFS object store no longer counted in the function bundle"
+
       - name: Install Vercel CLI
         run: npm i -g vercel
 
