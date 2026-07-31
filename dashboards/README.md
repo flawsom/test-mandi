@@ -1,10 +1,50 @@
-# MandiIQ Grafana Dashboard
+<div align="center" style="position:relative; overflow:hidden; border-radius:20px; background:linear-gradient(135deg, #0B0F1E 0%, #0F1F15 40%, #0B0F1E 100%); padding:44px 20px 36px; margin-bottom:8px; border:1px solid rgba(0,255,136,0.08);">
+
+<div style="position:absolute; top:-120px; left:50%; transform:translateX(-50%); width:600px; height:300px; background:radial-gradient(ellipse, rgba(0,255,136,0.12) 0%, transparent 70%); pointer-events:none;"></div>
+<div style="position:absolute; top:0; left:10%; right:10%; height:1px; background:linear-gradient(90deg, transparent, rgba(0,255,136,0.5), transparent);"></div>
+
+<div style="position:relative; z-index:1;">
+<h1 style="margin:0; font-size:2.2em; font-weight:700; color:#E0E0E0; letter-spacing:-0.5px;">
+  <svg xmlns="http://www.w3.org/2000/svg" width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="#00FF88" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:middle"><path d="M12 2v18"/><path d="M8 6c0-2 4-4 4 0"/><path d="M16 6c0-2-4-4-4 0"/><path d="M8 12c0-2 4-4 4 0"/><path d="M16 12c0-2-4-4-4 0"/><path d="M6 18c0-3 6-5 6 0"/><path d="M18 18c0-3-6-5-6 0"/><path d="M9 22h6"/></svg>
+  Mandiiq Grafana Dashboard
+</h1>
+<h4 style="color:#94A3B8; font-weight:400; font-size:0.95em; margin:6px 0 0 0;">MandiIQ Documentation</h4>
+</div>
+
+</div>
+<div style="background:linear-gradient(135deg, rgba(255,255,255,0.04) 0%, rgba(255,255,255,0.01) 100%); border:1px solid rgba(255,255,255,0.06); border-radius:16px; padding:24px 28px; margin:16px 0; box-shadow:0 8px 32px rgba(0,0,0,0.4); position:relative; overflow:hidden;">
+<div style="position:absolute; top:0; left:0; right:0; height:2px; background:linear-gradient(90deg, transparent, #00FF88, transparent); opacity:0.6;"></div>
+<div style="position:absolute; top:-60px; right:-60px; width:120px; height:120px; background:radial-gradient(circle, rgba(0,255,136,0.15) 0%, transparent 70%);"></div>
 
 Real-time monitoring dashboard for the MandiIQ data ingestion pipeline.
 Visualizes pipeline health, step durations, API call latency, and data
 throughput from the `/metrics` Prometheus endpoint.
 
-## Quick Start
+</div></div></div>
+<br />
+<div style="position:relative; height:60px; overflow:hidden; width:100%; margin:8px 0;">
+  <svg viewBox="0 0 1440 60" width="100%" height="60" preserveAspectRatio="none" style="position:absolute;bottom:0;">
+    <defs>
+      <linearGradient id="wg-1" x1="0%" y1="0%" x2="100%" y2="0%">
+        <stop offset="0%" stop-color="#0B0F1E" stop-opacity="0" />
+        <stop offset="25%" stop-color="#00FF88" stop-opacity="0.25" />
+        <stop offset="50%" stop-color="#00FF88" stop-opacity="0.4" />
+        <stop offset="75%" stop-color="#00FF88" stop-opacity="0.25" />
+        <stop offset="100%" stop-color="#0B0F1E" stop-opacity="0" />
+      </linearGradient>
+    </defs>
+    <path d="M0,30 C240,10 480,50 720,30 C960,10 1200,50 1440,30 L1440,60 L0,60 Z" fill="url(#wg)" opacity="0.6" />
+    <path d="M0,40 C240,25 480,55 720,40 C960,25 1200,55 1440,40 L1440,60 L0,60 Z" fill="url(#wg)" opacity="0.3" />
+  </svg>
+</div>
+<br />
+<div style="background:linear-gradient(135deg, rgba(255,255,255,0.04) 0%, rgba(255,255,255,0.01) 100%); border:1px solid rgba(255,255,255,0.06); border-radius:16px; padding:24px 28px; margin:16px 0; box-shadow:0 8px 32px rgba(0,0,0,0.4); position:relative; overflow:hidden;">
+<div style="position:absolute; top:0; left:0; right:0; height:2px; background:linear-gradient(90deg, transparent, #00FF88, transparent); opacity:0.6;"></div>
+<div style="position:absolute; top:-60px; right:-60px; width:120px; height:120px; background:radial-gradient(circle, rgba(0,255,136,0.15) 0%, transparent 70%);"></div>
+<a name="quick-start"></a>
+<h2 style="font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Helvetica,Arial,sans-serif; font-size:1.5em; font-weight:600; color:#E0E0E0; display:flex; align-items:center; gap:10px; margin:0 0 16px 0; padding-bottom:8px; border-bottom:1px solid rgba(255,255,255,0.06);">
+  <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:middle"><path d="M4 15s1-1 4-1 5 2 8 2 4-1 4-1V3s-1 1-4 1-5-2-8-2-4 1-4 1z"/><line x1="4" y1="22" x2="4" y2="15"/></svg> Quick Start
+</h2>
 
 ### Option 1: Auto-Provision via `/grafana-dashboard` (Recommended)
 
@@ -253,7 +293,31 @@ Then open:
 
 The `dashboards/grafana-provider.yml` file is included in this repo and ready to use.
 
-## Datasource Variable
+</div></div></div>
+<br />
+<div style="position:relative; height:60px; overflow:hidden; width:100%; margin:8px 0;">
+  <svg viewBox="0 0 1440 60" width="100%" height="60" preserveAspectRatio="none" style="position:absolute;bottom:0;">
+    <defs>
+      <linearGradient id="wg-2" x1="0%" y1="0%" x2="100%" y2="0%">
+        <stop offset="0%" stop-color="#0B0F1E" stop-opacity="0" />
+        <stop offset="25%" stop-color="#00FF88" stop-opacity="0.25" />
+        <stop offset="50%" stop-color="#00FF88" stop-opacity="0.4" />
+        <stop offset="75%" stop-color="#00FF88" stop-opacity="0.25" />
+        <stop offset="100%" stop-color="#0B0F1E" stop-opacity="0" />
+      </linearGradient>
+    </defs>
+    <path d="M0,30 C240,10 480,50 720,30 C960,10 1200,50 1440,30 L1440,60 L0,60 Z" fill="url(#wg)" opacity="0.6" />
+    <path d="M0,40 C240,25 480,55 720,40 C960,25 1200,55 1440,40 L1440,60 L0,60 Z" fill="url(#wg)" opacity="0.3" />
+  </svg>
+</div>
+<br />
+<div style="background:linear-gradient(135deg, rgba(255,255,255,0.04) 0%, rgba(255,255,255,0.01) 100%); border:1px solid rgba(255,255,255,0.06); border-radius:16px; padding:24px 28px; margin:16px 0; box-shadow:0 8px 32px rgba(0,0,0,0.4); position:relative; overflow:hidden;">
+<div style="position:absolute; top:0; left:0; right:0; height:2px; background:linear-gradient(90deg, transparent, #00FF88, transparent); opacity:0.6;"></div>
+<div style="position:absolute; top:-60px; right:-60px; width:120px; height:120px; background:radial-gradient(circle, rgba(0,255,136,0.15) 0%, transparent 70%);"></div>
+<a name="datasource-variable"></a>
+<h2 style="font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Helvetica,Arial,sans-serif; font-size:1.5em; font-weight:600; color:#E0E0E0; display:flex; align-items:center; gap:10px; margin:0 0 16px 0; padding-bottom:8px; border-bottom:1px solid rgba(255,255,255,0.06);">
+  <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:middle"><ellipse cx="12" cy="5" rx="9" ry="3"/><path d="M21 12c0 1.66-4 3-9 3s-9-1.34-9-3"/><path d="M3 5v14c0 1.66 4 3 9 3s9-1.34 9-3V5"/></svg> Datasource Variable
+</h2>
 
 All dashboard panels reference the template variable **`${DS_PROMETHEUS}`**.
 
@@ -264,8 +328,31 @@ All dashboard panels reference the template variable **`${DS_PROMETHEUS}`**.
 - The variable name `DS_PROMETHEUS` is Grafana's standard convention for
   Prometheus datasource template variables.
 
-## Validating the Setup
-## Metrics Scraping with Grafana Alloy / Grafana Agent
+</div></div></div>
+<br />
+<div style="position:relative; height:60px; overflow:hidden; width:100%; margin:8px 0;">
+  <svg viewBox="0 0 1440 60" width="100%" height="60" preserveAspectRatio="none" style="position:absolute;bottom:0;">
+    <defs>
+      <linearGradient id="wg-3" x1="0%" y1="0%" x2="100%" y2="0%">
+        <stop offset="0%" stop-color="#0B0F1E" stop-opacity="0" />
+        <stop offset="25%" stop-color="#00FF88" stop-opacity="0.25" />
+        <stop offset="50%" stop-color="#00FF88" stop-opacity="0.4" />
+        <stop offset="75%" stop-color="#00FF88" stop-opacity="0.25" />
+        <stop offset="100%" stop-color="#0B0F1E" stop-opacity="0" />
+      </linearGradient>
+    </defs>
+    <path d="M0,30 C240,10 480,50 720,30 C960,10 1200,50 1440,30 L1440,60 L0,60 Z" fill="url(#wg)" opacity="0.6" />
+    <path d="M0,40 C240,25 480,55 720,40 C960,25 1200,55 1440,40 L1440,60 L0,60 Z" fill="url(#wg)" opacity="0.3" />
+  </svg>
+</div>
+<br />
+<div style="background:linear-gradient(135deg, rgba(255,255,255,0.04) 0%, rgba(255,255,255,0.01) 100%); border:1px solid rgba(255,255,255,0.06); border-radius:16px; padding:24px 28px; margin:16px 0; box-shadow:0 8px 32px rgba(0,0,0,0.4); position:relative; overflow:hidden;">
+<div style="position:absolute; top:0; left:0; right:0; height:2px; background:linear-gradient(90deg, transparent, #00FF88, transparent); opacity:0.6;"></div>
+<div style="position:absolute; top:-60px; right:-60px; width:120px; height:120px; background:radial-gradient(circle, rgba(0,255,136,0.15) 0%, transparent 70%);"></div>
+<a name="metrics-scraping-with-grafana-alloy-grafana-agent"></a>
+<h2 style="font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Helvetica,Arial,sans-serif; font-size:1.5em; font-weight:600; color:#E0E0E0; display:flex; align-items:center; gap:10px; margin:0 0 16px 0; padding-bottom:8px; border-bottom:1px solid rgba(255,255,255,0.06);">
+  <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:middle"><path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"/><line x1="7" y1="7" x2="7.01" y2="7"/></svg> Metrics Scraping with Grafana Alloy / Grafana Agent
+</h2>
 
 ### Grafana Alloy (River syntax)
 
@@ -399,7 +486,31 @@ curl -s https://mandiiq-api.onrender.com/metrics | head -20
 curl -s https://mandiiq-api.onrender.com/health | python -c "import json,sys; d=json.load(sys.stdin); print(f'Status: {d[\"status\"]} — {d[\"n_prices\"]:,} prices, {d[\"n_commodities\"]} commodities')"
 ```
 
-## Panel Reference
+</div></div></div>
+<br />
+<div style="position:relative; height:60px; overflow:hidden; width:100%; margin:8px 0;">
+  <svg viewBox="0 0 1440 60" width="100%" height="60" preserveAspectRatio="none" style="position:absolute;bottom:0;">
+    <defs>
+      <linearGradient id="wg-4" x1="0%" y1="0%" x2="100%" y2="0%">
+        <stop offset="0%" stop-color="#0B0F1E" stop-opacity="0" />
+        <stop offset="25%" stop-color="#00FF88" stop-opacity="0.25" />
+        <stop offset="50%" stop-color="#00FF88" stop-opacity="0.4" />
+        <stop offset="75%" stop-color="#00FF88" stop-opacity="0.25" />
+        <stop offset="100%" stop-color="#0B0F1E" stop-opacity="0" />
+      </linearGradient>
+    </defs>
+    <path d="M0,30 C240,10 480,50 720,30 C960,10 1200,50 1440,30 L1440,60 L0,60 Z" fill="url(#wg)" opacity="0.6" />
+    <path d="M0,40 C240,25 480,55 720,40 C960,25 1200,55 1440,40 L1440,60 L0,60 Z" fill="url(#wg)" opacity="0.3" />
+  </svg>
+</div>
+<br />
+<div style="background:linear-gradient(135deg, rgba(255,255,255,0.04) 0%, rgba(255,255,255,0.01) 100%); border:1px solid rgba(255,255,255,0.06); border-radius:16px; padding:24px 28px; margin:16px 0; box-shadow:0 8px 32px rgba(0,0,0,0.4); position:relative; overflow:hidden;">
+<div style="position:absolute; top:0; left:0; right:0; height:2px; background:linear-gradient(90deg, transparent, #00FF88, transparent); opacity:0.6;"></div>
+<div style="position:absolute; top:-60px; right:-60px; width:120px; height:120px; background:radial-gradient(circle, rgba(0,255,136,0.15) 0%, transparent 70%);"></div>
+<a name="panel-reference"></a>
+<h2 style="font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Helvetica,Arial,sans-serif; font-size:1.5em; font-weight:600; color:#E0E0E0; display:flex; align-items:center; gap:10px; margin:0 0 16px 0; padding-bottom:8px; border-bottom:1px solid rgba(255,255,255,0.06);">
+  <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:middle"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg> Panel Reference
+</h2>
 
 ### Row 1: Pipeline Health (stats)
 - **Pipeline Runs** — total completed runs
@@ -431,7 +542,31 @@ curl -s https://mandiiq-api.onrender.com/health | python -c "import json,sys; d=
 - **API Summary** — stat rows per endpoint (success count, error count)
 - **Row Summary** — stat rows per step (fetched count, new count)
 
-## Metric Reference
+</div></div></div>
+<br />
+<div style="position:relative; height:60px; overflow:hidden; width:100%; margin:8px 0;">
+  <svg viewBox="0 0 1440 60" width="100%" height="60" preserveAspectRatio="none" style="position:absolute;bottom:0;">
+    <defs>
+      <linearGradient id="wg-5" x1="0%" y1="0%" x2="100%" y2="0%">
+        <stop offset="0%" stop-color="#0B0F1E" stop-opacity="0" />
+        <stop offset="25%" stop-color="#00FF88" stop-opacity="0.25" />
+        <stop offset="50%" stop-color="#00FF88" stop-opacity="0.4" />
+        <stop offset="75%" stop-color="#00FF88" stop-opacity="0.25" />
+        <stop offset="100%" stop-color="#0B0F1E" stop-opacity="0" />
+      </linearGradient>
+    </defs>
+    <path d="M0,30 C240,10 480,50 720,30 C960,10 1200,50 1440,30 L1440,60 L0,60 Z" fill="url(#wg)" opacity="0.6" />
+    <path d="M0,40 C240,25 480,55 720,40 C960,25 1200,55 1440,40 L1440,60 L0,60 Z" fill="url(#wg)" opacity="0.3" />
+  </svg>
+</div>
+<br />
+<div style="background:linear-gradient(135deg, rgba(255,255,255,0.04) 0%, rgba(255,255,255,0.01) 100%); border:1px solid rgba(255,255,255,0.06); border-radius:16px; padding:24px 28px; margin:16px 0; box-shadow:0 8px 32px rgba(0,0,0,0.4); position:relative; overflow:hidden;">
+<div style="position:absolute; top:0; left:0; right:0; height:2px; background:linear-gradient(90deg, transparent, #00FF88, transparent); opacity:0.6;"></div>
+<div style="position:absolute; top:-60px; right:-60px; width:120px; height:120px; background:radial-gradient(circle, rgba(0,255,136,0.15) 0%, transparent 70%);"></div>
+<a name="metric-reference"></a>
+<h2 style="font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Helvetica,Arial,sans-serif; font-size:1.5em; font-weight:600; color:#E0E0E0; display:flex; align-items:center; gap:10px; margin:0 0 16px 0; padding-bottom:8px; border-bottom:1px solid rgba(255,255,255,0.06);">
+  <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:middle"><rect x="3" y="12" width="4" height="9"/><rect x="10" y="7" width="4" height="14"/><rect x="17" y="3" width="4" height="18"/></svg> Metric Reference
+</h2>
 
 The `/metrics` endpoint exposes the following Prometheus metrics:
 
@@ -462,7 +597,31 @@ The `/metrics` endpoint exposes the following Prometheus metrics:
 > on the separate `mandiiq_step_duration_seconds` metric.
 
 
-## Webhook: Auto-Refresh on Dashboard Save
+</div></div></div>
+<br />
+<div style="position:relative; height:60px; overflow:hidden; width:100%; margin:8px 0;">
+  <svg viewBox="0 0 1440 60" width="100%" height="60" preserveAspectRatio="none" style="position:absolute;bottom:0;">
+    <defs>
+      <linearGradient id="wg-6" x1="0%" y1="0%" x2="100%" y2="0%">
+        <stop offset="0%" stop-color="#0B0F1E" stop-opacity="0" />
+        <stop offset="25%" stop-color="#00FF88" stop-opacity="0.25" />
+        <stop offset="50%" stop-color="#00FF88" stop-opacity="0.4" />
+        <stop offset="75%" stop-color="#00FF88" stop-opacity="0.25" />
+        <stop offset="100%" stop-color="#0B0F1E" stop-opacity="0" />
+      </linearGradient>
+    </defs>
+    <path d="M0,30 C240,10 480,50 720,30 C960,10 1200,50 1440,30 L1440,60 L0,60 Z" fill="url(#wg)" opacity="0.6" />
+    <path d="M0,40 C240,25 480,55 720,40 C960,25 1200,55 1440,40 L1440,60 L0,60 Z" fill="url(#wg)" opacity="0.3" />
+  </svg>
+</div>
+<br />
+<div style="background:linear-gradient(135deg, rgba(255,255,255,0.04) 0%, rgba(255,255,255,0.01) 100%); border:1px solid rgba(255,255,255,0.06); border-radius:16px; padding:24px 28px; margin:16px 0; box-shadow:0 8px 32px rgba(0,0,0,0.4); position:relative; overflow:hidden;">
+<div style="position:absolute; top:0; left:0; right:0; height:2px; background:linear-gradient(90deg, transparent, #00FF88, transparent); opacity:0.6;"></div>
+<div style="position:absolute; top:-60px; right:-60px; width:120px; height:120px; background:radial-gradient(circle, rgba(0,255,136,0.15) 0%, transparent 70%);"></div>
+<a name="webhook-auto-refresh-on-dashboard-save"></a>
+<h2 style="font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Helvetica,Arial,sans-serif; font-size:1.5em; font-weight:600; color:#E0E0E0; display:flex; align-items:center; gap:10px; margin:0 0 16px 0; padding-bottom:8px; border-bottom:1px solid rgba(255,255,255,0.06);">
+  <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:middle"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg> Webhook: Auto-Refresh on Dashboard Save
+</h2>
 
 The API exposes a webhook endpoint that Grafana (or any external process) can
 POST to whenever the dashboard JSON changes. On receipt, the server clears its
@@ -576,7 +735,31 @@ Run this as a cron job (`*/5 * * * *`) for dashboard-change detection within
 5 minutes of every save.
 
 
-## Admin: Refreshing the Dashboard Cache
+</div></div></div>
+<br />
+<div style="position:relative; height:60px; overflow:hidden; width:100%; margin:8px 0;">
+  <svg viewBox="0 0 1440 60" width="100%" height="60" preserveAspectRatio="none" style="position:absolute;bottom:0;">
+    <defs>
+      <linearGradient id="wg-7" x1="0%" y1="0%" x2="100%" y2="0%">
+        <stop offset="0%" stop-color="#0B0F1E" stop-opacity="0" />
+        <stop offset="25%" stop-color="#00FF88" stop-opacity="0.25" />
+        <stop offset="50%" stop-color="#00FF88" stop-opacity="0.4" />
+        <stop offset="75%" stop-color="#00FF88" stop-opacity="0.25" />
+        <stop offset="100%" stop-color="#0B0F1E" stop-opacity="0" />
+      </linearGradient>
+    </defs>
+    <path d="M0,30 C240,10 480,50 720,30 C960,10 1200,50 1440,30 L1440,60 L0,60 Z" fill="url(#wg)" opacity="0.6" />
+    <path d="M0,40 C240,25 480,55 720,40 C960,25 1200,55 1440,40 L1440,60 L0,60 Z" fill="url(#wg)" opacity="0.3" />
+  </svg>
+</div>
+<br />
+<div style="background:linear-gradient(135deg, rgba(255,255,255,0.04) 0%, rgba(255,255,255,0.01) 100%); border:1px solid rgba(255,255,255,0.06); border-radius:16px; padding:24px 28px; margin:16px 0; box-shadow:0 8px 32px rgba(0,0,0,0.4); position:relative; overflow:hidden;">
+<div style="position:absolute; top:0; left:0; right:0; height:2px; background:linear-gradient(90deg, transparent, #00FF88, transparent); opacity:0.6;"></div>
+<div style="position:absolute; top:-60px; right:-60px; width:120px; height:120px; background:radial-gradient(circle, rgba(0,255,136,0.15) 0%, transparent 70%);"></div>
+<a name="admin-refreshing-the-dashboard-cache"></a>
+<h2 style="font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Helvetica,Arial,sans-serif; font-size:1.5em; font-weight:600; color:#E0E0E0; display:flex; align-items:center; gap:10px; margin:0 0 16px 0; padding-bottom:8px; border-bottom:1px solid rgba(255,255,255,0.06);">
+  <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:middle"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg> Admin: Refreshing the Dashboard Cache
+</h2>
 
 The dashboard JSON is loaded from disk once at server startup and cached in memory.
 If you update the `mandiiq-pipeline.json` file on disk (e.g., after editing panels),
@@ -608,7 +791,31 @@ and the server continues serving the previously loaded dashboard.
 > `curl .../grafana-dashboard?datasource=Staging`.
 
 
-## Alerting
+</div></div></div>
+<br />
+<div style="position:relative; height:60px; overflow:hidden; width:100%; margin:8px 0;">
+  <svg viewBox="0 0 1440 60" width="100%" height="60" preserveAspectRatio="none" style="position:absolute;bottom:0;">
+    <defs>
+      <linearGradient id="wg-8" x1="0%" y1="0%" x2="100%" y2="0%">
+        <stop offset="0%" stop-color="#0B0F1E" stop-opacity="0" />
+        <stop offset="25%" stop-color="#00FF88" stop-opacity="0.25" />
+        <stop offset="50%" stop-color="#00FF88" stop-opacity="0.4" />
+        <stop offset="75%" stop-color="#00FF88" stop-opacity="0.25" />
+        <stop offset="100%" stop-color="#0B0F1E" stop-opacity="0" />
+      </linearGradient>
+    </defs>
+    <path d="M0,30 C240,10 480,50 720,30 C960,10 1200,50 1440,30 L1440,60 L0,60 Z" fill="url(#wg)" opacity="0.6" />
+    <path d="M0,40 C240,25 480,55 720,40 C960,25 1200,55 1440,40 L1440,60 L0,60 Z" fill="url(#wg)" opacity="0.3" />
+  </svg>
+</div>
+<br />
+<div style="background:linear-gradient(135deg, rgba(255,255,255,0.04) 0%, rgba(255,255,255,0.01) 100%); border:1px solid rgba(255,255,255,0.06); border-radius:16px; padding:24px 28px; margin:16px 0; box-shadow:0 8px 32px rgba(0,0,0,0.4); position:relative; overflow:hidden;">
+<div style="position:absolute; top:0; left:0; right:0; height:2px; background:linear-gradient(90deg, transparent, #00FF88, transparent); opacity:0.6;"></div>
+<div style="position:absolute; top:-60px; right:-60px; width:120px; height:120px; background:radial-gradient(circle, rgba(0,255,136,0.15) 0%, transparent 70%);"></div>
+<a name="alerting"></a>
+<h2 style="font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Helvetica,Arial,sans-serif; font-size:1.5em; font-weight:600; color:#E0E0E0; display:flex; align-items:center; gap:10px; margin:0 0 16px 0; padding-bottom:8px; border-bottom:1px solid rgba(255,255,255,0.06);">
+  <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:middle"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg> Alerting
+</h2>
 
 Grafana alert rules can be added for:
 
@@ -616,3 +823,11 @@ Grafana alert rules can be added for:
 - **Run duration spike**: `mandiiq_last_pipeline_duration_seconds > 120`
 - **Stale pipeline**: `mandiiq_last_pipeline_run_age_seconds > 3600` (1h)
 - **API errors**: `mandiiq_api_calls_total{result="failure"} > 10`
+
+</div></div></div>
+
+<div align="center">
+<br />
+<a href="#" style="display:inline-block; padding:8px 20px; border-radius:10px; background:linear-gradient(135deg, rgba(0,255,136,0.12) 0%, rgba(0,255,136,0.04) 100%); border:1px solid rgba(0,255,136,0.2); color:#00FF88; font-weight:500; text-decoration:none; font-size:14px;">&#x2191; Back to Top</a>
+<br /><br />
+</div>

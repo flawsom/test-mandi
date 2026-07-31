@@ -1,0 +1,120 @@
+# Deploy the read-only FastAPI to Vercel on every push to master.
+#
+# PREREQUISITES (one-time setup):
+#   1. Install Vercel CLI:  npm i -g vercel
+#   2. Login:               vercel login
+#   3. Link project:        vercel link  (creates .vercel/project.json)
+#   4. Create a Vercel token at https://vercel.com/account/tokens
+#   5. Add the token as a GitHub secret named VERCEL_TOKEN:
+#      https://github.com/flawsom/MandiIQ/settings/secrets/actions
+#
+# WHY: The Vercel serverless function exposes a read-only subset of the
+# FastAPI endpoints (/health, /prices, /rdd-result, /forecast, /risk-score)
+# using the Git-LFS-bundled DuckDB.  Full pipeline execution requires
+# Northflank or Render (persistent volume, no 60 s timeout).
+
+name: Deploy API to Vercel
+
+on:
+  push:
+    branches: [master]
+    paths:
+      - "api/**"
+      - "mandi_rdd/api/**"
+      - "mandi_rdd/storage/**"
+      - "requirements/api.txt"
+      - "requirements-vercel.txt"
+      - "vercel.json"
+      - ".python-version"
+      - ".github/workflows/deploy-vercel.yml"
+  workflow_dispatch:          # manual trigger via GitHub UI
+
+concurrency:
+  group: deploy-vercel-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Validate vercel.json is valid JSON
+        run: python -c "import json; json.load(open('vercel.json')); print('vercel.json OK')"
+
+      - name: Validate api/index.py imports cleanly
+        run: python -c "import ast; ast.parse(open('api/index.py').read()); print('api/index.py OK')"
+
+      - name: Validate .python-version is set
+        run: |
+          if [ ! -f .python-version ]; then
+            echo "::error ::Missing .python-version — create it with '3.12'"
+            exit 1
+          fi
+          echo ".python-version: $(cat .python-version) OK"
+
+  deploy:
+    needs: validate
+    runs-on: ubuntu-latest
+    outputs:
+      deploy_url: ${{ steps.deploy.outputs.url }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          lfs: true                           # pull the DuckDB via Git LFS
+
+      - name: Check LFS files are pulled (not pointers)
+        run: |
+          git lfs ls-files --long | head -5
+          if [ -f mandi_rdd/data/mandi_iq.duckdb ]; then
+            SIZE=$(stat --format=%s mandi_rdd/data/mandi_iq.duckdb 2>/dev/null || echo 0)
+            if [ "$SIZE" -lt 1024 ]; then
+              echo "::warning ::DuckDB file appears to be a Git LFS pointer (<1 KB) — did LFS pull succeed?"
+            else
+              echo "DuckDB: $(numfmt --to=iec $SIZE) OK"
+            fi
+          fi
+
+      - name: Install Vercel CLI
+        run: npm i -g vercel
+
+      - name: Pull Vercel environment
+        run: vercel pull --yes --environment=production --token=${{ secrets.VERCEL_TOKEN }}
+
+      - name: Build for production
+        run: vercel build --prod --token=${{ secrets.VERCEL_TOKEN }}
+
+      - name: Deploy to production
+        id: deploy
+        run: |
+          OUTPUT=$(vercel deploy --prebuilt --prod --token=${{ secrets.VERCEL_TOKEN }})
+          echo "$OUTPUT"
+          # Extract the production URL from the deploy output
+          URL=$(echo "$OUTPUT" | grep -oP 'https://[a-zA-Z0-9.-]+\.vercel\.app' | head -1)
+          if [ -n "$URL" ]; then
+            echo "url=$URL" >> $GITHUB_OUTPUT
+          fi
+
+      - name: Smoke-test the deployment
+        if: steps.deploy.outputs.deploy_url != ''
+        env:
+          URL: ${{ steps.deploy.outputs.deploy_url }}
+        run: |
+          echo "Smoke-testing $URL/health ..."
+          for i in 1 2 3; do
+            HTTP_CODE=$(curl -s -o /dev/null -w "%{http_code}" --max-time 15 "$URL/health" 2>/dev/null)
+            if [ "$HTTP_CODE" = "200" ]; then
+              echo " OK — /health returned 200"
+              exit 0
+            fi
+            echo "Attempt $i: HTTP $HTTP_CODE — retrying in 5s..."
+            sleep 5
+          done
+          echo "::warning ::Smoke-test failed — /health did not return 200 after 3 attempts"
+          exit 1
+        continue-on-error: true               # smoke-test failure is informational

@@ -1,11 +1,50 @@
-# 🚀 MandiIQ Implementation Status
+<div align="center" style="position:relative; overflow:hidden; border-radius:20px; background:linear-gradient(135deg, #0B0F1E 0%, #0F1F15 40%, #0B0F1E 100%); padding:44px 20px 36px; margin-bottom:8px; border:1px solid rgba(0,255,136,0.08);">
+
+<div style="position:absolute; top:-120px; left:50%; transform:translateX(-50%); width:600px; height:300px; background:radial-gradient(ellipse, rgba(0,255,136,0.12) 0%, transparent 70%); pointer-events:none;"></div>
+<div style="position:absolute; top:0; left:10%; right:10%; height:1px; background:linear-gradient(90deg, transparent, rgba(0,255,136,0.5), transparent);"></div>
+
+<div style="position:relative; z-index:1;">
+<h1 style="margin:0; font-size:2.2em; font-weight:700; color:#E0E0E0; letter-spacing:-0.5px;">
+  <svg xmlns="http://www.w3.org/2000/svg" width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="#00FF88" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:middle"><path d="M12 2v18"/><path d="M8 6c0-2 4-4 4 0"/><path d="M16 6c0-2-4-4-4 0"/><path d="M8 12c0-2 4-4 4 0"/><path d="M16 12c0-2-4-4-4 0"/><path d="M6 18c0-3 6-5 6 0"/><path d="M18 18c0-3-6-5-6 0"/><path d="M9 22h6"/></svg> Mandiiq Implementation Status
+</h1>
+<h4 style="color:#94A3B8; font-weight:400; font-size:0.95em; margin:6px 0 0 0;">MandiIQ Documentation</h4>
+</div>
+
+</div>
+<div style="background:linear-gradient(135deg, rgba(255,255,255,0.04) 0%, rgba(255,255,255,0.01) 100%); border:1px solid rgba(255,255,255,0.06); border-radius:16px; padding:24px 28px; margin:16px 0; box-shadow:0 8px 32px rgba(0,0,0,0.4); position:relative; overflow:hidden;">
+<div style="position:absolute; top:0; left:0; right:0; height:2px; background:linear-gradient(90deg, transparent, #00FF88, transparent); opacity:0.6;"></div>
+<div style="position:absolute; top:-60px; right:-60px; width:120px; height:120px; background:radial-gradient(circle, rgba(0,255,136,0.15) 0%, transparent 70%);"></div>
 
 **Date**: 2025-07-17
-**Status**: ✅ **~95% COMPLETE** — Core System Production-Ready
+**Status**: <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:middle"><circle cx="12" cy="12" r="10"/><path d="m9 12 2 2 4-4"/></svg> **~95% COMPLETE** — Core System Production-Ready
 
 ---
 
-## 📊 Executive Summary
+</div></div></div>
+<br />
+<div style="position:relative; height:60px; overflow:hidden; width:100%; margin:8px 0;">
+  <svg viewBox="0 0 1440 60" width="100%" height="60" preserveAspectRatio="none" style="position:absolute;bottom:0;">
+    <defs>
+      <linearGradient id="wg-1" x1="0%" y1="0%" x2="100%" y2="0%">
+        <stop offset="0%" stop-color="#0B0F1E" stop-opacity="0" />
+        <stop offset="25%" stop-color="#00FF88" stop-opacity="0.25" />
+        <stop offset="50%" stop-color="#00FF88" stop-opacity="0.4" />
+        <stop offset="75%" stop-color="#00FF88" stop-opacity="0.25" />
+        <stop offset="100%" stop-color="#0B0F1E" stop-opacity="0" />
+      </linearGradient>
+    </defs>
+    <path d="M0,30 C240,10 480,50 720,30 C960,10 1200,50 1440,30 L1440,60 L0,60 Z" fill="url(#wg)" opacity="0.6" />
+    <path d="M0,40 C240,25 480,55 720,40 C960,25 1200,55 1440,40 L1440,60 L0,60 Z" fill="url(#wg)" opacity="0.3" />
+  </svg>
+</div>
+<br />
+<div style="background:linear-gradient(135deg, rgba(255,255,255,0.04) 0%, rgba(255,255,255,0.01) 100%); border:1px solid rgba(255,255,255,0.06); border-radius:16px; padding:24px 28px; margin:16px 0; box-shadow:0 8px 32px rgba(0,0,0,0.4); position:relative; overflow:hidden;">
+<div style="position:absolute; top:0; left:0; right:0; height:2px; background:linear-gradient(90deg, transparent, #00FF88, transparent); opacity:0.6;"></div>
+<div style="position:absolute; top:-60px; right:-60px; width:120px; height:120px; background:radial-gradient(circle, rgba(0,255,136,0.15) 0%, transparent 70%);"></div>
+<a name="section"></a>
+<h2 style="font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Helvetica,Arial,sans-serif; font-size:1.5em; font-weight:600; color:#E0E0E0; display:flex; align-items:center; gap:10px; margin:0 0 16px 0; padding-bottom:8px; border-bottom:1px solid rgba(255,255,255,0.06);">
+  <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:middle"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg> Executive Summary
+</h2>
 
 The **MandiIQ** system delivers a **production-ready causal intelligence platform** that:
 1. Detects rainfall-deficiency effects on commodity prices using RDD
@@ -16,42 +55,66 @@ The **MandiIQ** system delivers a **production-ready causal intelligence platfor
 **Live on Render**: https://mandi-iq-api.onrender.com, https://mandi-iq-dashboard.onrender.com
 
 **Success Metrics Achieved**:
-- ✅ Zero marginal cost (all open/free models)
-- ✅ Robust causal finding (p=0.003)
-- ✅ Multi-model AI with circuit-breaker
-- ✅ 7-day automated uptime
-- ✅ 29/29 tests passing
-- ✅ Readable findings in <90 seconds
-- ✅ **NO hallucinations** (tool-grounding enforced)
+- <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:middle"><circle cx="12" cy="12" r="10"/><path d="m9 12 2 2 4-4"/></svg> Zero marginal cost (all open/free models)
+- <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:middle"><circle cx="12" cy="12" r="10"/><path d="m9 12 2 2 4-4"/></svg> Robust causal finding (p=0.003)
+- <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:middle"><circle cx="12" cy="12" r="10"/><path d="m9 12 2 2 4-4"/></svg> Multi-model AI with circuit-breaker
+- <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:middle"><circle cx="12" cy="12" r="10"/><path d="m9 12 2 2 4-4"/></svg> 7-day automated uptime
+- <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:middle"><circle cx="12" cy="12" r="10"/><path d="m9 12 2 2 4-4"/></svg> 29/29 tests passing
+- <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:middle"><circle cx="12" cy="12" r="10"/><path d="m9 12 2 2 4-4"/></svg> Readable findings in <90 seconds
+- <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:middle"><circle cx="12" cy="12" r="10"/><path d="m9 12 2 2 4-4"/></svg> **NO hallucinations** (tool-grounding enforced)
 
 ---
 
-## 🏗️ System Components
+</div></div></div>
+<br />
+<div style="position:relative; height:60px; overflow:hidden; width:100%; margin:8px 0;">
+  <svg viewBox="0 0 1440 60" width="100%" height="60" preserveAspectRatio="none" style="position:absolute;bottom:0;">
+    <defs>
+      <linearGradient id="wg-2" x1="0%" y1="0%" x2="100%" y2="0%">
+        <stop offset="0%" stop-color="#0B0F1E" stop-opacity="0" />
+        <stop offset="25%" stop-color="#00FF88" stop-opacity="0.25" />
+        <stop offset="50%" stop-color="#00FF88" stop-opacity="0.4" />
+        <stop offset="75%" stop-color="#00FF88" stop-opacity="0.25" />
+        <stop offset="100%" stop-color="#0B0F1E" stop-opacity="0" />
+      </linearGradient>
+    </defs>
+    <path d="M0,30 C240,10 480,50 720,30 C960,10 1200,50 1440,30 L1440,60 L0,60 Z" fill="url(#wg)" opacity="0.6" />
+    <path d="M0,40 C240,25 480,55 720,40 C960,25 1200,55 1440,40 L1440,60 L0,60 Z" fill="url(#wg)" opacity="0.3" />
+  </svg>
+</div>
+<br />
+<div style="background:linear-gradient(135deg, rgba(255,255,255,0.04) 0%, rgba(255,255,255,0.01) 100%); border:1px solid rgba(255,255,255,0.06); border-radius:16px; padding:24px 28px; margin:16px 0; box-shadow:0 8px 32px rgba(0,0,0,0.4); position:relative; overflow:hidden;">
+<div style="position:absolute; top:0; left:0; right:0; height:2px; background:linear-gradient(90deg, transparent, #00FF88, transparent); opacity:0.6;"></div>
+<div style="position:absolute; top:-60px; right:-60px; width:120px; height:120px; background:radial-gradient(circle, rgba(0,255,136,0.15) 0%, transparent 70%);"></div>
+<a name="section-1"></a>
+<h2 style="font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Helvetica,Arial,sans-serif; font-size:1.5em; font-weight:600; color:#E0E0E0; display:flex; align-items:center; gap:10px; margin:0 0 16px 0; padding-bottom:8px; border-bottom:1px solid rgba(255,255,255,0.06);">
+  <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:middle"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg> System Components
+</h2>
 
-### ✅ COMPLETE (Production-Ready)
+### <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:middle"><circle cx="12" cy="12" r="10"/><path d="m9 12 2 2 4-4"/></svg> COMPLETE (Production-Ready)
 
 | Phase | Component | Implementation | Status | Date |
 |-------|-----------|----------------|--------|------|
-| **core** | **Causal Intelligence** | RDD engine + robustness | ✅ Production | 2025-06-15 |
-| **core** | **Predictive ML** | Prophet vs LSTM comparison | ✅ Production | 2025-06-18 |
-| **core** | **XGBoost Classifier** | Spike risk predictor | ✅ Production | 2025-06-20 |
-| **core** | **Prescriptive Layer** | Procurement advisor | ✅ Production | 2025-06-22 |
-| **10 endpoints** | **FastAPI** | /prices, /rdd-result, /robustness | ✅ Live | 2025-06-25 |
-| **5 pages** | **Streamlit Dashboard** | Overview, Causal, Forecast, Risk, Advisor | ✅ Live | 2025-06-28 |
-| **10 models** | **AI Orchestrator** | OpenRouter circuit-breaker fallback | ✅ Live | 2025-06-30 |
-| **automation** | **Nightly Pipeline** | Cron-driven ingestion + recomputation | ✅ Live | 2025-07-01 |
-| **deployment** | **Docker + Render** | Multi-service deployment | ✅ Live | 2025-07-02 |
-| **QA** | **Test Suite** | 29/29 tests passing | ✅ Production | 2025-07-03 |
+| **core** | **Causal Intelligence** | RDD engine + robustness | <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:middle"><circle cx="12" cy="12" r="10"/><path d="m9 12 2 2 4-4"/></svg> Production | 2025-06-15 |
+| **core** | **Predictive ML** | Prophet vs LSTM comparison | <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:middle"><circle cx="12" cy="12" r="10"/><path d="m9 12 2 2 4-4"/></svg> Production | 2025-06-18 |
+| **core** | **XGBoost Classifier** | Spike risk predictor | <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:middle"><circle cx="12" cy="12" r="10"/><path d="m9 12 2 2 4-4"/></svg> Production | 2025-06-20 |
+| **core** | **Prescriptive Layer** | Procurement advisor | <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:middle"><circle cx="12" cy="12" r="10"/><path d="m9 12 2 2 4-4"/></svg> Production | 2025-06-22 |
+| **10 endpoints** | **FastAPI** | /prices, /rdd-result, /robustness | <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:middle"><circle cx="12" cy="12" r="10"/><path d="m9 12 2 2 4-4"/></svg> Live | 2025-06-25 |
+| **5 pages** | **Streamlit Dashboard** | Overview, Causal, Forecast, Risk, Advisor | <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:middle"><circle cx="12" cy="12" r="10"/><path d="m9 12 2 2 4-4"/></svg> Live | 2025-06-28 |
+| **10 models** | **AI Orchestrator** | OpenRouter circuit-breaker fallback | <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:middle"><circle cx="12" cy="12" r="10"/><path d="m9 12 2 2 4-4"/></svg> Live | 2025-06-30 |
+| **automation** | **Nightly Pipeline** | Cron-driven ingestion + recomputation | <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:middle"><circle cx="12" cy="12" r="10"/><path d="m9 12 2 2 4-4"/></svg> Live | 2025-07-01 |
+| **deployment** | **Docker + Render** | Multi-service deployment | <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:middle"><circle cx="12" cy="12" r="10"/><path d="m9 12 2 2 4-4"/></svg> Live | 2025-07-02 |
+| **QA** | **Test Suite** | 29/29 tests passing | <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:middle"><circle cx="12" cy="12" r="10"/><path d="m9 12 2 2 4-4"/></svg> Production | 2025-07-03 |
 
-### ⏳ OPTIONAL (Phase 10 - NDVI Satellite)
+### <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:middle"><path d="M5 22h14"/><path d="M5 2h14"/><path d="M17 22v-4.172a2 2 0 0 0-.586-1.414L12 12l-4.414 4.414A2 2 0 0 0 7 17.828V22"/><path d="M7 2v4.172a2 2 0 0 0 .586 1.414L12 12l4.414-4.414A2 2 0 0 0 17 6.172V2"/></svg> OPTIONAL (Phase 10 - NDVI Satellite)
 
 | Component | Status | Notes |
 |-----------|--------|-------|
-| NDVI Satellite Ingestion | ⏳ Pending | Phase 10 optional |
-| Google Earth Engine | ⏳ Pending | Requires GEE API account |
-| District Shapefile Mapping | ⏳ Pending | Survey of India/GADM data |
-| Cross-Check RDD | ⏳ Pending | Independent confirmation |
-| Satellite View Page | ⏳ Pending | Visual component |
+| NDVI Satellite Ingestion | <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:middle"><path d="M5 22h14"/><path d="M5 2h14"/><path d="M17 22v-4.172a2 2 0 0 0-.586-1.414L12 12l-4.414 4.414A2 2 0 0 0 7 17.828V22"/><path d="M7 2v4.172a2 2 0 0 0 .586 1.414L12 12l4.414-4.414A2 2 0 0 0 17 6.172V2"/></svg> Pending | Phase 10 optional |
+| Google Earth Engine | <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:middle"><path d="M5 22h14"/><path d="M5 2h14"/><path d="M17 22v-4.172a2 2 0 0 0-.586-1.414L12 12l-4.414 4.414A2 2 0 0 0 7 17.828V22"/><path d="M7 2v4.172a2 2 0 0 0 .586 1.414L12 12l4.414-4.414A2 2 0 0 0 17 6.172V2"/></svg> Pending | Requires GEE API account |
+| District Shapefile Mapping | <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:middle"><path d="M5 22h14"/><path d="M5 2h14"/><path d="M17 22v-4.172a2 2 0 0 0-.586-1.414L12 12l-4.414 4.414A2 2 0 0 0 7 17.828V22"/><path d="M7 2v4.172a2 2 0 0 0 .586 1.414L12 12l4.414-4.414A2 2 0 0 0 17 6.172V2"/></svg> Pending | Survey of India/GADM data |
+| Cross-Check RDD | <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:middle"><path d="M5 22h14"/><path d="M5 2h14"/><path d="M17 22v-4.172a2 2 0 0 0-.586-1.414L12 12l-4.414 4.414A2 2 0 0 0 7 17.828V22"/><path d="M7 2v4.172a2 2 0 0 0 .586 1.414L12 12l4.414-4.414A2 2 0 0 0 17 6.172V2"/></svg> Pending | Independent confirmation |
+| Satellite View Page | <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:middle"><path d="M5 22h14"/><path d="M5 2h14"/><path d="M17 22v-4.172a2 2 0 0 0-.586-1.414L12 12l-4.414 4.414A2 2 0 0 0 7 17.828V22"/><path d="M7 2v4.172a2 2 0 0 0 .586 1.414L12 12l4.414-4.414A2 2 0 0 0 17 6.172V2"/></svg> Pending | Visual component |
 
 **Estimated Effort**: 3-4 days
 **Benefits**:
@@ -64,7 +127,31 @@ The **MandiIQ** system delivers a **production-ready causal intelligence platfor
 
 ---
 
-## 📈 Key Results
+</div></div></div>
+<br />
+<div style="position:relative; height:60px; overflow:hidden; width:100%; margin:8px 0;">
+  <svg viewBox="0 0 1440 60" width="100%" height="60" preserveAspectRatio="none" style="position:absolute;bottom:0;">
+    <defs>
+      <linearGradient id="wg-3" x1="0%" y1="0%" x2="100%" y2="0%">
+        <stop offset="0%" stop-color="#0B0F1E" stop-opacity="0" />
+        <stop offset="25%" stop-color="#00FF88" stop-opacity="0.25" />
+        <stop offset="50%" stop-color="#00FF88" stop-opacity="0.4" />
+        <stop offset="75%" stop-color="#00FF88" stop-opacity="0.25" />
+        <stop offset="100%" stop-color="#0B0F1E" stop-opacity="0" />
+      </linearGradient>
+    </defs>
+    <path d="M0,30 C240,10 480,50 720,30 C960,10 1200,50 1440,30 L1440,60 L0,60 Z" fill="url(#wg)" opacity="0.6" />
+    <path d="M0,40 C240,25 480,55 720,40 C960,25 1200,55 1440,40 L1440,60 L0,60 Z" fill="url(#wg)" opacity="0.3" />
+  </svg>
+</div>
+<br />
+<div style="background:linear-gradient(135deg, rgba(255,255,255,0.04) 0%, rgba(255,255,255,0.01) 100%); border:1px solid rgba(255,255,255,0.06); border-radius:16px; padding:24px 28px; margin:16px 0; box-shadow:0 8px 32px rgba(0,0,0,0.4); position:relative; overflow:hidden;">
+<div style="position:absolute; top:0; left:0; right:0; height:2px; background:linear-gradient(90deg, transparent, #00FF88, transparent); opacity:0.6;"></div>
+<div style="position:absolute; top:-60px; right:-60px; width:120px; height:120px; background:radial-gradient(circle, rgba(0,255,136,0.15) 0%, transparent 70%);"></div>
+<a name="section-2"></a>
+<h2 style="font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Helvetica,Arial,sans-serif; font-size:1.5em; font-weight:600; color:#E0E0E0; display:flex; align-items:center; gap:10px; margin:0 0 16px 0; padding-bottom:8px; border-bottom:1px solid rgba(255,255,255,0.06);">
+  <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:middle"><path d="M21 2l-2 2m-7.61 7.61a5.5 5.5 0 1 1-7.78 7.78 5.5 5.5 0 0 1 7.78-7.78zm0 0L15.5 7.5m0 0l3 3L22 7l-3-3m-3.5 3.5L19 4"/></svg> Key Results
+</h2>
 
 ### Primary Causal Finding
 
@@ -90,7 +177,7 @@ The **MandiIQ** system delivers a **production-ready causal intelligence platfor
 
 | Model | MAPE | Winner |
 |-------|------|--------|
-| **Prophet** | **11.2%** | ✅ First choice |
+| **Prophet** | **11.2%** | <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:middle"><circle cx="12" cy="12" r="10"/><path d="m9 12 2 2 4-4"/></svg> First choice |
 | LSTM | 13.7% | Fallback |
 
 **Why Prophet Won**:
@@ -151,7 +238,31 @@ Circuit-Breaker:
 
 ---
 
-## 🔧 Technical Stack
+</div></div></div>
+<br />
+<div style="position:relative; height:60px; overflow:hidden; width:100%; margin:8px 0;">
+  <svg viewBox="0 0 1440 60" width="100%" height="60" preserveAspectRatio="none" style="position:absolute;bottom:0;">
+    <defs>
+      <linearGradient id="wg-4" x1="0%" y1="0%" x2="100%" y2="0%">
+        <stop offset="0%" stop-color="#0B0F1E" stop-opacity="0" />
+        <stop offset="25%" stop-color="#00FF88" stop-opacity="0.25" />
+        <stop offset="50%" stop-color="#00FF88" stop-opacity="0.4" />
+        <stop offset="75%" stop-color="#00FF88" stop-opacity="0.25" />
+        <stop offset="100%" stop-color="#0B0F1E" stop-opacity="0" />
+      </linearGradient>
+    </defs>
+    <path d="M0,30 C240,10 480,50 720,30 C960,10 1200,50 1440,30 L1440,60 L0,60 Z" fill="url(#wg)" opacity="0.6" />
+    <path d="M0,40 C240,25 480,55 720,40 C960,25 1200,55 1440,40 L1440,60 L0,60 Z" fill="url(#wg)" opacity="0.3" />
+  </svg>
+</div>
+<br />
+<div style="background:linear-gradient(135deg, rgba(255,255,255,0.04) 0%, rgba(255,255,255,0.01) 100%); border:1px solid rgba(255,255,255,0.06); border-radius:16px; padding:24px 28px; margin:16px 0; box-shadow:0 8px 32px rgba(0,0,0,0.4); position:relative; overflow:hidden;">
+<div style="position:absolute; top:0; left:0; right:0; height:2px; background:linear-gradient(90deg, transparent, #00FF88, transparent); opacity:0.6;"></div>
+<div style="position:absolute; top:-60px; right:-60px; width:120px; height:120px; background:radial-gradient(circle, rgba(0,255,136,0.15) 0%, transparent 70%);"></div>
+<a name="section-3"></a>
+<h2 style="font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Helvetica,Arial,sans-serif; font-size:1.5em; font-weight:600; color:#E0E0E0; display:flex; align-items:center; gap:10px; margin:0 0 16px 0; padding-bottom:8px; border-bottom:1px solid rgba(255,255,255,0.06);">
+  <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:middle"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg> Technical Stack
+</h2>
 
 ### Data Layer
 - **Database**: DuckDB (analytical SQL, no setup required)
@@ -180,7 +291,31 @@ Circuit-Breaker:
 
 ---
 
-## 📝 Usage Examples
+</div></div></div>
+<br />
+<div style="position:relative; height:60px; overflow:hidden; width:100%; margin:8px 0;">
+  <svg viewBox="0 0 1440 60" width="100%" height="60" preserveAspectRatio="none" style="position:absolute;bottom:0;">
+    <defs>
+      <linearGradient id="wg-5" x1="0%" y1="0%" x2="100%" y2="0%">
+        <stop offset="0%" stop-color="#0B0F1E" stop-opacity="0" />
+        <stop offset="25%" stop-color="#00FF88" stop-opacity="0.25" />
+        <stop offset="50%" stop-color="#00FF88" stop-opacity="0.4" />
+        <stop offset="75%" stop-color="#00FF88" stop-opacity="0.25" />
+        <stop offset="100%" stop-color="#0B0F1E" stop-opacity="0" />
+      </linearGradient>
+    </defs>
+    <path d="M0,30 C240,10 480,50 720,30 C960,10 1200,50 1440,30 L1440,60 L0,60 Z" fill="url(#wg)" opacity="0.6" />
+    <path d="M0,40 C240,25 480,55 720,40 C960,25 1200,55 1440,40 L1440,60 L0,60 Z" fill="url(#wg)" opacity="0.3" />
+  </svg>
+</div>
+<br />
+<div style="background:linear-gradient(135deg, rgba(255,255,255,0.04) 0%, rgba(255,255,255,0.01) 100%); border:1px solid rgba(255,255,255,0.06); border-radius:16px; padding:24px 28px; margin:16px 0; box-shadow:0 8px 32px rgba(0,0,0,0.4); position:relative; overflow:hidden;">
+<div style="position:absolute; top:0; left:0; right:0; height:2px; background:linear-gradient(90deg, transparent, #00FF88, transparent); opacity:0.6;"></div>
+<div style="position:absolute; top:-60px; right:-60px; width:120px; height:120px; background:radial-gradient(circle, rgba(0,255,136,0.15) 0%, transparent 70%);"></div>
+<a name="section-4"></a>
+<h2 style="font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Helvetica,Arial,sans-serif; font-size:1.5em; font-weight:600; color:#E0E0E0; display:flex; align-items:center; gap:10px; margin:0 0 16px 0; padding-bottom:8px; border-bottom:1px solid rgba(255,255,255,0.06);">
+  <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:middle"><path d="M4 15s1-1 4-1 5 2 8 2 4-1 4-1V3s-1 1-4 1-5-2-8-2-4 1-4 1z"/><line x1="4" y1="22" x2="4" y2="15"/></svg> Usage Examples
+</h2>
 
 ### Executive Summary (90-second skim)
 
@@ -209,7 +344,31 @@ Circuit-Breaker:
 
 ---
 
-## 🎨 Visual Design (Section 6.10)
+</div></div></div>
+<br />
+<div style="position:relative; height:60px; overflow:hidden; width:100%; margin:8px 0;">
+  <svg viewBox="0 0 1440 60" width="100%" height="60" preserveAspectRatio="none" style="position:absolute;bottom:0;">
+    <defs>
+      <linearGradient id="wg-6" x1="0%" y1="0%" x2="100%" y2="0%">
+        <stop offset="0%" stop-color="#0B0F1E" stop-opacity="0" />
+        <stop offset="25%" stop-color="#00FF88" stop-opacity="0.25" />
+        <stop offset="50%" stop-color="#00FF88" stop-opacity="0.4" />
+        <stop offset="75%" stop-color="#00FF88" stop-opacity="0.25" />
+        <stop offset="100%" stop-color="#0B0F1E" stop-opacity="0" />
+      </linearGradient>
+    </defs>
+    <path d="M0,30 C240,10 480,50 720,30 C960,10 1200,50 1440,30 L1440,60 L0,60 Z" fill="url(#wg)" opacity="0.6" />
+    <path d="M0,40 C240,25 480,55 720,40 C960,25 1200,55 1440,40 L1440,60 L0,60 Z" fill="url(#wg)" opacity="0.3" />
+  </svg>
+</div>
+<br />
+<div style="background:linear-gradient(135deg, rgba(255,255,255,0.04) 0%, rgba(255,255,255,0.01) 100%); border:1px solid rgba(255,255,255,0.06); border-radius:16px; padding:24px 28px; margin:16px 0; box-shadow:0 8px 32px rgba(0,0,0,0.4); position:relative; overflow:hidden;">
+<div style="position:absolute; top:0; left:0; right:0; height:2px; background:linear-gradient(90deg, transparent, #00FF88, transparent); opacity:0.6;"></div>
+<div style="position:absolute; top:-60px; right:-60px; width:120px; height:120px; background:radial-gradient(circle, rgba(0,255,136,0.15) 0%, transparent 70%);"></div>
+<a name="section-5"></a>
+<h2 style="font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Helvetica,Arial,sans-serif; font-size:1.5em; font-weight:600; color:#E0E0E0; display:flex; align-items:center; gap:10px; margin:0 0 16px 0; padding-bottom:8px; border-bottom:1px solid rgba(255,255,255,0.06);">
+  <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:middle"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg> Visual Design (Section 6.10)
+</h2>
 
 ### Commodity Color System
 
@@ -279,7 +438,31 @@ Background includes static **drifting gradient blobs** (monsoon clouds):
 
 ---
 
-## 🔐 Production Requirements
+</div></div></div>
+<br />
+<div style="position:relative; height:60px; overflow:hidden; width:100%; margin:8px 0;">
+  <svg viewBox="0 0 1440 60" width="100%" height="60" preserveAspectRatio="none" style="position:absolute;bottom:0;">
+    <defs>
+      <linearGradient id="wg-7" x1="0%" y1="0%" x2="100%" y2="0%">
+        <stop offset="0%" stop-color="#0B0F1E" stop-opacity="0" />
+        <stop offset="25%" stop-color="#00FF88" stop-opacity="0.25" />
+        <stop offset="50%" stop-color="#00FF88" stop-opacity="0.4" />
+        <stop offset="75%" stop-color="#00FF88" stop-opacity="0.25" />
+        <stop offset="100%" stop-color="#0B0F1E" stop-opacity="0" />
+      </linearGradient>
+    </defs>
+    <path d="M0,30 C240,10 480,50 720,30 C960,10 1200,50 1440,30 L1440,60 L0,60 Z" fill="url(#wg)" opacity="0.6" />
+    <path d="M0,40 C240,25 480,55 720,40 C960,25 1200,55 1440,40 L1440,60 L0,60 Z" fill="url(#wg)" opacity="0.3" />
+  </svg>
+</div>
+<br />
+<div style="background:linear-gradient(135deg, rgba(255,255,255,0.04) 0%, rgba(255,255,255,0.01) 100%); border:1px solid rgba(255,255,255,0.06); border-radius:16px; padding:24px 28px; margin:16px 0; box-shadow:0 8px 32px rgba(0,0,0,0.4); position:relative; overflow:hidden;">
+<div style="position:absolute; top:0; left:0; right:0; height:2px; background:linear-gradient(90deg, transparent, #00FF88, transparent); opacity:0.6;"></div>
+<div style="position:absolute; top:-60px; right:-60px; width:120px; height:120px; background:radial-gradient(circle, rgba(0,255,136,0.15) 0%, transparent 70%);"></div>
+<a name="section-6"></a>
+<h2 style="font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Helvetica,Arial,sans-serif; font-size:1.5em; font-weight:600; color:#E0E0E0; display:flex; align-items:center; gap:10px; margin:0 0 16px 0; padding-bottom:8px; border-bottom:1px solid rgba(255,255,255,0.06);">
+  <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:middle"><path d="M4.5 16.5c-1.5 1.26-2 5-2 5s3.74-.5 5-2c.71-.84.7-2.13-.09-2.91a2.18 2.18 0 0 0-2.91-.09z"/><path d="M12 15l-3-3a22 22 0 0 1 2-3.95A12.88 12.88 0 0 1 22 2c0 2.72-.78 7.5-6 11a22.35 22.35 0 0 1-4 2z"/></svg> Production Requirements
+</h2>
 
 ### Environment Variables (Minimum Config)
 
@@ -322,50 +505,122 @@ python -m mandi_rdd.run_nightly --commodity <commodity>
 
 ---
 
-## ✅ Success Metrics Achieved
+</div></div></div>
+<br />
+<div style="position:relative; height:60px; overflow:hidden; width:100%; margin:8px 0;">
+  <svg viewBox="0 0 1440 60" width="100%" height="60" preserveAspectRatio="none" style="position:absolute;bottom:0;">
+    <defs>
+      <linearGradient id="wg-8" x1="0%" y1="0%" x2="100%" y2="0%">
+        <stop offset="0%" stop-color="#0B0F1E" stop-opacity="0" />
+        <stop offset="25%" stop-color="#00FF88" stop-opacity="0.25" />
+        <stop offset="50%" stop-color="#00FF88" stop-opacity="0.4" />
+        <stop offset="75%" stop-color="#00FF88" stop-opacity="0.25" />
+        <stop offset="100%" stop-color="#0B0F1E" stop-opacity="0" />
+      </linearGradient>
+    </defs>
+    <path d="M0,30 C240,10 480,50 720,30 C960,10 1200,50 1440,30 L1440,60 L0,60 Z" fill="url(#wg)" opacity="0.6" />
+    <path d="M0,40 C240,25 480,55 720,40 C960,25 1200,55 1440,40 L1440,60 L0,60 Z" fill="url(#wg)" opacity="0.3" />
+  </svg>
+</div>
+<br />
+<div style="background:linear-gradient(135deg, rgba(255,255,255,0.04) 0%, rgba(255,255,255,0.01) 100%); border:1px solid rgba(255,255,255,0.06); border-radius:16px; padding:24px 28px; margin:16px 0; box-shadow:0 8px 32px rgba(0,0,0,0.4); position:relative; overflow:hidden;">
+<div style="position:absolute; top:0; left:0; right:0; height:2px; background:linear-gradient(90deg, transparent, #00FF88, transparent); opacity:0.6;"></div>
+<div style="position:absolute; top:-60px; right:-60px; width:120px; height:120px; background:radial-gradient(circle, rgba(0,255,136,0.15) 0%, transparent 70%);"></div>
+<a name="section-7"></a>
+<h2 style="font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Helvetica,Arial,sans-serif; font-size:1.5em; font-weight:600; color:#E0E0E0; display:flex; align-items:center; gap:10px; margin:0 0 16px 0; padding-bottom:8px; border-bottom:1px solid rgba(255,255,255,0.06);">
+  <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:middle"><path d="M14 2H10"/><path d="M12 2v10"/><path d="M9 10a4 4 0 0 0 6 0"/><path d="M14 6a4 4 0 0 1 0-4"/><path d="M6 18a4 4 0 0 0 4 4h4a4 4 0 0 0 4-4"/></svg> Success Metrics Achieved
+</h2>
 
 | Metric | Target | Result | Status |
 |--------|--------|--------|--------|
-| **Causal Finding** | 1 robust RDD with evidence | 24.5% price jump, p=0.003 | ✅ Pass |
-| **Forecast MAPE** | < 15% | 11.2% | ✅ Pass |
-| **Classifier AUC** | > 70% | 0.81 | ✅ Pass |
-| **Nightly Uptime** | 7 consecutive days | Daily cron runs | ✅ Pass |
-| **AI Availability** | > 99% answer availability | 98/99 calls successful | ✅ Pass |
-| **Hallucination** | 0% tool-grounded only | 100% | ✅ Pass |
-| **Live URL** | Deployed | 2 active URLs | ✅ Pass |
-| **README Readability** | < 90 seconds | 2-sentence find, visual chart | ✅ Pass |
-| **Lighthouse Score** | 90+ | N/A (WebUI - partially scheduled) | ⏳ Pending |
+| **Causal Finding** | 1 robust RDD with evidence | 24.5% price jump, p=0.003 | <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:middle"><circle cx="12" cy="12" r="10"/><path d="m9 12 2 2 4-4"/></svg> Pass |
+| **Forecast MAPE** | < 15% | 11.2% | <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:middle"><circle cx="12" cy="12" r="10"/><path d="m9 12 2 2 4-4"/></svg> Pass |
+| **Classifier AUC** | > 70% | 0.81 | <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:middle"><circle cx="12" cy="12" r="10"/><path d="m9 12 2 2 4-4"/></svg> Pass |
+| **Nightly Uptime** | 7 consecutive days | Daily cron runs | <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:middle"><circle cx="12" cy="12" r="10"/><path d="m9 12 2 2 4-4"/></svg> Pass |
+| **AI Availability** | > 99% answer availability | 98/99 calls successful | <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:middle"><circle cx="12" cy="12" r="10"/><path d="m9 12 2 2 4-4"/></svg> Pass |
+| **Hallucination** | 0% tool-grounded only | 100% | <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:middle"><circle cx="12" cy="12" r="10"/><path d="m9 12 2 2 4-4"/></svg> Pass |
+| **Live URL** | Deployed | 2 active URLs | <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:middle"><circle cx="12" cy="12" r="10"/><path d="m9 12 2 2 4-4"/></svg> Pass |
+| **README Readability** | < 90 seconds | 2-sentence find, visual chart | <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:middle"><circle cx="12" cy="12" r="10"/><path d="m9 12 2 2 4-4"/></svg> Pass |
+| **Lighthouse Score** | 90+ | N/A (WebUI - partially scheduled) | <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:middle"><path d="M5 22h14"/><path d="M5 2h14"/><path d="M17 22v-4.172a2 2 0 0 0-.586-1.414L12 12l-4.414 4.414A2 2 0 0 0 7 17.828V22"/><path d="M7 2v4.172a2 2 0 0 0 .586 1.414L12 12l4.414-4.414A2 2 0 0 0 17 6.172V2"/></svg> Pending |
 
 ---
 
-## 📊 Roadmap Recap
+</div></div></div>
+<br />
+<div style="position:relative; height:60px; overflow:hidden; width:100%; margin:8px 0;">
+  <svg viewBox="0 0 1440 60" width="100%" height="60" preserveAspectRatio="none" style="position:absolute;bottom:0;">
+    <defs>
+      <linearGradient id="wg-9" x1="0%" y1="0%" x2="100%" y2="0%">
+        <stop offset="0%" stop-color="#0B0F1E" stop-opacity="0" />
+        <stop offset="25%" stop-color="#00FF88" stop-opacity="0.25" />
+        <stop offset="50%" stop-color="#00FF88" stop-opacity="0.4" />
+        <stop offset="75%" stop-color="#00FF88" stop-opacity="0.25" />
+        <stop offset="100%" stop-color="#0B0F1E" stop-opacity="0" />
+      </linearGradient>
+    </defs>
+    <path d="M0,30 C240,10 480,50 720,30 C960,10 1200,50 1440,30 L1440,60 L0,60 Z" fill="url(#wg)" opacity="0.6" />
+    <path d="M0,40 C240,25 480,55 720,40 C960,25 1200,55 1440,40 L1440,60 L0,60 Z" fill="url(#wg)" opacity="0.3" />
+  </svg>
+</div>
+<br />
+<div style="background:linear-gradient(135deg, rgba(255,255,255,0.04) 0%, rgba(255,255,255,0.01) 100%); border:1px solid rgba(255,255,255,0.06); border-radius:16px; padding:24px 28px; margin:16px 0; box-shadow:0 8px 32px rgba(0,0,0,0.4); position:relative; overflow:hidden;">
+<div style="position:absolute; top:0; left:0; right:0; height:2px; background:linear-gradient(90deg, transparent, #00FF88, transparent); opacity:0.6;"></div>
+<div style="position:absolute; top:-60px; right:-60px; width:120px; height:120px; background:radial-gradient(circle, rgba(0,255,136,0.15) 0%, transparent 70%);"></div>
+<a name="section-8"></a>
+<h2 style="font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Helvetica,Arial,sans-serif; font-size:1.5em; font-weight:600; color:#E0E0E0; display:flex; align-items:center; gap:10px; margin:0 0 16px 0; padding-bottom:8px; border-bottom:1px solid rgba(255,255,255,0.06);">
+  <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:middle"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg> Roadmap Recap
+</h2>
 
 ### Week 1-2: Core Implementation (Complete)
-- ✅ RDD validation gate (Phase 1)
-- ✅ Live ingestion + DuckDB (Phase 2)
-- ✅ Robustness suite (Phase 3)
-- ✅ Fixed-effects cross-check (Phase 4)
-- ✅ Forecast layer (Phase 5)
-- ✅ Classifier layer (Phase 6)
-- ✅ Prescriptive layer (Phase 7)
+- <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:middle"><circle cx="12" cy="12" r="10"/><path d="m9 12 2 2 4-4"/></svg> RDD validation gate (Phase 1)
+- <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:middle"><circle cx="12" cy="12" r="10"/><path d="m9 12 2 2 4-4"/></svg> Live ingestion + DuckDB (Phase 2)
+- <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:middle"><circle cx="12" cy="12" r="10"/><path d="m9 12 2 2 4-4"/></svg> Robustness suite (Phase 3)
+- <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:middle"><circle cx="12" cy="12" r="10"/><path d="m9 12 2 2 4-4"/></svg> Fixed-effects cross-check (Phase 4)
+- <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:middle"><circle cx="12" cy="12" r="10"/><path d="m9 12 2 2 4-4"/></svg> Forecast layer (Phase 5)
+- <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:middle"><circle cx="12" cy="12" r="10"/><path d="m9 12 2 2 4-4"/></svg> Classifier layer (Phase 6)
+- <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:middle"><circle cx="12" cy="12" r="10"/><path d="m9 12 2 2 4-4"/></svg> Prescriptive layer (Phase 7)
 
 ### Week 3-4: Deployment + AI Orchestrator (Complete)
-- ✅ Dashboard (Phase 8)
-- ✅ Tests + CI + Docker (Phase 9)
-- ✅ AI orchestrator (Phase 11)
-- ✅ Live on Render
+- <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:middle"><circle cx="12" cy="12" r="10"/><path d="m9 12 2 2 4-4"/></svg> Dashboard (Phase 8)
+- <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:middle"><circle cx="12" cy="12" r="10"/><path d="m9 12 2 2 4-4"/></svg> Tests + CI + Docker (Phase 9)
+- <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:middle"><circle cx="12" cy="12" r="10"/><path d="m9 12 2 2 4-4"/></svg> AI orchestrator (Phase 11)
+- <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:middle"><circle cx="12" cy="12" r="10"/><path d="m9 12 2 2 4-4"/></svg> Live on Render
 
 ### Week 5-6 (Optional: Visual Polish)
-- ⏳ Commodity color system
-- ⏳ Flip-board animation
-- ⏳ Atmosphere layer
-- ⏳ Typography update
-- ⏳ Lighthouse 90+ optimization
-- ⏳ Phase 10 NDVI (if time permits)
+- <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:middle"><path d="M5 22h14"/><path d="M5 2h14"/><path d="M17 22v-4.172a2 2 0 0 0-.586-1.414L12 12l-4.414 4.414A2 2 0 0 0 7 17.828V22"/><path d="M7 2v4.172a2 2 0 0 0 .586 1.414L12 12l4.414-4.414A2 2 0 0 0 17 6.172V2"/></svg> Commodity color system
+- <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:middle"><path d="M5 22h14"/><path d="M5 2h14"/><path d="M17 22v-4.172a2 2 0 0 0-.586-1.414L12 12l-4.414 4.414A2 2 0 0 0 7 17.828V22"/><path d="M7 2v4.172a2 2 0 0 0 .586 1.414L12 12l4.414-4.414A2 2 0 0 0 17 6.172V2"/></svg> Flip-board animation
+- <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:middle"><path d="M5 22h14"/><path d="M5 2h14"/><path d="M17 22v-4.172a2 2 0 0 0-.586-1.414L12 12l-4.414 4.414A2 2 0 0 0 7 17.828V22"/><path d="M7 2v4.172a2 2 0 0 0 .586 1.414L12 12l4.414-4.414A2 2 0 0 0 17 6.172V2"/></svg> Atmosphere layer
+- <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:middle"><path d="M5 22h14"/><path d="M5 2h14"/><path d="M17 22v-4.172a2 2 0 0 0-.586-1.414L12 12l-4.414 4.414A2 2 0 0 0 7 17.828V22"/><path d="M7 2v4.172a2 2 0 0 0 .586 1.414L12 12l4.414-4.414A2 2 0 0 0 17 6.172V2"/></svg> Typography update
+- <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:middle"><path d="M5 22h14"/><path d="M5 2h14"/><path d="M17 22v-4.172a2 2 0 0 0-.586-1.414L12 12l-4.414 4.414A2 2 0 0 0 7 17.828V22"/><path d="M7 2v4.172a2 2 0 0 0 .586 1.414L12 12l4.414-4.414A2 2 0 0 0 17 6.172V2"/></svg> Lighthouse 90+ optimization
+- <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:middle"><path d="M5 22h14"/><path d="M5 2h14"/><path d="M17 22v-4.172a2 2 0 0 0-.586-1.414L12 12l-4.414 4.414A2 2 0 0 0 7 17.828V22"/><path d="M7 2v4.172a2 2 0 0 0 .586 1.414L12 12l4.414-4.414A2 2 0 0 0 17 6.172V2"/></svg> Phase 10 NDVI (if time permits)
 
 ---
 
-## 🎯 Decision Points
+</div></div></div>
+<br />
+<div style="position:relative; height:60px; overflow:hidden; width:100%; margin:8px 0;">
+  <svg viewBox="0 0 1440 60" width="100%" height="60" preserveAspectRatio="none" style="position:absolute;bottom:0;">
+    <defs>
+      <linearGradient id="wg-10" x1="0%" y1="0%" x2="100%" y2="0%">
+        <stop offset="0%" stop-color="#0B0F1E" stop-opacity="0" />
+        <stop offset="25%" stop-color="#00FF88" stop-opacity="0.25" />
+        <stop offset="50%" stop-color="#00FF88" stop-opacity="0.4" />
+        <stop offset="75%" stop-color="#00FF88" stop-opacity="0.25" />
+        <stop offset="100%" stop-color="#0B0F1E" stop-opacity="0" />
+      </linearGradient>
+    </defs>
+    <path d="M0,30 C240,10 480,50 720,30 C960,10 1200,50 1440,30 L1440,60 L0,60 Z" fill="url(#wg)" opacity="0.6" />
+    <path d="M0,40 C240,25 480,55 720,40 C960,25 1200,55 1440,40 L1440,60 L0,60 Z" fill="url(#wg)" opacity="0.3" />
+  </svg>
+</div>
+<br />
+<div style="background:linear-gradient(135deg, rgba(255,255,255,0.04) 0%, rgba(255,255,255,0.01) 100%); border:1px solid rgba(255,255,255,0.06); border-radius:16px; padding:24px 28px; margin:16px 0; box-shadow:0 8px 32px rgba(0,0,0,0.4); position:relative; overflow:hidden;">
+<div style="position:absolute; top:0; left:0; right:0; height:2px; background:linear-gradient(90deg, transparent, #00FF88, transparent); opacity:0.6;"></div>
+<div style="position:absolute; top:-60px; right:-60px; width:120px; height:120px; background:radial-gradient(circle, rgba(0,255,136,0.15) 0%, transparent 70%);"></div>
+<a name="section-9"></a>
+<h2 style="font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Helvetica,Arial,sans-serif; font-size:1.5em; font-weight:600; color:#E0E0E0; display:flex; align-items:center; gap:10px; margin:0 0 16px 0; padding-bottom:8px; border-bottom:1px solid rgba(255,255,255,0.06);">
+  <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:middle"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg> Decision Points
+</h2>
 
 ### Path A: Production-Focused (Recommended)
 **Continue with**:
@@ -389,7 +644,31 @@ python -m mandi_rdd.run_nightly --commodity <commodity>
 
 ---
 
-## 📞 Getting Started
+</div></div></div>
+<br />
+<div style="position:relative; height:60px; overflow:hidden; width:100%; margin:8px 0;">
+  <svg viewBox="0 0 1440 60" width="100%" height="60" preserveAspectRatio="none" style="position:absolute;bottom:0;">
+    <defs>
+      <linearGradient id="wg-11" x1="0%" y1="0%" x2="100%" y2="0%">
+        <stop offset="0%" stop-color="#0B0F1E" stop-opacity="0" />
+        <stop offset="25%" stop-color="#00FF88" stop-opacity="0.25" />
+        <stop offset="50%" stop-color="#00FF88" stop-opacity="0.4" />
+        <stop offset="75%" stop-color="#00FF88" stop-opacity="0.25" />
+        <stop offset="100%" stop-color="#0B0F1E" stop-opacity="0" />
+      </linearGradient>
+    </defs>
+    <path d="M0,30 C240,10 480,50 720,30 C960,10 1200,50 1440,30 L1440,60 L0,60 Z" fill="url(#wg)" opacity="0.6" />
+    <path d="M0,40 C240,25 480,55 720,40 C960,25 1200,55 1440,40 L1440,60 L0,60 Z" fill="url(#wg)" opacity="0.3" />
+  </svg>
+</div>
+<br />
+<div style="background:linear-gradient(135deg, rgba(255,255,255,0.04) 0%, rgba(255,255,255,0.01) 100%); border:1px solid rgba(255,255,255,0.06); border-radius:16px; padding:24px 28px; margin:16px 0; box-shadow:0 8px 32px rgba(0,0,0,0.4); position:relative; overflow:hidden;">
+<div style="position:absolute; top:0; left:0; right:0; height:2px; background:linear-gradient(90deg, transparent, #00FF88, transparent); opacity:0.6;"></div>
+<div style="position:absolute; top:-60px; right:-60px; width:120px; height:120px; background:radial-gradient(circle, rgba(0,255,136,0.15) 0%, transparent 70%);"></div>
+<a name="section-10"></a>
+<h2 style="font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Helvetica,Arial,sans-serif; font-size:1.5em; font-weight:600; color:#E0E0E0; display:flex; align-items:center; gap:10px; margin:0 0 16px 0; padding-bottom:8px; border-bottom:1px solid rgba(255,255,255,0.06);">
+  <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:middle"><path d="M4 15s1-1 4-1 5 2 8 2 4-1 4-1V3s-1 1-4 1-5-2-8-2-4 1-4 1z"/><line x1="4" y1="22" x2="4" y2="15"/></svg> Getting Started
+</h2>
 
 ### Local Debugging
 
@@ -424,7 +703,31 @@ python -m mandi_rdd.analysis.rdd_engine --commodity Onion --district Nashik
 
 ---
 
-## 🎉 Bottom Line
+</div></div></div>
+<br />
+<div style="position:relative; height:60px; overflow:hidden; width:100%; margin:8px 0;">
+  <svg viewBox="0 0 1440 60" width="100%" height="60" preserveAspectRatio="none" style="position:absolute;bottom:0;">
+    <defs>
+      <linearGradient id="wg-12" x1="0%" y1="0%" x2="100%" y2="0%">
+        <stop offset="0%" stop-color="#0B0F1E" stop-opacity="0" />
+        <stop offset="25%" stop-color="#00FF88" stop-opacity="0.25" />
+        <stop offset="50%" stop-color="#00FF88" stop-opacity="0.4" />
+        <stop offset="75%" stop-color="#00FF88" stop-opacity="0.25" />
+        <stop offset="100%" stop-color="#0B0F1E" stop-opacity="0" />
+      </linearGradient>
+    </defs>
+    <path d="M0,30 C240,10 480,50 720,30 C960,10 1200,50 1440,30 L1440,60 L0,60 Z" fill="url(#wg)" opacity="0.6" />
+    <path d="M0,40 C240,25 480,55 720,40 C960,25 1200,55 1440,40 L1440,60 L0,60 Z" fill="url(#wg)" opacity="0.3" />
+  </svg>
+</div>
+<br />
+<div style="background:linear-gradient(135deg, rgba(255,255,255,0.04) 0%, rgba(255,255,255,0.01) 100%); border:1px solid rgba(255,255,255,0.06); border-radius:16px; padding:24px 28px; margin:16px 0; box-shadow:0 8px 32px rgba(0,0,0,0.4); position:relative; overflow:hidden;">
+<div style="position:absolute; top:0; left:0; right:0; height:2px; background:linear-gradient(90deg, transparent, #00FF88, transparent); opacity:0.6;"></div>
+<div style="position:absolute; top:-60px; right:-60px; width:120px; height:120px; background:radial-gradient(circle, rgba(0,255,136,0.15) 0%, transparent 70%);"></div>
+<a name="section-11"></a>
+<h2 style="font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Helvetica,Arial,sans-serif; font-size:1.5em; font-weight:600; color:#E0E0E0; display:flex; align-items:center; gap:10px; margin:0 0 16px 0; padding-bottom:8px; border-bottom:1px solid rgba(255,255,255,0.06);">
+  <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:middle"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg> Bottom Line
+</h2>
 
 **MandiIQ is production-ready and demonstrating complete end-to-end data analytics skills**:
 1. Data engineering (live APIs, DuckDB, SQL analytics)
@@ -438,11 +741,18 @@ python -m mandi_rdd.analysis.rdd_engine --commodity Onion --district Nashik
 **One sentence executive finding**: 
 > Districts crossing IMD's official rainfall deficiency threshold show a robust, statistically significant price jump (+₹350, 24.5%) for onion, with MCC-correct behavior and available for purchase.
 
-**Ready for interview showcase 🚀**
+**Ready for interview showcase <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:middle"><path d="M4.5 16.5c-1.5 1.26-2 5-2 5s3.74-.5 5-2c.71-.84.7-2.13-.09-2.91a2.18 2.18 0 0 0-2.91-.09z"/><path d="m12 15-3-3a22 22 0 0 1 2-3.95A12.88 12.88 0 0 1 22 2c0 2.72-.78 7.5-6 11a22.35 22.35 0 0 1-4 2z"/><path d="M9 12H4s.55-3.03 2-4c1.62-1.08 5 0 5 0"/><path d="M12 15v5s3.03-.55 4-2c1.08-1.62 0-5 0-5"/></svg>**
 
 ---
 
 **Version**: 1.0.0-mandiiq
-**Status**: ✅ Core System Complete (~95%)
+**Status**: <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:middle"><circle cx="12" cy="12" r="10"/><path d="m9 12 2 2 4-4"/></svg> Core System Complete (~95%)
 **Live URLs**: https://mandi-iq-api.onrender.com, https://mandi-iq-dashboard.onrender.com
 **Last Updated**: 2025-07-17
+</div></div></div>
+
+<div align="center">
+<br />
+<a href="#" style="display:inline-block; padding:8px 20px; border-radius:10px; background:linear-gradient(135deg, rgba(0,255,136,0.12) 0%, rgba(0,255,136,0.04) 100%); border:1px solid rgba(0,255,136,0.2); color:#00FF88; font-weight:500; text-decoration:none; font-size:14px;">&#x2191; Back to Top</a>
+<br /><br />
+</div>

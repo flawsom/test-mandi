@@ -1,5 +1,6 @@
 {
   "dependencies": {
+    "marked": "^16.4.2",
     "mermaid": "^11.16.0",
     "playwright": "^1.62.0",
     "puppeteer": "^25.4.0"

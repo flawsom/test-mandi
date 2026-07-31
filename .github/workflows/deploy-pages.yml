@@ -1,10 +1,12 @@
-name: Deploy SEO to GitHub Pages
+name: Deploy Landing + Docs to GitHub Pages
 
 on:
   push:
     branches: [master]
     paths:
+      - "landing/**"
       - "docs/**"
+      - "static/**"
       - ".github/workflows/deploy-pages.yml"
   workflow_dispatch:
 
@@ -24,10 +26,40 @@ jobs:
       - uses: actions/checkout@v4
       - name: Setup Pages
         uses: actions/configure-pages@v5
+      - name: Prepare deploy artifact
+        run: |
+          mkdir -p _site/docs
+          # ── Landing page → root (/). Relative links like ../docs/
+          #    resolve to /docs/ which matches the docs subdirectory. ──
+          cp -r landing/index.html _site/
+          if [ -d landing/mandi-iq ]; then
+            cp -r landing/mandi-iq _site/
+          fi
+          # ── Docs → /docs/ (except SEO files that crawlers need at root) ──
+          if [ -d docs ]; then
+            for f in docs/*; do
+              [ -e "$f" ] || continue
+              base="$(basename "$f")"
+              case "$base" in
+                robots.txt|sitemap.xml) cp "$f" _site/ ;;
+                *) cp -r "$f" _site/docs/ ;;
+              esac
+            done
+            # Also copy .nojekyll from docs root if present
+            [ -f docs/.nojekyll ] && cp docs/.nojekyll _site/
+          fi
+          # ── Root-level static assets (robots.txt, sitemap-*.xml, cursor-effect.js) ──
+          if [ -d static ]; then
+            for f in static/*; do
+              [ -e "$f" ] && cp "$f" _site/
+            done
+          fi
+          # .nojekyll prevents Jekyll processing
+          touch _site/.nojekyll
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:
-          path: docs
+          path: _site
       - id: deployment
         name: Deploy
         uses: actions/deploy-pages@v4

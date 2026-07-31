@@ -110,9 +110,11 @@ CLEANUP.md
 MandoIQ.env
 *.local.env
 secrets.env
+.streamlit/secrets.toml
 
 # Local artifacts
 streamlit_stderr.log
+.rendercheck/
 verify_dashboard.mjs
 .test_integration.py
 

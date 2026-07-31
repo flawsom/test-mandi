@@ -1,0 +1,26 @@
+# MandiIQ Vercel — minimal requirements for read-only serverless API
+# Vercel copies this over requirements.txt during build via vercel.json buildCommand.
+# Heavy packages (streamlit, prophet, boto3) are excluded to keep the
+# serverless bundle under 500 MB and cold starts under 15 s.
+#
+# WARNING: every package here must be importable at module level by
+# mandi_rdd/api/main.py — if any import fails the entire function 500s.
+#
+# Derived from: requirements/api.txt
+
+fastapi>=0.100.0
+uvicorn>=0.23.0
+python-multipart>=0.0.6
+pydantic>=2.0.0
+duckdb>=0.8.0
+pandas>=2.0.0
+numpy>=1.24.0
+scipy>=1.11.0
+scikit-learn>=1.2.0
+joblib>=1.2.0
+xgboost>=2.0.0          # /risk-score endpoint loads .json models
+openai>=1.0.0            # /ask endpoint (Ask MandiIQ)
+prometheus-client>=0.19.0 # /metrics endpoint
+python-dotenv>=1.0.0
+requests>=2.28.0
+urllib3>=2.0.0
