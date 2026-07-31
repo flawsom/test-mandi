@@ -1,0 +1,33 @@
+/* ═══════════════════════════════════════════════════════════
+   DEPLOYMENT SURFACE HEALTH BADGE — shared stylesheet
+   Loaded by BOTH landing/index.html and docs/index.html so the
+   live verdict badges render identically on every Pages surface.
+   Uses the Alche design tokens defined in each page's :root.
+   ═══════════════════════════════════════════════════════════ */
+.surface-status{border:1px solid var(--hairline);border-radius:8px;padding:1.2rem 1.4rem;margin:-1.5rem 0 3rem;background:linear-gradient(135deg,rgba(255,255,255,0.02)0%,rgba(255,255,255,0.005)100%);opacity:0;transform:translateY(8px);transition:opacity 0.5s ease,transform 0.5s ease}
+.surface-status.visible{opacity:1;transform:translateY(0)}
+.surface-status-head{display:flex;justify-content:space-between;align-items:baseline;flex-wrap:wrap;gap:0.4rem;margin-bottom:0.9rem}
+.surface-status-title{font-family:var(--font-mono);font-size:0.7rem;color:var(--color-text-med);text-transform:uppercase;letter-spacing:0.08em}
+.surface-status-ts{font-family:var(--font-mono);font-size:0.7rem;color:var(--color-primary);letter-spacing:0.04em}
+.surface-status-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:0.7rem}
+.surface-chip{display:flex;flex-direction:column;align-items:stretch;gap:0.45rem;border:1px solid var(--hairline);border-radius:6px;padding:0.55rem 0.7rem;font-family:var(--font-mono);font-size:0.72rem;transition:border-color 0.3s ease}
+.surface-chip-top{display:flex;align-items:center;gap:0.5rem}
+.surface-spark{display:flex;align-items:flex-end;gap:2px;height:16px;padding-top:2px}
+.surface-spark i{flex:1;min-width:2px;border-radius:1px;background:#3a3a3a;opacity:0.55;transition:opacity .2s ease,transform .2s ease}
+.surface-spark i:hover{opacity:1;transform:translateY(-2px)}
+.surface-spark i.l{background:#5ddb6c}.surface-spark i.s{background:#ffb020}.surface-spark i.d{background:#ff4d5e}.surface-spark i.u{background:#4da3ff}
+.surface-spark .spark-empty{color:var(--color-text-low);font-size:0.6rem;line-height:16px}
+.surface-meta{font-family:var(--font-mono);font-size:0.62rem;color:var(--color-text-med);letter-spacing:0.03em;line-height:1.4}
+.surface-status-legend{display:flex;gap:1rem;margin-top:0.7rem;font-family:var(--font-mono);font-size:0.6rem;color:var(--color-text-med);text-transform:uppercase;letter-spacing:0.06em}
+.surface-status-legend i{width:8px;height:8px;border-radius:1px;display:inline-block;margin-right:4px;vertical-align:middle}
+.surface-status-legend i.l{background:#5ddb6c}.surface-status-legend i.s{background:#ffb020}.surface-status-legend i.d{background:#ff4d5e}.surface-status-legend i.u{background:#4da3ff}
+.surface-chip .dot{width:8px;height:8px;border-radius:50%;flex:0 0 auto}
+.surface-chip .sname{color:var(--color-paper)}
+.surface-chip .sverdict{margin-left:auto;font-weight:500;text-transform:uppercase;font-size:0.66rem;letter-spacing:0.06em}
+.surface-chip .sn {margin-left:0.3rem;color:var(--color-text-med)}
+.dot.latest{background:#5ddb6c;box-shadow:0 0 8px rgba(93,219,108,0.6)}
+.dot.stale{background:#ffb020;box-shadow:0 0 8px rgba(255,176,32,0.6)}
+.dot.down,.dot.broken{background:#ff4d5e;box-shadow:0 0 8px rgba(255,77,94,0.6)}
+.dot.up{background:#4da3ff;box-shadow:0 0 8px rgba(77,163,255,0.5)}
+.sverdict.latest{color:#5ddb6c}.sverdict.stale{color:#ffb020}.sverdict.down,.sverdict.broken{color:#ff4d5e}.sverdict.up{color:#4da3ff}
+.surface-status.empty .surface-status-ts{color:var(--color-text-med)}

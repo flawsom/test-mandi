@@ -8,6 +8,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@300;400;500;600&family=Space+Grotesk:wght@300;400;500;600;700&family=Barlow:wght@300;400;500;600;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="health-badge.css">
     <script src="https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.min.js"></script>
 <script src="mandiq-effects.js"></script>
     <style>
@@ -418,6 +419,16 @@ html{scrollbar-width:none;-ms-overflow-style:none}
                     <div class="glass-card"><div class="label">Commodity Scope</div><div class="value" data-countup="n_commodities">—</div><div class="meta">Unique agricultural commodities</div></div>
                     <div class="glass-card"><div class="label">District Coverage</div><div class="value" data-countup="n_districts">—</div><div class="meta">Markets across India</div></div>
                     <div class="glass-card"><div class="label">RDD Estimates</div><div class="value accent" data-countup="n_rdd">—</div><div class="meta">Causal estimates computed</div></div>
+                </div>
+                <div class="surface-status" id="surface-status" data-status-json="health-status.json">
+                    <div class="surface-status-head">
+                        <span class="surface-status-title">Deployment Surface Health</span>
+                        <span class="surface-status-ts" id="surface-status-ts">checking…</span>
+                    </div>
+                    <div class="surface-status-grid" id="surface-status-grid"><!-- per-surface badges injected --></div>
+                    <div class="surface-status-legend">
+                        <span><i class="l"></i>LATEST</span><span><i class="s"></i>STALE</span><span><i class="d"></i>DOWN</span><span><i class="u"></i>AUTH/STATIC</span>
+                    </div>
                 </div>
             </section>
 
@@ -1118,6 +1129,7 @@ flowchart TB
 </script>
     <!-- Shared scripts -->
     <script src="api-config.js"></script>
+    <script src="health-badge.js"></script>
 <script>
 /* ═══ LIVE DATA FETCH — Auto-refresh KPI cards + Mermaid diagram badges ═══ */
 (function(){
