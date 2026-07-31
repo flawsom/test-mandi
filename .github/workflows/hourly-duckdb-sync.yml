@@ -7,14 +7,19 @@
 #   1. Commits the refreshed DuckDB + status JSONs back to master (Git LFS)
 #   2. Pushes with --force-with-lease (safe for bot-only binary commits)
 #   3. Triggers every deployment surface:
-#        - Render:   POST the API's /deploy hook
 #        - Vercel:   gh workflow run deploy-vercel.yml
 #        - Pages:    gh workflow run deploy-pages.yml
 #        - Streamlit: auto-deploys from master via its own GitHub webhook
 #
+# NOTE: The legacy "Trigger Render deploy" step (POST to the API's /deploy,
+# which proxied to a Render deploy hook) was REMOVED — the API now runs on
+# Northflank (not Render) and reads its DuckDB from the /data volume that its
+# own hourly cron + R2 restore keep fresh. This workflow's R2 backup below is
+# the data-bus; a POST /admin/restore-from-r2 re-syncs the volume on demand.
+#
 # NOTE on redeploys: commits made with the default GITHUB_TOKEN do NOT
 # re-trigger other workflows (GitHub anti-recursion), so this workflow
-# explicitly dispatches Vercel + Pages and POSTs the Render hook. Streamlit
+# explicitly dispatches Vercel + Pages. Streamlit
 # is a webhook consumer and redeploys on any push to master automatically.
 #
 # REQUIRED SECRETS (repo Settings → Secrets and variables → Actions):
@@ -42,7 +47,6 @@ concurrency:
   cancel-in-progress: false    # never cancel a run mid-push (binary LFS race safety)
 
 env:
-  RENDER_HOOK_URL: "https://p01--mandiiq--zbvjrztgjqgw.code.run/deploy"
   # GitHub Actions does not allow secrets.* inside `if:` conditions, so the
   # token is exposed via job env and the Vercel step gates on env.VERCEL_TOKEN.
   VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
@@ -266,12 +270,6 @@ jobs:
             git lfs push origin master 2>&1 || echo "LFS push skipped (may not be needed)"
             echo "committed=true" >> "$GITHUB_OUTPUT"
           fi
-
-      - name: Trigger Render deploy
-        if: steps.commit.outputs.committed == 'true'
-        uses: ./.github/actions/trigger-render-deploy
-        with:
-          hook-url: ${{ env.RENDER_HOOK_URL }}
 
       - name: Redeploy Vercel (read-only API with fresh DB)
         if: steps.commit.outputs.committed == 'true' && env.VERCEL_TOKEN != ''
