@@ -21,6 +21,8 @@
 
 name: Deploy API to Vercel
 
+# v2 — cached workflow definition refresh. Do not remove this line.
+
 on:
   push:
     branches: [master]
@@ -29,12 +31,12 @@ on:
       - "mandi_rdd/api/**"
       - "mandi_rdd/storage/**"
       - "mandi_rdd/data/**"   # DuckDB — redeploy API whenever the DB syncs
-      - "requirements/api.txt"
+      - "mandi_rdd/analysis/**"  # scipy-guarded modules; API degrades gracefully
+      - "requirements/**"
       - "requirements-vercel.txt"
       - "vercel.json"
       - "pyproject.toml"   # Vercel Python runtime installs via uv from this
       - "uv.lock"
-
       - ".python-version"
       - ".github/workflows/deploy-vercel.yml"
   workflow_dispatch:          # manual trigger via GitHub UI
@@ -138,21 +140,13 @@ jobs:
           # First cold start downloads the DuckDB from R2 into /tmp (~35 MB),
           # so allow up to ~120 s for the first 200 with real row counts.
           for i in 1 2 3 4 5 6 7 8; do
-            OUT=$(curl -s -w '\n%{http_code}' --max-time 55 "$URL/health" 2>/dev/null)
-            HTTP_CODE=$(echo "$OUT" | tail -1)
-            BODY=$(echo "$OUT" | head -n -1)
-            N_PRICES=$(echo "$BODY" | python -c "import sys,json
-try:
-    d=json.load(sys.stdin); print(d.get('n_prices', -1))
-except Exception:
-    print(-1)" 2>/dev/null)
-            echo "Attempt $i: HTTP $HTTP_CODE | n_prices=$N_PRICES"
-            if [ "$HTTP_CODE" = "200" ] && [ "$N_PRICES" -ge 1000000 ]; then
-              echo " OK — /health served live data: n_prices=$N_PRICES"
+            if python scripts/vercel_smoke_test.py "$URL"; then
+              echo "OK at attempt $i"
               exit 0
             fi
+            echo "Attempt $i failed, retrying in 15s..."
             sleep 15
           done
-          echo "::warning ::Smoke-test failed — /health did not serve 1M+ prices after 8 attempts"
+          echo "::warning ::Smoke-test failed - /health did not serve 1M+ prices after 8 attempts"
           exit 1
         continue-on-error: true               # smoke-test failure is informational
