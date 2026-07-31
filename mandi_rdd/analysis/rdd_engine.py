@@ -166,14 +166,21 @@ def local_linear_rdd(
         # Degenerate design (e.g. a side with no variance) -> use pseudo-inverse
         XWX_inv = np.linalg.pinv(X_w.T @ X_w)
 
-    h = np.diag(X_pooled @ XWX_inv @ (X_pooled * w_pooled[:, np.newaxis]).T)
+    # Hat values via vectorized einsum: h_i = (XWX_inv @ x_i) · (w_i * x_i)
+    # This is O(n*k²) memory but k=4, so the intermediate is (n, 4) = ~2 MB for 66k rows.
+    # The naive np.diag(X_pooled @ XWX_inv @ ...) would allocate 32.7 GiB.
+    XPW = X_pooled * w_pooled[:, np.newaxis]
+    h = np.sum((X_pooled @ XWX_inv) * XPW, axis=1)
     h = np.clip(h, 0, 0.99)  # Avoid division by zero
     
     # HC2: e^2 / (1 - h)
     e_adj = residuals**2 / (1 - h)
     
     # Sandwich: (X'WX)^{-1} X' W diag(e_adj) W X (X'WX)^{-1}
-    meat = (X_pooled * w_pooled[:, np.newaxis]).T @ np.diag(e_adj) @ (X_pooled * w_pooled[:, np.newaxis])
+    # X' W diag(e_adj) W X = sum_i (x_i * w_i * sqrt(e_adj_i)) * (x_i * w_i * sqrt(e_adj_i))^T
+    # This avoids allocating another O(n^2) diagonal matrix.
+    XWsqrt_e = XPW * np.sqrt(e_adj)[:, np.newaxis]
+    meat = XWsqrt_e.T @ XWsqrt_e
     varcov = XWX_inv @ meat @ XWX_inv
     
     # The effect is (beta_0 - gamma_0) = beta_pooled[2] - beta_pooled[0]
@@ -194,7 +201,7 @@ def local_linear_rdd(
     return {
         "effect": float(effect),
         "std_error": float(se_effect),
-        "p_value": float(p_value),
+        "p_value": float(p_value) if p_value is not None else None,
         "t_stat": float(t_stat),
         "n_left": int(n_left),
         "n_right": int(n_right),
@@ -209,10 +216,18 @@ def local_linear_rdd(
 
 
 def _wls(X: np.ndarray, y: np.ndarray, weights: np.ndarray) -> np.ndarray:
-    """Weighted least squares: beta = (X'WX)^{-1} X'W y."""
-    W = np.diag(weights)
-    XWX = X.T @ W @ X
-    XWy = X.T @ W @ y
+    """Weighted least squares: beta = (X'WX)^{-1} X'W y.
+
+    Uses element-wise broadcasting instead of np.diag(weights) to avoid
+    allocating an O(n^2) diagonal matrix.  For n=34000 this is the difference
+    between 8.8 GiB and a few KB.
+    """
+    # X'WX = X.T @ diag(w) @ X = (X * sqrt(w)).T @ (X * sqrt(w))
+    w_sqrt = np.sqrt(weights)
+    X_w = X * w_sqrt[:, np.newaxis]
+    y_w = y * w_sqrt
+    XWX = X_w.T @ X_w
+    XWy = X_w.T @ y_w
     try:
         beta = np.linalg.solve(XWX, XWy)
     except np.linalg.LinAlgError:

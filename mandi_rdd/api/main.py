@@ -544,7 +544,11 @@ async def prices(
 
 @app.get("/rdd-result/{commodity}", response_model=RDDResult, tags=["Analysis"])
 async def rdd_result(commodity: str):
-    """Get the latest RDD estimate for a commodity."""
+    """Get the latest RDD estimate for a commodity.
+
+    Auto-detects scipy availability: when scipy is not bundled (Vercel),
+    uses the lightweight pure-numpy engine which returns p_value=None.
+    """
     conn = get_connection()
     init_schema(conn)
     
@@ -564,10 +568,21 @@ async def rdd_result(commodity: str):
             error=None,
         )
     
+    # Auto-detect: use lightweight engine when scipy is absent
+    _use_light = False
+    try:
+        import scipy  # noqa: F401
+    except ImportError:
+        _use_light = True
+    
     # Run fresh RDD
     try:
-        from mandi_rdd.analysis.rdd_engine import run_rdd
-        result = run_rdd(conn, commodity=commodity)
+        if _use_light:
+            from mandi_rdd.analysis.lightweight_rdd import run_rdd_lightweight
+            result = run_rdd_lightweight(conn, commodity=commodity)
+        else:
+            from mandi_rdd.analysis.rdd_engine import run_rdd
+            result = run_rdd(conn, commodity=commodity)
         conn.close()
         
         return RDDResult(
@@ -695,12 +710,28 @@ async def forecast(
 
 @app.get("/robustness/{commodity}", tags=["Analysis"])
 async def robustness(commodity: str):
-    """Get the full robustness check bundle for a commodity."""
+    """Get the full robustness check bundle for a commodity.
+
+    Auto-detects scipy availability: when scipy is not bundled (Vercel),
+    uses the lightweight pure-numpy engine which returns p_value=None
+    but still provides bandwidth sensitivity, placebo tests, and density.
+    """
     conn = get_connection()
     init_schema(conn)
     
-    from mandi_rdd.analysis.rdd_engine import run_rdd
-    result = run_rdd(conn, commodity=commodity)
+    # Auto-detect: use lightweight engine when scipy is absent
+    _use_light = False
+    try:
+        import scipy  # noqa: F401
+    except ImportError:
+        _use_light = True
+    
+    if _use_light:
+        from mandi_rdd.analysis.lightweight_rdd import run_rdd_lightweight
+        result = run_rdd_lightweight(conn, commodity=commodity)
+    else:
+        from mandi_rdd.analysis.rdd_engine import run_rdd
+        result = run_rdd(conn, commodity=commodity)
     conn.close()
     
     if result.get("error"):
@@ -716,6 +747,7 @@ async def robustness(commodity: str):
         "covariate_balance": result.get("covariate_balance", {}),
         "fe_effect": result.get("fe_effect"),
         "fe_p_value": result.get("fe_p_value"),
+        "engine": "lightweight" if _use_light else "full",
     }
 
 
