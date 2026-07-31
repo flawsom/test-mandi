@@ -10,12 +10,15 @@
 #        - Vercel:   gh workflow run deploy-vercel.yml
 #        - Pages:    gh workflow run deploy-pages.yml
 #        - Streamlit: auto-deploys from master via its own GitHub webhook
+#   4. Restores the fresh DB onto the Northflank volume via
+#      POST /admin/restore-from-r2 (R2-as-data-bus — see the NOTE below)
 #
 # NOTE: The legacy "Trigger Render deploy" step (POST to the API's /deploy,
 # which proxied to a Render deploy hook) was REMOVED — the API now runs on
-# Northflank (not Render) and reads its DuckDB from the /data volume that its
-# own hourly cron + R2 restore keep fresh. This workflow's R2 backup below is
-# the data-bus; a POST /admin/restore-from-r2 re-syncs the volume on demand.
+# Northflank (not Render). This workflow's R2 backup is the data-bus: after
+# every committed change it POSTs /admin/restore-from-r2 so the fresh
+# GH-committed DB also lands on the Northflank /data volume — closing the
+# R2-as-data-bus loop automatically.
 #
 # NOTE on redeploys: commits made with the default GITHUB_TOKEN do NOT
 # re-trigger other workflows (GitHub anti-recursion), so this workflow
@@ -50,6 +53,8 @@ env:
   # GitHub Actions does not allow secrets.* inside `if:` conditions, so the
   # token is exposed via job env and the Vercel step gates on env.VERCEL_TOKEN.
   VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
+  # Northflank API that owns the /data volume — the restore target below.
+  API_BASE: "https://p01--mandiiq--zbvjrztgjqgw.code.run"
 
 jobs:
   sync:
@@ -316,6 +321,10 @@ jobs:
             --only-show-errors; then
             echo "::warning::DuckDB R2 backup failed (transient error)"
           else
+            # Marker consumed by the restore step below: only restore the
+            # volume when THIS run's backup succeeded (never overwrite a
+            # newer volume DB with a stale R2 object).
+            touch /tmp/r2_backup_ok
             ORIG_SIZE=$(stat -c%s mandi_rdd/data/mandi_iq.duckdb 2>/dev/null || stat -f%z mandi_rdd/data/mandi_iq.duckdb 2>/dev/null)
             GZ_SIZE=$(stat -c%s "$BACKUP_FILE" 2>/dev/null || stat -f%z "$BACKUP_FILE" 2>/dev/null)
             PCT=$(( (ORIG_SIZE - GZ_SIZE) * 100 / ORIG_SIZE ))
@@ -340,6 +349,23 @@ jobs:
           key: "mandi_iq.duckdb.gz"
           aws-access-key-id: ${{ secrets.R2_ACCESS_KEY_ID }}
           aws-secret-access-key: ${{ secrets.R2_SECRET_ACCESS_KEY }}
+
+      - name: Restore fresh DB onto Northflank volume (R2 data-bus)
+        if: steps.commit.outputs.committed == 'true'
+        continue-on-error: true
+        run: |
+          if [ ! -f /tmp/r2_backup_ok ]; then
+            echo "::warning::R2 backup did not report success this run — skipping volume restore (never overwrite a newer volume DB with a stale R2 object)"
+            exit 0
+          fi
+          echo "Restoring DuckDB onto the Northflank volume via POST ${API_BASE}/admin/restore-from-r2 ..."
+          RESPONSE=$(curl -s -X POST "${API_BASE}/admin/restore-from-r2" --max-time 600 2>/dev/null || true)
+          echo "$RESPONSE"
+          if echo "$RESPONSE" | grep -q '"status": "ok"'; then
+            echo "::notice::Volume DB restored from R2 backup — /health should now serve the fresh GH-committed rows"
+          else
+            echo "::error::Restore response did not report status ok — check the API logs (response above)"
+          fi
 
       - name: Summary
         run: |
