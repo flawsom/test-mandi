@@ -862,7 +862,7 @@ Single-page tabbed documentation site with full Alche Studio design system:
 | `ci.yml` | Push/PR | Build, test, lint, scan |
 | `daily-ingest.yml` | Daily 03:00 UTC | Full pipeline run (prices, rainfall, NDVI, RDD, forecast) |
 | `nightly-ingest.yml` | Daily | Ashoka historical import |
-| `deploy-render.yml` | Push to master | Deploy to Render |
+| `deploy-render.yml` | Push to master | Config validation |
 | `deploy-pages.yml` | Push to master | Deploy docs to GitHub Pages |
 | `heartbeat.yml` | Every 5min | Health check + Grafana metrics push |
 | `dashboard-heartbeat.yml` | Every 10min | Streamlit dashboard health check |

@@ -30,7 +30,7 @@
   <img src="https://img.shields.io/github/v/release/flawsom/test-mandi?style=for-the-badge&amp;label=Version&amp;color=00FF88&amp;logo=github" alt="Version" />
   <img src="https://img.shields.io/github/license/flawsom/test-mandi?style=for-the-badge&amp;label=License&amp;color=blue&amp;logo=open-source-initiative" alt="License" />
   <img src="https://img.shields.io/github/actions/workflow/status/flawsom/test-mandi/ci.yml?style=for-the-badge&amp;label=CI&amp;color=success&amp;logo=githubactions" alt="CI" />
-  <img src="https://img.shields.io/github/actions/workflow/status/flawsom/test-mandi/deploy-render.yml?style=for-the-badge&amp;label=Deploy+Render&amp;color=success&amp;logo=render" alt="Deploy Render" />
+  <img src="https://img.shields.io/github/actions/workflow/status/flawsom/test-mandi/deploy-render.yml?style=for-the-badge&amp;label=Config+Validation&amp;color=success" alt="Config Validation" />
   <img src="https://img.shields.io/github/actions/workflow/status/flawsom/test-mandi/deploy-vercel.yml?style=for-the-badge&amp;label=Deploy+Vercel&amp;color=success&amp;logo=vercel" alt="Deploy Vercel" />
   <img src="https://img.shields.io/github/actions/workflow/status/flawsom/test-mandi/deploy-pages.yml?style=for-the-badge&amp;label=Deploy+Pages&amp;color=success&amp;logo=githubpages" alt="Deploy Pages" />
   <img src="https://img.shields.io/github/stars/flawsom/test-mandi?style=for-the-badge&amp;label=Stars&amp;color=yellow&amp;logo=github" alt="Stars" />
@@ -871,7 +871,7 @@ pytest mandi_rdd/tests/test_rdd_engine.py -v
 | # | Workflow | Status | Trigger | Schedule | Purpose |
 |---|----------|--------|---------|----------|---------|
 | 1 | **CI** | <img src="https://img.shields.io/github/actions/workflow/status/flawsom/test-mandi/ci.yml?style=flat-square&amp;label=&amp;logo=githubactions" alt="status" /> | Push/PR | &mdash; | Test suite + linting + type checks |
-| 2 | **Deploy to Render** | <img src="https://img.shields.io/github/actions/workflow/status/flawsom/test-mandi/deploy-render.yml?style=flat-square&amp;label=&amp;logo=render" alt="status" /> | Push to `master` | &mdash; | Deploy FastAPI to production |
+| 2 | **Config Validation** | <img src="https://img.shields.io/github/actions/workflow/status/flawsom/test-mandi/deploy-render.yml?style=flat-square&amp;label=&amp;color=success" alt="status" /> | Push to `master` | &mdash; | Validate deploy configs on push |
 | 3 | **Deploy API to Vercel** | <img src="https://img.shields.io/github/actions/workflow/status/flawsom/test-mandi/deploy-vercel.yml?style=flat-square&amp;label=&amp;logo=vercel" alt="status" /> | Push to `api/**` | &mdash; | Read-only serverless API |
 | 4 | **Deploy Pages** | <img src="https://img.shields.io/github/actions/workflow/status/flawsom/test-mandi/deploy-pages.yml?style=flat-square&amp;label=&amp;logo=githubpages" alt="status" /> | Push to `landing/**` | &mdash; | GitHub Pages (landing + docs) |
 | 5 | **Nightly Ingestion** | <img src="https://img.shields.io/github/actions/workflow/status/flawsom/test-mandi/nightly-ingest.yml?style=flat-square&amp;label=" alt="status" /> | Schedule | Daily 02:00 UTC | Fetch prices, update DuckDB |

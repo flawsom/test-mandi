@@ -1,13 +1,11 @@
-# Trigger a Render deploy on every push to master via Deploy Hook.
+# Config validation on every push to master.
 #
-# SETUP (one-time):
-#   1. https://dashboard.render.com -> mandiiq-api -> Settings -> Deploy Hooks
-#   2. Click "Generate Deploy Hook", copy the URL
-#   3. Add it as a GitHub secret named RENDER_DEPLOY_HOOK_URL:
-#      https://github.com/flawsom/MandiIQ/settings/secrets/actions
-#   4. Done -- every push to master now auto-deploys via this workflow.
+# The API formerly deployed to Render via a deploy hook; it now runs on
+# Northflank and reads its DuckDB from the /data volume (kept fresh by the
+# hourly cron + R2 restore), so there is no Render deploy to trigger.
+# This workflow validates the deployment configuration files instead.
 
-name: Deploy to Render
+name: Config Validation
 
 on:
   push:
@@ -15,11 +13,11 @@ on:
   workflow_dispatch:
 
 concurrency:
-  group: deploy-render-${{ github.ref }}
+  group: config-validation-${{ github.ref }}
   cancel-in-progress: true
 
 jobs:
-  validate-config:
+  validate:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -34,18 +32,5 @@ jobs:
       - name: Validate Northflank config
         run: python scripts/validate_northflank_config.py
 
-  deploy:
-    needs: validate-config
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-        with:
-          lfs: true
-
       - name: Validate render.yaml + DuckDB
         uses: ./.github/actions/validate-all
-
-      - name: Trigger Render deploy
-        uses: ./.github/actions/trigger-render-deploy
-        with:
-          hook-url: ${{ secrets.RENDER_DEPLOY_HOOK_URL }}
