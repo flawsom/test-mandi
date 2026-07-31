@@ -7,6 +7,8 @@
 (function() {
   'use strict';
 
+  function boot() {
+
   /* ═══════════════════════════════════════════════════════════
      Cursor Trail — Spring Physics
      ═══════════════════════════════════════════════════════════ */
@@ -247,4 +249,15 @@
       if (canvas.parentNode) canvas.parentNode.removeChild(canvas);
     };
   })();
+
+  } // end boot
+
+  // The script may be loaded from <head> (landing) where <body> does not
+  // exist yet — both effects append canvases to document.body, so defer
+  // until the DOM is ready.
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', boot);
+  } else {
+    boot();
+  }
 })();
