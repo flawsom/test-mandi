@@ -9,7 +9,7 @@
     "api/index.py": {
       "maxDuration": 60,
       "memory": 1024,
-      "excludeFiles": "{tests/**,**/tests/**,test_output/**,**/test_output/**,**/screenshots/**,**/data/mandi_iq.duckdb.pre_fix_backup,**/data/mandi_iq.duckdb.backup,**/data/*.backup,**/repomix*,archive/**,**/archive/**,demo/**,**/demo/**,worker/**,**/worker/**,landing/**,**/landing/**,docs/**,**/docs/**,**/node_modules/**,**/__pycache__/**,**/.pytest_cache/**,**.git/**,**/.git/**,**.vercel/**,**.streamlit/**,scripts/**,**/scripts/**,mandi_rdd/dashboard/**,mandi_rdd/styles/**}"
+      "excludeFiles": "{**/data/mandi_iq.duckdb.*,**/repomix*,**/tests/**,**/__pycache__/**,**/node_modules/**,**/.git/**,archive/**,docs/**,landing/**,scripts/**,**/screenshots/**,mandi_rdd/dashboard/**,test_output/**}"
     }
   },
   "buildCommand": "cp requirements-vercel.txt requirements.txt"

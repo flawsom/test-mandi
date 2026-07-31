@@ -1,0 +1,29 @@
+# Keep the Vercel deploy lean — these are never needed to build/serve the API.
+# excludeFiles (vercel.json) trims the function bundle; this trims the upload.
+
+# DuckDB backups (155 MB pre_fix_backup + 2 MB backup) — only the live DB ships
+**/data/mandi_iq.duckdb.pre_fix_backup
+**/data/mandi_iq.duckdb.backup
+**/*.backup
+
+# Repomix dumps (~41 MB of generated markdown/XML)
+**/repomix*
+
+# Not needed by the API
+archive/
+demo/
+worker/
+landing/
+docs/
+scripts/
+tests/
+test_output/
+**/screenshots/
+
+# Tooling / VCS
+.git/
+.vercel/
+.streamlit/
+**/__pycache__/
+**/.pytest_cache/
+**/node_modules/

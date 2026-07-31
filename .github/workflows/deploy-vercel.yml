@@ -92,7 +92,7 @@ jobs:
             fi
           fi
 
-      - name: Strip .git before build (LFS objects exceed Vercel's 500 MB bundle cap)
+      - name: Strip .git before deploy (LFS objects would bloat the upload)
         run: |
           du -sh .git 2>/dev/null || true
           rm -rf .git
@@ -109,24 +109,19 @@ jobs:
           echo "::error::2. Add it as a repo secret: gh secret set VERCEL_TOKEN"
           exit 1
 
-      - name: Link Vercel project (idempotent)
+      - name: Write .vercel/project.json (deployment-token flow — link/pull need a user identity)
         if: env.VERCEL_TOKEN != ''
         run: |
-          vercel link --yes --project=test-mandi --token=${{ secrets.VERCEL_TOKEN }}
+          mkdir -p .vercel
+          cat > .vercel/project.json <<'EOF'
+          {"orgId":"team_DrSClSXxqs4UlleVMuvPOuvX","projectId":"prj_MIMwhXIJMxCdpKRPmljzjFpfaE4i"}
+          EOF
 
-      - name: Pull Vercel environment
-        if: env.VERCEL_TOKEN != ''
-        run: vercel pull --yes --environment=production --token=${{ secrets.VERCEL_TOKEN }}
-
-      - name: Build for production
-        if: env.VERCEL_TOKEN != ''
-        run: vercel build --prod --token=${{ secrets.VERCEL_TOKEN }}
-
-      - name: Deploy to production
+      - name: Deploy to production (single command, no user-scope calls)
         id: deploy
         if: env.VERCEL_TOKEN != ''
         run: |
-          OUTPUT=$(vercel deploy --prebuilt --prod --token=${{ secrets.VERCEL_TOKEN }})
+          OUTPUT=$(vercel deploy --prod --yes --token=${{ secrets.VERCEL_TOKEN }} 2>&1)
           echo "$OUTPUT"
           # Extract the production URL from the deploy output
           URL=$(echo "$OUTPUT" | grep -oP 'https://[a-zA-Z0-9.-]+\.vercel\.app' | head -1)
