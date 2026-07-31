@@ -12,6 +12,7 @@ import streamlit as st
 from mandi_rdd.dashboard.theme import (
     inject_theme, TURMERIC, RUST, SAGE, SLATE, MUTED, FAINT, INK
 )
+from mandi_rdd.dashboard.data_access import get_last_run_status, format_last_run_utc
 
 def render():
     inject_theme()
@@ -85,10 +86,15 @@ def render():
     </div>
     """, unsafe_allow_html=True)
 
+    # Live status from the hourly ingestion writer — never a hardcoded date.
+    _status = get_last_run_status()
+    _last_str = format_last_run_utc(_status.get("last_run_utc"))
+    _outcome = str(_status.get("outcome", "unknown")).title()
+
     st.markdown(f"""
     <p style="color: {FAINT}; font-size: 0.75rem; text-align: center; 
                position: fixed; bottom: 1rem; left: 0; right: 0;">
-        Last run: 2026-07-18 02:00 IST • No mock data, ever
+        Last run: {_last_str} ({_outcome}) • No mock data, ever
     </p>
     """, unsafe_allow_html=True)
 

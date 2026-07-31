@@ -13,6 +13,7 @@ import streamlit as st
 from mandi_rdd.dashboard.theme import (
     inject_theme, TURMERIC, RUST, SAGE, SLATE, MUTED, FAINT
 )
+from mandi_rdd.dashboard.data_access import get_last_run_status, format_last_run_utc
 
 def render():
     inject_theme()
@@ -108,9 +109,15 @@ def render():
     </div>
     """, unsafe_allow_html=True)
 
+    # Live timestamps from the pipeline status files — never hardcoded.
+    import datetime as _dt
+    _now = _dt.datetime.now(_dt.timezone.utc).strftime("%Y-%m-%d %H:%M UTC")
+    _status = get_last_run_status()
+    _last_str = format_last_run_utc(_status.get("last_run_utc"))
+
     st.markdown(f"""
     <p style="color: {FAINT}; font-size: 0.75rem; text-align: center; margin-top: 2rem;">
         Error code: MODEL_CHAIN_EXHAUSTED<br/>
-        Timestamp: 2026-07-18 • Last pipeline run: see /settings for details
+        Generated: {_now} • Last pipeline run: {_last_str} (see /settings for details)
     </p>
     """, unsafe_allow_html=True)

@@ -14,6 +14,7 @@ sys.path.insert(0, str(Path(__file__).resolve().parent.parent.parent.parent))
 
 import streamlit as st
 from mandi_rdd.dashboard.theme import inject_theme, TURMERIC, RUST, SLATE, MUTED, SAGE
+from mandi_rdd.dashboard.data_access import get_last_run_status, format_last_run_utc
 
 
 def render():
@@ -175,7 +176,30 @@ def render():
         </div>
     """, unsafe_allow_html=True)
 
-    st.markdown("""
+    # Live record counts from DuckDB — never a hardcoded figure.
+    _n_prices = 0
+    _n_districts = 0
+    _conn = None
+    try:
+        from mandi_rdd.storage.duckdb_store import get_connection
+        _conn = get_connection(read_only=True)
+        _n_prices = int(_conn.execute("SELECT COUNT(*) FROM prices").fetchone()[0])
+        _n_districts = int(_conn.execute("SELECT COUNT(DISTINCT district) FROM prices").fetchone()[0])
+    except Exception:
+        pass
+    finally:
+        if _conn is not None:
+            try:
+                _conn.close()
+            except Exception:
+                pass
+    _counts_str = (
+        f"{_n_prices:,} records across {_n_districts:,} districts"
+        if _n_prices > 0
+        else "records counted live on next pipeline run"
+    )
+
+    st.markdown(f"""
         <div class="crosshair-panel glass" style="padding:1.2rem;">
             <table style="width:100%;font-size:0.85rem;">
                 <tr style="color:#bababa;text-align:left;"><th style="padding:0.3rem;">Source</th><th style="padding:0.3rem;">Data</th><th style="padding:0.3rem;">Update</th><th style="padding:0.3rem;">Provider</th></tr>
@@ -184,7 +208,7 @@ def render():
                 <tr><td style="padding:0.3rem;color:#ffffff;"><strong>Sentinel-2</strong></td><td style="padding:0.3rem;color:#bababa;">NDVI vegetation index</td><td style="padding:0.3rem;color:#bababa;">Weekly</td><td style="padding:0.3rem;color:#bababa;"><a href="https://sentinel.esa.int/" style="color:#d7ff00;">Copernicus</a></td></tr>
             </table>
             <p style="color:#7e7e7e;font-size:0.8rem;margin-top:0.8rem;">
-                Historical backfill extends to 2019 for mandi prices, providing ~2M records across 300+ districts.
+                Historical backfill extends to 2019 for mandi prices — currently {_counts_str} in the live database.
             </p>
         </div>
     """, unsafe_allow_html=True)
@@ -243,9 +267,12 @@ def render():
     """, unsafe_allow_html=True)
 
     st.markdown("<hr style='border-color:rgba(255,255,255,0.07);margin:2rem 0;'>", unsafe_allow_html=True)
+    # Live data timestamp — reflects the most recent pipeline run, never a hardcoded date.
+    _status = get_last_run_status()
+    _last_str = format_last_run_utc(_status.get("last_run_utc"))
     st.markdown(
         '<p style="color:#7e7e7e;font-size:0.8rem;">'
-        'Last updated: July 2026 • Data sources: data.gov.in, IMD, Sentinel-2'
+        f'Last pipeline run: {_last_str} • Data sources: data.gov.in, IMD, Sentinel-2'
         '</p>',
         unsafe_allow_html=True
     )

@@ -1,10 +1,58 @@
 """MandiIQ Dashboard - Data access layer with stale-data fallback warnings."""
 
+import datetime as _dt
+import json
 import logging
 import os
+from pathlib import Path
 from typing import Optional
 
 logger = logging.getLogger(__name__)
+
+
+def get_last_run_status() -> dict:
+    """Read the most recent pipeline run status from on-disk status files.
+
+    Prefers ``last_hourly_run.json`` (the hourly ingestion writer) and falls
+    back to ``last_ingest_status.json`` (the full nightly pipeline writer).
+    Returns an empty dict when neither file exists/is readable, so callers
+    can show an honest "no run recorded yet" instead of a hardcoded date.
+
+    Keys returned: last_run_utc, outcome, new_price_rows, duration_s, error.
+    """
+    data_dir = Path(__file__).resolve().parent.parent / "data"
+
+    def _read(name: str) -> dict | None:
+        try:
+            p = data_dir / name
+            if p.exists():
+                with open(p) as f:
+                    return json.load(f)
+        except Exception:
+            pass
+        return None
+
+    rec = _read("last_hourly_run.json") or {}
+    if not rec.get("last_run_utc"):
+        legacy = _read("last_ingest_status.json") or {}
+        rec.setdefault("last_run_utc", legacy.get("last_run_utc"))
+        rec.setdefault("outcome", legacy.get("outcome"))
+
+    return rec
+
+
+def format_last_run_utc(last_run_utc: str | None) -> str:
+    """Format an ISO UTC timestamp as a human string, or 'no run recorded yet'."""
+    if not last_run_utc:
+        return "no run recorded yet"
+    try:
+        run_dt = _dt.datetime.fromisoformat(str(last_run_utc).replace("Z", "+00:00"))
+        if run_dt.tzinfo is None:
+            run_dt = run_dt.replace(tzinfo=_dt.timezone.utc)
+        ist = run_dt.astimezone(_dt.timezone(_dt.timedelta(hours=5, minutes=30)))
+        return ist.strftime("%Y-%m-%d %H:%M IST")
+    except (ValueError, TypeError):
+        return str(last_run_utc)[:19]
 
 _FALLBACK_COUNT: int = 0
 

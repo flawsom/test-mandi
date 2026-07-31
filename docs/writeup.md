@@ -340,7 +340,7 @@ graph LR
     linkStyle default stroke-width:2px,fill:none,stroke:#d7ff00
 ```
 
-**Last run:** 2026-07-30 10:30 UTC · 12.5s total · Outcome: **success**
+**Last run:** 2026-07-30 14:09 UTC · 383s total · Outcome: **success**
 
 ### What each run refreshes
 
