@@ -112,8 +112,7 @@ jobs:
       - name: Link Vercel project (idempotent)
         if: env.VERCEL_TOKEN != ''
         run: |
-          vercel link --yes --project=test-mandi || \
-            echo "::warning::vercel link failed (project may not exist yet) — pull will retry"
+          vercel link --yes --project=test-mandi --token=${{ secrets.VERCEL_TOKEN }}
 
       - name: Pull Vercel environment
         if: env.VERCEL_TOKEN != ''
