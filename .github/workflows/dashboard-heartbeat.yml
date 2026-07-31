@@ -31,6 +31,10 @@ on:
         required: false
         default: "Manual heartbeat dashboard cache refresh"
 
+# gh variable get/set (repo Actions variables) requires actions: write
+permissions:
+  actions: write
+
 env:
   API_BASE: "https://p01--mandiiq--zbvjrztgjqgw.code.run"
   VAR_NAME: "HASH_PREVIOUS"
