@@ -1,6 +1,6 @@
 {
-  "last_updated": "2026-07-31T10:00:30.345281+00:00",
-  "n_records": 6811,
+  "last_updated": "2026-07-31T11:32:24.969352+00:00",
+  "n_records": 6826,
   "records": [
     {
       "state": "Andaman & Nicobar",
@@ -6269,6 +6269,41 @@
     },
     {
       "state": "Chattisgarh",
+      "district": "Rajnandgaon",
+      "date": "2026-02-01",
+      "ndvi": 0.3813,
+      "anomaly": 0.0
+    },
+    {
+      "state": "Chattisgarh",
+      "district": "Rajnandgaon",
+      "date": "2026-03-01",
+      "ndvi": 0.2919,
+      "anomaly": 0.0
+    },
+    {
+      "state": "Chattisgarh",
+      "district": "Rajnandgaon",
+      "date": "2026-04-01",
+      "ndvi": 0.2743,
+      "anomaly": 0.0
+    },
+    {
+      "state": "Chattisgarh",
+      "district": "Rajnandgaon",
+      "date": "2026-05-01",
+      "ndvi": 0.1874,
+      "anomaly": 0.0
+    },
+    {
+      "state": "Chattisgarh",
+      "district": "Rajnandgaon",
+      "date": "2026-06-01",
+      "ndvi": -0.0178,
+      "anomaly": 0.0
+    },
+    {
+      "state": "Chattisgarh",
       "district": "Sarangarh Bilaigarh",
       "date": "2026-01-31",
       "ndvi": 0.3238,
@@ -12145,6 +12180,41 @@
       "district": "Kathua",
       "date": "2026-06-28",
       "ndvi": 0.2834,
+      "anomaly": 0.0
+    },
+    {
+      "state": "Jammu & Kashmir",
+      "district": "Kupwara",
+      "date": "2026-02-01",
+      "ndvi": 0.3762,
+      "anomaly": 0.0
+    },
+    {
+      "state": "Jammu & Kashmir",
+      "district": "Kupwara",
+      "date": "2026-03-01",
+      "ndvi": 0.4927,
+      "anomaly": 0.0
+    },
+    {
+      "state": "Jammu & Kashmir",
+      "district": "Kupwara",
+      "date": "2026-04-01",
+      "ndvi": 0.262,
+      "anomaly": 0.0
+    },
+    {
+      "state": "Jammu & Kashmir",
+      "district": "Kupwara",
+      "date": "2026-05-01",
+      "ndvi": 0.5879,
+      "anomaly": 0.0
+    },
+    {
+      "state": "Jammu & Kashmir",
+      "district": "Kupwara",
+      "date": "2026-06-01",
+      "ndvi": 0.5375,
       "anomaly": 0.0
     },
     {
@@ -37660,6 +37730,41 @@
       "district": "Medak",
       "date": "2026-06-28",
       "ndvi": 0.15,
+      "anomaly": 0.0
+    },
+    {
+      "state": "Telangana",
+      "district": "Medchal Malkajgiri",
+      "date": "2026-02-01",
+      "ndvi": 0.28,
+      "anomaly": 0.0
+    },
+    {
+      "state": "Telangana",
+      "district": "Medchal Malkajgiri",
+      "date": "2026-03-01",
+      "ndvi": 0.2994,
+      "anomaly": 0.0
+    },
+    {
+      "state": "Telangana",
+      "district": "Medchal Malkajgiri",
+      "date": "2026-04-01",
+      "ndvi": 0.2939,
+      "anomaly": 0.0
+    },
+    {
+      "state": "Telangana",
+      "district": "Medchal Malkajgiri",
+      "date": "2026-05-01",
+      "ndvi": 0.2366,
+      "anomaly": 0.0
+    },
+    {
+      "state": "Telangana",
+      "district": "Medchal Malkajgiri",
+      "date": "2026-06-01",
+      "ndvi": 0.1791,
       "anomaly": 0.0
     },
     {
