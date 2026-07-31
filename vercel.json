@@ -9,7 +9,7 @@
     "api/index.py": {
       "maxDuration": 60,
       "memory": 1024,
-      "excludeFiles": "{**/data/mandi_iq.duckdb.*,**/repomix*,**/tests/**,**/__pycache__/**,**/node_modules/**,**/.git/**,archive/**,docs/**,landing/**,scripts/**,**/screenshots/**,mandi_rdd/dashboard/**,test_output/**}"
+      "excludeFiles": "{**/data/mandi_iq.duckdb,**/data/mandi_iq.duckdb.*,**/repomix*,**/tests/**,**/__pycache__/**,**/node_modules/**,**/.git/**,archive/**,docs/**,landing/**,scripts/**,**/screenshots/**,mandi_rdd/dashboard/**,test_output/**}"
     }
   },
   "buildCommand": "cp requirements-vercel.txt requirements.txt"

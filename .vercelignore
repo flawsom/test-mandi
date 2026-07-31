@@ -1,7 +1,11 @@
 # Keep the Vercel deploy lean — these are never needed to build/serve the API.
 # excludeFiles (vercel.json) trims the function bundle; this trims the upload.
 
-# DuckDB backups (155 MB pre_fix_backup + 2 MB backup) — only the live DB ships
+# DuckDB: the live 157 MB DB exceeds Vercel's 100 MB per-file upload cap, and
+# the API now restores it from Cloudflare R2 at runtime (see duckdb_store.py
+# _bootstrap_db_from_r2 — restores into the writable /tmp on serverless).
+# Exclude the live DB AND its backups so the upload stays small.
+**/data/mandi_iq.duckdb
 **/data/mandi_iq.duckdb.pre_fix_backup
 **/data/mandi_iq.duckdb.backup
 **/*.backup

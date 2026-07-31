@@ -135,15 +135,24 @@ jobs:
           URL: ${{ steps.deploy.outputs.deploy_url }}
         run: |
           echo "Smoke-testing $URL/health ..."
-          for i in 1 2 3; do
-            HTTP_CODE=$(curl -s -o /dev/null -w "%{http_code}" --max-time 15 "$URL/health" 2>/dev/null)
-            if [ "$HTTP_CODE" = "200" ]; then
-              echo " OK — /health returned 200"
+          # First cold start downloads the DuckDB from R2 into /tmp (~35 MB),
+          # so allow up to ~120 s for the first 200 with real row counts.
+          for i in 1 2 3 4 5 6 7 8; do
+            OUT=$(curl -s -w '\n%{http_code}' --max-time 55 "$URL/health" 2>/dev/null)
+            HTTP_CODE=$(echo "$OUT" | tail -1)
+            BODY=$(echo "$OUT" | head -n -1)
+            N_PRICES=$(echo "$BODY" | python -c "import sys,json
+try:
+    d=json.load(sys.stdin); print(d.get('n_prices', -1))
+except Exception:
+    print(-1)" 2>/dev/null)
+            echo "Attempt $i: HTTP $HTTP_CODE | n_prices=$N_PRICES"
+            if [ "$HTTP_CODE" = "200" ] && [ "$N_PRICES" -ge 1000000 ]; then
+              echo " OK — /health served live data: n_prices=$N_PRICES"
               exit 0
             fi
-            echo "Attempt $i: HTTP $HTTP_CODE — retrying in 5s..."
-            sleep 5
+            sleep 15
           done
-          echo "::warning ::Smoke-test failed — /health did not return 200 after 3 attempts"
+          echo "::warning ::Smoke-test failed — /health did not serve 1M+ prices after 8 attempts"
           exit 1
         continue-on-error: true               # smoke-test failure is informational

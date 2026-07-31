@@ -142,6 +142,29 @@ _RESTORE_LOCK = threading.Lock()
 
 REPO_DB_PATH = Path(__file__).resolve().parent.parent / "data" / "mandi_iq.duckdb"
 
+_R2_RESTORED_TO: Optional[Path] = None
+"""Path of the last successful R2 restore (serverless: a /tmp copy).
+
+The repo dir is read-only on Vercel, so the bootstrap restores into a
+writable temp dir there; warm instances reuse this path instead of
+re-downloading on every request.
+"""
+
+
+def _dir_is_writable(directory: Path) -> bool:
+    """Return True if files can be created in ``directory``.
+
+    Serverless (Vercel) function bundles are read-only except /tmp, so the
+    R2 bootstrap must pick a writable restore target there.
+    """
+    try:
+        probe = directory / f".w_{os.getpid()}"
+        probe.write_bytes(b"")
+        probe.unlink(missing_ok=True)
+        return True
+    except OSError:
+        return False
+
 
 def resolve_db_path() -> Path:
     """Return the DB path that actually exists, preferring the repo-default DB.
@@ -176,27 +199,49 @@ def _bootstrap_db_from_r2() -> Path:
     """Download the fresh DuckDB from Cloudflare R2 (once per process).
 
     Called when the local DB is missing or is a stale LFS pointer (e.g. git
-    LFS smudge failed on Streamlit Community Cloud). Non-fatal: any failure
-    is logged and callers fall through to their normal error handling.
+    LFS smudge failed on Streamlit Community Cloud, or the DuckDB is
+    excluded from a serverless bundle on Vercel). Non-fatal: any failure is
+    logged and callers fall through to their normal error handling.
+
+    Restore target: the repo DB path when its directory is writable (local /
+    Northflank), otherwise a writable temp dir (Vercel /tmp — function
+    bundles are read-only). Returns the path that now holds the restored DB
+    so callers open THAT file, not the missing configured path.
     """
-    global _DB_RESTORE_ATTEMPTED
+    global _DB_RESTORE_ATTEMPTED, _R2_RESTORED_TO
     # Hold the lock across the whole bootstrap so concurrent Streamlit
     # sessions block until the in-flight restore finishes, then re-resolve
     # (now finding the restored file) instead of erroring mid-download.
     with _RESTORE_LOCK:
         if _DB_RESTORE_ATTEMPTED:
-            return resolve_db_path()
+            return _R2_RESTORED_TO or resolve_db_path()
         _DB_RESTORE_ATTEMPTED = True
         try:
+            target = REPO_DB_PATH
+            if not _dir_is_writable(target.parent):
+                import tempfile
+
+                target = Path(tempfile.gettempdir()) / "mandi_iq.duckdb"
+                logger.warning(
+                    "%s is not writable (serverless bundle?) — "
+                    "restoring R2 backup to %s",
+                    REPO_DB_PATH, target,
+                )
             from mandi_rdd.storage.r2_sync import restore_db
-            result = restore_db(REPO_DB_PATH)
+
+            result = restore_db(target)
+            _R2_RESTORED_TO = target
             logger.info(
                 "R2 bootstrap: restored %s prices to %s",
-                result.get("prices"), REPO_DB_PATH,
+                result.get("prices"), target,
             )
         except Exception as e:  # noqa: BLE001
             logger.warning("R2 bootstrap unavailable: %s", e)
-    return resolve_db_path()
+            # Don't brick the whole warm instance on a transient failure
+            # (serverless cold starts are expensive) — allow a retry.
+            if _R2_RESTORED_TO is None:
+                _DB_RESTORE_ATTEMPTED = False
+    return _R2_RESTORED_TO or resolve_db_path()
 
 
 def get_connection(db_path: Optional[Path] = None, read_only: bool = False) -> "duckdb.DuckDBPyConnection":
