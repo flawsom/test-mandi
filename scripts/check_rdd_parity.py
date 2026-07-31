@@ -15,7 +15,8 @@ Semantics:
                 on both sides is not a parity failure)
   - NO-EFFECT   only ONE surface has an effect (drift — a real failure)
   - ERROR       a probe failed (HTTP error / non-JSON / timeout), retried
-                for transient 5xx before being counted as failure
+                3x / 20s apart for transient 429/5xx + network errors
+                before being counted as failure
 
 Exit codes:
     0 — every commodity passes (or is skipped)
@@ -60,19 +61,32 @@ COMMODITIES = [
 ]
 
 TIMEOUT_S = 120          # cold starts on Vercel may take ~35s for the R2 download
-MAX_ATTEMPTS = 3         # transient 5xx (502/503/504) retries before ERROR
-RETRY_WAIT_S = 5
+
+# The Northflank API redeploys on every push to master, so a transient
+# 503 "no healthy upstream" mid-redeploy is expected.  Retry each probe up
+# to MAX_ATTEMPTS times, RETRY_DELAY_S apart, before counting it as ERROR
+# (same pattern as scripts/check_health.py).
+MAX_ATTEMPTS = 3
+RETRY_DELAY_S = 20
+RETRYABLE_HTTP = {429, 500, 502, 503, 504}  # back-off + gateway errors
 
 
 def _fetch_effect(base: str, commodity: str, timeout: int = TIMEOUT_S) -> dict:
-    """Fetch /robustness/{commodity}, retrying transient 5xx.
+    """Fetch /robustness/{commodity}, retrying transient failures.
 
-    Returns {effect, p_value, http_status, error}.
+    Retries up to MAX_ATTEMPTS times (RETRY_DELAY_S apart) when the fetch
+    fails with a retryable HTTP status (429/5xx) or a network error, which
+    covers the API being mid-redeploy right after a push.  A definitive
+    answer (200, non-retryable 4xx) is returned at once.
+
+    Returns {effect, p_value, http_status, error, attempts}.
     """
     url = base + "/robustness/" + urllib.parse.quote(commodity, safe="")
-    result = {"effect": None, "p_value": None, "http_status": None, "error": None}
+    result = {"effect": None, "p_value": None, "http_status": None, "error": None, "attempts": 0}
+    body = None
 
     for attempt in range(1, MAX_ATTEMPTS + 1):
+        result["attempts"] = attempt
         req = urllib.request.Request(url, headers={"User-Agent": "MandiIQ/rdd-parity"})
         try:
             with urllib.request.urlopen(req, timeout=timeout) as resp:
@@ -81,16 +95,28 @@ def _fetch_effect(base: str, commodity: str, timeout: int = TIMEOUT_S) -> dict:
             break
         except urllib.error.HTTPError as e:
             result["http_status"] = e.code
-            if e.code in (502, 503, 504) and attempt < MAX_ATTEMPTS:
-                time.sleep(RETRY_WAIT_S * attempt)
-                continue
+            if e.code in RETRYABLE_HTTP:
+                if attempt < MAX_ATTEMPTS:
+                    print(f"  [retry {attempt}/{MAX_ATTEMPTS}] {url} -> HTTP {e.code} ({e.reason}); retrying in {RETRY_DELAY_S}s")
+                    time.sleep(RETRY_DELAY_S)
+                    continue
+                result["error"] = f"HTTP {e.code}: {e.reason} (after {MAX_ATTEMPTS} attempts)"
+                return result
             result["error"] = f"HTTP {e.code}: {e.reason}"
             return result
         except urllib.error.URLError as e:
-            result["error"] = f"URLError: {e.reason}"
+            if attempt < MAX_ATTEMPTS:
+                print(f"  [retry {attempt}/{MAX_ATTEMPTS}] {url} -> {e.reason}; retrying in {RETRY_DELAY_S}s")
+                time.sleep(RETRY_DELAY_S)
+                continue
+            result["error"] = f"URLError: {e.reason} (after {MAX_ATTEMPTS} attempts)"
             return result
         except OSError as e:
-            result["error"] = f"OSError: {e}"
+            if attempt < MAX_ATTEMPTS:
+                print(f"  [retry {attempt}/{MAX_ATTEMPTS}] {url} -> OSError: {e}; retrying in {RETRY_DELAY_S}s")
+                time.sleep(RETRY_DELAY_S)
+                continue
+            result["error"] = f"OSError: {e} (after {MAX_ATTEMPTS} attempts)"
             return result
 
     try:
@@ -125,9 +151,11 @@ def run_check(threshold: float, abs_floor: float) -> tuple[bool, dict]:
             "vercel_effect": v["effect"],
             "vercel_p_value": v["p_value"],
             "vercel_error": v["error"],
+            "vercel_attempts": v["attempts"],
             "northflank_effect": n["effect"],
             "northflank_p_value": n["p_value"],
             "northflank_error": n["error"],
+            "northflank_attempts": n["attempts"],
             "rel_diff": None,
             "abs_diff": None,
             "verdict": None,
@@ -171,6 +199,14 @@ def run_check(threshold: float, abs_floor: float) -> tuple[bool, dict]:
                 )
                 all_ok = False
 
+        # Surface when a surface needed retries (transient 503s mid-redeploy).
+        if v["attempts"] > 1 or n["attempts"] > 1:
+            suffix = f" [retried {v['attempts']}x/{n['attempts']}x]"
+            if row["note"]:
+                row["note"] += suffix
+            else:
+                row["note"] = suffix.lstrip()
+
         rows.append(row)
 
     # Human table
@@ -186,7 +222,7 @@ def run_check(threshold: float, abs_floor: float) -> tuple[bool, dict]:
 
     report = {
         "schema": 1,
-        "generated_at": datetime.datetime.now(datetime.timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ"),
+        "generated_at": datetime.datetime.now(datetime.UTC).strftime("%Y-%m-%dT%H:%M:%SZ"),
         "threshold": threshold,
         "abs_floor": abs_floor,
         "overall": "parity-ok" if all_ok else "parity-mismatch",

@@ -166,7 +166,7 @@ jobs:
   # one surface serves a different DB or a broken engine.
   rdd-parity:
     runs-on: ubuntu-latest
-    timeout-minutes: 60      # 10 commodities x 2 surfaces x (3 retries x 120s) worst case
+    timeout-minutes: 60      # 10 commodities x 2 surfaces x (3 attempts x 120s timeout + 2 x 20s retry delay) absolute worst case
     permissions:
       checks: write
     steps:
