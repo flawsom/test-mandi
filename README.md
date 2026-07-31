@@ -456,7 +456,7 @@ store = DuckDBStore()
 n = store.query('SELECT COUNT(*) as c FROM prices')[0]['c']
 print(f'Price records: {n:,}')
 "
-# Expected: Price records: 1,334,647
+# Expected: Price records: 1,335,093
 ```
 
 ### Step 5 &mdash; Launch Dashboard
@@ -486,7 +486,7 @@ docker compose up --build
 
 ```bash
 curl http://localhost:8000/health
-# {"status":"healthy","n_prices":1334647,"n_rainfall":438,...}
+# {"status":"healthy","n_prices":1335093,"n_rainfall":438,...}
 
 curl "http://localhost:8000/prices?commodity=Onion&limit=3"
 # Array of price records with modal prices, markets, dates
@@ -712,7 +712,8 @@ def get_forecast(commodity: str) -> dict:
 
 <br /><br />
 
-> **Tip:** Replace with updated screenshots from your deployment. These were captured from the live services.
+> **Live captures:** these screenshots were captured automatically from the deployed services (Pages, API).
+> Regenerate them anytime with `node scripts/_capture_screenshots.mjs`.
 
 </div>
 
