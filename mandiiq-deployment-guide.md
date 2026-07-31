@@ -75,6 +75,16 @@ ALL_INDIA_RAINFALL_API_KEY = "..."
 ALL_INDIA_RAINFALL_RESOURCE_ID = "..."
 ```
 
+#### Make the app public (remove the login wall)
+**Symptom:** visitors are redirected to `share.streamlit.io/-/auth/app` (a 303 → `/-/login` page) instead of the dashboard — the app is **private** (Streamlit Cloud's default).
+
+**Fix:** on [share.streamlit.io](https://share.streamlit.io), open your app → **⋮ menu → Settings** → toggle **"Make this app public"** to **ON**.
+
+**Verify:** `curl -sI https://your-app.streamlit.app/` returns `200` (a `303` to `/-/auth/app` means it's still private).
+
+#### DuckDB fallback (no /data volume on Streamlit Cloud)
+If you set `MANDIIQ_DB_PATH=/data/mandi_iq.duckdb`, that path does not exist on Streamlit Cloud — the storage layer (`resolve_db_path()` in `mandi_rdd/storage/duckdb_store.py`) automatically falls back to the git-LFS-pulled repo DB at `mandi_rdd/data/mandi_iq.duckdb` and logs a `WARNING` so it's diagnosable. Ensure the DB is pulled via Git LFS during the build (otherwise the file is a ~100-byte pointer).
+
 ### Step 4: Fix Custom Domain
 **Option A — Point DNS to Render (easiest):**
 Set `CNAME` record for your custom domain (e.g. `dashboard.mandiiq.in`) → `p01--mandiiq--zbvjrztgjqgw.code.run`

@@ -819,6 +819,30 @@ Already exists at repo root:
 
 Streamlit Cloud only supports Python 3.9–3.11 on the free tier (as of 2026). The DuckDB Python bindings require ≥3.9 on Linux, and we need 3.11 for the latest pandas/numpy features that the dashboard uses.
 
+### 3.2.4 Make the app public (remove the login wall)
+
+**Symptom:** anonymous visitors hitting your app URL are redirected to `share.streamlit.io/-/auth/app` (or a `/-/login` page) instead of seeing the dashboard. That 303 redirect means the app is **private** — Streamlit Community Cloud defaults new apps to private, and only the owner (and people they invite) can view them.
+
+**Fix — flip the visibility toggle once, in the Streamlit Cloud dashboard:**
+
+1. Go to [share.streamlit.io](https://share.streamlit.io) → open your app.
+2. Click the app's **⋮ (three-dot / overflow) menu** in the top-right of the app toolbar.
+3. Click **Settings**.
+4. Scroll to the **Visibility / access** section (or **General → App access**) and toggle **"Make this app public"** to **ON**.
+5. Confirm the save. The URL now loads for anyone without a login prompt.
+
+> **Verify:** `curl -sI https://your-app.streamlit.app/` should return `HTTP/1.1 200` — if it returns `303 See Other` with a `location: .../-/auth/app...`, the app is still private.
+
+### 3.2.5 DuckDB fallback on Streamlit Cloud
+
+The dashboard reads the DuckDB via `get_connection()` in `mandi_rdd/storage/duckdb_store.py`. Streamlit Cloud has **no `/data` volume**, so an env var like `MANDIIQ_DB_PATH=/data/mandi_iq.duckdb` points at a path that does not exist. The storage layer handles this automatically via `resolve_db_path()`:
+
+1. If `MANDIIQ_DB_PATH` exists **and** is a real DB file → use it.
+2. Else if the git-LFS-pulled repo DB (`mandi_rdd/data/mandi_iq.duckdb`) exists → **fall back to it** (this is what keeps the deployed dashboard working).
+3. Else return the configured path so callers raise a clear "database does not exist" error (and the R2 bootstrap can try to recover it).
+
+The fallback logs a `WARNING` naming both paths, so a failing deployment is diagnosable from the app logs instead of showing a bare `Cannot open database` error. Because the repo DB is fetched via Git LFS, make sure the build pulls it — Streamlit Cloud does run the LFS smudge filter on tracked files, but it can fail (the actual build logs showed `Smudge error ... git@github.com: Permission denied` / `smudge filter lfs failed`). If that happens, `mandi_rdd/data/mandi_iq.duckdb` stays a ~100-byte pointer and the fallback treats it as missing — re-trigger a redeploy, or seed the repo DB object via the R2 bootstrap, to recover.
+
 ---
 
 </div></div></div>

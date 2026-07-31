@@ -80,6 +80,7 @@ superstore_dashboard.png
 # Scratch test and check scripts (one-off, not for deploy)
 test_*.py
 !mandi_rdd/tests/test_verification.py
+!mandi_rdd/tests/test_db_fallback.py
 _check_*.py
 _fix_*.py
 _test_*.py

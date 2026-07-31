@@ -157,7 +157,18 @@ def resolve_db_path() -> Path:
     if DB_PATH.exists() and not _is_lfs_pointer(DB_PATH):
         return DB_PATH
     if REPO_DB_PATH.exists() and not _is_lfs_pointer(REPO_DB_PATH):
+        logger.warning(
+            "MANDIIQ_DB_PATH=%s is missing or a stale LFS pointer — "
+            "falling back to the repo-committed DB at %s",
+            DB_PATH, REPO_DB_PATH,
+        )
         return REPO_DB_PATH
+    logger.warning(
+        "Neither MANDIIQ_DB_PATH=%s nor the repo DB %s exists — callers "
+        "will raise a clear 'database does not exist' error (the R2 "
+        "bootstrap may still recover it)",
+        DB_PATH, REPO_DB_PATH,
+    )
     return DB_PATH
 
 
