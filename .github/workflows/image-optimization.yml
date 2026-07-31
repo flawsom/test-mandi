@@ -1,0 +1,62 @@
+name: Image Optimization
+
+on:
+  push:
+    branches: [master]
+    paths:
+      - "**/*.png"
+      - "**/*.jpg"
+      - "**/*.jpeg"
+      - "**/*.gif"
+      - "**/*.webp"
+      - "**/*.svg"
+  pull_request:
+    paths:
+      - "**/*.png"
+      - "**/*.jpg"
+      - "**/*.jpeg"
+      - "**/*.gif"
+      - "**/*.webp"
+      - "**/*.svg"
+  workflow_dispatch:
+
+concurrency:
+  group: image-opt-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  optimize:
+    name: Compress images
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      pull-requests: write
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      # calibre/image-actions auto-compresses PNG/JPG/GIF/WebP/SVG on every push.
+      # It skips files over 10 MB (safe for our 145 MB DuckDB LFS file).
+      # If it finds improvements, it commits them back automatically (push mode).
+      # Pinned to a release tag (1.5.0) for security/reproducibility.
+      - name: Compress Images
+        id: calibre
+        uses: calibreapp/image-actions@1.5.0
+        with:
+          githubToken: ${{ secrets.GITHUB_TOKEN }}
+          compressOnly: false
+          ignorePaths: |
+            node_modules/**
+            mandi_rdd/data/**
+            dist/**
+            .freebuff/**
+            archive/**
+
+      # Always report what changed so maintainers can review quickly
+      - name: Summarize
+        if: always()
+        run: |
+          echo "## Image Optimization Complete" >> $GITHUB_STEP_SUMMARY
+          echo "- Ran calibreapp/image-actions across all committed image assets." >> $GITHUB_STEP_SUMMARY
+          echo "- Any auto-committed improvements are in this push." >> $GITHUB_STEP_SUMMARY

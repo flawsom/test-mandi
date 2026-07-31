@@ -1,3 +1,11 @@
+# ── Images: mark as binary; skip git delta attempts on already-compressed formats ──
+*.png binary -delta
+*.jpg binary -delta
+*.jpeg binary -delta
+*.gif binary -delta
+*.webp binary -delta
+*.ico binary -delta
+
 *.duckdb filter=lfs diff=lfs merge=lfs -text
 *.duckdb.gz filter=lfs diff=lfs merge=lfs -text
 tmp_verify_test_5120/verify_mandi_iq.duckdb.gz filter=lfs diff=lfs merge=lfs -text
