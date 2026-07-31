@@ -8,8 +8,8 @@
 <meta property="og:title" content="MandiIQ — Agricultural Price Intelligence">
 <meta property="og:description" content="Causal RDD + ML forecasting + DuckDB warehouse — open-source agricultural price intelligence.">
 <meta property="og:type" content="website">
-<meta property="og:url" content="https://flawsom.github.io/MandiIQ/">
-<meta property="og:image" content="https://flawsom.github.io/MandiIQ/static/og-image.png">
+<meta property="og:url" content="https://flawsom.github.io/test-mandi/">
+<meta property="og:image" content="https://flawsom.github.io/test-mandi/static/og-image.png">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="MandiIQ — Agricultural Price Intelligence">
 <meta name="twitter:description" content="Causal RDD + ML forecasting + DuckDB warehouse">
@@ -257,7 +257,7 @@ footer{padding:2.5rem 0;display:flex;align-items:center;justify-content:space-be
         <nav class="header-nav" aria-label="Main Navigation">
             <a class="nav-link active" href="#overview" data-scramble>Overview</a>
             <a class="nav-link" href="../docs/index.html" data-scramble>Documentation</a>
-            <a class="nav-link" href="https://github.com/flawsom/MandiIQ" target="_blank" data-scramble>GitHub</a>
+            <a class="nav-link" href="https://github.com/flawsom/test-mandi" target="_blank" data-scramble>GitHub</a>
         </nav>
         <div class="header-actions">
             <button class="sound-toggle" id="sound-toggle" data-muted="true" aria-label="Toggle sound" title="Toggle sound">
@@ -386,7 +386,7 @@ flowchart TB
         <div class="nav-card-grid">
             <a href="../docs/index.html" class="nav-card stagger-ready stagger-d1"><div class="nav-card-icon">📚</div><h3>Documentation</h3><p>Technical docs, API reference, and system architecture</p><span class="nav-card-arrow">→</span></a>
             <a href="https://mandiiq.streamlit.app/" target="_blank" class="nav-card stagger-ready stagger-d2"><div class="nav-card-icon">📊</div><h3>Dashboard</h3><p>Interactive exploration of prices, forecasts, and RDD results</p><span class="nav-card-arrow">→</span></a>
-            <a href="https://github.com/flawsom/MandiIQ" target="_blank" class="nav-card stagger-ready stagger-d3"><div class="nav-card-icon">💻</div><h3>Source Code</h3><p>Open source on GitHub. Fork, contribute, deploy.</p><span class="nav-card-arrow">→</span></a>
+            <a href="https://github.com/flawsom/test-mandi" target="_blank" class="nav-card stagger-ready stagger-d3"><div class="nav-card-icon">💻</div><h3>Source Code</h3><p>Open source on GitHub. Fork, contribute, deploy.</p><span class="nav-card-arrow">→</span></a>
             <a href="../docs/heartbeat-dashboard.html" class="nav-card stagger-ready stagger-d4"><div class="nav-card-icon">♥</div><h3>System Status</h3><p>Live pipeline status, health checks, and metrics</p><span class="nav-card-arrow">→</span></a>
         </div>
     </section>
@@ -396,7 +396,7 @@ flowchart TB
         <div class="footer-links">
             <a href="../docs/index.html" class="footer-link" data-scramble>Documentation</a>
             <a href="https://mandiiq.streamlit.app/" target="_blank" class="footer-link" data-scramble>Dashboard</a>
-            <a href="https://github.com/flawsom/MandiIQ" target="_blank" class="footer-link" data-scramble>GitHub</a>
+            <a href="https://github.com/flawsom/test-mandi" target="_blank" class="footer-link" data-scramble>GitHub</a>
         </div>
     </footer>
 </div>
@@ -415,7 +415,7 @@ flowchart TB
 const API_CONFIG = {
   get baseUrl() {
     const h = window.location.hostname;
-    return (h === 'localhost' || h === '127.0.0.1') ? 'http://127.0.0.1:18765' : 'https://mandiiq-api.onrender.com';
+    return (h === 'localhost' || h === '127.0.0.1') ? 'http://127.0.0.1:18765' : 'https://p01--mandiiq--zbvjrztgjqgw.code.run';
   },
   get dashboardUrl() { return 'https://mandiiq.streamlit.app'; },
   endpoints: { health: '/health', freshness: '/freshness', pipeline: '/pipeline.mmd' },

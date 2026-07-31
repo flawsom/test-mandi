@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://flawsom.github.io/MandiIQ/seo/sitemap-index.xml
+Sitemap: https://flawsom.github.io/test-mandi/seo/sitemap-index.xml

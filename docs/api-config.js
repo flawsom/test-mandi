@@ -1,6 +1,6 @@
 /**
  * MandiIQ API Configuration
- * Dynamic API base URL detection for local dev, GitHub Pages, and Render
+ * Dynamic API base URL detection for local dev, GitHub Pages, and Northflank
  * 
  * Include this in all HTML pages via:
  *   <script src="api-config.js"></script>
@@ -18,10 +18,10 @@ const API_CONFIG = {
       return 'http://127.0.0.1:18765';
     }
     if (isGitHub) {
-      return 'https://mandiiq-api.onrender.com';
+      return 'https://p01--mandiiq--zbvjrztgjqgw.code.run';
     }
-    // Render / production
-    return 'https://mandiiq-api.onrender.com';
+    // Northflank / production
+    return 'https://p01--mandiiq--zbvjrztgjqgw.code.run';
   },
 
   /**
@@ -39,7 +39,7 @@ const API_CONFIG = {
     if (hostname === 'localhost' || hostname === '127.0.0.1') {
       return '/docs';
     }
-    return 'https://flawsom.github.io/MandiIQ/docs';
+    return 'https://flawsom.github.io/test-mandi/docs';
   },
 
   /**
@@ -50,7 +50,7 @@ const API_CONFIG = {
     if (hostname === 'localhost' || hostname === '127.0.0.1') {
       return '/landing/index.html';
     }
-    return 'https://flawsom.github.io/MandiIQ';
+    return 'https://flawsom.github.io/test-mandi';
   },
 
   /**
