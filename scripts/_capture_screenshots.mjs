@@ -30,8 +30,14 @@
  *      run-to-run.
  *
  * Gateway/error responses (5xx or a gateway error page with a 200, e.g.
- * during a Northflank redeploy) are retried, never captured — the
- * optimizer's MIN_BYTES guard remains the final backstop.
+ * during a Northflank redeploy) are retried, never captured — and a
+ * 5-minute recovery wait polls the API /health (validating JSON +
+ * n_prices) until healthy so the retry rides out the whole redeploy
+ * window instead of burning both attempts inside it. A KPI guard
+ * additionally retries any capture whose live numbers render
+ * 'Offline'/'—'. A push-triggered rebuild can therefore never produce a
+ * red run or a degraded commit. The optimizer's MIN_BYTES guard remains
+ * the final backstop.
  *
  * Exits non-zero if any surface fails (after 2 retries), so the workflow
  * never commits stale/partial captures.
@@ -75,6 +81,14 @@ const SHOTS = [
     },
   },
 ];
+
+// The Northflank API is the only surface that 503s during a redeploy, and
+// every capture's live data reads from it — so /health is the single
+// recovery target for all three surfaces (polling a Pages URL would never
+// observe the outage, and a status-only check on /docs can false-positive
+// on a 200 gateway error page). Derived from the api-docs URL so a future
+// API host change can't silently break recovery.
+const API_HEALTH_URL = SHOTS.find((s) => s.name === 'api-docs-live').url.replace(/\/docs$/, '/health');
 
 async function stabilizeForScreenshot(page, shotName) {
   // Hide live "last updated" meta text so its per-minute drift never
@@ -160,6 +174,25 @@ async function stabilizeForScreenshot(page, shotName) {
   // (a font loading late — or falling back — would otherwise create a
   // spurious pixel diff and an unwanted daily commit).
   await page.evaluate(() => document.fonts.ready).catch(() => {});
+
+  // A healthy capture must show real KPI numbers: 'Offline'/'—' means the
+  // live /health fetch failed during a redeploy window — retry rather
+  // than commit a full-size degraded screenshot (MIN_BYTES can't catch
+  // one, since a rendered page is always >50KB). Note this assumes /health
+  // always carries every countup key (n_prices etc. — it does today); if
+  // a key were ever absent its element would keep the '—' default and
+  // this would fail the capture.
+  const degraded = await page.evaluate(() => {
+    const els = document.querySelectorAll('[data-countup]');
+    for (const el of els) {
+      const t = (el.textContent || '').trim();
+      if (t === 'Offline' || t === '\u2014') return true;
+    }
+    return false;
+  });
+  if (degraded) {
+    throw new Error('KPI values Offline — degraded capture');
+  }
 }
 
 async function captureOne(browser, shot) {
@@ -199,7 +232,32 @@ async function captureOne(browser, shot) {
       return true;
     } catch (e) {
       lastErr = e;
-      console.log(`retry ${attempt}/2 ${shot.name}: ${e.message.split('\n')[0]}`);
+      const msg = e.message.split('\n')[0];
+      console.log(`retry ${attempt}/2 ${shot.name}: ${msg}`);
+      // Ride out a Northflank redeploy window: the API 503s for ~1-5 min
+      // after every master push rebuilds the service, and two quick
+      // attempts would both land inside it. Poll the API /health —
+      // validating it really returns JSON with n_prices, so a 200 gateway
+      // error page can't false-positive — until healthy (capped 5 min),
+      // then the next goto succeeds. Also triggered by the KPI guard's
+      // 'Offline' failure on landing/docs when their internal fetch hits
+      // the same window.
+      if (/HTTP 5|gateway|error page|Offline/i.test(msg)) {
+        const deadline = Date.now() + 5 * 60 * 1000;
+        while (Date.now() < deadline) {
+          await page.waitForTimeout(15000);
+          try {
+            const r = await context.request.get(API_HEALTH_URL, { timeout: 12000 });
+            const body = r.ok() ? await r.json().catch(() => null) : null;
+            if (body && body.n_prices) {
+              console.log(`recovered ${shot.name}: API healthy (n_prices=${body.n_prices}) — resuming capture`);
+              break;
+            }
+          } catch (_) {
+            /* still down — keep polling */
+          }
+        }
+      }
     }
   }
   console.log(`ERR ${shot.name}: ${(lastErr && lastErr.message ? lastErr.message.split('\n')[0] : 'unknown')}`);
