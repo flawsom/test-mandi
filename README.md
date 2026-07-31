@@ -216,6 +216,10 @@
 <details>
 <summary><strong>Architecture source (Mermaid)</strong> — click to expand</summary>
 
+<!-- Keep in sync with docs/assets/mermaid/architecture.mmd (regenerate the SVG with:
+     npx mmdc -i docs/assets/mermaid/architecture.mmd -o docs/assets/svg/architecture-diagram.svg \
+       -c docs/assets/mermaid/alche-config.json -p puppeteer.json -b "#0B0F1E" -s 2 -w 1600) -->
+
 ```mermaid
 flowchart TB
     subgraph Sources["Data Sources"]
