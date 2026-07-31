@@ -5,6 +5,15 @@ database.  The freshest n_prices observed across all reachable API
 surfaces is the reference: any API surface serving fewer rows is stale,
 any unreachable surface is down.
 
+In addition to the human-readable table it writes a machine-readable
+status JSON (default: docs/health-status.json) containing the per-surface
+verdicts and a STABLE signature — the payload hash EXCLUDING the
+generated_at timestamp — so CI can gate commits/redeploys on real status
+changes without a timestamp churn loop.
+
+Usage:
+    python scripts/check_health.py [--json-out PATH] [--no-json]
+
 Exit codes:
     0 — all surfaces up, and every API surface serves the latest DB
     1 — one or more surfaces are stale (behind the freshest DB) or down
@@ -14,6 +23,9 @@ Stdlib-only so it runs on the ubuntu runner with no pip install.
 
 from __future__ import annotations
 
+import argparse
+import datetime
+import hashlib
 import json
 import sys
 import urllib.error
@@ -77,11 +89,22 @@ def _probe(url: str, timeout: int = TIMEOUT_S) -> dict:
     return result
 
 
-def check_all() -> bool:
-    """Check all surfaces, compute DB freshness parity, and print verdicts.
+def _stable_signature(report: dict) -> str:
+    """SHA-256 of the status payload EXCLUDING generated_at.
 
-    Returns True if every surface is up AND every API surface with a
-    readable count serves the latest DB.
+    CI compares this across runs: a timestamp-only change must never
+    trigger a commit/redeploy, but any real verdict/row-count change does.
+    """
+    payload = {k: v for k, v in report.items() if k != "generated_at"}
+    canonical = json.dumps(payload, sort_keys=True, separators=(",", ":"))
+    return hashlib.sha256(canonical.encode("utf-8")).hexdigest()[:16]
+
+
+def run_check() -> tuple[bool, dict]:
+    """Probe all surfaces, compute DB freshness parity, print verdicts.
+
+    Returns (all_ok, report) where report is the machine-readable status
+    dict (including a stable signature and the human table text).
     """
     # 1. Probe everything
     results = {}
@@ -100,13 +123,15 @@ def check_all() -> bool:
     ref = max(api_counts) if api_counts else None
 
     # 3. Verdict per surface.
-    print(f"  {'Surface':<14} | {'Verdict':<13} | {'n_prices':>11} | Notes")
-    print("  " + "-" * 14 + "-+-" + "-" * 13 + "-+-" + "-" * 11 + "-+-" + "-" * 28)
+    lines = []
+    lines.append(f"  {'Surface':<14} | {'Verdict':<13} | {'n_prices':>11} | Notes")
+    lines.append("  " + "-" * 14 + "-+-" + "-" * 13 + "-+-" + "-" * 11 + "-+-" + "-" * 28)
     all_ok = True
     serving_latest = []
     stale = []
     down = []
     count_unavailable = []
+    surfaces_out = {}
 
     for name, r in results.items():
         kind = r["kind"]
@@ -150,11 +175,6 @@ def check_all() -> bool:
                 note = f"behind latest DB ({n:,} vs {ref:,})"
                 all_ok = False
                 stale.append(name)
-        elif status == 200 and n is None:
-            verdict = "UNKNOWN"
-            note = "200 but no n_prices in body"
-            all_ok = False
-            unknown.append(name)
         else:
             verdict = "DOWN"
             note = r.get("error") or f"HTTP {status}"
@@ -162,38 +182,85 @@ def check_all() -> bool:
             down.append(name)
 
         n_str = f"{n:,}" if n is not None else "-"
-        print(f"  {name:<14} | {verdict:<13} | {n_str:>11} | {note}")
+        lines.append(f"  {name:<14} | {verdict:<13} | {n_str:>11} | {note}")
+
+        surfaces_out[name] = {
+            "verdict": verdict,
+            "n_prices": n,
+            "http_status": status,
+            "kind": kind,
+            "note": note,
+            "url": r["url"],
+        }
 
     # 4. Summary line — which surfaces serve the latest DB?
-    print()
+    lines.append("")
     if ref is not None:
-        print(f"  Latest DB reference: {ref:,} rows")
+        lines.append(f"  Latest DB reference: {ref:,} rows")
         if serving_latest:
-            print(f"  Serving latest DB : {', '.join(serving_latest)}")
+            lines.append(f"  Serving latest DB : {', '.join(serving_latest)}")
         else:
-            print("  Serving latest DB : (none)")
+            lines.append("  Serving latest DB : (none)")
     else:
-        print("  Latest DB reference: unknown — no API surface returned a count")
+        lines.append("  Latest DB reference: unknown — no API surface returned a count")
 
     if stale:
-        print(f"  Stale surfaces    : {', '.join(stale)}")
+        lines.append(f"  Stale surfaces    : {', '.join(stale)}")
     if down:
-        print(f"  Down surfaces     : {', '.join(down)}")
+        lines.append(f"  Down surfaces     : {', '.join(down)}")
     if count_unavailable:
-        print(f"  Count unavailable : {', '.join(count_unavailable)}")
+        lines.append(f"  Count unavailable : {', '.join(count_unavailable)}")
 
-    return all_ok
+    # 5. Build machine-readable report.
+    report = {
+        "schema": 1,
+        "generated_at": datetime.datetime.now(datetime.timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ"),
+        "overall": "healthy" if all_ok else "unhealthy",
+        "exit_code": 0 if all_ok else 1,
+        "min_prices": MIN_PRICES,
+        "latest_db_reference": ref,
+        "serving_latest": serving_latest,
+        "stale": stale,
+        "down": down,
+        "count_unavailable": count_unavailable,
+        "surfaces": surfaces_out,
+        "table": "\n".join(lines),
+    }
+    report["signature"] = _stable_signature(report)
+
+    print("\n".join(lines))
+    return all_ok, report
 
 
-if __name__ == "__main__":
+def main() -> int:
+    parser = argparse.ArgumentParser(description="MandiIQ multi-surface health check")
+    parser.add_argument("--json-out", default="docs/health-status.json",
+                        help="path to write the machine-readable status JSON")
+    parser.add_argument("--no-json", action="store_true",
+                        help="do not write the JSON file (table only)")
+    args = parser.parse_args()
+
     print("MandiIQ multi-surface health check — latest-DB parity")
     print(f"  min_prices={MIN_PRICES}, timeout={TIMEOUT_S}s")
     print()
-    all_ok = check_all()
+    all_ok, report = run_check()
     print()
     if all_ok:
         print("All surfaces healthy — every reachable API serves the latest DB.")
-        sys.exit(0)
     else:
         print("One or more surfaces stale or down!")
-        sys.exit(1)
+
+    if not args.no_json:
+        try:
+            with open(args.json_out, "w", encoding="utf-8") as f:
+                json.dump(report, f, indent=2)
+                f.write("\n")
+            print(f"\nStatus JSON written to {args.json_out} (signature={report['signature']})")
+        except OSError as e:
+            print(f"\n::warning::Could not write status JSON to {args.json_out}: {e}")
+
+    return report["exit_code"]
+
+
+if __name__ == "__main__":
+    sys.exit(main())

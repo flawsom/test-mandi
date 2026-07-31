@@ -1,9 +1,18 @@
 # Multi-surface health check for MandiIQ.
 #
-# Runs on a schedule (every 6 hours) and after every deploy-vercel and
-# deploy-pages workflow completes.  Curls all 4 deployed surfaces, verifies
-# each serves live data with 1M+ prices, and fails the check if any surface
-# is stale or down.
+# Runs on a schedule (every 6 hours) and after every deploy-vercel,
+# deploy-pages, deploy-worker, and hourly-duckdb-sync workflow completes.
+# Curls all 4 deployed surfaces, reports which ones serve the latest DB
+# (LATEST / STALE / DOWN / UP (auth) / UP (static)), and:
+#
+#   1. Posts a GitHub Check Run with the pass/fail verdict table
+#   2. Uploads the machine-readable verdicts as a workflow artifact
+#      (docs/health-status.json — surface verdicts, n_prices, timestamps)
+#   3. Commits docs/health-status.json back to master and dispatches
+#      deploy-pages so the landing page's status badge stays fresh.
+#      The commit is gated on the STABLE signature (payload hash excluding
+#      generated_at) — a timestamp-only change never commits, so this
+#      workflow cannot loop with the workflow_run trigger above.
 #
 # The health check script (scripts/check_health.py) is stdlib-only so it
 # runs directly on the ubuntu runner with no pip install needed.
@@ -27,14 +36,18 @@ concurrency:
   group: check-health-${{ github.ref }}
   cancel-in-progress: true
 
+permissions:
+  contents: write                  # commit docs/health-status.json back to master
+  actions: write                   # dispatch deploy-pages via gh workflow run
+  checks: write                    # post the check run
+
 jobs:
   check:
     runs-on: ubuntu-latest
-    permissions:
-      contents: read
-      checks: write
     steps:
       - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0           # needed to diff the committed status.json
 
       - name: Set up Python
         uses: actions/setup-python@v5
@@ -44,14 +57,76 @@ jobs:
       - name: Run multi-surface health check
         id: health
         run: |
-          python scripts/check_health.py 2>&1 | tee /tmp/health_output.txt
+          set -o pipefail
+          python scripts/check_health.py --json-out docs/health-status.json 2>&1 | tee /tmp/health_output.txt
+          RC=$?
+          echo "exit_code=$RC" >> "$GITHUB_OUTPUT"
+          # Explicitly fail the step when surfaces are stale/down — the
+          # final echo above would otherwise mask the pipeline exit.
+          exit $RC
+
+      - name: Upload health verdicts artifact
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: health-status
+          path: |
+            docs/health-status.json
+            /tmp/health_output.txt
+          if-no-files-found: warn
+          retention-days: 14
+
+      - name: Commit status JSON + redeploy Pages (stable signature gate)
+        if: always()
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+
+          # Bail out entirely if the script failed to produce the JSON.
+          if [ ! -f docs/health-status.json ]; then
+            echo "::warning::No docs/health-status.json produced — skipping commit & Pages dispatch"
+            exit 0
+          fi
+
+          # Read the committed signature (may not exist on first run).
+          OLD_SIG=""
+          if git cat-file -e HEAD:docs/health-status.json 2>/dev/null; then
+            OLD_SIG=$(git show HEAD:docs/health-status.json | python3 -c "import sys,json; print(json.load(sys.stdin).get('signature',''))")
+          fi
+          NEW_SIG=$(python3 -c "import json; print(json.load(open('docs/health-status.json')).get('signature',''))")
+
+          echo "old signature: ${OLD_SIG:-<none>}"
+          echo "new signature: ${NEW_SIG}"
+
+          if [ -n "$OLD_SIG" ] && [ "$OLD_SIG" = "$NEW_SIG" ]; then
+            echo "Status unchanged (signature identical) — no commit, no Pages dispatch."
+            exit 0
+          fi
+
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add docs/health-status.json
+          git commit -m "chore: update health status (signature ${NEW_SIG})" || { echo "nothing to commit"; exit 0; }
+          git pull --rebase origin master 2>&1 || true
+          git push origin master 2>&1 || echo "::warning::status.json push failed — Pages badge may be stale until the next push"
+
+          # GITHUB_TOKEN commits do not re-trigger workflows (GitHub
+          # anti-recursion), so explicitly dispatch Pages to publish the badge.
+          gh workflow run deploy-pages.yml --ref master
+          echo "::notice::health-status.json committed + Pages deploy dispatched (signature ${NEW_SIG})"
 
       - name: Post status check
         if: always()
         env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GH_TOKEN: ${{ github.token }}
         run: |
-          CONCLUSION=$(python scripts/check_health.py >/dev/null 2>&1 && echo "success" || echo "failure")
+          # Reuse the single probe above — no second 4-surface scan.
+          if [ "${{ steps.health.outputs.exit_code }}" = "0" ]; then
+            CONCLUSION="success"
+          else
+            CONCLUSION="failure"
+          fi
           SUMMARY=$(head -30 /tmp/health_output.txt)
           # Post a check run on the latest commit
           curl -s -X POST \

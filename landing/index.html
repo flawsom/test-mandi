@@ -138,6 +138,23 @@ section:last-of-type{border-bottom:none}
 .section-num{font-family:var(--font-mono);font-size:0.78rem;color:var(--color-primary);letter-spacing:0.1em;margin-bottom:0.6rem;display:block;opacity:0;transform:translateY(10px)}
 .section-title{font-family:var(--font-display);font-weight:400;font-size:1.5rem;color:var(--color-paper);text-transform:uppercase;letter-spacing:0.05em;margin-bottom:2rem;opacity:0;transform:translateY(10px)}
 .kpi-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:1.2rem;margin-bottom:3rem}
+.surface-status{border:1px solid var(--hairline);border-radius:8px;padding:1.2rem 1.4rem;margin:-1.5rem 0 3rem;background:linear-gradient(135deg,rgba(255,255,255,0.02)0%,rgba(255,255,255,0.005)100%);opacity:0;transform:translateY(8px);transition:opacity 0.5s ease,transform 0.5s ease}
+.surface-status.visible{opacity:1;transform:translateY(0)}
+.surface-status-head{display:flex;justify-content:space-between;align-items:baseline;flex-wrap:wrap;gap:0.4rem;margin-bottom:0.9rem}
+.surface-status-title{font-family:var(--font-mono);font-size:0.7rem;color:var(--color-text-med);text-transform:uppercase;letter-spacing:0.08em}
+.surface-status-ts{font-family:var(--font-mono);font-size:0.7rem;color:var(--color-primary);letter-spacing:0.04em}
+.surface-status-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:0.7rem}
+.surface-chip{display:flex;align-items:center;gap:0.5rem;border:1px solid var(--hairline);border-radius:6px;padding:0.55rem 0.7rem;font-family:var(--font-mono);font-size:0.72rem;transition:border-color 0.3s ease}
+.surface-chip .dot{width:8px;height:8px;border-radius:50%;flex:0 0 auto}
+.surface-chip .sname{color:var(--color-paper)}
+.surface-chip .sverdict{margin-left:auto;font-weight:500;text-transform:uppercase;font-size:0.66rem;letter-spacing:0.06em}
+.surface-chip .sn {margin-left:0.3rem;color:var(--color-text-med)}
+.dot.latest{background:#5ddb6c;box-shadow:0 0 8px rgba(93,219,108,0.6)}
+.dot.stale{background:#ffb020;box-shadow:0 0 8px rgba(255,176,32,0.6)}
+.dot.down,.dot.broken{background:#ff4d5e;box-shadow:0 0 8px rgba(255,77,94,0.6)}
+.dot.up{background:#4da3ff;box-shadow:0 0 8px rgba(77,163,255,0.5)}
+.sverdict.latest{color:#5ddb6c}.sverdict.stale{color:#ffb020}.sverdict.down,.sverdict.broken{color:#ff4d5e}.sverdict.up{color:#4da3ff}
+.surface-status.empty .surface-status-ts{color:var(--color-text-med)}
 .glass-card{background:linear-gradient(135deg,rgba(255,255,255,0.03)0%,rgba(255,255,255,0.008)100%);border:1px solid var(--hairline);border-radius:8px;padding:1.5rem;transition:transform 0.35s var(--ease-bounce),border-color 0.35s ease,box-shadow 0.35s ease;position:relative}
 .glass-card:hover{border-color:rgba(215,255,0,0.15);transform:translateY(-2px);box-shadow:0 8px 24px rgba(0,0,0,0.4)}
 .glass-card::before{content:"";position:absolute;top:-1px;left:-1px;width:12px;height:12px;border-top:2px solid var(--color-primary);border-left:2px solid var(--color-primary);opacity:0;transition:opacity var(--duration-base) ease;pointer-events:none}
@@ -321,6 +338,13 @@ footer{padding:2.5rem 0;display:flex;align-items:center;justify-content:space-be
             <div class="glass-card stagger-ready stagger-d2"><div class="label">Commodities</div><div class="value" data-countup="n_commodities">—</div><div class="meta">Unique agricultural commodities</div></div>
             <div class="glass-card stagger-ready stagger-d3"><div class="label">Districts</div><div class="value" data-countup="n_districts">—</div><div class="meta">Markets covered</div></div>
             <div class="glass-card stagger-ready stagger-d4"><div class="label">RDD Estimates</div><div class="value accent" data-countup="n_rdd">—</div><div class="meta">Causal estimates computed</div></div>
+        </div>
+        <div class="surface-status" id="surface-status">
+            <div class="surface-status-head">
+                <span class="surface-status-title">Deployment Surface Health</span>
+                <span class="surface-status-ts" id="surface-status-ts">checking…</span>
+            </div>
+            <div class="surface-status-grid" id="surface-status-grid"><!-- per-surface badges injected --></div>
         </div>
     </section>
 
@@ -572,6 +596,81 @@ const API_CONFIG = {
   fetchMetrics();
   setInterval(fetchMetrics, interval);
   setInterval(updateFreshness, 30000);
+})();
+
+/* ═══════════════════════════════════════════════════════════
+   SURFACE HEALTH BADGES — from docs/health-status.json
+   (published by the Multi-Surface Health Check workflow)
+   ═══════════════════════════════════════════════════════════ */
+(function() {
+  var box = document.getElementById('surface-status');
+  var grid = document.getElementById('surface-status-grid');
+  var tsEl = document.getElementById('surface-status-ts');
+  if (!box || !grid) return;
+
+  var VERDICT_META = {
+    LATEST:      { cls: 'latest', label: 'LATEST' },
+    STALE:       { cls: 'stale',  label: 'STALE' },
+    BROKEN:      { cls: 'broken', label: 'BROKEN' },
+    DOWN:        { cls: 'down',   label: 'DOWN' },
+    'UP (auth)':   { cls: 'up',  label: 'AUTH' },
+    'UP (static)': { cls: 'up',  label: 'STATIC' },
+  };
+
+  function fmtAgo(iso) {
+    if (!iso) return 'unknown';
+    var diff = Math.floor((Date.now() - new Date(iso).getTime()) / 1000);
+    if (diff < 60) return 'just now';
+    if (diff < 3600) return Math.floor(diff / 60) + 'm ago';
+    return Math.floor(diff / 3600) + 'h ago';
+  }
+
+  function render(data) {
+    // Sort: LATEST first, then DOWN/BROKEN, then the rest.
+    var order = { LATEST: 0, DOWN: 1, BROKEN: 2, STALE: 3 };
+    var names = Object.keys(data.surfaces || {});
+    names.sort(function(a, b) {
+      var va = data.surfaces[a].verdict, vb = data.surfaces[b].verdict;
+      return (order[va] !== undefined ? order[va] : 9) - (order[vb] !== undefined ? order[vb] : 9);
+    });
+
+    grid.innerHTML = '';
+    names.forEach(function(name) {
+      var s = data.surfaces[name];
+      var meta = VERDICT_META[s.verdict] || { cls: 'up', label: s.verdict };
+      var chip = document.createElement('div');
+      chip.className = 'surface-chip';
+      var nStr = (s.n_prices != null) ? ' · ' + Number(s.n_prices).toLocaleString() : '';
+      chip.innerHTML =
+        '<span class="dot ' + meta.cls + '"></span>' +
+        '<span class="sname">' + name.replace(/ /g, '\u00A0') + '</span>' +
+        '<span class="sverdict ' + meta.cls + '">' + meta.label + '</span>' +
+        '<span class="sn">' + nStr + '</span>';
+      chip.title = s.note || s.verdict;
+      grid.appendChild(chip);
+    });
+
+    tsEl.textContent = 'Checked ' + fmtAgo(data.generated_at) + (data.latest_db_reference ? ' · ref ' + Number(data.latest_db_reference).toLocaleString() + ' rows' : '');
+    box.classList.add('visible');
+    box.classList.remove('empty');
+  }
+
+  function onFail() {
+    // status.json not published yet (first deploy) or offline — show the
+    // muted empty state so the section is visibly present, not hidden.
+    box.classList.add('empty', 'visible');
+    tsEl.textContent = 'status not published yet';
+  }
+
+  function refresh() {
+    fetch('docs/health-status.json' + '?t=' + Date.now(), { cache: 'no-store' })
+      .then(function(r) { if (!r.ok) throw new Error(r.status); return r.json(); })
+      .then(render)
+      .catch(onFail);
+  }
+
+  refresh();
+  setInterval(refresh, 60000); // re-check every 60s alongside the KPIs
 })();
 
 /* ═══════════════════════════════════════════════════════════
