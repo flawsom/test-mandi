@@ -43,6 +43,9 @@ concurrency:
 
 env:
   RENDER_HOOK_URL: "https://p01--mandiiq--zbvjrztgjqgw.code.run/deploy"
+  # GitHub Actions does not allow secrets.* inside `if:` conditions, so the
+  # token is exposed via job env and the Vercel step gates on env.VERCEL_TOKEN.
+  VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
 
 jobs:
   sync:
@@ -204,7 +207,7 @@ jobs:
           hook-url: ${{ env.RENDER_HOOK_URL }}
 
       - name: Redeploy Vercel (read-only API with fresh DB)
-        if: steps.commit.outputs.committed == 'true' && secrets.VERCEL_TOKEN != ''
+        if: steps.commit.outputs.committed == 'true' && env.VERCEL_TOKEN != ''
         env:
           GH_TOKEN: ${{ github.token }}
         run: |

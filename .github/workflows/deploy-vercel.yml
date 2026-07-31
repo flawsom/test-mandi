@@ -73,6 +73,8 @@ jobs:
     runs-on: ubuntu-latest
     outputs:
       deploy_url: ${{ steps.deploy.outputs.url }}
+    env:
+      VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
     steps:
       - uses: actions/checkout@v4
         with:
@@ -93,14 +95,31 @@ jobs:
       - name: Install Vercel CLI
         run: npm i -g vercel
 
+      - name: Verify VERCEL_TOKEN is configured
+        if: env.VERCEL_TOKEN == ''
+        run: |
+          echo "::error::VERCEL_TOKEN secret is not set — Vercel deploy skipped."
+          echo "::error::1. Create a token at https://vercel.com/account/tokens"
+          echo "::error::2. Add it as a repo secret: gh secret set VERCEL_TOKEN"
+          exit 1
+
+      - name: Link Vercel project (idempotent)
+        if: env.VERCEL_TOKEN != ''
+        run: |
+          vercel link --yes --project=test-mandi || \
+            echo "::warning::vercel link failed (project may not exist yet) — pull will retry"
+
       - name: Pull Vercel environment
+        if: env.VERCEL_TOKEN != ''
         run: vercel pull --yes --environment=production --token=${{ secrets.VERCEL_TOKEN }}
 
       - name: Build for production
+        if: env.VERCEL_TOKEN != ''
         run: vercel build --prod --token=${{ secrets.VERCEL_TOKEN }}
 
       - name: Deploy to production
         id: deploy
+        if: env.VERCEL_TOKEN != ''
         run: |
           OUTPUT=$(vercel deploy --prebuilt --prod --token=${{ secrets.VERCEL_TOKEN }})
           echo "$OUTPUT"
