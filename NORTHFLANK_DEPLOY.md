@@ -73,8 +73,12 @@
 # 3. Persistent Volume:
 #    - Name: mandiiq-data
 #    - Mount path: /data
-#    - This MUST be the SAME volume as the API server's
-#      so they share the same DuckDB file
+#    - NOTE (free tier): volumes are ReadWriteOnce, so they can attach
+#      to ONE workload only. Attach the volume to the API server and run
+#      the cron job volumeless — the cron pushes the refreshed DB to R2
+#      after every run (run_hourly.py -> _sync_db_to_r2) and the API
+#      auto-restores from R2 at startup when /data is empty. This is the
+#      "R2-as-data-bus" design (see mandi_rdd/storage/r2_sync.py).
 #
 # 4. Environment variables (set these):
 #    - PYTHONPATH=/app
@@ -97,12 +101,24 @@
 # To force a full analysis run (not just price fetch):
 #   python run_hourly.py --force-full
 #
-# ⚠️ IMPORTANT: The cron job container and the API server container
-#    must mount the EXACT SAME Persistent Volume at /data.
-#    If they use separate volumes, the cron job will write to a
-#    DuckDB that the API server never sees. Verify in the Northflank
-#    dashboard that both services reference "mandiiq-data" as the
-#    volume source.
+# ⚠️ IMPORTANT (verified 2026-07-31): Northflank free-tier volumes are
+#    ReadWriteOnce — they can attach to only ONE workload. Trying to mount
+#    the same volume on both the API service and the cron job fails with
+#    "Maximum number of free platform-volumes exceeded" / single-attach.
+#
+#    Correct topology (R2-as-data-bus):
+#      1. Volume mandiiq-data (RWO, NVMe) -> attached to the API service
+#         at /data ONLY.
+#      2. Cron job runs volumeless; after each successful run it uploads
+#         the refreshed DuckDB to s3://<R2_BUCKET>/mandi_iq.duckdb.gz
+#         (run_hourly.py -> _sync_db_to_r2).
+#      3. API startup: if /data/mandi_iq.duckdb has <100 prices, it
+#         restores the DB from R2 (mandi_rdd/api/main.py lifespan), so
+#         the 1.3M-row database is available immediately on a fresh volume.
+#
+#    Manual seed (one-time):
+#      python scripts/sync_duckdb_to_r2.py --push   # local -> R2
+#      curl -X POST https://<api>/admin/restore-from-r2  # R2 -> /data
 </div></div></div>
 
 <div align="center">

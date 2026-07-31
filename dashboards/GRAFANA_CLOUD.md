@@ -194,7 +194,7 @@ accessible. In your Grafana Cloud dashboard:
 1. Go to **Connections → Data Sources → Add Prometheus**
 2. Set URL to: `https://mandiiq-api.onrender.com`
 3. Set Scrape interval: `60s`
-4. Click **Save & Test**
+4. Click **Save &amp; Test**
 
 ✅ **This is the simplest option and costs $0.** No agent, no config changes.
 

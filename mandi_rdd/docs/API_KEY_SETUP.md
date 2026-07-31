@@ -104,7 +104,7 @@ The public demo key on the API code is **rate-limited to ~100 requests/day**. Fo
 4. Click **Create API Key**
 5. Name: `MandiIQ Production`
 6. Use Case: "Commodity price analysis pipeline"
-7. Purpose: "Research & development of causal inference models"
+7. Purpose: "Research &amp; development of causal inference models"
 8. Click **Create Key**
 
 #### 3. Copy Your API Key

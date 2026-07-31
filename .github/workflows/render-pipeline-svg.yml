@@ -88,6 +88,28 @@ jobs:
           echo "has_diagram=true" >> "$GITHUB_OUTPUT"
         id: render
 
+      - name: Sanitize SVG for XML well-formedness
+        if: steps.render.outputs.has_diagram == 'true'
+        run: |
+          # mmdc emits XML-invalid output: a duplicate xmlns attribute and
+          # unclosed <br> void elements inside <foreignObject> label divs.
+          # Both break strict XML renderers (xmlParseEntityRef / mismatched
+          # tag). Sanitize before validating, uploading and committing.
+          SVG="diagrams/pipeline-flow-live.svg"
+          python - "$SVG" <<'PY'
+          import re, sys
+          path = sys.argv[1]
+          t = open(path, encoding="utf-8").read()
+          first = t.find('xmlns="http://www.w3.org/2000/svg"')
+          second = t.find('xmlns="http://www.w3.org/2000/svg"', first + 1)
+          if second != -1:
+              t = t[:second] + t[second + len('xmlns="http://www.w3.org/2000/svg" '):]
+          n_br = len(re.findall(r"<br(?![ /])", t))
+          t = re.sub(r"<br(?![ /])", "<br/>", t)
+          open(path, "w", encoding="utf-8", newline="").write(t)
+          print(f"Sanitized SVG: duplicate xmlns removed, {n_br} <br> self-closed")
+          PY
+
       - name: Validate SVG output
         if: steps.render.outputs.has_diagram == 'true'
         run: |

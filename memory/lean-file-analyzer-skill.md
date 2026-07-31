@@ -6,7 +6,7 @@ type: project
 
 # lean-file-analyzer skill — DONE, installed, not pushed
 
-## What & why
+## What &amp; why
 Built to counter the token-burn pattern on per-token model APIs (workspace.default.si, Databricks foundation-model endpoints, OpenRouter). Each time the agent uses its Read tool, the FULL file content enters the context window and is billed as input tokens every subsequent turn. This skill analyzes files OUTSIDE the context window and returns only a bounded digest.
 
 ## Location

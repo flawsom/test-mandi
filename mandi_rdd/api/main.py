@@ -209,6 +209,38 @@ async def lifespan(app: FastAPI):
         n_rdd = conn.execute("SELECT COUNT(*) FROM rdd_results").fetchone()[0]
         
         logger.info(f"Startup data check: {n_prices} prices, {n_rainfall} rainfall, {n_rdd} RDD results")
+
+        # ── R2-as-data-bus: on a fresh/empty volume, restore the last-known-good ──
+        # DuckDB from Cloudflare R2 instead of re-ingesting from scratch.
+        if n_prices < 100:
+            try:
+                from mandi_rdd.storage.r2_sync import restore_db
+                logger.info("DB is empty — attempting restore from R2 backup...")
+                conn.close()  # release the DB file lock (Windows) before replacing it
+                result = restore_db()
+                logger.info(
+                    "R2 restore: %d bytes -> %s",
+                    result["bytes_decompressed"], result["db_path"],
+                )
+                conn = get_connection()
+                init_schema(conn)
+                df = conn.execute("SELECT DISTINCT commodity FROM prices ORDER BY commodity").fetchdf()
+                state.commodities = df["commodity"].tolist() if len(df) > 0 else []
+                n_prices = conn.execute("SELECT COUNT(*) FROM prices").fetchone()[0]
+                n_rainfall = conn.execute("SELECT COUNT(*) FROM rainfall").fetchone()[0]
+                n_rdd = conn.execute("SELECT COUNT(*) FROM rdd_results").fetchone()[0]
+                logger.info(
+                    "After R2 restore: %d prices, %d rainfall, %d RDD results",
+                    n_prices, n_rainfall, n_rdd,
+                )
+            except Exception as e:
+                logger.warning(f"R2 restore skipped (non-fatal): {e}")
+                try:
+                    conn = get_connection()
+                    init_schema(conn)
+                except Exception:
+                    pass
+
         
         # Auto-trigger pipeline if data is missing or stale
         if n_prices < 100 or n_rainfall < 10 or n_rdd < 1:
@@ -1552,6 +1584,33 @@ def _strip_mmd_frontmatter(content: str) -> str:
     return content
 
 
+def _sanitize_svg_xml(svg: str) -> str:
+    """Make an mmdc-produced SVG strictly XML-well-formed.
+
+    mermaid-cli emits two XML-invalid constructs that break strict XML
+    renderers (Firefox showing `xmlParseEntityRef` / `mismatched tag`):
+      1. a duplicated ``xmlns="http://www.w3.org/2000/svg"`` attribute
+         (duplicate attribute is a hard XML error), and
+      2. unclosed ``<br>`` void elements inside ``<foreignObject>`` label
+         divs (must be ``<br/>`` for XML well-formedness).
+
+    Returns the sanitized SVG string (idempotent — safe to call again).
+    """
+    import re as _re
+
+    # 1. Drop the duplicate xmlns attribute (keep the first occurrence)
+    first = svg.find('xmlns="http://www.w3.org/2000/svg"')
+    if first != -1:
+        second = svg.find('xmlns="http://www.w3.org/2000/svg"', first + 1)
+        if second != -1:
+            svg = svg[:second] + svg[second + len('xmlns="http://www.w3.org/2000/svg" '):]
+
+    # 2. Self-close void <br> elements (not already closed)
+    svg = _re.sub(r"<br(?![ /])", "<br/>", svg)
+
+    return svg
+
+
 def _render_pipeline_svg(force: bool = False) -> str:
     """Render the pipeline-flow-live.mmd to SVG via mermaid-cli.
 
@@ -1616,7 +1675,10 @@ def _render_pipeline_svg(force: bool = False) -> str:
         if not svg_path.exists():
             raise RuntimeError("mmdc did not produce output SVG")
 
-        svg_content = svg_path.read_text(encoding="utf-8")
+        # mmdc emits XML-invalid output (duplicate xmlns, unclosed <br>);
+        # sanitize before caching/serving so strict XML renderers display it.
+        svg_content = _sanitize_svg_xml(svg_path.read_text(encoding="utf-8"))
+        svg_path.write_text(svg_content, encoding="utf-8")
         _MMDC_SVG_CACHE = svg_content
         _MMDC_SVG_MTIME = mmd_path.stat().st_mtime
         logger.info(

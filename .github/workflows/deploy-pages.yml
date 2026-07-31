@@ -7,6 +7,7 @@ on:
       - "landing/**"
       - "docs/**"
       - "static/**"
+      - "mandi_rdd/data/**"   # DuckDB — landing/docs KPI freshness reads live data
       - ".github/workflows/deploy-pages.yml"
   workflow_dispatch:
 

@@ -153,6 +153,11 @@ def run_hourly(force_full: bool = False) -> dict:
             _persist_step_timings()
             # ── Post-ingestion: regenerate pipeline DAG diagram with live timing ──
             _run_diagram_generator()
+            # ── Post-ingestion: push refreshed DB to R2 (R2-as-data-bus) ──
+            # The Northflank cron runs volumeless on the free tier (the single
+            # ReadWriteOnce volume lives on the API), so R2 is how the API sees
+            # fresh data. Non-fatal: a backup failure must never fail the run.
+            _sync_db_to_r2()
 
         return summary
 
@@ -246,6 +251,26 @@ def _run_diagram_generator() -> None:
         logger.warning(f"Diagram generator module not available: {e}")
     except Exception as e:
         logger.warning(f"Diagram generation failed: {e}")
+
+
+def _sync_db_to_r2() -> None:
+    """Upload the refreshed DuckDB to Cloudflare R2 after a successful run.
+
+    This is the R2-as-data-bus half for the Northflank cron: the cron runs
+    volumeless (free-tier ReadWriteOnce volume lives on the API service), so
+    R2 is how the API receives fresh data. Skipped silently when R2_* env
+    vars are unset; failures are logged as warnings, never fatal.
+    """
+    try:
+        from mandi_rdd.storage.r2_sync import upload_db
+        result = upload_db()
+        logger.info(
+            "R2 backup: %d bytes (from %d raw, %.1f%% smaller) -> %s",
+            result["compressed_bytes"], result["raw_bytes"],
+            result["compression_pct"], result["r2_key"],
+        )
+    except Exception as e:  # noqa: BLE001
+        logger.warning(f"R2 backup skipped (non-fatal): {e}")
 
 
 if __name__ == "__main__":

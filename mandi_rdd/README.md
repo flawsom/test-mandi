@@ -17,12 +17,12 @@
 
 > **Districts crossing IMD's −19% rainfall-deficiency threshold see a ₹350 (+24.5%) jump in onion modal prices (p=0.003, robust across 4 bandwidths, placebo-tested, cross-checked by fixed-effects regression).** Fully automated: `data.gov.in` → DuckDB → RDD → FastAPI → dashboard, refreshed nightly with zero manual intervention.
 
-[![Python 3.12+](https://img.shields.io/badge/Python-3.12+-blue?style=flat-square&logo=python)](https://www.python.org/)
+[![Python 3.12+](https://img.shields.io/badge/Python-3.12+-blue?style=flat-square&amp;logo=python)](https://www.python.org/)
 [![CI](https://github.com/flawsom/Margin-Intelligence-System/actions/workflows/mandi_rdd_ci.yml/badge.svg)](https://github.com/flawsom/Margin-Intelligence-System/actions/workflows/mandi_rdd_ci.yml)
 [![Tests](https://img.shields.io/badge/tests-29%2F29%20passing-brightgreen?style=flat-square)](#-testing)
-[![API](https://img.shields.io/badge/API-FastAPI-009688?style=flat-square&logo=fastapi)](mandi_rdd/api/main.py)
-[![DuckDB](https://img.shields.io/badge/DB-DuckDB-FFF000?style=flat-square&logo=duckdb)](https://duckdb.org/)
-[![OpenRouter](https://img.shields.io/badge/AI-OpenRouter%20(free)-FF6600?style=flat-square&logo=openai)](https://openrouter.ai/)
+[![API](https://img.shields.io/badge/API-FastAPI-009688?style=flat-square&amp;logo=fastapi)](mandi_rdd/api/main.py)
+[![DuckDB](https://img.shields.io/badge/DB-DuckDB-FFF000?style=flat-square&amp;logo=duckdb)](https://duckdb.org/)
+[![OpenRouter](https://img.shields.io/badge/AI-OpenRouter%20(free)-FF6600?style=flat-square&amp;logo=openai)](https://openrouter.ai/)
 [![License](https://img.shields.io/badge/License-MIT-yellow?style=flat-square)](LICENSE)
 
 A production-adjacent end-to-end analytics product that spans the full stack: **data engineering** (paginated API ingestion from data.gov.in), **causal inference** (local-linear RDD + fixed-effects cross-check), **predictive ML** (XGBoost classifier + Prophet vs LSTM forecast), **prescriptive recommendations** (Procurement Risk Advisor), **AI orchestration** (multi-model router on OpenRouter free tier with circuit-breaker failover), and **automated deployment** (CI/CD + Docker + nightly scheduler). Designed as a single flagship project that demonstrates every layer of the data analytics / data science stack in one coherent, defensible story.
@@ -57,10 +57,10 @@ A production-adjacent end-to-end analytics product that spans the full stack: **
 
 Live services (auto-checks via shields.io — badges turn green when services respond):
 
-[![API Health](https://img.shields.io/website?url=https%3A%2F%2Fmandi-iq-api.onrender.com%2Fhealth&label=FastAPI&style=for-the-badge&color=2FA787)](https://mandi-iq-api.onrender.com/docs)
-[![Dashboard](https://img.shields.io/website?url=https%3A%2F%2Fmandi-iq-dashboard.onrender.com&label=Dashboard&style=for-the-badge&color=2FA787)](https://mandi-iq-dashboard.onrender.com)
-[![Landing Page](https://img.shields.io/website?url=https%3A%2F%2Fmandi-iq.netlify.app%2Fmandi-iq%2F&label=Landing+Page&style=for-the-badge&color=2FA787)](https://mandi-iq.netlify.app/mandi-iq/)
-[![CI/CD](https://img.shields.io/github/actions/workflow/status/flawsom/Margin-Intelligence-System/mandi_rdd_ci.yml?branch=master&label=CI&style=for-the-badge&color=2FA787&logo=github)](https://github.com/flawsom/Margin-Intelligence-System/actions/workflows/mandi_rdd_ci.yml)
+[![API Health](https://img.shields.io/website?url=https%3A%2F%2Fmandi-iq-api.onrender.com%2Fhealth&amp;label=FastAPI&amp;style=for-the-badge&amp;color=2FA787)](https://mandi-iq-api.onrender.com/docs)
+[![Dashboard](https://img.shields.io/website?url=https%3A%2F%2Fmandi-iq-dashboard.onrender.com&amp;label=Dashboard&amp;style=for-the-badge&amp;color=2FA787)](https://mandi-iq-dashboard.onrender.com)
+[![Landing Page](https://img.shields.io/website?url=https%3A%2F%2Fmandi-iq.netlify.app%2Fmandi-iq%2F&amp;label=Landing+Page&amp;style=for-the-badge&amp;color=2FA787)](https://mandi-iq.netlify.app/mandi-iq/)
+[![CI/CD](https://img.shields.io/github/actions/workflow/status/flawsom/Margin-Intelligence-System/mandi_rdd_ci.yml?branch=master&amp;label=CI&amp;style=for-the-badge&amp;color=2FA787&amp;logo=github)](https://github.com/flawsom/Margin-Intelligence-System/actions/workflows/mandi_rdd_ci.yml)
 
 | Service | Status | URL | Deployed Via |
 |---|---|---|---|
@@ -297,9 +297,9 @@ uvicorn mandi_rdd.api.main:app --reload
 
 | Page | What it shows |
 |---|---|
-| **Executive Overview** | Nightly narrative (front & center), "Ask MandiIQ" chat panel (primary entry point), headline finding, 4 KPI metrics, daily price trend chart |
+| **Executive Overview** | Nightly narrative (front &amp; center), "Ask MandiIQ" chat panel (primary entry point), headline finding, 4 KPI metrics, daily price trend chart |
 | **Causal Explorer** | RDD discontinuity plot (centerpiece), bandwidth-sensitivity chart, placebo-test results, density check, covariate balance — the full methodology story |
-| **Risk & Forecast** | Classifier risk scores by district, Prophet forecast with CI, **Prophet vs LSTM comparison** (toggleable, with honest winner callout) |
+| **Risk &amp; Forecast** | Classifier risk scores by district, Prophet forecast with CI, **Prophet vs LSTM comparison** (toggleable, with honest winner callout) |
 | **Procurement Advisor** | Interactive prescriptive recommendation: combines RDD effect + risk score + forecast → "consider locking procurement now" advice |
 | **Deep Dive** | Raw data explorer, 5 analytical SQL query display |
 

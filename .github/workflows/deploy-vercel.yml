@@ -22,6 +22,7 @@ on:
       - "api/**"
       - "mandi_rdd/api/**"
       - "mandi_rdd/storage/**"
+      - "mandi_rdd/data/**"   # DuckDB — redeploy API whenever the DB syncs
       - "requirements/api.txt"
       - "requirements-vercel.txt"
       - "vercel.json"

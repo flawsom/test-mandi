@@ -96,7 +96,7 @@ graph TD
 
 If this system needed to handle 10M orders/day instead of 10K total, the following changes would be required:
 
-### 2.1 Ingestion & Storage
+### 2.1 Ingestion &amp; Storage
 
 | Current | At 10M/day |
 |---|---|
@@ -125,7 +125,7 @@ If this system needed to handle 10M orders/day instead of 10K total, the followi
 - Available with sub-100ms latency for online predictions
 - Feast (open-source) or Tecton (managed) would serve this need.
 
-### 2.3 Model Training & Retraining
+### 2.3 Model Training &amp; Retraining
 
 | Current | At 10M/day |
 |---|---|
@@ -163,7 +163,7 @@ If this system needed to handle 10M orders/day instead of 10K total, the followi
 - Batch inference for bulk scoring (e.g., overnight batch job for all open orders)
 - Feature pre-computation for stable features (average discount per category only changes weekly)
 
-### 2.5 Monitoring & Observability
+### 2.5 Monitoring &amp; Observability
 
 | Current | At 10M/day |
 |---|---|
@@ -215,7 +215,7 @@ This is approximately $0.00015-0.00042 per prediction — within reasonable rang
 <div style="position:absolute; top:-60px; right:-60px; width:120px; height:120px; background:radial-gradient(circle, rgba(0,255,136,0.15) 0%, transparent 70%);"></div>
 <a name="3-failure-modes-mitigations"></a>
 <h2 style="font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Helvetica,Arial,sans-serif; font-size:1.5em; font-weight:600; color:#E0E0E0; display:flex; align-items:center; gap:10px; margin:0 0 16px 0; padding-bottom:8px; border-bottom:1px solid rgba(255,255,255,0.06);">
-  <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:middle"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg> 3. Failure Modes & Mitigations
+  <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:middle"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg> 3. Failure Modes &amp; Mitigations
 </h2>
 
 ### 3.1 Model Registry Unavailable at API Start

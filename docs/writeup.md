@@ -6,7 +6,7 @@
 <div style="position:relative; z-index:1;">
 <h1 style="margin:0; font-size:2.2em; font-weight:700; color:#E0E0E0; letter-spacing:-0.5px;">
   <svg xmlns="http://www.w3.org/2000/svg" width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="#00FF88" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:middle"><path d="M12 2v18"/><path d="M8 6c0-2 4-4 4 0"/><path d="M16 6c0-2-4-4-4 0"/><path d="M8 12c0-2 4-4 4 0"/><path d="M16 12c0-2-4-4-4 0"/><path d="M6 18c0-3 6-5 6 0"/><path d="M18 18c0-3-6-5-6 0"/><path d="M9 22h6"/></svg>
-  Mandiiq: Agricultural Margin Intelligence & Causal Rdd Specification
+  Mandiiq: Agricultural Margin Intelligence &amp; Causal Rdd Specification
 </h1>
 <h4 style="color:#94A3B8; font-weight:400; font-size:0.95em; margin:6px 0 0 0;">MandiIQ Documentation</h4>
 </div>
@@ -43,7 +43,7 @@ This technical writeup details the empirical framework, database schema, machine
 <div style="position:absolute; top:-60px; right:-60px; width:120px; height:120px; background:radial-gradient(circle, rgba(0,255,136,0.15) 0%, transparent 70%);"></div>
 <a name="1-executive-summary-empirical-focus"></a>
 <h2 style="font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Helvetica,Arial,sans-serif; font-size:1.5em; font-weight:600; color:#E0E0E0; display:flex; align-items:center; gap:10px; margin:0 0 16px 0; padding-bottom:8px; border-bottom:1px solid rgba(255,255,255,0.06);">
-  <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:middle"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg> 1. Executive Summary & Empirical Focus
+  <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:middle"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg> 1. Executive Summary &amp; Empirical Focus
 </h2>
 
 Indian agricultural markets are highly fragmented, leading to extreme spatial and temporal price dispersion. On any given day, wholesale prices for the same commodity (e.g., onions or tomatoes) can vary by up to 800% between producing states (like Maharashtra) and consuming centers (like Kerala).
@@ -83,7 +83,7 @@ This −20% threshold triggers regulatory actions, including:
 <div style="position:absolute; top:-60px; right:-60px; width:120px; height:120px; background:radial-gradient(circle, rgba(0,255,136,0.15) 0%, transparent 70%);"></div>
 <a name="2-causal-inference-regression-discontinuity-design-rdd"></a>
 <h2 style="font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Helvetica,Arial,sans-serif; font-size:1.5em; font-weight:600; color:#E0E0E0; display:flex; align-items:center; gap:10px; margin:0 0 16px 0; padding-bottom:8px; border-bottom:1px solid rgba(255,255,255,0.06);">
-  <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:middle"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg> 2. Causal Inference & Regression Discontinuity Design (RDD)
+  <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:middle"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg> 2. Causal Inference &amp; Regression Discontinuity Design (RDD)
 </h2>
 
 Standard correlation analysis cannot determine if a policy threshold itself alters market sentiment. To identify this causal effect, MandiIQ implements a **Regression Discontinuity Design (RDD)**. 
@@ -148,7 +148,7 @@ Across 1,525 real subdivision-month rainfall-departure observations (2018–2025
 <div style="position:absolute; top:-60px; right:-60px; width:120px; height:120px; background:radial-gradient(circle, rgba(0,255,136,0.15) 0%, transparent 70%);"></div>
 <a name="3-forecasting-ml-engine"></a>
 <h2 style="font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Helvetica,Arial,sans-serif; font-size:1.5em; font-weight:600; color:#E0E0E0; display:flex; align-items:center; gap:10px; margin:0 0 16px 0; padding-bottom:8px; border-bottom:1px solid rgba(255,255,255,0.06);">
-  <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:middle"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg> 3. Forecasting & ML Engine
+  <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:middle"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg> 3. Forecasting &amp; ML Engine
 </h2>
 
 To augment the causal analysis, MandiIQ includes a forecasting engine to predict price trends and estimate volatility envelopes:
@@ -184,7 +184,7 @@ To augment the causal analysis, MandiIQ includes a forecasting engine to predict
 <div style="position:absolute; top:-60px; right:-60px; width:120px; height:120px; background:radial-gradient(circle, rgba(0,255,136,0.15) 0%, transparent 70%);"></div>
 <a name="4-system-architecture-high-scale-blueprint"></a>
 <h2 style="font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Helvetica,Arial,sans-serif; font-size:1.5em; font-weight:600; color:#E0E0E0; display:flex; align-items:center; gap:10px; margin:0 0 16px 0; padding-bottom:8px; border-bottom:1px solid rgba(255,255,255,0.06);">
-  <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:middle"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg> 4. System Architecture & High-Scale Blueprint
+  <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:middle"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg> 4. System Architecture &amp; High-Scale Blueprint
 </h2>
 
 The MandiIQ prototype is built using a decoupled architecture:
@@ -261,7 +261,7 @@ To upgrade the system from an analytical prototype to an enterprise platform pro
 <div style="position:absolute; top:-60px; right:-60px; width:120px; height:120px; background:radial-gradient(circle, rgba(0,255,136,0.15) 0%, transparent 70%);"></div>
 <a name="5-telemetry-failure-recovery"></a>
 <h2 style="font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Helvetica,Arial,sans-serif; font-size:1.5em; font-weight:600; color:#E0E0E0; display:flex; align-items:center; gap:10px; margin:0 0 16px 0; padding-bottom:8px; border-bottom:1px solid rgba(255,255,255,0.06);">
-  <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:middle"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg> 5. Telemetry & Failure Recovery
+  <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:middle"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg> 5. Telemetry &amp; Failure Recovery
 </h2>
 
 MandiIQ implements fallback states and automated recovery pipelines to handle system degradation:
@@ -443,7 +443,7 @@ The diagram auto-regenerates after every successful hourly run (see `run_hourly.
 <div style="position:absolute; top:-60px; right:-60px; width:120px; height:120px; background:radial-gradient(circle, rgba(0,255,136,0.15) 0%, transparent 70%);"></div>
 <a name="7-visual-polish-creative-studio-aesthetic"></a>
 <h2 style="font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Helvetica,Arial,sans-serif; font-size:1.5em; font-weight:600; color:#E0E0E0; display:flex; align-items:center; gap:10px; margin:0 0 16px 0; padding-bottom:8px; border-bottom:1px solid rgba(255,255,255,0.06);">
-  <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:middle"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg> 7. Visual Polish & Creative Studio Aesthetic
+  <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:middle"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg> 7. Visual Polish &amp; Creative Studio Aesthetic
 </h2>
 
 To distinguish MandiIQ from typical data dashboards, we upgraded the frontend styling, adapting the design language of the Japanese creative house **Alche Studio (alche.studio)**:
@@ -459,14 +459,14 @@ To distinguish MandiIQ from typical data dashboards, we upgraded the frontend st
   4. **Cross-tab sync** — A `window.addEventListener('storage', ...)` listener detects when another browser tab writes to the `mandiiq_surface_mode` localStorage key and automatically syncs the theme by triggering the hidden toggle button.
 - **Duplicate CSS Prevention:** The `inject_theme()` function in `theme.py` uses a one-shot session-state gate (`_mandiiq_theme_injected`) — the 35KB stylesheet is injected exactly once per session instead of up to three times per page navigation.
 
-### 6.2 Color & Typography
+### 6.2 Color &amp; Typography
 
 - **Selective Accents:** Chartreuse/Lime (`#d7ff00`) is used sparingly for active states, key metric values, and success status indicators. Semantic alerts use Rust (`#D9663B`) and Sage (`#8FAE89`).
 - **Commodity Colors:** Each tracked commodity has a distinct secondary color: Onion (Dusty Violet `#8B6BC4`), Tomato (Rust `#D9663B`), Wheat (Dry Gold `#D4A94E`), Potato (Clay `#B98354`).
 - **Typographic System:**
   - Headings: `Space Grotesk` with wider tracking (`0.08em` to `0.12em`), uppercase letter treatments, and lighter weights.
   - Body Copy: `IBM Plex Sans` for readability.
-  - Metrics & Code: `IBM Plex Mono` for tabular alignment and data clarity.
+  - Metrics &amp; Code: `IBM Plex Mono` for tabular alignment and data clarity.
   - Numeric Displays: `Barlow` with `font-variant-numeric: tabular-nums` for aligned dashboard KPIs.
 
 ### 6.3 SVG Icon System
@@ -492,7 +492,7 @@ The icons are Lucide-compatible (24×24 viewBox, `stroke="currentColor"`, `strok
 - **Crosshair Brackets:** Lime (`#d7ff00`) SVG corner markers on `::before`/`::after` pseudo-elements that fade in on hover. The brackets use `top: -1px`/`left: -1px` positioning to sit exactly at the card border. **Fix applied:** `overflow: hidden` was removed from all `.glass-card` and `.crosshair-panel` elements across all pages — the previous clipping prevented the outer 1px of the bracket lines from rendering.
 - **Scroll Reveal:** Elements with the `.reveal` class fade and translate-up when they enter the viewport via IntersectionObserver. Staggered via `.stagger-1` through `.stagger-4` delay helpers.
 
-### 6.5 Atmosphere & Background Effects
+### 6.5 Atmosphere &amp; Background Effects
 
 - **5-Layer Drifter System:** A fixed-position `atmosphere` container with five independently drifting gradient blobs, each with randomized `--x`/`--y`/`--s`/`--d`/`--hue` CSS custom properties. Combined cycle times range from 25 to 45 seconds per blob, creating a calm, infinite-canvas feel.
 - **Dot Grid:** A 38px-spaced radial-gradient dot pattern at 0.04 opacity provides a subtle pixel-grid texture without distracting from content.

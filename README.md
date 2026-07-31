@@ -9,7 +9,7 @@
 
 <!-- Banner -->
 <div style="position:relative; z-index:1;">
-<img src="https://capsule-render.vercel.app/api?type=waving&color=0:0B0F1E,50:1A3A2A,100:00FF88&height=280&section=header&text=MandiIQ&fontSize=90&fontColor=FFFFFF&animation=fadeIn&fontAlignY=38&desc=Agricultural%20Price%20Intelligence%20%26%20Causal%20RDD%20System&descAlignY=55&descSize=20" width="100%" alt="MandiIQ Banner" style="border-radius:12px;" />
+<img src="https://capsule-render.vercel.app/api?type=waving&amp;color=0:0B0F1E,50:1A3A2A,100:00FF88&amp;height=280&amp;section=header&amp;text=MandiIQ&amp;fontSize=90&amp;fontColor=FFFFFF&amp;animation=fadeIn&amp;fontAlignY=38&amp;desc=Agricultural%20Price%20Intelligence%20%26%20Causal%20RDD%20System&amp;descAlignY=55&amp;descSize=20" width="100%" alt="MandiIQ Banner" style="border-radius:12px;" />
 </div>
 
 <br />
@@ -27,22 +27,22 @@
 <!-- Badges -->
 <div style="position:relative; z-index:1; max-width:900px; margin:0 auto;">
 <p style="line-height:2.4;">
-  <img src="https://img.shields.io/github/v/release/flawsom/MandiIQ?style=for-the-badge&label=Version&color=00FF88&logo=github" alt="Version" />
-  <img src="https://img.shields.io/github/license/flawsom/MandiIQ?style=for-the-badge&label=License&color=blue&logo=open-source-initiative" alt="License" />
-  <img src="https://img.shields.io/github/actions/workflow/status/flawsom/MandiIQ/ci.yml?style=for-the-badge&label=CI&color=success&logo=githubactions" alt="CI" />
-  <img src="https://img.shields.io/github/actions/workflow/status/flawsom/MandiIQ/deploy-render.yml?style=for-the-badge&label=Deploy+Render&color=success&logo=render" alt="Deploy Render" />
-  <img src="https://img.shields.io/github/actions/workflow/status/flawsom/MandiIQ/deploy-vercel.yml?style=for-the-badge&label=Deploy+Vercel&color=success&logo=vercel" alt="Deploy Vercel" />
-  <img src="https://img.shields.io/github/actions/workflow/status/flawsom/MandiIQ/deploy-pages.yml?style=for-the-badge&label=Deploy+Pages&color=success&logo=githubpages" alt="Deploy Pages" />
-  <img src="https://img.shields.io/github/stars/flawsom/MandiIQ?style=for-the-badge&label=Stars&color=yellow&logo=github" alt="Stars" />
-  <img src="https://img.shields.io/github/forks/flawsom/MandiIQ?style=for-the-badge&label=Forks&color=orange&logo=github" alt="Forks" />
-  <img src="https://img.shields.io/github/downloads/flawsom/MandiIQ/total?style=for-the-badge&label=Downloads&color=purple&logo=download" alt="Downloads" />
-  <img src="https://img.shields.io/github/issues/flawsom/MandiIQ?style=for-the-badge&label=Issues&color=red&logo=github" alt="Issues" />
-  <img src="https://img.shields.io/github/issues-pr/flawsom/MandiIQ?style=for-the-badge&label=PRs&color=brightgreen&logo=github" alt="PRs" />
-  <img src="https://img.shields.io/github/last-commit/flawsom/MandiIQ?style=for-the-badge&label=Last%20Commit&color=informational&logo=git" alt="Last Commit" />
-  <img src="https://img.shields.io/badge/Python-3.12%2B-blue?style=for-the-badge&logo=python&logoColor=white" alt="Python" />
-  <img src="https://img.shields.io/badge/DuckDB-FFF000?style=for-the-badge&logo=duckdb&logoColor=black" alt="DuckDB" />
-  <img src="https://img.shields.io/badge/Streamlit-FF4B4B?style=for-the-badge&logo=streamlit&logoColor=white" alt="Streamlit" />
-  <img src="https://img.shields.io/badge/FastAPI-009688?style=for-the-badge&logo=fastapi&logoColor=white" alt="FastAPI" />
+  <img src="https://img.shields.io/github/v/release/flawsom/MandiIQ?style=for-the-badge&amp;label=Version&amp;color=00FF88&amp;logo=github" alt="Version" />
+  <img src="https://img.shields.io/github/license/flawsom/MandiIQ?style=for-the-badge&amp;label=License&amp;color=blue&amp;logo=open-source-initiative" alt="License" />
+  <img src="https://img.shields.io/github/actions/workflow/status/flawsom/MandiIQ/ci.yml?style=for-the-badge&amp;label=CI&amp;color=success&amp;logo=githubactions" alt="CI" />
+  <img src="https://img.shields.io/github/actions/workflow/status/flawsom/MandiIQ/deploy-render.yml?style=for-the-badge&amp;label=Deploy+Render&amp;color=success&amp;logo=render" alt="Deploy Render" />
+  <img src="https://img.shields.io/github/actions/workflow/status/flawsom/MandiIQ/deploy-vercel.yml?style=for-the-badge&amp;label=Deploy+Vercel&amp;color=success&amp;logo=vercel" alt="Deploy Vercel" />
+  <img src="https://img.shields.io/github/actions/workflow/status/flawsom/MandiIQ/deploy-pages.yml?style=for-the-badge&amp;label=Deploy+Pages&amp;color=success&amp;logo=githubpages" alt="Deploy Pages" />
+  <img src="https://img.shields.io/github/stars/flawsom/MandiIQ?style=for-the-badge&amp;label=Stars&amp;color=yellow&amp;logo=github" alt="Stars" />
+  <img src="https://img.shields.io/github/forks/flawsom/MandiIQ?style=for-the-badge&amp;label=Forks&amp;color=orange&amp;logo=github" alt="Forks" />
+  <img src="https://img.shields.io/github/downloads/flawsom/MandiIQ/total?style=for-the-badge&amp;label=Downloads&amp;color=purple&amp;logo=download" alt="Downloads" />
+  <img src="https://img.shields.io/github/issues/flawsom/MandiIQ?style=for-the-badge&amp;label=Issues&amp;color=red&amp;logo=github" alt="Issues" />
+  <img src="https://img.shields.io/github/issues-pr/flawsom/MandiIQ?style=for-the-badge&amp;label=PRs&amp;color=brightgreen&amp;logo=github" alt="PRs" />
+  <img src="https://img.shields.io/github/last-commit/flawsom/MandiIQ?style=for-the-badge&amp;label=Last%20Commit&amp;color=informational&amp;logo=git" alt="Last Commit" />
+  <img src="https://img.shields.io/badge/Python-3.12%2B-blue?style=for-the-badge&amp;logo=python&amp;logoColor=white" alt="Python" />
+  <img src="https://img.shields.io/badge/DuckDB-FFF000?style=for-the-badge&amp;logo=duckdb&amp;logoColor=black" alt="DuckDB" />
+  <img src="https://img.shields.io/badge/Streamlit-FF4B4B?style=for-the-badge&amp;logo=streamlit&amp;logoColor=white" alt="Streamlit" />
+  <img src="https://img.shields.io/badge/FastAPI-009688?style=for-the-badge&amp;logo=fastapi&amp;logoColor=white" alt="FastAPI" />
 </p>
 </div>
 
@@ -63,11 +63,11 @@
   <svg viewBox="0 0 1440 60" width="100%" height="60" preserveAspectRatio="none" style="position:absolute;bottom:0;">
     <defs>
       <linearGradient id="wg" x1="0%" y1="0%" x2="100%" y2="0%">
-        <stop offset="0%" stop-color="{bg}" stop-opacity="0" />
-        <stop offset="25%" stop-color="{lime}" stop-opacity="0.25" />
-        <stop offset="50%" stop-color="{lime}" stop-opacity="0.4" />
-        <stop offset="75%" stop-color="{lime}" stop-opacity="0.25" />
-        <stop offset="100%" stop-color="{bg}" stop-opacity="0" />
+        <stop offset="0%" stop-color="#0B0F1E" stop-opacity="0" />
+        <stop offset="25%" stop-color="#00FF88" stop-opacity="0.25" />
+        <stop offset="50%" stop-color="#00FF88" stop-opacity="0.4" />
+        <stop offset="75%" stop-color="#00FF88" stop-opacity="0.25" />
+        <stop offset="100%" stop-color="#0B0F1E" stop-opacity="0" />
       </linearGradient>
     </defs>
     <path d="M0,30 C240,10 480,50 720,30 C960,10 1200,50 1440,30 L1440,60 L0,60 Z" fill="url(#wg)" opacity="0.6" />
@@ -95,11 +95,11 @@
   <svg viewBox="0 0 1440 60" width="100%" height="60" preserveAspectRatio="none" style="position:absolute;bottom:0;">
     <defs>
       <linearGradient id="wg" x1="0%" y1="0%" x2="100%" y2="0%">
-        <stop offset="0%" stop-color="{bg}" stop-opacity="0" />
-        <stop offset="25%" stop-color="{lime}" stop-opacity="0.25" />
-        <stop offset="50%" stop-color="{lime}" stop-opacity="0.4" />
-        <stop offset="75%" stop-color="{lime}" stop-opacity="0.25" />
-        <stop offset="100%" stop-color="{bg}" stop-opacity="0" />
+        <stop offset="0%" stop-color="#0B0F1E" stop-opacity="0" />
+        <stop offset="25%" stop-color="#00FF88" stop-opacity="0.25" />
+        <stop offset="50%" stop-color="#00FF88" stop-opacity="0.4" />
+        <stop offset="75%" stop-color="#00FF88" stop-opacity="0.25" />
+        <stop offset="100%" stop-color="#0B0F1E" stop-opacity="0" />
       </linearGradient>
     </defs>
     <path d="M0,30 C240,10 480,50 720,30 C960,10 1200,50 1440,30 L1440,60 L0,60 Z" fill="url(#wg)" opacity="0.6" />
@@ -135,11 +135,11 @@
   <svg viewBox="0 0 1440 60" width="100%" height="60" preserveAspectRatio="none" style="position:absolute;bottom:0;">
     <defs>
       <linearGradient id="wg" x1="0%" y1="0%" x2="100%" y2="0%">
-        <stop offset="0%" stop-color="{bg}" stop-opacity="0" />
-        <stop offset="25%" stop-color="{lime}" stop-opacity="0.25" />
-        <stop offset="50%" stop-color="{lime}" stop-opacity="0.4" />
-        <stop offset="75%" stop-color="{lime}" stop-opacity="0.25" />
-        <stop offset="100%" stop-color="{bg}" stop-opacity="0" />
+        <stop offset="0%" stop-color="#0B0F1E" stop-opacity="0" />
+        <stop offset="25%" stop-color="#00FF88" stop-opacity="0.25" />
+        <stop offset="50%" stop-color="#00FF88" stop-opacity="0.4" />
+        <stop offset="75%" stop-color="#00FF88" stop-opacity="0.25" />
+        <stop offset="100%" stop-color="#0B0F1E" stop-opacity="0" />
       </linearGradient>
     </defs>
     <path d="M0,30 C240,10 480,50 720,30 C960,10 1200,50 1440,30 L1440,60 L0,60 Z" fill="url(#wg)" opacity="0.6" />
@@ -235,11 +235,11 @@
   <svg viewBox="0 0 1440 60" width="100%" height="60" preserveAspectRatio="none" style="position:absolute;bottom:0;">
     <defs>
       <linearGradient id="wg" x1="0%" y1="0%" x2="100%" y2="0%">
-        <stop offset="0%" stop-color="{bg}" stop-opacity="0" />
-        <stop offset="25%" stop-color="{lime}" stop-opacity="0.25" />
-        <stop offset="50%" stop-color="{lime}" stop-opacity="0.4" />
-        <stop offset="75%" stop-color="{lime}" stop-opacity="0.25" />
-        <stop offset="100%" stop-color="{bg}" stop-opacity="0" />
+        <stop offset="0%" stop-color="#0B0F1E" stop-opacity="0" />
+        <stop offset="25%" stop-color="#00FF88" stop-opacity="0.25" />
+        <stop offset="50%" stop-color="#00FF88" stop-opacity="0.4" />
+        <stop offset="75%" stop-color="#00FF88" stop-opacity="0.25" />
+        <stop offset="100%" stop-color="#0B0F1E" stop-opacity="0" />
       </linearGradient>
     </defs>
     <path d="M0,30 C240,10 480,50 720,30 C960,10 1200,50 1440,30 L1440,60 L0,60 Z" fill="url(#wg)" opacity="0.6" />
@@ -331,11 +331,11 @@ flowchart TB
   <svg viewBox="0 0 1440 60" width="100%" height="60" preserveAspectRatio="none" style="position:absolute;bottom:0;">
     <defs>
       <linearGradient id="wg" x1="0%" y1="0%" x2="100%" y2="0%">
-        <stop offset="0%" stop-color="{bg}" stop-opacity="0" />
-        <stop offset="25%" stop-color="{lime}" stop-opacity="0.25" />
-        <stop offset="50%" stop-color="{lime}" stop-opacity="0.4" />
-        <stop offset="75%" stop-color="{lime}" stop-opacity="0.25" />
-        <stop offset="100%" stop-color="{bg}" stop-opacity="0" />
+        <stop offset="0%" stop-color="#0B0F1E" stop-opacity="0" />
+        <stop offset="25%" stop-color="#00FF88" stop-opacity="0.25" />
+        <stop offset="50%" stop-color="#00FF88" stop-opacity="0.4" />
+        <stop offset="75%" stop-color="#00FF88" stop-opacity="0.25" />
+        <stop offset="100%" stop-color="#0B0F1E" stop-opacity="0" />
       </linearGradient>
     </defs>
     <path d="M0,30 C240,10 480,50 720,30 C960,10 1200,50 1440,30 L1440,60 L0,60 Z" fill="url(#wg)" opacity="0.6" />
@@ -354,43 +354,43 @@ flowchart TB
 <div align="center">
 
 ### Frontend
-<img src="https://img.shields.io/badge/Streamlit-FF4B4B?style=for-the-badge&logo=streamlit&logoColor=white" alt="Streamlit" />
-<img src="https://img.shields.io/badge/Plotly-3F4F75?style=for-the-badge&logo=plotly&logoColor=white" alt="Plotly" />
-<img src="https://img.shields.io/badge/React-20232A?style=for-the-badge&logo=react&logoColor=61DAFB" alt="React" />
-<img src="https://img.shields.io/badge/TypeScript-007ACC?style=for-the-badge&logo=typescript&logoColor=white" alt="TypeScript" />
-<img src="https://img.shields.io/badge/Vite-646CFF?style=for-the-badge&logo=vite&logoColor=white" alt="Vite" />
-<img src="https://img.shields.io/badge/Three.js-000000?style=for-the-badge&logo=three.js&logoColor=white" alt="Three.js" />
+<img src="https://img.shields.io/badge/Streamlit-FF4B4B?style=for-the-badge&amp;logo=streamlit&amp;logoColor=white" alt="Streamlit" />
+<img src="https://img.shields.io/badge/Plotly-3F4F75?style=for-the-badge&amp;logo=plotly&amp;logoColor=white" alt="Plotly" />
+<img src="https://img.shields.io/badge/React-20232A?style=for-the-badge&amp;logo=react&amp;logoColor=61DAFB" alt="React" />
+<img src="https://img.shields.io/badge/TypeScript-007ACC?style=for-the-badge&amp;logo=typescript&amp;logoColor=white" alt="TypeScript" />
+<img src="https://img.shields.io/badge/Vite-646CFF?style=for-the-badge&amp;logo=vite&amp;logoColor=white" alt="Vite" />
+<img src="https://img.shields.io/badge/Three.js-000000?style=for-the-badge&amp;logo=three.js&amp;logoColor=white" alt="Three.js" />
 
 ### Backend
-<img src="https://img.shields.io/badge/Python-3776AB?style=for-the-badge&logo=python&logoColor=white" alt="Python" />
-<img src="https://img.shields.io/badge/FastAPI-009688?style=for-the-badge&logo=fastapi&logoColor=white" alt="FastAPI" />
-<img src="https://img.shields.io/badge/Uvicorn-000000?style=for-the-badge&logo=uvicorn&logoColor=white" alt="Uvicorn" />
-<img src="https://img.shields.io/badge/Pydantic-E92063?style=for-the-badge&logo=pydantic&logoColor=white" alt="Pydantic" />
+<img src="https://img.shields.io/badge/Python-3776AB?style=for-the-badge&amp;logo=python&amp;logoColor=white" alt="Python" />
+<img src="https://img.shields.io/badge/FastAPI-009688?style=for-the-badge&amp;logo=fastapi&amp;logoColor=white" alt="FastAPI" />
+<img src="https://img.shields.io/badge/Uvicorn-000000?style=for-the-badge&amp;logo=uvicorn&amp;logoColor=white" alt="Uvicorn" />
+<img src="https://img.shields.io/badge/Pydantic-E92063?style=for-the-badge&amp;logo=pydantic&amp;logoColor=white" alt="Pydantic" />
 
 ### Database
-<img src="https://img.shields.io/badge/DuckDB-FFF000?style=for-the-badge&logo=duckdb&logoColor=black" alt="DuckDB" />
-<img src="https://img.shields.io/badge/Git_LFS-F64935?style=for-the-badge&logo=gitlfs&logoColor=white" alt="Git LFS" />
+<img src="https://img.shields.io/badge/DuckDB-FFF000?style=for-the-badge&amp;logo=duckdb&amp;logoColor=black" alt="DuckDB" />
+<img src="https://img.shields.io/badge/Git_LFS-F64935?style=for-the-badge&amp;logo=gitlfs&amp;logoColor=white" alt="Git LFS" />
 
 ### AI / ML
-<img src="https://img.shields.io/badge/XGBoost-FF6600?style=for-the-badge&logo=xgboost&logoColor=white" alt="XGBoost" />
-<img src="https://img.shields.io/badge/scikit_learn-F7931E?style=for-the-badge&logo=scikitlearn&logoColor=white" alt="scikit-learn" />
-<img src="https://img.shields.io/badge/NumPy-013243?style=for-the-badge&logo=numpy&logoColor=white" alt="NumPy" />
-<img src="https://img.shields.io/badge/Pandas-150458?style=for-the-badge&logo=pandas&logoColor=white" alt="Pandas" />
-<img src="https://img.shields.io/badge/SciPy-8CAAE6?style=for-the-badge&logo=scipy&logoColor=white" alt="SciPy" />
-<img src="https://img.shields.io/badge/OpenAI-412991?style=for-the-badge&logo=openai&logoColor=white" alt="OpenAI" />
+<img src="https://img.shields.io/badge/XGBoost-FF6600?style=for-the-badge&amp;logo=xgboost&amp;logoColor=white" alt="XGBoost" />
+<img src="https://img.shields.io/badge/scikit_learn-F7931E?style=for-the-badge&amp;logo=scikitlearn&amp;logoColor=white" alt="scikit-learn" />
+<img src="https://img.shields.io/badge/NumPy-013243?style=for-the-badge&amp;logo=numpy&amp;logoColor=white" alt="NumPy" />
+<img src="https://img.shields.io/badge/Pandas-150458?style=for-the-badge&amp;logo=pandas&amp;logoColor=white" alt="Pandas" />
+<img src="https://img.shields.io/badge/SciPy-8CAAE6?style=for-the-badge&amp;logo=scipy&amp;logoColor=white" alt="SciPy" />
+<img src="https://img.shields.io/badge/OpenAI-412991?style=for-the-badge&amp;logo=openai&amp;logoColor=white" alt="OpenAI" />
 
-### Cloud & DevOps
-<img src="https://img.shields.io/badge/Docker-2496ED?style=for-the-badge&logo=docker&logoColor=white" alt="Docker" />
-<img src="https://img.shields.io/badge/GitHub_Actions-2088FF?style=for-the-badge&logo=githubactions&logoColor=white" alt="GitHub Actions" />
-<img src="https://img.shields.io/badge/Vercel-000000?style=for-the-badge&logo=vercel&logoColor=white" alt="Vercel" />
-<img src="https://img.shields.io/badge/Render-46E3B7?style=for-the-badge&logo=render&logoColor=black" alt="Render" />
-<img src="https://img.shields.io/badge/Northflank-000000?style=for-the-badge&logo=northflank&logoColor=white" alt="Northflank" />
-<img src="https://img.shields.io/badge/Cloudflare_R2-FF6600?style=for-the-badge&logo=cloudflare&logoColor=white" alt="Cloudflare R2" />
-<img src="https://img.shields.io/badge/Grafana-FF6600?style=for-the-badge&logo=grafana&logoColor=white" alt="Grafana" />
-<img src="https://img.shields.io/badge/Prometheus-E6522C?style=for-the-badge&logo=prometheus&logoColor=white" alt="Prometheus" />
+### Cloud &amp; DevOps
+<img src="https://img.shields.io/badge/Docker-2496ED?style=for-the-badge&amp;logo=docker&amp;logoColor=white" alt="Docker" />
+<img src="https://img.shields.io/badge/GitHub_Actions-2088FF?style=for-the-badge&amp;logo=githubactions&amp;logoColor=white" alt="GitHub Actions" />
+<img src="https://img.shields.io/badge/Vercel-000000?style=for-the-badge&amp;logo=vercel&amp;logoColor=white" alt="Vercel" />
+<img src="https://img.shields.io/badge/Render-46E3B7?style=for-the-badge&amp;logo=render&amp;logoColor=black" alt="Render" />
+<img src="https://img.shields.io/badge/Northflank-000000?style=for-the-badge&amp;logo=northflank&amp;logoColor=white" alt="Northflank" />
+<img src="https://img.shields.io/badge/Cloudflare_R2-FF6600?style=for-the-badge&amp;logo=cloudflare&amp;logoColor=white" alt="Cloudflare R2" />
+<img src="https://img.shields.io/badge/Grafana-FF6600?style=for-the-badge&amp;logo=grafana&amp;logoColor=white" alt="Grafana" />
+<img src="https://img.shields.io/badge/Prometheus-E6522C?style=for-the-badge&amp;logo=prometheus&amp;logoColor=white" alt="Prometheus" />
 
 ### Testing
-<img src="https://img.shields.io/badge/pytest-0A9EDC?style=for-the-badge&logo=pytest&logoColor=white" alt="pytest" />
+<img src="https://img.shields.io/badge/pytest-0A9EDC?style=for-the-badge&amp;logo=pytest&amp;logoColor=white" alt="pytest" />
 
 </div>
 </div>
@@ -399,11 +399,11 @@ flowchart TB
   <svg viewBox="0 0 1440 60" width="100%" height="60" preserveAspectRatio="none" style="position:absolute;bottom:0;">
     <defs>
       <linearGradient id="wg" x1="0%" y1="0%" x2="100%" y2="0%">
-        <stop offset="0%" stop-color="{bg}" stop-opacity="0" />
-        <stop offset="25%" stop-color="{lime}" stop-opacity="0.25" />
-        <stop offset="50%" stop-color="{lime}" stop-opacity="0.4" />
-        <stop offset="75%" stop-color="{lime}" stop-opacity="0.25" />
-        <stop offset="100%" stop-color="{bg}" stop-opacity="0" />
+        <stop offset="0%" stop-color="#0B0F1E" stop-opacity="0" />
+        <stop offset="25%" stop-color="#00FF88" stop-opacity="0.25" />
+        <stop offset="50%" stop-color="#00FF88" stop-opacity="0.4" />
+        <stop offset="75%" stop-color="#00FF88" stop-opacity="0.25" />
+        <stop offset="100%" stop-color="#0B0F1E" stop-opacity="0" />
       </linearGradient>
     </defs>
     <path d="M0,30 C240,10 480,50 720,30 C960,10 1200,50 1440,30 L1440,60 L0,60 Z" fill="url(#wg)" opacity="0.6" />
@@ -443,11 +443,11 @@ flowchart TB
   <svg viewBox="0 0 1440 60" width="100%" height="60" preserveAspectRatio="none" style="position:absolute;bottom:0;">
     <defs>
       <linearGradient id="wg" x1="0%" y1="0%" x2="100%" y2="0%">
-        <stop offset="0%" stop-color="{bg}" stop-opacity="0" />
-        <stop offset="25%" stop-color="{lime}" stop-opacity="0.25" />
-        <stop offset="50%" stop-color="{lime}" stop-opacity="0.4" />
-        <stop offset="75%" stop-color="{lime}" stop-opacity="0.25" />
-        <stop offset="100%" stop-color="{bg}" stop-opacity="0" />
+        <stop offset="0%" stop-color="#0B0F1E" stop-opacity="0" />
+        <stop offset="25%" stop-color="#00FF88" stop-opacity="0.25" />
+        <stop offset="50%" stop-color="#00FF88" stop-opacity="0.4" />
+        <stop offset="75%" stop-color="#00FF88" stop-opacity="0.25" />
+        <stop offset="100%" stop-color="#0B0F1E" stop-opacity="0" />
       </linearGradient>
     </defs>
     <path d="M0,30 C240,10 480,50 720,30 C960,10 1200,50 1440,30 L1440,60 L0,60 Z" fill="url(#wg)" opacity="0.6" />
@@ -570,11 +570,11 @@ curl "http://localhost:8000/prices?commodity=Onion&limit=3"
   <svg viewBox="0 0 1440 60" width="100%" height="60" preserveAspectRatio="none" style="position:absolute;bottom:0;">
     <defs>
       <linearGradient id="wg" x1="0%" y1="0%" x2="100%" y2="0%">
-        <stop offset="0%" stop-color="{bg}" stop-opacity="0" />
-        <stop offset="25%" stop-color="{lime}" stop-opacity="0.25" />
-        <stop offset="50%" stop-color="{lime}" stop-opacity="0.4" />
-        <stop offset="75%" stop-color="{lime}" stop-opacity="0.25" />
-        <stop offset="100%" stop-color="{bg}" stop-opacity="0" />
+        <stop offset="0%" stop-color="#0B0F1E" stop-opacity="0" />
+        <stop offset="25%" stop-color="#00FF88" stop-opacity="0.25" />
+        <stop offset="50%" stop-color="#00FF88" stop-opacity="0.4" />
+        <stop offset="75%" stop-color="#00FF88" stop-opacity="0.25" />
+        <stop offset="100%" stop-color="#0B0F1E" stop-opacity="0" />
       </linearGradient>
     </defs>
     <path d="M0,30 C240,10 480,50 720,30 C960,10 1200,50 1440,30 L1440,60 L0,60 Z" fill="url(#wg)" opacity="0.6" />
@@ -636,11 +636,11 @@ curl "http://localhost:8000/prices?commodity=Onion&limit=3"
   <svg viewBox="0 0 1440 60" width="100%" height="60" preserveAspectRatio="none" style="position:absolute;bottom:0;">
     <defs>
       <linearGradient id="wg" x1="0%" y1="0%" x2="100%" y2="0%">
-        <stop offset="0%" stop-color="{bg}" stop-opacity="0" />
-        <stop offset="25%" stop-color="{lime}" stop-opacity="0.25" />
-        <stop offset="50%" stop-color="{lime}" stop-opacity="0.4" />
-        <stop offset="75%" stop-color="{lime}" stop-opacity="0.25" />
-        <stop offset="100%" stop-color="{bg}" stop-opacity="0" />
+        <stop offset="0%" stop-color="#0B0F1E" stop-opacity="0" />
+        <stop offset="25%" stop-color="#00FF88" stop-opacity="0.25" />
+        <stop offset="50%" stop-color="#00FF88" stop-opacity="0.4" />
+        <stop offset="75%" stop-color="#00FF88" stop-opacity="0.25" />
+        <stop offset="100%" stop-color="#0B0F1E" stop-opacity="0" />
       </linearGradient>
     </defs>
     <path d="M0,30 C240,10 480,50 720,30 C960,10 1200,50 1440,30 L1440,60 L0,60 Z" fill="url(#wg)" opacity="0.6" />
@@ -707,11 +707,11 @@ curl -s -X POST http://localhost:8000/ask \
   <svg viewBox="0 0 1440 60" width="100%" height="60" preserveAspectRatio="none" style="position:absolute;bottom:0;">
     <defs>
       <linearGradient id="wg" x1="0%" y1="0%" x2="100%" y2="0%">
-        <stop offset="0%" stop-color="{bg}" stop-opacity="0" />
-        <stop offset="25%" stop-color="{lime}" stop-opacity="0.25" />
-        <stop offset="50%" stop-color="{lime}" stop-opacity="0.4" />
-        <stop offset="75%" stop-color="{lime}" stop-opacity="0.25" />
-        <stop offset="100%" stop-color="{bg}" stop-opacity="0" />
+        <stop offset="0%" stop-color="#0B0F1E" stop-opacity="0" />
+        <stop offset="25%" stop-color="#00FF88" stop-opacity="0.25" />
+        <stop offset="50%" stop-color="#00FF88" stop-opacity="0.4" />
+        <stop offset="75%" stop-color="#00FF88" stop-opacity="0.25" />
+        <stop offset="100%" stop-color="#0B0F1E" stop-opacity="0" />
       </linearGradient>
     </defs>
     <path d="M0,30 C240,10 480,50 720,30 C960,10 1200,50 1440,30 L1440,60 L0,60 Z" fill="url(#wg)" opacity="0.6" />
@@ -789,11 +789,11 @@ def get_forecast(commodity: str) -> dict:
   <svg viewBox="0 0 1440 60" width="100%" height="60" preserveAspectRatio="none" style="position:absolute;bottom:0;">
     <defs>
       <linearGradient id="wg" x1="0%" y1="0%" x2="100%" y2="0%">
-        <stop offset="0%" stop-color="{bg}" stop-opacity="0" />
-        <stop offset="25%" stop-color="{lime}" stop-opacity="0.25" />
-        <stop offset="50%" stop-color="{lime}" stop-opacity="0.4" />
-        <stop offset="75%" stop-color="{lime}" stop-opacity="0.25" />
-        <stop offset="100%" stop-color="{bg}" stop-opacity="0" />
+        <stop offset="0%" stop-color="#0B0F1E" stop-opacity="0" />
+        <stop offset="25%" stop-color="#00FF88" stop-opacity="0.25" />
+        <stop offset="50%" stop-color="#00FF88" stop-opacity="0.4" />
+        <stop offset="75%" stop-color="#00FF88" stop-opacity="0.25" />
+        <stop offset="100%" stop-color="#0B0F1E" stop-opacity="0" />
       </linearGradient>
     </defs>
     <path d="M0,30 C240,10 480,50 720,30 C960,10 1200,50 1440,30 L1440,60 L0,60 Z" fill="url(#wg)" opacity="0.6" />
@@ -842,11 +842,11 @@ def get_forecast(commodity: str) -> dict:
   <svg viewBox="0 0 1440 60" width="100%" height="60" preserveAspectRatio="none" style="position:absolute;bottom:0;">
     <defs>
       <linearGradient id="wg" x1="0%" y1="0%" x2="100%" y2="0%">
-        <stop offset="0%" stop-color="{bg}" stop-opacity="0" />
-        <stop offset="25%" stop-color="{lime}" stop-opacity="0.25" />
-        <stop offset="50%" stop-color="{lime}" stop-opacity="0.4" />
-        <stop offset="75%" stop-color="{lime}" stop-opacity="0.25" />
-        <stop offset="100%" stop-color="{bg}" stop-opacity="0" />
+        <stop offset="0%" stop-color="#0B0F1E" stop-opacity="0" />
+        <stop offset="25%" stop-color="#00FF88" stop-opacity="0.25" />
+        <stop offset="50%" stop-color="#00FF88" stop-opacity="0.4" />
+        <stop offset="75%" stop-color="#00FF88" stop-opacity="0.25" />
+        <stop offset="100%" stop-color="#0B0F1E" stop-opacity="0" />
       </linearGradient>
     </defs>
     <path d="M0,30 C240,10 480,50 720,30 C960,10 1200,50 1440,30 L1440,60 L0,60 Z" fill="url(#wg)" opacity="0.6" />
@@ -897,11 +897,11 @@ def get_forecast(commodity: str) -> dict:
   <svg viewBox="0 0 1440 60" width="100%" height="60" preserveAspectRatio="none" style="position:absolute;bottom:0;">
     <defs>
       <linearGradient id="wg" x1="0%" y1="0%" x2="100%" y2="0%">
-        <stop offset="0%" stop-color="{bg}" stop-opacity="0" />
-        <stop offset="25%" stop-color="{lime}" stop-opacity="0.25" />
-        <stop offset="50%" stop-color="{lime}" stop-opacity="0.4" />
-        <stop offset="75%" stop-color="{lime}" stop-opacity="0.25" />
-        <stop offset="100%" stop-color="{bg}" stop-opacity="0" />
+        <stop offset="0%" stop-color="#0B0F1E" stop-opacity="0" />
+        <stop offset="25%" stop-color="#00FF88" stop-opacity="0.25" />
+        <stop offset="50%" stop-color="#00FF88" stop-opacity="0.4" />
+        <stop offset="75%" stop-color="#00FF88" stop-opacity="0.25" />
+        <stop offset="100%" stop-color="#0B0F1E" stop-opacity="0" />
       </linearGradient>
     </defs>
     <path d="M0,30 C240,10 480,50 720,30 C960,10 1200,50 1440,30 L1440,60 L0,60 Z" fill="url(#wg)" opacity="0.6" />
@@ -958,11 +958,11 @@ dashboards/                       # Grafana dashboard JSON (31 panels)
   <svg viewBox="0 0 1440 60" width="100%" height="60" preserveAspectRatio="none" style="position:absolute;bottom:0;">
     <defs>
       <linearGradient id="wg" x1="0%" y1="0%" x2="100%" y2="0%">
-        <stop offset="0%" stop-color="{bg}" stop-opacity="0" />
-        <stop offset="25%" stop-color="{lime}" stop-opacity="0.25" />
-        <stop offset="50%" stop-color="{lime}" stop-opacity="0.4" />
-        <stop offset="75%" stop-color="{lime}" stop-opacity="0.25" />
-        <stop offset="100%" stop-color="{bg}" stop-opacity="0" />
+        <stop offset="0%" stop-color="#0B0F1E" stop-opacity="0" />
+        <stop offset="25%" stop-color="#00FF88" stop-opacity="0.25" />
+        <stop offset="50%" stop-color="#00FF88" stop-opacity="0.4" />
+        <stop offset="75%" stop-color="#00FF88" stop-opacity="0.25" />
+        <stop offset="100%" stop-color="#0B0F1E" stop-opacity="0" />
       </linearGradient>
     </defs>
     <path d="M0,30 C240,10 480,50 720,30 C960,10 1200,50 1440,30 L1440,60 L0,60 Z" fill="url(#wg)" opacity="0.6" />
@@ -1010,11 +1010,11 @@ pytest mandi_rdd/tests/test_rdd_engine.py -v
   <svg viewBox="0 0 1440 60" width="100%" height="60" preserveAspectRatio="none" style="position:absolute;bottom:0;">
     <defs>
       <linearGradient id="wg" x1="0%" y1="0%" x2="100%" y2="0%">
-        <stop offset="0%" stop-color="{bg}" stop-opacity="0" />
-        <stop offset="25%" stop-color="{lime}" stop-opacity="0.25" />
-        <stop offset="50%" stop-color="{lime}" stop-opacity="0.4" />
-        <stop offset="75%" stop-color="{lime}" stop-opacity="0.25" />
-        <stop offset="100%" stop-color="{bg}" stop-opacity="0" />
+        <stop offset="0%" stop-color="#0B0F1E" stop-opacity="0" />
+        <stop offset="25%" stop-color="#00FF88" stop-opacity="0.25" />
+        <stop offset="50%" stop-color="#00FF88" stop-opacity="0.4" />
+        <stop offset="75%" stop-color="#00FF88" stop-opacity="0.25" />
+        <stop offset="100%" stop-color="#0B0F1E" stop-opacity="0" />
       </linearGradient>
     </defs>
     <path d="M0,30 C240,10 480,50 720,30 C960,10 1200,50 1440,30 L1440,60 L0,60 Z" fill="url(#wg)" opacity="0.6" />
@@ -1036,24 +1036,24 @@ pytest mandi_rdd/tests/test_rdd_engine.py -v
 
 | # | Workflow | Status | Trigger | Schedule | Purpose |
 |---|----------|--------|---------|----------|---------|
-| 1 | **CI** | <img src="https://img.shields.io/github/actions/workflow/status/flawsom/MandiIQ/ci.yml?style=flat-square&label=&logo=githubactions" alt="status" /> | Push/PR | &mdash; | Test suite + linting + type checks |
-| 2 | **Deploy to Render** | <img src="https://img.shields.io/github/actions/workflow/status/flawsom/MandiIQ/deploy-render.yml?style=flat-square&label=&logo=render" alt="status" /> | Push to `master` | &mdash; | Deploy FastAPI to production |
-| 3 | **Deploy API to Vercel** | <img src="https://img.shields.io/github/actions/workflow/status/flawsom/MandiIQ/deploy-vercel.yml?style=flat-square&label=&logo=vercel" alt="status" /> | Push to `api/**` | &mdash; | Read-only serverless API |
-| 4 | **Deploy Pages** | <img src="https://img.shields.io/github/actions/workflow/status/flawsom/MandiIQ/deploy-pages.yml?style=flat-square&label=&logo=githubpages" alt="status" /> | Push to `landing/**` | &mdash; | GitHub Pages (landing + docs) |
-| 5 | **Nightly Ingestion** | <img src="https://img.shields.io/github/actions/workflow/status/flawsom/MandiIQ/nightly-ingest.yml?style=flat-square&label=" alt="status" /> | Schedule | Daily 02:00 UTC | Fetch prices, update DuckDB |
-| 6 | **Daily Ingest** | <img src="https://img.shields.io/github/actions/workflow/status/flawsom/MandiIQ/daily-ingest.yml?style=flat-square&label=" alt="status" /> | Schedule | Daily 06:00 UTC | Rainfall + NDVI cycle |
-| 7 | **Dashboard Heartbeat** | <img src="https://img.shields.io/github/actions/workflow/status/flawsom/MandiIQ/dashboard-heartbeat.yml?style=flat-square&label=" alt="status" /> | Schedule | Hourly | Grafana cache refresh |
-| 8 | **Drift Detector** | <img src="https://img.shields.io/github/actions/workflow/status/flawsom/MandiIQ/dashboard-drift-detector.yml?style=flat-square&label=" alt="status" /> | Schedule | Daily 08:00 UTC | Dashboard hash comparison |
-| 9 | **Dashboard Sync** | <img src="https://img.shields.io/github/actions/workflow/status/flawsom/MandiIQ/dashboard-sync.yml?style=flat-square&label=" alt="status" /> | Push `dashboards/*.json` | &mdash; | Grafana webhook |
-| 10 | **Check Freshness** | <img src="https://img.shields.io/github/actions/workflow/status/flawsom/MandiIQ/check-freshness.yml?style=flat-square&label=" alt="status" /> | Schedule | Daily 06:00 UTC | Stale data alerts |
-| 11 | **Check Ashoka Import** | <img src="https://img.shields.io/github/actions/workflow/status/flawsom/MandiIQ/check-ashoka-import.yml?style=flat-square&label=" alt="status" /> | Schedule + push | Every 3h | Import progress poll |
-| 12 | **Dashboard Integration** | <img src="https://img.shields.io/github/actions/workflow/status/flawsom/MandiIQ/dashboard-integration.yml?style=flat-square&label=" alt="status" /> | Push, schedule | &mdash; | E2E integration tests |
-| 13 | **Docker Build** | <img src="https://img.shields.io/github/actions/workflow/status/flawsom/MandiIQ/docker-build.yml?style=flat-square&label=" alt="status" /> | Push `Dockerfile*` | &mdash; | Container image build |
-| 14 | **Keepalive Loop** | <img src="https://img.shields.io/github/actions/workflow/status/flawsom/MandiIQ/keepalive-loop.yml?style=flat-square&label=" alt="status" /> | Schedule | Every 14 min | Prevent Render/free-tier cold boots |
-| 15 | **MandiIQ CI** | <img src="https://img.shields.io/github/actions/workflow/status/flawsom/MandiIQ/mandi_rdd_ci.yml?style=flat-square&label=" alt="status" /> | Push, schedule | &mdash; | Package-level CI |
-| 16 | **Render Pipeline SVG** | <img src="https://img.shields.io/github/actions/workflow/status/flawsom/MandiIQ/render-pipeline-svg.yml?style=flat-square&label=" alt="status" /> | Schedule | Daily | Generate pipeline architecture SVG |
-| 17 | **Heartbeat** | <img src="https://img.shields.io/github/actions/workflow/status/flawsom/MandiIQ/heartbeat.yml?style=flat-square&label=" alt="status" /> | Schedule | Every 5 min | Dashboard uptime monitoring |
-| 18 | **Verify Live Data** | <img src="https://img.shields.io/github/actions/workflow/status/flawsom/MandiIQ/verify-live-data.yml?style=flat-square&label=" alt="status" /> | Schedule | Daily | End-to-end data validation |
+| 1 | **CI** | <img src="https://img.shields.io/github/actions/workflow/status/flawsom/MandiIQ/ci.yml?style=flat-square&amp;label=&amp;logo=githubactions" alt="status" /> | Push/PR | &mdash; | Test suite + linting + type checks |
+| 2 | **Deploy to Render** | <img src="https://img.shields.io/github/actions/workflow/status/flawsom/MandiIQ/deploy-render.yml?style=flat-square&amp;label=&amp;logo=render" alt="status" /> | Push to `master` | &mdash; | Deploy FastAPI to production |
+| 3 | **Deploy API to Vercel** | <img src="https://img.shields.io/github/actions/workflow/status/flawsom/MandiIQ/deploy-vercel.yml?style=flat-square&amp;label=&amp;logo=vercel" alt="status" /> | Push to `api/**` | &mdash; | Read-only serverless API |
+| 4 | **Deploy Pages** | <img src="https://img.shields.io/github/actions/workflow/status/flawsom/MandiIQ/deploy-pages.yml?style=flat-square&amp;label=&amp;logo=githubpages" alt="status" /> | Push to `landing/**` | &mdash; | GitHub Pages (landing + docs) |
+| 5 | **Nightly Ingestion** | <img src="https://img.shields.io/github/actions/workflow/status/flawsom/MandiIQ/nightly-ingest.yml?style=flat-square&amp;label=" alt="status" /> | Schedule | Daily 02:00 UTC | Fetch prices, update DuckDB |
+| 6 | **Daily Ingest** | <img src="https://img.shields.io/github/actions/workflow/status/flawsom/MandiIQ/daily-ingest.yml?style=flat-square&amp;label=" alt="status" /> | Schedule | Daily 06:00 UTC | Rainfall + NDVI cycle |
+| 7 | **Dashboard Heartbeat** | <img src="https://img.shields.io/github/actions/workflow/status/flawsom/MandiIQ/dashboard-heartbeat.yml?style=flat-square&amp;label=" alt="status" /> | Schedule | Hourly | Grafana cache refresh |
+| 8 | **Drift Detector** | <img src="https://img.shields.io/github/actions/workflow/status/flawsom/MandiIQ/dashboard-drift-detector.yml?style=flat-square&amp;label=" alt="status" /> | Schedule | Daily 08:00 UTC | Dashboard hash comparison |
+| 9 | **Dashboard Sync** | <img src="https://img.shields.io/github/actions/workflow/status/flawsom/MandiIQ/dashboard-sync.yml?style=flat-square&amp;label=" alt="status" /> | Push `dashboards/*.json` | &mdash; | Grafana webhook |
+| 10 | **Check Freshness** | <img src="https://img.shields.io/github/actions/workflow/status/flawsom/MandiIQ/check-freshness.yml?style=flat-square&amp;label=" alt="status" /> | Schedule | Daily 06:00 UTC | Stale data alerts |
+| 11 | **Check Ashoka Import** | <img src="https://img.shields.io/github/actions/workflow/status/flawsom/MandiIQ/check-ashoka-import.yml?style=flat-square&amp;label=" alt="status" /> | Schedule + push | Every 3h | Import progress poll |
+| 12 | **Dashboard Integration** | <img src="https://img.shields.io/github/actions/workflow/status/flawsom/MandiIQ/dashboard-integration.yml?style=flat-square&amp;label=" alt="status" /> | Push, schedule | &mdash; | E2E integration tests |
+| 13 | **Docker Build** | <img src="https://img.shields.io/github/actions/workflow/status/flawsom/MandiIQ/docker-build.yml?style=flat-square&amp;label=" alt="status" /> | Push `Dockerfile*` | &mdash; | Container image build |
+| 14 | **Keepalive Loop** | <img src="https://img.shields.io/github/actions/workflow/status/flawsom/MandiIQ/keepalive-loop.yml?style=flat-square&amp;label=" alt="status" /> | Schedule | Every 14 min | Prevent Render/free-tier cold boots |
+| 15 | **MandiIQ CI** | <img src="https://img.shields.io/github/actions/workflow/status/flawsom/MandiIQ/mandi_rdd_ci.yml?style=flat-square&amp;label=" alt="status" /> | Push, schedule | &mdash; | Package-level CI |
+| 16 | **Render Pipeline SVG** | <img src="https://img.shields.io/github/actions/workflow/status/flawsom/MandiIQ/render-pipeline-svg.yml?style=flat-square&amp;label=" alt="status" /> | Schedule | Daily | Generate pipeline architecture SVG |
+| 17 | **Heartbeat** | <img src="https://img.shields.io/github/actions/workflow/status/flawsom/MandiIQ/heartbeat.yml?style=flat-square&amp;label=" alt="status" /> | Schedule | Every 5 min | Dashboard uptime monitoring |
+| 18 | **Verify Live Data** | <img src="https://img.shields.io/github/actions/workflow/status/flawsom/MandiIQ/verify-live-data.yml?style=flat-square&amp;label=" alt="status" /> | Schedule | Daily | End-to-end data validation |
 
 </details>
 </div>
@@ -1062,11 +1062,11 @@ pytest mandi_rdd/tests/test_rdd_engine.py -v
   <svg viewBox="0 0 1440 60" width="100%" height="60" preserveAspectRatio="none" style="position:absolute;bottom:0;">
     <defs>
       <linearGradient id="wg" x1="0%" y1="0%" x2="100%" y2="0%">
-        <stop offset="0%" stop-color="{bg}" stop-opacity="0" />
-        <stop offset="25%" stop-color="{lime}" stop-opacity="0.25" />
-        <stop offset="50%" stop-color="{lime}" stop-opacity="0.4" />
-        <stop offset="75%" stop-color="{lime}" stop-opacity="0.25" />
-        <stop offset="100%" stop-color="{bg}" stop-opacity="0" />
+        <stop offset="0%" stop-color="#0B0F1E" stop-opacity="0" />
+        <stop offset="25%" stop-color="#00FF88" stop-opacity="0.25" />
+        <stop offset="50%" stop-color="#00FF88" stop-opacity="0.4" />
+        <stop offset="75%" stop-color="#00FF88" stop-opacity="0.25" />
+        <stop offset="100%" stop-color="#0B0F1E" stop-opacity="0" />
       </linearGradient>
     </defs>
     <path d="M0,30 C240,10 480,50 720,30 C960,10 1200,50 1440,30 L1440,60 L0,60 Z" fill="url(#wg)" opacity="0.6" />
@@ -1102,11 +1102,11 @@ pytest mandi_rdd/tests/test_rdd_engine.py -v
   <svg viewBox="0 0 1440 60" width="100%" height="60" preserveAspectRatio="none" style="position:absolute;bottom:0;">
     <defs>
       <linearGradient id="wg" x1="0%" y1="0%" x2="100%" y2="0%">
-        <stop offset="0%" stop-color="{bg}" stop-opacity="0" />
-        <stop offset="25%" stop-color="{lime}" stop-opacity="0.25" />
-        <stop offset="50%" stop-color="{lime}" stop-opacity="0.4" />
-        <stop offset="75%" stop-color="{lime}" stop-opacity="0.25" />
-        <stop offset="100%" stop-color="{bg}" stop-opacity="0" />
+        <stop offset="0%" stop-color="#0B0F1E" stop-opacity="0" />
+        <stop offset="25%" stop-color="#00FF88" stop-opacity="0.25" />
+        <stop offset="50%" stop-color="#00FF88" stop-opacity="0.4" />
+        <stop offset="75%" stop-color="#00FF88" stop-opacity="0.25" />
+        <stop offset="100%" stop-color="#0B0F1E" stop-opacity="0" />
       </linearGradient>
     </defs>
     <path d="M0,30 C240,10 480,50 720,30 C960,10 1200,50 1440,30 L1440,60 L0,60 Z" fill="url(#wg)" opacity="0.6" />
@@ -1170,11 +1170,11 @@ pytest mandi_rdd/tests/test_rdd_engine.py -v
   <svg viewBox="0 0 1440 60" width="100%" height="60" preserveAspectRatio="none" style="position:absolute;bottom:0;">
     <defs>
       <linearGradient id="wg" x1="0%" y1="0%" x2="100%" y2="0%">
-        <stop offset="0%" stop-color="{bg}" stop-opacity="0" />
-        <stop offset="25%" stop-color="{lime}" stop-opacity="0.25" />
-        <stop offset="50%" stop-color="{lime}" stop-opacity="0.4" />
-        <stop offset="75%" stop-color="{lime}" stop-opacity="0.25" />
-        <stop offset="100%" stop-color="{bg}" stop-opacity="0" />
+        <stop offset="0%" stop-color="#0B0F1E" stop-opacity="0" />
+        <stop offset="25%" stop-color="#00FF88" stop-opacity="0.25" />
+        <stop offset="50%" stop-color="#00FF88" stop-opacity="0.4" />
+        <stop offset="75%" stop-color="#00FF88" stop-opacity="0.25" />
+        <stop offset="100%" stop-color="#0B0F1E" stop-opacity="0" />
       </linearGradient>
     </defs>
     <path d="M0,30 C240,10 480,50 720,30 C960,10 1200,50 1440,30 L1440,60 L0,60 Z" fill="url(#wg)" opacity="0.6" />
@@ -1231,11 +1231,11 @@ We follow [Conventional Commits](https://www.conventionalcommits.org/):
   <svg viewBox="0 0 1440 60" width="100%" height="60" preserveAspectRatio="none" style="position:absolute;bottom:0;">
     <defs>
       <linearGradient id="wg" x1="0%" y1="0%" x2="100%" y2="0%">
-        <stop offset="0%" stop-color="{bg}" stop-opacity="0" />
-        <stop offset="25%" stop-color="{lime}" stop-opacity="0.25" />
-        <stop offset="50%" stop-color="{lime}" stop-opacity="0.4" />
-        <stop offset="75%" stop-color="{lime}" stop-opacity="0.25" />
-        <stop offset="100%" stop-color="{bg}" stop-opacity="0" />
+        <stop offset="0%" stop-color="#0B0F1E" stop-opacity="0" />
+        <stop offset="25%" stop-color="#00FF88" stop-opacity="0.25" />
+        <stop offset="50%" stop-color="#00FF88" stop-opacity="0.4" />
+        <stop offset="75%" stop-color="#00FF88" stop-opacity="0.25" />
+        <stop offset="100%" stop-color="#0B0F1E" stop-opacity="0" />
       </linearGradient>
     </defs>
     <path d="M0,30 C240,10 480,50 720,30 C960,10 1200,50 1440,30 L1440,60 L0,60 Z" fill="url(#wg)" opacity="0.6" />
@@ -1280,11 +1280,11 @@ We follow [Conventional Commits](https://www.conventionalcommits.org/):
   <svg viewBox="0 0 1440 60" width="100%" height="60" preserveAspectRatio="none" style="position:absolute;bottom:0;">
     <defs>
       <linearGradient id="wg" x1="0%" y1="0%" x2="100%" y2="0%">
-        <stop offset="0%" stop-color="{bg}" stop-opacity="0" />
-        <stop offset="25%" stop-color="{lime}" stop-opacity="0.25" />
-        <stop offset="50%" stop-color="{lime}" stop-opacity="0.4" />
-        <stop offset="75%" stop-color="{lime}" stop-opacity="0.25" />
-        <stop offset="100%" stop-color="{bg}" stop-opacity="0" />
+        <stop offset="0%" stop-color="#0B0F1E" stop-opacity="0" />
+        <stop offset="25%" stop-color="#00FF88" stop-opacity="0.25" />
+        <stop offset="50%" stop-color="#00FF88" stop-opacity="0.4" />
+        <stop offset="75%" stop-color="#00FF88" stop-opacity="0.25" />
+        <stop offset="100%" stop-color="#0B0F1E" stop-opacity="0" />
       </linearGradient>
     </defs>
     <path d="M0,30 C240,10 480,50 720,30 C960,10 1200,50 1440,30 L1440,60 L0,60 Z" fill="url(#wg)" opacity="0.6" />
@@ -1324,11 +1324,11 @@ We follow [Conventional Commits](https://www.conventionalcommits.org/):
   <svg viewBox="0 0 1440 60" width="100%" height="60" preserveAspectRatio="none" style="position:absolute;bottom:0;">
     <defs>
       <linearGradient id="wg" x1="0%" y1="0%" x2="100%" y2="0%">
-        <stop offset="0%" stop-color="{bg}" stop-opacity="0" />
-        <stop offset="25%" stop-color="{lime}" stop-opacity="0.25" />
-        <stop offset="50%" stop-color="{lime}" stop-opacity="0.4" />
-        <stop offset="75%" stop-color="{lime}" stop-opacity="0.25" />
-        <stop offset="100%" stop-color="{bg}" stop-opacity="0" />
+        <stop offset="0%" stop-color="#0B0F1E" stop-opacity="0" />
+        <stop offset="25%" stop-color="#00FF88" stop-opacity="0.25" />
+        <stop offset="50%" stop-color="#00FF88" stop-opacity="0.4" />
+        <stop offset="75%" stop-color="#00FF88" stop-opacity="0.25" />
+        <stop offset="100%" stop-color="#0B0F1E" stop-opacity="0" />
       </linearGradient>
     </defs>
     <path d="M0,30 C240,10 480,50 720,30 C960,10 1200,50 1440,30 L1440,60 L0,60 Z" fill="url(#wg)" opacity="0.6" />
@@ -1359,11 +1359,11 @@ We follow [Conventional Commits](https://www.conventionalcommits.org/):
   <svg viewBox="0 0 1440 60" width="100%" height="60" preserveAspectRatio="none" style="position:absolute;bottom:0;">
     <defs>
       <linearGradient id="wg" x1="0%" y1="0%" x2="100%" y2="0%">
-        <stop offset="0%" stop-color="{bg}" stop-opacity="0" />
-        <stop offset="25%" stop-color="{lime}" stop-opacity="0.25" />
-        <stop offset="50%" stop-color="{lime}" stop-opacity="0.4" />
-        <stop offset="75%" stop-color="{lime}" stop-opacity="0.25" />
-        <stop offset="100%" stop-color="{bg}" stop-opacity="0" />
+        <stop offset="0%" stop-color="#0B0F1E" stop-opacity="0" />
+        <stop offset="25%" stop-color="#00FF88" stop-opacity="0.25" />
+        <stop offset="50%" stop-color="#00FF88" stop-opacity="0.4" />
+        <stop offset="75%" stop-color="#00FF88" stop-opacity="0.25" />
+        <stop offset="100%" stop-color="#0B0F1E" stop-opacity="0" />
       </linearGradient>
     </defs>
     <path d="M0,30 C240,10 480,50 720,30 C960,10 1200,50 1440,30 L1440,60 L0,60 Z" fill="url(#wg)" opacity="0.6" />
@@ -1385,11 +1385,11 @@ If MandiIQ helps you make better procurement decisions or advances your agri-dat
 
 <br />
 
-<a href="https://github.com/flawsom/MandiIQ"><img src="https://img.shields.io/badge/⭐_Star_on_GitHub-181717?style=for-the-badge&logo=github&logoColor=white" alt="Star on GitHub" /></a>
+<a href="https://github.com/flawsom/MandiIQ"><img src="https://img.shields.io/badge/⭐_Star_on_GitHub-181717?style=for-the-badge&amp;logo=github&amp;logoColor=white" alt="Star on GitHub" /></a>
 &nbsp;&nbsp;
-<a href="https://github.com/sponsors/flawsom"><img src="https://img.shields.io/badge/💖_Sponsor-FF4B4B?style=for-the-badge&logo=githubsponsors&logoColor=white" alt="Sponsor" /></a>
+<a href="https://github.com/sponsors/flawsom"><img src="https://img.shields.io/badge/💖_Sponsor-FF4B4B?style=for-the-badge&amp;logo=githubsponsors&amp;logoColor=white" alt="Sponsor" /></a>
 &nbsp;&nbsp;
-<a href="https://www.buymeacoffee.com/flawsom"><img src="https://img.shields.io/badge/☕_Buy_Me_a_Coffee-FFDD00?style=for-the-badge&logo=buymeacoffee&logoColor=black" alt="Buy Me a Coffee" /></a>
+<a href="https://www.buymeacoffee.com/flawsom"><img src="https://img.shields.io/badge/☕_Buy_Me_a_Coffee-FFDD00?style=for-the-badge&amp;logo=buymeacoffee&amp;logoColor=black" alt="Buy Me a Coffee" /></a>
 
 <br />
 
@@ -1400,11 +1400,11 @@ If MandiIQ helps you make better procurement decisions or advances your agri-dat
   <svg viewBox="0 0 1440 60" width="100%" height="60" preserveAspectRatio="none" style="position:absolute;bottom:0;">
     <defs>
       <linearGradient id="wg" x1="0%" y1="0%" x2="100%" y2="0%">
-        <stop offset="0%" stop-color="{bg}" stop-opacity="0" />
-        <stop offset="25%" stop-color="{lime}" stop-opacity="0.25" />
-        <stop offset="50%" stop-color="{lime}" stop-opacity="0.4" />
-        <stop offset="75%" stop-color="{lime}" stop-opacity="0.25" />
-        <stop offset="100%" stop-color="{bg}" stop-opacity="0" />
+        <stop offset="0%" stop-color="#0B0F1E" stop-opacity="0" />
+        <stop offset="25%" stop-color="#00FF88" stop-opacity="0.25" />
+        <stop offset="50%" stop-color="#00FF88" stop-opacity="0.4" />
+        <stop offset="75%" stop-color="#00FF88" stop-opacity="0.25" />
+        <stop offset="100%" stop-color="#0B0F1E" stop-opacity="0" />
       </linearGradient>
     </defs>
     <path d="M0,30 C240,10 480,50 720,30 C960,10 1200,50 1440,30 L1440,60 L0,60 Z" fill="url(#wg)" opacity="0.6" />
@@ -1448,11 +1448,11 @@ SOFTWARE.
   <svg viewBox="0 0 1440 60" width="100%" height="60" preserveAspectRatio="none" style="position:absolute;bottom:0;">
     <defs>
       <linearGradient id="wg" x1="0%" y1="0%" x2="100%" y2="0%">
-        <stop offset="0%" stop-color="{bg}" stop-opacity="0" />
-        <stop offset="25%" stop-color="{lime}" stop-opacity="0.25" />
-        <stop offset="50%" stop-color="{lime}" stop-opacity="0.4" />
-        <stop offset="75%" stop-color="{lime}" stop-opacity="0.25" />
-        <stop offset="100%" stop-color="{bg}" stop-opacity="0" />
+        <stop offset="0%" stop-color="#0B0F1E" stop-opacity="0" />
+        <stop offset="25%" stop-color="#00FF88" stop-opacity="0.25" />
+        <stop offset="50%" stop-color="#00FF88" stop-opacity="0.4" />
+        <stop offset="75%" stop-color="#00FF88" stop-opacity="0.25" />
+        <stop offset="100%" stop-color="#0B0F1E" stop-opacity="0" />
       </linearGradient>
     </defs>
     <path d="M0,30 C240,10 480,50 720,30 C960,10 1200,50 1440,30 L1440,60 L0,60 Z" fill="url(#wg)" opacity="0.6" />

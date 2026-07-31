@@ -17,7 +17,7 @@
 <div style="position:absolute; top:-60px; right:-60px; width:120px; height:120px; background:radial-gradient(circle, rgba(0,255,136,0.15) 0%, transparent 70%);"></div>
 
 > **Generated:** July 30, 2026  
-> **Project:** Agricultural Margin Intelligence & Causal RDD System  
+> **Project:** Agricultural Margin Intelligence &amp; Causal RDD System  
 > **Live Preview:** http://127.0.0.1:18765/docs/index.html  
 > **API Server:** http://127.0.0.1:18765 (FastAPI, PID 31012)  
 
@@ -59,10 +59,10 @@
 8. [Dashboard (Streamlit)](#8-dashboard-streamlit)
 9. [Frontend (React / Vite)](#9-frontend-react--vite)
 10. [AI Orchestrator](#10-ai-orchestrator)
-11. [Docs & Landing Pages](#11-docs--landing-pages)
-12. [Deployment & CI/CD](#12-deployment--cicd)
+11. [Docs &amp; Landing Pages](#11-docs--landing-pages)
+12. [Deployment &amp; CI/CD](#12-deployment--cicd)
 13. [Live Data State](#13-live-data-state)
-14. [Known Issues & Pending Work](#14-known-issues--pending-work)
+14. [Known Issues &amp; Pending Work](#14-known-issues--pending-work)
 15. [Local Development](#15-local-development)
 
 ---
@@ -669,7 +669,7 @@ Combines RDD effect, risk score, and forecast into procurement recommendations:
 **System endpoints:**
 | Method | Path | Description |
 |--------|------|-------------|
-| POST | `/ask` | AI orchestrator (free-text procurement Q&A) |
+| POST | `/ask` | AI orchestrator (free-text procurement Q&amp;A) |
 | POST | `/refresh` | Manual pipeline re-run (background) |
 | POST | `/run-rainfall-rdd` | Targeted rainfall + RDD run |
 | POST | `/backfill-historical` | Ashoka CEDA historical backfill |
@@ -936,7 +936,7 @@ Defines model endpoints, rate limits, and routing rules.
 <div style="position:absolute; top:-60px; right:-60px; width:120px; height:120px; background:radial-gradient(circle, rgba(0,255,136,0.15) 0%, transparent 70%);"></div>
 <a name="11-docs-landing-pages"></a>
 <h2 style="font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Helvetica,Arial,sans-serif; font-size:1.5em; font-weight:600; color:#E0E0E0; display:flex; align-items:center; gap:10px; margin:0 0 16px 0; padding-bottom:8px; border-bottom:1px solid rgba(255,255,255,0.06);">
-  <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:middle"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg> 11. Docs & Landing Pages
+  <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:middle"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg> 11. Docs &amp; Landing Pages
 </h2>
 
 ### 11.1 Consolidated Docs (`docs/index.html`)
@@ -993,7 +993,7 @@ Single-page tabbed documentation site with full Alche Studio design system:
 <div style="position:absolute; top:-60px; right:-60px; width:120px; height:120px; background:radial-gradient(circle, rgba(0,255,136,0.15) 0%, transparent 70%);"></div>
 <a name="12-deployment-cicd"></a>
 <h2 style="font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Helvetica,Arial,sans-serif; font-size:1.5em; font-weight:600; color:#E0E0E0; display:flex; align-items:center; gap:10px; margin:0 0 16px 0; padding-bottom:8px; border-bottom:1px solid rgba(255,255,255,0.06);">
-  <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:middle"><path d="M4.5 16.5c-1.5 1.26-2 5-2 5s3.74-.5 5-2c.71-.84.7-2.13-.09-2.91a2.18 2.18 0 0 0-2.91-.09z"/><path d="M12 15l-3-3a22 22 0 0 1 2-3.95A12.88 12.88 0 0 1 22 2c0 2.72-.78 7.5-6 11a22.35 22.35 0 0 1-4 2z"/></svg> 12. Deployment & CI/CD
+  <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:middle"><path d="M4.5 16.5c-1.5 1.26-2 5-2 5s3.74-.5 5-2c.71-.84.7-2.13-.09-2.91a2.18 2.18 0 0 0-2.91-.09z"/><path d="M12 15l-3-3a22 22 0 0 1 2-3.95A12.88 12.88 0 0 1 22 2c0 2.72-.78 7.5-6 11a22.35 22.35 0 0 1-4 2z"/></svg> 12. Deployment &amp; CI/CD
 </h2>
 
 ### 12.1 Docker
@@ -1134,7 +1134,7 @@ Cloudflare Workers script that serves SEO-friendly HTML shell to bots while prox
 <div style="position:absolute; top:-60px; right:-60px; width:120px; height:120px; background:radial-gradient(circle, rgba(0,255,136,0.15) 0%, transparent 70%);"></div>
 <a name="14-known-issues-pending-work"></a>
 <h2 style="font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Helvetica,Arial,sans-serif; font-size:1.5em; font-weight:600; color:#E0E0E0; display:flex; align-items:center; gap:10px; margin:0 0 16px 0; padding-bottom:8px; border-bottom:1px solid rgba(255,255,255,0.06);">
-  <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:middle"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg> 14. Known Issues & Pending Work
+  <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:middle"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg> 14. Known Issues &amp; Pending Work
 </h2>
 
 ### 14.1 Urgent
@@ -1301,7 +1301,7 @@ mmdc -i diagrams/pipeline-flow-live.mmd -o diagrams/pipeline-flow-live.svg -b tr
   <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:middle"><path d="M14 2H10"/><path d="M12 2v10"/><path d="M9 10a4 4 0 0 0 6 0"/><path d="M14 6a4 4 0 0 1 0-4"/><path d="M6 18a4 4 0 0 0 4 4h4a4 4 0 0 0 4-4"/></svg> Recent Verifications
 </h2>
 
-### Syntax Bugs Found & Fixed (July 30, 2026)
+### Syntax Bugs Found &amp; Fixed (July 30, 2026)
 
 1. **Critical SyntaxError blocked all JS execution** — regex `/\\\\/+$/` had double backslash (`\\`) causing premature regex close at `/`. Hex bytes `2f 5c 5c 2f 2b 24 2f` → `2f 5c 2f 2b 24 2f`. **Fix:** Binary-safe replacement in `docs/index.html`.
 
@@ -1309,7 +1309,7 @@ mmdc -i diagrams/pipeline-flow-live.mmd -o diagrams/pipeline-flow-live.svg -b tr
 
 3. **Zero console errors** confirmed after both fixes.
 
-### Build & Test Commands
+### Build &amp; Test Commands
 
 - `node --check` on the 26,045-char inline script → **PASSED**
 - API endpoint headless test `/health`, `/freshness`, `/pipeline.mmd`, `/docs/index.html` → **ALL PASSED**

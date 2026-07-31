@@ -1,0 +1,284 @@
+# MandiIQ — Hourly DuckDB Sync + Redeploy
+#
+# Runs the hourly ingestion (run_hourly.py) on a schedule in GitHub Actions,
+# detects whether the DuckDB's DATA actually changed (row counts + max date —
+# NOT raw file bytes, so spurious DuckDB churn never triggers a commit), and
+# when it did:
+#   1. Commits the refreshed DuckDB + status JSONs back to master (Git LFS)
+#   2. Pushes with --force-with-lease (safe for bot-only binary commits)
+#   3. Triggers every deployment surface:
+#        - Render:   POST the API's /deploy hook
+#        - Vercel:   gh workflow run deploy-vercel.yml
+#        - Pages:    gh workflow run deploy-pages.yml
+#        - Streamlit: auto-deploys from master via its own GitHub webhook
+#
+# NOTE on redeploys: commits made with the default GITHUB_TOKEN do NOT
+# re-trigger other workflows (GitHub anti-recursion), so this workflow
+# explicitly dispatches Vercel + Pages and POSTs the Render hook. Streamlit
+# is a webhook consumer and redeploys on any push to master automatically.
+#
+# REQUIRED SECRETS (repo Settings → Secrets and variables → Actions):
+#   DATA_GOV_IN_API_KEY   — data.gov.in API key (for fresh prices)
+#   VERCEL_TOKEN          — only needed for the Vercel deploy step
+#   R2_*                  — optional; guards R2 backup/verify steps
+#   SENTINEL_*            — optional; for NDVI during the 24h full run
+#
+# Without DATA_GOV_IN_API_KEY the ingest step still runs (analysis on the
+# committed DB) but fetches 0 new rows, so no commit/redeploy is emitted.
+
+name: Hourly DuckDB Sync + Redeploy
+
+on:
+  schedule:
+    - cron: "30 * * * *"      # hourly at :30 — after the Northflank :00 cron and API refresh
+  workflow_dispatch: {}        # manual "Run workflow" from the Actions tab
+
+permissions:
+  contents: write
+  actions: write               # needed for `gh workflow run` of Vercel/Pages
+
+concurrency:
+  group: hourly-duckdb-sync
+  cancel-in-progress: false    # never cancel a run mid-push (binary LFS race safety)
+
+env:
+  RENDER_HOOK_URL: "https://p01--mandiiq--x4n8x4gkmzht.code.run/deploy"
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          lfs: true            # pull the committed 151MB DuckDB for real
+
+      - name: Validate render.yaml
+        uses: ./.github/actions/validate-render
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+
+      - name: Snapshot committed DB signature
+        id: snapshot
+        run: |
+          python - <<'PY'
+          import os
+          import duckdb
+
+          TABLES = ("prices", "rainfall", "rdd_results", "ndvi", "forecast_metrics")
+
+          def signature(path):
+              if not os.path.exists(path):
+                  return ""
+              conn = duckdb.connect(path, read_only=True)
+              try:
+                  parts = []
+                  for t in TABLES:
+                      try:
+                          n = conn.execute(f"SELECT COUNT(*) FROM {t}").fetchone()[0]
+                          parts.append(f"{t}={n}")
+                      except Exception:
+                          parts.append(f"{t}=n/a")
+                  try:
+                      parts.append(
+                          "max_date=" + str(conn.execute(
+                              "SELECT MAX(arrival_date) FROM prices"
+                          ).fetchone()[0])
+                      )
+                  except Exception:
+                      pass
+                  return "|".join(parts)
+              finally:
+                  conn.close()
+
+          with open("sig_before.txt", "w") as f:
+              f.write(signature("mandi_rdd/data/mandi_iq.duckdb"))
+          print("committed signature:", open("sig_before.txt").read() or "(no DB)")
+          PY
+
+      - name: Run hourly ingestion
+        env:
+          DATA_GOV_IN_API_KEY: ${{ secrets.DATA_GOV_IN_API_KEY }}
+          SENTINEL_CLIENT_ID: ${{ secrets.SENTINEL_CLIENT_ID }}
+          SENTINEL_CLIENT_SECRET: ${{ secrets.SENTINEL_CLIENT_SECRET }}
+          OPENROUTER_API_KEY: ${{ secrets.OPENROUTER_API_KEY }}
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+        run: |
+          python run_hourly.py || echo "::warning::run_hourly.py exited non-zero — continuing to check for data changes"
+
+      - name: Compare DB signature (real data change?)
+        id: changed
+        run: |
+          python - <<'PY'
+          import os
+          import duckdb
+
+          TABLES = ("prices", "rainfall", "rdd_results", "ndvi", "forecast_metrics")
+
+          def signature(path):
+              if not os.path.exists(path):
+                  return ""
+              conn = duckdb.connect(path, read_only=True)
+              try:
+                  parts = []
+                  for t in TABLES:
+                      try:
+                          n = conn.execute(f"SELECT COUNT(*) FROM {t}").fetchone()[0]
+                          parts.append(f"{t}={n}")
+                      except Exception:
+                          parts.append(f"{t}=n/a")
+                  try:
+                      parts.append(
+                          "max_date=" + str(conn.execute(
+                              "SELECT MAX(arrival_date) FROM prices"
+                          ).fetchone()[0])
+                      )
+                  except Exception:
+                      pass
+                  return "|".join(parts)
+              finally:
+                  conn.close()
+
+          before = open("sig_before.txt").read().strip()
+          after = signature("mandi_rdd/data/mandi_iq.duckdb")
+          print("before:", before or "(no DB)")
+          print("after :", after or "(no DB)")
+          print("changed:", before != after)
+          with open("changed.txt", "w") as f:
+              f.write("true" if before != after else "false")
+          PY
+          echo "changed=$(cat changed.txt)" >> "$GITHUB_OUTPUT"
+          if [ "$(cat changed.txt)" = "false" ]; then
+            echo "::notice::No real data change (row counts + max date identical) — skipping commit & redeploy"
+          fi
+
+      - name: Validate DuckDB LFS object
+        if: steps.changed.outputs.changed == 'true'
+        uses: ./.github/actions/validate-duckdb
+
+      - id: commit
+        name: Commit refreshed DuckDB
+        if: steps.changed.outputs.changed == 'true'
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git lfs install --local 2>/dev/null || true
+          # Some files (r2_backup_metrics.json, _last_full_analysis.txt) only exist
+          # after later steps / 24h full runs. An unmatched `git add` pathspec is a
+          # hard fatal (exit 128) even with --ignore-errors, so guard each path
+          # with an existence check before staging.
+          for f in \
+            mandi_rdd/data/mandi_iq.duckdb \
+            mandi_rdd/data/last_hourly_run.json \
+            mandi_rdd/data/last_step_timings.json \
+            mandi_rdd/data/_last_full_analysis.txt \
+            mandi_rdd/data/r2_backup_metrics.json \
+            diagrams/pipeline-flow-live.mmd; do
+            [ -f "$f" ] && git add "$f"
+          done
+          if git diff --cached --quiet; then
+            echo "No database changes to commit."
+            echo "committed=false" >> "$GITHUB_OUTPUT"
+          else
+            git commit -m "chore: hourly duckdb sync ($(date -u +%Y-%m-%dT%H:%M:%SZ))"
+            # Force-with-lease: safe for bot-only repo. Rebasing binary DuckDB
+            # files causes merge conflicts between concurrent workflow runs.
+            git push --force-with-lease origin master 2>&1
+            git lfs push origin master 2>&1 || echo "LFS push skipped (may not be needed)"
+            echo "committed=true" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Trigger Render deploy
+        if: steps.commit.outputs.committed == 'true'
+        uses: ./.github/actions/trigger-render-deploy
+        with:
+          hook-url: ${{ env.RENDER_HOOK_URL }}
+
+      - name: Redeploy Vercel (read-only API with fresh DB)
+        if: steps.commit.outputs.committed == 'true' && secrets.VERCEL_TOKEN != ''
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh workflow run deploy-vercel.yml --ref master
+          echo "::notice::Vercel deploy workflow dispatched"
+
+      - name: Redeploy GitHub Pages (docs/landing)
+        if: steps.commit.outputs.committed == 'true'
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh workflow run deploy-pages.yml --ref master
+          echo "::notice::GitHub Pages deploy workflow dispatched"
+
+      - name: Backup DuckDB to Cloudflare R2
+        if: steps.commit.outputs.committed == 'true'
+        continue-on-error: true
+        env:
+          AWS_ACCESS_KEY_ID: ${{ secrets.R2_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.R2_SECRET_ACCESS_KEY }}
+          R2_ACCOUNT_ID: ${{ secrets.R2_ACCOUNT_ID }}
+          R2_BUCKET: ${{ secrets.R2_BUCKET }}
+        run: |
+          if [ -z "$R2_ACCOUNT_ID" ] || [ -z "$R2_BUCKET" ]; then
+            echo "::warning::R2 secrets not configured — skipping backup"
+            exit 0
+          fi
+          BACKUP_FILE="/tmp/mandi_iq.duckdb.gz"
+          METRICS_FILE="mandi_rdd/data/r2_backup_metrics.json"
+          gzip -c mandi_rdd/data/mandi_iq.duckdb > "$BACKUP_FILE"
+          if [ ! -s "$BACKUP_FILE" ]; then
+            echo "::warning::gzip compression failed — skipping backup"
+            rm -f "$BACKUP_FILE"
+            exit 0
+          fi
+          if ! aws s3 cp "$BACKUP_FILE" \
+            "s3://${R2_BUCKET}/mandi_iq.duckdb.gz" \
+            --endpoint-url "https://${R2_ACCOUNT_ID}.r2.cloudflarestorage.com" \
+            --region auto \
+            --content-encoding gzip \
+            --only-show-errors; then
+            echo "::warning::DuckDB R2 backup failed (transient error)"
+          else
+            ORIG_SIZE=$(stat -c%s mandi_rdd/data/mandi_iq.duckdb 2>/dev/null || stat -f%z mandi_rdd/data/mandi_iq.duckdb 2>/dev/null)
+            GZ_SIZE=$(stat -c%s "$BACKUP_FILE" 2>/dev/null || stat -f%z "$BACKUP_FILE" 2>/dev/null)
+            PCT=$(( (ORIG_SIZE - GZ_SIZE) * 100 / ORIG_SIZE ))
+            echo "::notice::DuckDB backed up to s3://${R2_BUCKET}/mandi_iq.duckdb.gz (${PCT}% smaller)"
+            DB_SHA256=$(sha256sum mandi_rdd/data/mandi_iq.duckdb | cut -d' ' -f1)
+            if [ -n "$DB_SHA256" ]; then
+              python3 -c "import json; json.dump({'raw_bytes': ${ORIG_SIZE}, 'compressed_bytes': ${GZ_SIZE}, 'compression_pct': ${PCT}, 'sha256': '${DB_SHA256}', 'timestamp_utc': '$(date -u +%Y-%m-%dT%H:%M:%SZ)', 'timestamp_epoch': $(date +%s)}, open('${METRICS_FILE}', 'w'))"
+            else
+              python3 -c "import json; json.dump({'raw_bytes': ${ORIG_SIZE}, 'compressed_bytes': ${GZ_SIZE}, 'compression_pct': ${PCT}, 'timestamp_utc': '$(date -u +%Y-%m-%dT%H:%M:%SZ)', 'timestamp_epoch': $(date +%s)}, open('${METRICS_FILE}', 'w'))"
+            fi
+            echo "::notice::R2 backup metrics written to ${METRICS_FILE}"
+          fi
+          rm -f "$BACKUP_FILE"
+
+      - name: Verify DuckDB backup on R2
+        if: steps.commit.outputs.committed == 'true'
+        continue-on-error: true
+        uses: ./.github/actions/verify-r2-backup
+        with:
+          bucket: ${{ secrets.R2_BUCKET }}
+          account-id: ${{ secrets.R2_ACCOUNT_ID }}
+          key: "mandi_iq.duckdb.gz"
+          aws-access-key-id: ${{ secrets.R2_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.R2_SECRET_ACCESS_KEY }}
+
+      - name: Summary
+        run: |
+          echo "changed=${{ steps.changed.outputs.changed }}"
+          echo "committed=${{ steps.commit.outputs.committed }}"
+          if [ "${{ steps.changed.outputs.changed }}" = "false" ]; then
+            echo "No data change — all surfaces already current."
+          else
+            echo "Data changed — commit + redeploys triggered."
+          fi
