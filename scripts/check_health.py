@@ -49,7 +49,14 @@ def _probe(url: str, timeout: int = TIMEOUT_S) -> dict:
             body = resp.read().decode("utf-8", errors="replace")
     except urllib.error.HTTPError as e:
         result["http_status"] = e.code
-        result["error"] = f"HTTP {e.code}: {e.reason}"
+        # Streamlit private apps redirect to auth (303) — not a failure, just
+        # a known limitation of the Streamlit Community Cloud auth wall.
+        if e.code == 303:
+            result["ok"] = True
+            result["n_prices"] = None
+            result["status"] = "private (auth redirect)"
+        else:
+            result["error"] = f"HTTP {e.code}: {e.reason}"
         return result
     except urllib.error.URLError as e:
         result["error"] = f"URLError: {e.reason}"
