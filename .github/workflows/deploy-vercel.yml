@@ -26,6 +26,9 @@ on:
       - "requirements/api.txt"
       - "requirements-vercel.txt"
       - "vercel.json"
+      - "pyproject.toml"   # Vercel Python runtime installs via uv from this
+      - "uv.lock"
+
       - ".python-version"
       - ".github/workflows/deploy-vercel.yml"
   workflow_dispatch:          # manual trigger via GitHub UI
