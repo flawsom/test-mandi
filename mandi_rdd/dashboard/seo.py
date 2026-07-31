@@ -22,15 +22,16 @@ from typing import Dict, Optional
 # Option B: the app domain is the single canonical. GitHub Pages still hosts
 # the crawler-visible landing DOCUMENT (LANDING_URL below) and the /seo assets,
 # but every canonical/og:url/JSON-LD URL points at the app domain.
-SITE_URL = "https://mandiiq.unifies.codes"
-APP_URL = "https://mandiiq.unifies.codes"
+SITE_URL = "https://test-mandi-keae7eruks2n4cqvumjfu8.streamlit.app"
+APP_URL = "https://test-mandi-keae7eruks2n4cqvumjfu8.streamlit.app"
 SITE_NAME = "MandiIQ"
 TWITTER_HANDLE = "@MandiIQ"
 
 # Crawler-visible entry point (GitHub Pages). Streamlit apps serve a JS shell,
 # so the SEO-facing landing page (raw HTML) carries the OG/Twitter/JSON-LD
-# tags and links to the live app. SEO assets are served from /seo/ on Pages.
-SEO_ASSET_BASE = "https://flawsom.github.io/MandiIQ/seo"
+# tags and links to the live app. SEO assets (og-image.png) are served from the
+# Pages site root (static/* is copied to _site/ root by deploy-pages.yml).
+SEO_ASSET_BASE = "https://flawsom.github.io/test-mandi"
 
 DEFAULT_DESCRIPTION = (
     "MandiIQ: Indian mandi (APMC) price intelligence \u2014 regression-discontinuity "
@@ -289,9 +290,9 @@ def route_seo_js() -> str:
 # The live app URL. Crawler hits to this host should resolve to rich OG tags
 # (Streamlit's own shell is JS-rendered and carries none), so the edge proxy
 # serves the landing HTML below for text/html requests.
-APP_URL = "https://mandiiq.unifies.codes"
-PROXY_LANDING_URL = "https://flawsom.github.io/MandiIQ/"
-PROXY_OG_IMAGE = "https://flawsom.github.io/MandiIQ/seo/og-image.png"
+APP_URL = "https://test-mandi-keae7eruks2n4cqvumjfu8.streamlit.app"
+PROXY_LANDING_URL = "https://flawsom.github.io/test-mandi/"
+PROXY_OG_IMAGE = "https://flawsom.github.io/test-mandi/og-image.png"
 
 
 def proxy_landing_html() -> str:

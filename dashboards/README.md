@@ -54,7 +54,7 @@ JSON directly. Grafana can fetch this URL for zero-touch provisioning.
 **Step 1: Validate the endpoint**
 
 ```bash
-curl -s https://mandiiq-api.onrender.com/grafana-dashboard | head -c 200
+curl -s https://p01--mandiiq--zbvjrztgjqgw.code.run/grafana-dashboard | head -c 200
 ```
 
 Expected output (truncated):
@@ -63,7 +63,7 @@ Expected output (truncated):
 ```
 
 If you see `{"detail":"Dashboard template not found"}`, the dashboard file
-isn't deployed — file an issue at github.com/flawsom/MandiIQ.
+isn't deployed — file an issue at github.com/flawsom/test-mandi.
 
 **Step 2: Configure Grafana's dashboard provisioning**
 
@@ -91,7 +91,7 @@ Then create a **JSON provisioning file** at
       "name": "MandiIQ",
       "type": "url",
       "options": {
-        "url": "https://mandiiq-api.onrender.com/grafana-dashboard"
+        "url": "https://p01--mandiiq--zbvjrztgjqgw.code.run/grafana-dashboard"
       }
     }
   ]
@@ -113,7 +113,7 @@ datasources:
   - name: MandiIQ Prometheus
     type: prometheus
     access: proxy
-    url: https://mandiiq-api.onrender.com
+    url: https://p01--mandiiq--zbvjrztgjqgw.code.run
     isDefault: false
     editable: false
 ```
@@ -132,7 +132,7 @@ select the "MandiIQ Prometheus" datasource you just created.
 1. Fetch the dashboard JSON:
 
    ```bash
-   curl -s https://mandiiq-api.onrender.com/grafana-dashboard > mandiiq-pipeline.json
+   curl -s https://p01--mandiiq--zbvjrztgjqgw.code.run/grafana-dashboard > mandiiq-pipeline.json
    ```
 
 2. In Grafana: **+** > **Import** > Upload `mandiiq-pipeline.json`
@@ -145,7 +145,7 @@ select the "MandiIQ Prometheus" datasource you just created.
 cp dashboards/grafana-datasource.yml /etc/grafana/provisioning/datasources/mandiiq.yml
 
 # 2. Add the dashboard JSON (fetched from the API)
-curl -s https://mandiiq-api.onrender.com/grafana-dashboard > /etc/grafana/provisioning/dashboards/mandiiq-pipeline.json
+curl -s https://p01--mandiiq--zbvjrztgjqgw.code.run/grafana-dashboard > /etc/grafana/provisioning/dashboards/mandiiq-pipeline.json
 
 # 3. Add a dashboard provider
 cat > /etc/grafana/provisioning/dashboards/mandiiq-provider.yaml << 'EOF'
@@ -251,7 +251,7 @@ scrape_configs:
   #   metrics_path: /metrics
   #   scheme: https
   #   static_configs:
-  #     - targets: ["mandiiq-api.onrender.com"]
+  #     - targets: ["p01--mandiiq--zbvjrztgjqgw.code.run"]
   #       labels:
   #         service: "mandiiq"
   #         environment: "production"
@@ -285,7 +285,7 @@ Then open:
 > **Note:** The Grafana datasource provisioning YAML (`grafana-datasource.yml`)
 > must point at the Prometheus container. If running Render's hosted API
 > instead of the local container, update the URL to
-> `https://mandiiq-api.onrender.com` in both the datasource and the compose
+> `https://p01--mandiiq--zbvjrztgjqgw.code.run` in both the datasource and the compose
 > scrape target.
 
 > **Pro tip:** Use `?datasource=MandiIQ+Prometheus` on the dashboard URL to
@@ -372,7 +372,7 @@ logging {
 prometheus.scrape "mandiiq" {
   targets = [
     {
-      __address__ = "mandiiq-api.onrender.com:443",
+      __address__ = "p01--mandiiq--zbvjrztgjqgw.code.run:443",
       scheme      = "https",
       metrics_path = "/metrics",
     },
@@ -429,7 +429,7 @@ metrics:
           metrics_path: /metrics
           scheme: https
           static_configs:
-            - targets: ["mandiiq-api.onrender.com"]
+            - targets: ["p01--mandiiq--zbvjrztgjqgw.code.run"]
               labels:
                 service: "mandiiq"
                 environment: "production"
@@ -456,7 +456,7 @@ scrape_configs:
     metrics_path: /metrics
     scheme: https
     static_configs:
-      - targets: ["mandiiq-api.onrender.com"]
+      - targets: ["p01--mandiiq--zbvjrztgjqgw.code.run"]
         labels:
           service: "mandiiq"
           environment: "production"
@@ -477,13 +477,13 @@ docker run -d --name prometheus   -p 9090:9090   -v ./prometheus.yml:/etc/promet
 
 ```bash
 # Check the dashboard API endpoint
-curl -s https://mandiiq-api.onrender.com/grafana-dashboard | python -c "import json,sys; d=json.load(sys.stdin); print(f'Dashboard: {d.get(\"dashboard\",d).get(\"title\",\"?\")} — {len(d.get(\"dashboard\",d).get(\"panels\",[]))} panels')"
+curl -s https://p01--mandiiq--zbvjrztgjqgw.code.run/grafana-dashboard | python -c "import json,sys; d=json.load(sys.stdin); print(f'Dashboard: {d.get(\"dashboard\",d).get(\"title\",\"?\")} — {len(d.get(\"dashboard\",d).get(\"panels\",[]))} panels')"
 
 # Check the /metrics endpoint
-curl -s https://mandiiq-api.onrender.com/metrics | head -20
+curl -s https://p01--mandiiq--zbvjrztgjqgw.code.run/metrics | head -20
 
 # Check the API is alive
-curl -s https://mandiiq-api.onrender.com/health | python -c "import json,sys; d=json.load(sys.stdin); print(f'Status: {d[\"status\"]} — {d[\"n_prices\"]:,} prices, {d[\"n_commodities\"]} commodities')"
+curl -s https://p01--mandiiq--zbvjrztgjqgw.code.run/health | python -c "import json,sys; d=json.load(sys.stdin); print(f'Status: {d[\"status\"]} — {d[\"n_prices\"]:,} prices, {d[\"n_commodities\"]} commodities')"
 ```
 
 </div></div></div>
@@ -640,7 +640,7 @@ error message if the dashboard file is missing on disk).
 
 **Example call:**
 ```bash
-curl -X POST https://mandiiq-api.onrender.com/webhook/grafana-dashboard-update \
+curl -X POST https://p01--mandiiq--zbvjrztgjqgw.code.run/webhook/grafana-dashboard-update \
   -H "Content-Type: application/json" \
   -d '{"event":"dashboard_updated","title":"MandiIQ Pipeline"}'
 ```
@@ -674,7 +674,7 @@ jobs:
     steps:
       - name: Trigger dashboard cache webhook
         env:
-          API_BASE: "https://mandiiq-api.onrender.com"
+          API_BASE: "https://p01--mandiiq--zbvjrztgjqgw.code.run"
         run: |
           curl -X POST "${API_BASE}/webhook/grafana-dashboard-update" \
             -H "Content-Type: application/json" \
@@ -697,7 +697,7 @@ Contact Point that POSTs to the webhook endpoint whenever an alert fires.
 1. **Grafana** → **Alerting** → **Contact points** → **New contact point**
 2. Name: `MandiIQ Dashboard Refresh`
 3. Type: **Webhook**
-4. URL: `https://mandiiq-api.onrender.com/webhook/grafana-dashboard-update`
+4. URL: `https://p01--mandiiq--zbvjrztgjqgw.code.run/webhook/grafana-dashboard-update`
 5. HTTP Method: `POST`
 6. Optional: Add a custom message with the dashboard name
 
@@ -725,7 +725,7 @@ LAST_VERSION=$(cat "$LAST_VERSION_FILE" 2>/dev/null || echo "0")
 
 if [ "$CURRENT_VERSION" -gt "$LAST_VERSION" ]; then
   echo "$CURRENT_VERSION" > "$LAST_VERSION_FILE"
-  curl -X POST https://mandiiq-api.onrender.com/webhook/grafana-dashboard-update \
+  curl -X POST https://p01--mandiiq--zbvjrztgjqgw.code.run/webhook/grafana-dashboard-update \
     -H "Content-Type: application/json" \
     -d '{"event":"dashboard_updated","version":'$CURRENT_VERSION'}'
 fi
@@ -766,7 +766,7 @@ If you update the `mandiiq-pipeline.json` file on disk (e.g., after editing pane
 you can push the changes live without a full server restart:
 
 ```bash
-curl -X POST https://mandiiq-api.onrender.com/admin/refresh-dashboard-cache
+curl -X POST https://p01--mandiiq--zbvjrztgjqgw.code.run/admin/refresh-dashboard-cache
 ```
 
 Expected response:

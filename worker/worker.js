@@ -20,10 +20,10 @@ const LANDING_URL = "https://flawsom.github.io/test-mandi/";
 
 // Inline fallback if the landing page is unreachable.
 const FALLBACK_HTML = `<!DOCTYPE html><html><head><title>MandiIQ</title>`
-  + `<link rel="canonical" href="https://mandiiq.unifies.codes/" />`
+  + `<link rel="canonical" href="https://flawsom.github.io/test-mandi/" />`
   + `<meta property="og:title" content="MandiIQ" />`
-  + `<meta property="og:image" content="https://flawsom.github.io/test-mandi/seo/og-image.png" />`
-  + `</head><body><a href="https://mandiiq.unifies.codes/">MandiIQ</a></body></html>`;
+  + `<meta property="og:image" content="https://flawsom.github.io/test-mandi/og-image.png" />`
+  + `</head><body><a href="https://flawsom.github.io/test-mandi/">MandiIQ</a></body></html>`;
 
 // Paths that look like static assets should always proxy (never get the shell).
 function isAssetPath(pathname) {

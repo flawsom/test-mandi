@@ -15,9 +15,9 @@ from xml.sax.saxutils import escape
 try:
     from mandi_rdd.dashboard.seo import SITE_URL, PAGE_SEO, SEO_ASSET_BASE
 except Exception:  # pragma: no cover - import safety
-    SITE_URL = "https://mandiiq.unifies.codes"
+    SITE_URL = "https://test-mandi-keae7eruks2n4cqvumjfu8.streamlit.app"
     PAGE_SEO = {}
-    SEO_ASSET_BASE = "https://flawsom.github.io/MandiIQ/seo"
+    SEO_ASSET_BASE = "https://flawsom.github.io/test-mandi"
 
 # Where the sitemap files are *published* (GitHub Pages). The <loc> entries
 # inside point at SITE_URL (the canonical app domain); the index itself points

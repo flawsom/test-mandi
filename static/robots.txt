@@ -3,4 +3,4 @@ Allow: /
 
 # SEO assets (og-image, sitemaps) are served from GitHub Pages because
 # Streamlit reserves /static/ for its own frontend.
-Sitemap: https://flawsom.github.io/test-mandi/seo/sitemap-index.xml
+Sitemap: https://flawsom.github.io/test-mandi/sitemap-index.xml

@@ -27,18 +27,18 @@
 <!-- Badges -->
 <div style="position:relative; z-index:1; max-width:900px; margin:0 auto;">
 <p style="line-height:2.4;">
-  <img src="https://img.shields.io/github/v/release/flawsom/MandiIQ?style=for-the-badge&amp;label=Version&amp;color=00FF88&amp;logo=github" alt="Version" />
-  <img src="https://img.shields.io/github/license/flawsom/MandiIQ?style=for-the-badge&amp;label=License&amp;color=blue&amp;logo=open-source-initiative" alt="License" />
-  <img src="https://img.shields.io/github/actions/workflow/status/flawsom/MandiIQ/ci.yml?style=for-the-badge&amp;label=CI&amp;color=success&amp;logo=githubactions" alt="CI" />
-  <img src="https://img.shields.io/github/actions/workflow/status/flawsom/MandiIQ/deploy-render.yml?style=for-the-badge&amp;label=Deploy+Render&amp;color=success&amp;logo=render" alt="Deploy Render" />
-  <img src="https://img.shields.io/github/actions/workflow/status/flawsom/MandiIQ/deploy-vercel.yml?style=for-the-badge&amp;label=Deploy+Vercel&amp;color=success&amp;logo=vercel" alt="Deploy Vercel" />
-  <img src="https://img.shields.io/github/actions/workflow/status/flawsom/MandiIQ/deploy-pages.yml?style=for-the-badge&amp;label=Deploy+Pages&amp;color=success&amp;logo=githubpages" alt="Deploy Pages" />
-  <img src="https://img.shields.io/github/stars/flawsom/MandiIQ?style=for-the-badge&amp;label=Stars&amp;color=yellow&amp;logo=github" alt="Stars" />
-  <img src="https://img.shields.io/github/forks/flawsom/MandiIQ?style=for-the-badge&amp;label=Forks&amp;color=orange&amp;logo=github" alt="Forks" />
-  <img src="https://img.shields.io/github/downloads/flawsom/MandiIQ/total?style=for-the-badge&amp;label=Downloads&amp;color=purple&amp;logo=download" alt="Downloads" />
-  <img src="https://img.shields.io/github/issues/flawsom/MandiIQ?style=for-the-badge&amp;label=Issues&amp;color=red&amp;logo=github" alt="Issues" />
-  <img src="https://img.shields.io/github/issues-pr/flawsom/MandiIQ?style=for-the-badge&amp;label=PRs&amp;color=brightgreen&amp;logo=github" alt="PRs" />
-  <img src="https://img.shields.io/github/last-commit/flawsom/MandiIQ?style=for-the-badge&amp;label=Last%20Commit&amp;color=informational&amp;logo=git" alt="Last Commit" />
+  <img src="https://img.shields.io/github/v/release/flawsom/test-mandi?style=for-the-badge&amp;label=Version&amp;color=00FF88&amp;logo=github" alt="Version" />
+  <img src="https://img.shields.io/github/license/flawsom/test-mandi?style=for-the-badge&amp;label=License&amp;color=blue&amp;logo=open-source-initiative" alt="License" />
+  <img src="https://img.shields.io/github/actions/workflow/status/flawsom/test-mandi/ci.yml?style=for-the-badge&amp;label=CI&amp;color=success&amp;logo=githubactions" alt="CI" />
+  <img src="https://img.shields.io/github/actions/workflow/status/flawsom/test-mandi/deploy-render.yml?style=for-the-badge&amp;label=Deploy+Render&amp;color=success&amp;logo=render" alt="Deploy Render" />
+  <img src="https://img.shields.io/github/actions/workflow/status/flawsom/test-mandi/deploy-vercel.yml?style=for-the-badge&amp;label=Deploy+Vercel&amp;color=success&amp;logo=vercel" alt="Deploy Vercel" />
+  <img src="https://img.shields.io/github/actions/workflow/status/flawsom/test-mandi/deploy-pages.yml?style=for-the-badge&amp;label=Deploy+Pages&amp;color=success&amp;logo=githubpages" alt="Deploy Pages" />
+  <img src="https://img.shields.io/github/stars/flawsom/test-mandi?style=for-the-badge&amp;label=Stars&amp;color=yellow&amp;logo=github" alt="Stars" />
+  <img src="https://img.shields.io/github/forks/flawsom/test-mandi?style=for-the-badge&amp;label=Forks&amp;color=orange&amp;logo=github" alt="Forks" />
+  <img src="https://img.shields.io/github/downloads/flawsom/test-mandi/total?style=for-the-badge&amp;label=Downloads&amp;color=purple&amp;logo=download" alt="Downloads" />
+  <img src="https://img.shields.io/github/issues/flawsom/test-mandi?style=for-the-badge&amp;label=Issues&amp;color=red&amp;logo=github" alt="Issues" />
+  <img src="https://img.shields.io/github/issues-pr/flawsom/test-mandi?style=for-the-badge&amp;label=PRs&amp;color=brightgreen&amp;logo=github" alt="PRs" />
+  <img src="https://img.shields.io/github/last-commit/flawsom/test-mandi?style=for-the-badge&amp;label=Last%20Commit&amp;color=informational&amp;logo=git" alt="Last Commit" />
   <img src="https://img.shields.io/badge/Python-3.12%2B-blue?style=for-the-badge&amp;logo=python&amp;logoColor=white" alt="Python" />
   <img src="https://img.shields.io/badge/DuckDB-FFF000?style=for-the-badge&amp;logo=duckdb&amp;logoColor=black" alt="DuckDB" />
   <img src="https://img.shields.io/badge/Streamlit-FF4B4B?style=for-the-badge&amp;logo=streamlit&amp;logoColor=white" alt="Streamlit" />
@@ -50,11 +50,11 @@
 
 <!-- CTA Buttons -->
 <div style="position:relative; z-index:1; display:flex; flex-wrap:wrap; justify-content:center; gap:12px;">
-<a href="https://mandiiq.unifies.codes" style="display:inline-block; padding:10px 24px; border-radius:10px; background:linear-gradient(135deg, rgba(0,255,136,0.15) 0%, rgba(0,255,136,0.05) 100%); border:1px solid rgba(0,255,136,0.3); color:#00FF88; font-weight:600; text-decoration:none; font-size:15px; transition:all 0.2s;">&#x1F680;&#xFE0E; Live Demo</a>
-<a href="https://mandiiq.streamlit.app" style="display:inline-block; padding:10px 24px; border-radius:10px; background:linear-gradient(135deg, rgba(255,75,75,0.15) 0%, rgba(255,75,75,0.05) 100%); border:1px solid rgba(255,75,75,0.3); color:#FF4B4B; font-weight:600; text-decoration:none; font-size:15px; transition:all 0.2s;">&#x1F4CA;&#xFE0E; Dashboard</a>
-<a href="https://mandiiq-api.onrender.com/docs" style="display:inline-block; padding:10px 24px; border-radius:10px; background:linear-gradient(135deg, rgba(0,150,136,0.15) 0%, rgba(0,150,136,0.05) 100%); border:1px solid rgba(0,150,136,0.3); color:#4DB6AC; font-weight:600; text-decoration:none; font-size:15px; transition:all 0.2s;">&#x1F4D6;&#xFE0E; API Docs</a>
+<a href="https://flawsom.github.io/test-mandi" style="display:inline-block; padding:10px 24px; border-radius:10px; background:linear-gradient(135deg, rgba(0,255,136,0.15) 0%, rgba(0,255,136,0.05) 100%); border:1px solid rgba(0,255,136,0.3); color:#00FF88; font-weight:600; text-decoration:none; font-size:15px; transition:all 0.2s;">&#x1F680;&#xFE0E; Live Demo</a>
+<a href="https://test-mandi-keae7eruks2n4cqvumjfu8.streamlit.app" style="display:inline-block; padding:10px 24px; border-radius:10px; background:linear-gradient(135deg, rgba(255,75,75,0.15) 0%, rgba(255,75,75,0.05) 100%); border:1px solid rgba(255,75,75,0.3); color:#FF4B4B; font-weight:600; text-decoration:none; font-size:15px; transition:all 0.2s;">&#x1F4CA;&#xFE0E; Dashboard</a>
+<a href="https://p01--mandiiq--zbvjrztgjqgw.code.run/docs" style="display:inline-block; padding:10px 24px; border-radius:10px; background:linear-gradient(135deg, rgba(0,150,136,0.15) 0%, rgba(0,150,136,0.05) 100%); border:1px solid rgba(0,150,136,0.3); color:#4DB6AC; font-weight:600; text-decoration:none; font-size:15px; transition:all 0.2s;">&#x1F4D6;&#xFE0E; API Docs</a>
 <a href="#quick-start" style="display:inline-block; padding:10px 24px; border-radius:10px; background:linear-gradient(135deg, rgba(255,255,255,0.08) 0%, rgba(255,255,255,0.02) 100%); border:1px solid rgba(255,255,255,0.12); color:#E0E0E0; font-weight:600; text-decoration:none; font-size:15px; transition:all 0.2s;">&#x26A1;&#xFE0E; Installation</a>
-<a href="https://github.com/flawsom/MandiIQ" style="display:inline-block; padding:10px 24px; border-radius:10px; background:linear-gradient(135deg, rgba(255,255,255,0.08) 0%, rgba(255,255,255,0.02) 100%); border:1px solid rgba(255,255,255,0.12); color:#E0E0E0; font-weight:600; text-decoration:none; font-size:15px; transition:all 0.2s;">&#x1F419;&#xFE0E; GitHub</a>
+<a href="https://github.com/flawsom/test-mandi" style="display:inline-block; padding:10px 24px; border-radius:10px; background:linear-gradient(135deg, rgba(255,255,255,0.08) 0%, rgba(255,255,255,0.02) 100%); border:1px solid rgba(255,255,255,0.12); color:#E0E0E0; font-weight:600; text-decoration:none; font-size:15px; transition:all 0.2s;">&#x1F419;&#xFE0E; GitHub</a>
 </div>
 
 </div>
@@ -98,11 +98,11 @@
 
 | Service | URL | Status | Deployed Via |
 |---------|-----|--------|-------------|
-| **FastAPI (Production)** | [mandiiq-api.onrender.com](https://mandiiq-api.onrender.com) | <img src="https://img.shields.io/badge/-Live-success?style=flat-square" /> | Render Blueprint |
-| **Streamlit Dashboard** | [mandiiq.streamlit.app](https://mandiiq.streamlit.app) | <img src="https://img.shields.io/badge/-Live-brightgreen?style=flat-square" /> | Streamlit Cloud |
-| **Landing Page** | [mandiiq.unifies.codes](https://mandiiq.unifies.codes) | <img src="https://img.shields.io/badge/-Live-blue?style=flat-square" /> | GitHub Pages |
+| **FastAPI (Production)** | [p01--mandiiq--zbvjrztgjqgw.code.run](https://p01--mandiiq--zbvjrztgjqgw.code.run) | <img src="https://img.shields.io/badge/-Live-success?style=flat-square" /> | Northflank |
+| **Streamlit Dashboard** | [test-mandi-keae7eruks2n4cqvumjfu8.streamlit.app](https://test-mandi-keae7eruks2n4cqvumjfu8.streamlit.app) | <img src="https://img.shields.io/badge/-Live-brightgreen?style=flat-square" /> | Streamlit Cloud |
+| **Landing Page** | [flawsom.github.io/test-mandi](https://flawsom.github.io/test-mandi) | <img src="https://img.shields.io/badge/-Live-blue?style=flat-square" /> | GitHub Pages |
 | **Vercel API (Read-Only)** | — | <img src="https://img.shields.io/badge/-Auto--deployed-informational?style=flat-square" /> | Vercel + GitHub Actions |
-| **GitHub Repo** | [github.com/flawsom/MandiIQ](https://github.com/flawsom/MandiIQ) | <img src="https://img.shields.io/badge/-Public-success?style=flat-square" /> | — |
+| **GitHub Repo** | [github.com/flawsom/test-mandi](https://github.com/flawsom/test-mandi) | <img src="https://img.shields.io/badge/-Public-success?style=flat-square" /> | — |
 
 </details>
 </div>
@@ -395,7 +395,7 @@ flowchart TB
 ### Step 1 &mdash; Clone &amp; Pull LFS
 
 ```bash
-git clone https://github.com/flawsom/MandiIQ.git
+git clone https://github.com/flawsom/test-mandi.git
 cd MandiIQ
 git lfs pull
 
@@ -729,10 +729,10 @@ def get_forecast(commodity: str) -> dict:
 
 | Platform | URL | What You'll See |
 |----------|-----|-----------------|
-| **Landing Page** | [mandiiq.unifies.codes](https://mandiiq.unifies.codes) | Animated hero, live KPIs, pipeline architecture diagram |
-| **Streamlit Dashboard** | [mandiiq.streamlit.app](https://mandiiq.streamlit.app) | 11-page interactive dashboard with live data |
-| **FastAPI Docs** | [mandiiq-api.onrender.com/docs](https://mandiiq-api.onrender.com/docs) | Interactive OpenAPI documentation &mdash; try endpoints live |
-| **GitHub Pages** | [flawsom.github.io/MandiIQ](https://flawsom.github.io/MandiIQ) | Full documentation, heartbeat dashboard, pipeline report |
+| **Landing Page** | [flawsom.github.io/test-mandi](https://flawsom.github.io/test-mandi) | Animated hero, live KPIs, pipeline architecture diagram |
+| **Streamlit Dashboard** | [test-mandi-keae7eruks2n4cqvumjfu8.streamlit.app](https://test-mandi-keae7eruks2n4cqvumjfu8.streamlit.app) | 11-page interactive dashboard with live data |
+| **FastAPI Docs** | [p01--mandiiq--zbvjrztgjqgw.code.run/docs](https://p01--mandiiq--zbvjrztgjqgw.code.run/docs) | Interactive OpenAPI documentation &mdash; try endpoints live |
+| **GitHub Pages** | [flawsom.github.io/test-mandi](https://flawsom.github.io/test-mandi) | Full documentation, heartbeat dashboard, pipeline report |
 
 <br />
 
@@ -740,9 +740,9 @@ def get_forecast(commodity: str) -> dict:
 
 | Tool | Link |
 |------|------|
-| **Interactive Pipeline** | [pipeline-interactive.html](https://flawsom.github.io/MandiIQ/pipeline-interactive.html) |
-| **Pipeline Report** | [pipeline-report.html](https://flawsom.github.io/MandiIQ/pipeline-report.html) |
-| **Heartbeat Dashboard** | [heartbeat-dashboard.html](https://flawsom.github.io/MandiIQ/heartbeat-dashboard.html) |
+| **Interactive Pipeline** | [pipeline-interactive.html](https://flawsom.github.io/test-mandi/pipeline-interactive.html) |
+| **Pipeline Report** | [pipeline-report.html](https://flawsom.github.io/test-mandi/pipeline-report.html) |
+| **Heartbeat Dashboard** | [heartbeat-dashboard.html](https://flawsom.github.io/test-mandi/heartbeat-dashboard.html) |
 
 </div>
 
@@ -856,24 +856,24 @@ pytest mandi_rdd/tests/test_rdd_engine.py -v
 
 | # | Workflow | Status | Trigger | Schedule | Purpose |
 |---|----------|--------|---------|----------|---------|
-| 1 | **CI** | <img src="https://img.shields.io/github/actions/workflow/status/flawsom/MandiIQ/ci.yml?style=flat-square&amp;label=&amp;logo=githubactions" alt="status" /> | Push/PR | &mdash; | Test suite + linting + type checks |
-| 2 | **Deploy to Render** | <img src="https://img.shields.io/github/actions/workflow/status/flawsom/MandiIQ/deploy-render.yml?style=flat-square&amp;label=&amp;logo=render" alt="status" /> | Push to `master` | &mdash; | Deploy FastAPI to production |
-| 3 | **Deploy API to Vercel** | <img src="https://img.shields.io/github/actions/workflow/status/flawsom/MandiIQ/deploy-vercel.yml?style=flat-square&amp;label=&amp;logo=vercel" alt="status" /> | Push to `api/**` | &mdash; | Read-only serverless API |
-| 4 | **Deploy Pages** | <img src="https://img.shields.io/github/actions/workflow/status/flawsom/MandiIQ/deploy-pages.yml?style=flat-square&amp;label=&amp;logo=githubpages" alt="status" /> | Push to `landing/**` | &mdash; | GitHub Pages (landing + docs) |
-| 5 | **Nightly Ingestion** | <img src="https://img.shields.io/github/actions/workflow/status/flawsom/MandiIQ/nightly-ingest.yml?style=flat-square&amp;label=" alt="status" /> | Schedule | Daily 02:00 UTC | Fetch prices, update DuckDB |
-| 6 | **Daily Ingest** | <img src="https://img.shields.io/github/actions/workflow/status/flawsom/MandiIQ/daily-ingest.yml?style=flat-square&amp;label=" alt="status" /> | Schedule | Daily 06:00 UTC | Rainfall + NDVI cycle |
-| 7 | **Dashboard Heartbeat** | <img src="https://img.shields.io/github/actions/workflow/status/flawsom/MandiIQ/dashboard-heartbeat.yml?style=flat-square&amp;label=" alt="status" /> | Schedule | Hourly | Grafana cache refresh |
-| 8 | **Drift Detector** | <img src="https://img.shields.io/github/actions/workflow/status/flawsom/MandiIQ/dashboard-drift-detector.yml?style=flat-square&amp;label=" alt="status" /> | Schedule | Daily 08:00 UTC | Dashboard hash comparison |
-| 9 | **Dashboard Sync** | <img src="https://img.shields.io/github/actions/workflow/status/flawsom/MandiIQ/dashboard-sync.yml?style=flat-square&amp;label=" alt="status" /> | Push `dashboards/*.json` | &mdash; | Grafana webhook |
-| 10 | **Check Freshness** | <img src="https://img.shields.io/github/actions/workflow/status/flawsom/MandiIQ/check-freshness.yml?style=flat-square&amp;label=" alt="status" /> | Schedule | Daily 06:00 UTC | Stale data alerts |
-| 11 | **Check Ashoka Import** | <img src="https://img.shields.io/github/actions/workflow/status/flawsom/MandiIQ/check-ashoka-import.yml?style=flat-square&amp;label=" alt="status" /> | Schedule + push | Every 3h | Import progress poll |
-| 12 | **Dashboard Integration** | <img src="https://img.shields.io/github/actions/workflow/status/flawsom/MandiIQ/dashboard-integration.yml?style=flat-square&amp;label=" alt="status" /> | Push, schedule | &mdash; | E2E integration tests |
-| 13 | **Docker Build** | <img src="https://img.shields.io/github/actions/workflow/status/flawsom/MandiIQ/docker-build.yml?style=flat-square&amp;label=" alt="status" /> | Push `Dockerfile*` | &mdash; | Container image build |
-| 14 | **Keepalive Loop** | <img src="https://img.shields.io/github/actions/workflow/status/flawsom/MandiIQ/keepalive-loop.yml?style=flat-square&amp;label=" alt="status" /> | Schedule | Every 14 min | Prevent Render/free-tier cold boots |
-| 15 | **MandiIQ CI** | <img src="https://img.shields.io/github/actions/workflow/status/flawsom/MandiIQ/mandi_rdd_ci.yml?style=flat-square&amp;label=" alt="status" /> | Push, schedule | &mdash; | Package-level CI |
-| 16 | **Render Pipeline SVG** | <img src="https://img.shields.io/github/actions/workflow/status/flawsom/MandiIQ/render-pipeline-svg.yml?style=flat-square&amp;label=" alt="status" /> | Schedule | Daily | Generate pipeline architecture SVG |
-| 17 | **Heartbeat** | <img src="https://img.shields.io/github/actions/workflow/status/flawsom/MandiIQ/heartbeat.yml?style=flat-square&amp;label=" alt="status" /> | Schedule | Every 5 min | Dashboard uptime monitoring |
-| 18 | **Verify Live Data** | <img src="https://img.shields.io/github/actions/workflow/status/flawsom/MandiIQ/verify-live-data.yml?style=flat-square&amp;label=" alt="status" /> | Schedule | Daily | End-to-end data validation |
+| 1 | **CI** | <img src="https://img.shields.io/github/actions/workflow/status/flawsom/test-mandi/ci.yml?style=flat-square&amp;label=&amp;logo=githubactions" alt="status" /> | Push/PR | &mdash; | Test suite + linting + type checks |
+| 2 | **Deploy to Render** | <img src="https://img.shields.io/github/actions/workflow/status/flawsom/test-mandi/deploy-render.yml?style=flat-square&amp;label=&amp;logo=render" alt="status" /> | Push to `master` | &mdash; | Deploy FastAPI to production |
+| 3 | **Deploy API to Vercel** | <img src="https://img.shields.io/github/actions/workflow/status/flawsom/test-mandi/deploy-vercel.yml?style=flat-square&amp;label=&amp;logo=vercel" alt="status" /> | Push to `api/**` | &mdash; | Read-only serverless API |
+| 4 | **Deploy Pages** | <img src="https://img.shields.io/github/actions/workflow/status/flawsom/test-mandi/deploy-pages.yml?style=flat-square&amp;label=&amp;logo=githubpages" alt="status" /> | Push to `landing/**` | &mdash; | GitHub Pages (landing + docs) |
+| 5 | **Nightly Ingestion** | <img src="https://img.shields.io/github/actions/workflow/status/flawsom/test-mandi/nightly-ingest.yml?style=flat-square&amp;label=" alt="status" /> | Schedule | Daily 02:00 UTC | Fetch prices, update DuckDB |
+| 6 | **Daily Ingest** | <img src="https://img.shields.io/github/actions/workflow/status/flawsom/test-mandi/daily-ingest.yml?style=flat-square&amp;label=" alt="status" /> | Schedule | Daily 06:00 UTC | Rainfall + NDVI cycle |
+| 7 | **Dashboard Heartbeat** | <img src="https://img.shields.io/github/actions/workflow/status/flawsom/test-mandi/dashboard-heartbeat.yml?style=flat-square&amp;label=" alt="status" /> | Schedule | Hourly | Grafana cache refresh |
+| 8 | **Drift Detector** | <img src="https://img.shields.io/github/actions/workflow/status/flawsom/test-mandi/dashboard-drift-detector.yml?style=flat-square&amp;label=" alt="status" /> | Schedule | Daily 08:00 UTC | Dashboard hash comparison |
+| 9 | **Dashboard Sync** | <img src="https://img.shields.io/github/actions/workflow/status/flawsom/test-mandi/dashboard-sync.yml?style=flat-square&amp;label=" alt="status" /> | Push `dashboards/*.json` | &mdash; | Grafana webhook |
+| 10 | **Check Freshness** | <img src="https://img.shields.io/github/actions/workflow/status/flawsom/test-mandi/check-freshness.yml?style=flat-square&amp;label=" alt="status" /> | Schedule | Daily 06:00 UTC | Stale data alerts |
+| 11 | **Check Ashoka Import** | <img src="https://img.shields.io/github/actions/workflow/status/flawsom/test-mandi/check-ashoka-import.yml?style=flat-square&amp;label=" alt="status" /> | Schedule + push | Every 3h | Import progress poll |
+| 12 | **Dashboard Integration** | <img src="https://img.shields.io/github/actions/workflow/status/flawsom/test-mandi/dashboard-integration.yml?style=flat-square&amp;label=" alt="status" /> | Push, schedule | &mdash; | E2E integration tests |
+| 13 | **Docker Build** | <img src="https://img.shields.io/github/actions/workflow/status/flawsom/test-mandi/docker-build.yml?style=flat-square&amp;label=" alt="status" /> | Push `Dockerfile*` | &mdash; | Container image build |
+| 14 | **Keepalive Loop** | <img src="https://img.shields.io/github/actions/workflow/status/flawsom/test-mandi/keepalive-loop.yml?style=flat-square&amp;label=" alt="status" /> | Schedule | Every 14 min | Prevent Render/free-tier cold boots |
+| 15 | **MandiIQ CI** | <img src="https://img.shields.io/github/actions/workflow/status/flawsom/test-mandi/mandi_rdd_ci.yml?style=flat-square&amp;label=" alt="status" /> | Push, schedule | &mdash; | Package-level CI |
+| 16 | **Render Pipeline SVG** | <img src="https://img.shields.io/github/actions/workflow/status/flawsom/test-mandi/render-pipeline-svg.yml?style=flat-square&amp;label=" alt="status" /> | Schedule | Daily | Generate pipeline architecture SVG |
+| 17 | **Heartbeat** | <img src="https://img.shields.io/github/actions/workflow/status/flawsom/test-mandi/heartbeat.yml?style=flat-square&amp;label=" alt="status" /> | Schedule | Every 5 min | Dashboard uptime monitoring |
+| 18 | **Verify Live Data** | <img src="https://img.shields.io/github/actions/workflow/status/flawsom/test-mandi/verify-live-data.yml?style=flat-square&amp;label=" alt="status" /> | Schedule | Daily | End-to-end data validation |
 
 </details>
 </div>
@@ -1100,7 +1100,7 @@ We follow [Conventional Commits](https://www.conventionalcommits.org/):
 * [Streamlit](https://streamlit.io/) for the interactive dashboard framework.
 * [DuckDB](https://duckdb.org/) for the embedded analytical database.
 * [Capsule Render](https://github.com/kyechan99/capsule-render) for the animated banner SVG.
-* All [contributors](https://github.com/flawsom/MandiIQ/graphs/contributors) who have helped shape MandiIQ.
+* All [contributors](https://github.com/flawsom/test-mandi/graphs/contributors) who have helped shape MandiIQ.
 </div>
 <br />
 <div style="position:relative; height:60px; overflow:hidden; width:100%; margin:8px 0;">
@@ -1121,7 +1121,7 @@ If MandiIQ helps you make better procurement decisions or advances your agri-dat
 
 <br />
 
-<a href="https://github.com/flawsom/MandiIQ"><img src="https://img.shields.io/badge/⭐_Star_on_GitHub-181717?style=for-the-badge&amp;logo=github&amp;logoColor=white" alt="Star on GitHub" /></a>
+<a href="https://github.com/flawsom/test-mandi"><img src="https://img.shields.io/badge/⭐_Star_on_GitHub-181717?style=for-the-badge&amp;logo=github&amp;logoColor=white" alt="Star on GitHub" /></a>
 &nbsp;&nbsp;
 <a href="https://github.com/sponsors/flawsom"><img src="https://img.shields.io/badge/💖_Sponsor-FF4B4B?style=for-the-badge&amp;logo=githubsponsors&amp;logoColor=white" alt="Sponsor" /></a>
 &nbsp;&nbsp;

@@ -195,7 +195,7 @@ except Exception:
 
     st.html(
 
-        '<link rel="canonical" href="https://mandiiq.unifies.codes/" />',
+        '<link rel="canonical" href="https://test-mandi-keae7eruks2n4cqvumjfu8.streamlit.app/" />',
 
     )
 
@@ -1456,7 +1456,7 @@ with st.sidebar:
 
     st.markdown(
 
-        f'<a href="https://flawsom.github.io/MandiIQ/" target="_blank"'
+        f'<a href="https://flawsom.github.io/test-mandi/" target="_blank"'
 
         f'style="display:flex;align-items:center;gap:0.5rem;padding:0.5rem 1rem;'
 
@@ -1472,7 +1472,7 @@ with st.sidebar:
 
     st.markdown(
 
-        f'<a href="https://flawsom.github.io/MandiIQ/docs/" target="_blank"'
+        f'<a href="https://flawsom.github.io/test-mandi/docs/" target="_blank"'
 
         f'style="display:flex;align-items:center;gap:0.5rem;padding:0.5rem 1rem;'
 
@@ -1488,7 +1488,7 @@ with st.sidebar:
 
     st.markdown(
 
-        f'<a href="https://github.com/flawsom/MandiIQ" target="_blank"'
+        f'<a href="https://github.com/flawsom/test-mandi" target="_blank"'
 
         f'style="display:flex;align-items:center;gap:0.5rem;padding:0.5rem 1rem;'
 
@@ -1504,7 +1504,7 @@ with st.sidebar:
 
     st.markdown(
 
-        f'<a href="https://flawsom.github.io/MandiIQ/docs/heartbeat-dashboard.html" target="_blank"'
+        f'<a href="https://flawsom.github.io/test-mandi/docs/heartbeat-dashboard.html" target="_blank"'
 
         f'style="display:flex;align-items:center;gap:0.5rem;padding:0.5rem 1rem;'
 

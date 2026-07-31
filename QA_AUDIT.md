@@ -135,7 +135,7 @@ All 4 data points verified against direct DuckDB queries on 2026-07-20:
 - **Failure with cache:** Uses `localStorage` cached values labeled "(cached)"
 - **Failure without cache:** Shows "offline — live refresh unavailable"
 - **No fabricated values ever shown:** Initial state is "—", never a fake number
-- **Live verification at http://mandiiq.unifies.codes/:** All stats match (26,994 / 268 / 511 / 1,620 / 2,385 / 18)
+- **Live verification at http://flawsom.github.io/test-mandi/:** All stats match (26,994 / 268 / 511 / 1,620 / 2,385 / 18)
 - **HTTPS cert:** Still provisioning — accessible over HTTP only
 
 **Verdict:** <img src="docs/assets/svg/icon-dfc9746e71ac.svg" width="20" height="20" alt="" style="vertical-align:middle; max-width:100%;" /> PASS — all displayed stats reflect real current DuckDB state
@@ -268,9 +268,9 @@ Verified: both surfaces respect the user preference. No CSS animation runs when 
 | Commodities | 268 | Live fetch | Dynamic | <img src="docs/assets/svg/icon-dfc9746e71ac.svg" width="20" height="20" alt="" style="vertical-align:middle; max-width:100%;" /> |
 | Districts | 511 | Live fetch | Dynamic | <img src="docs/assets/svg/icon-dfc9746e71ac.svg" width="20" height="20" alt="" style="vertical-align:middle; max-width:100%;" /> |
 | Rainfall observations | 1,620 (updated 2026-07-20) | Live fetch | Dynamic | <img src="docs/assets/svg/icon-dfc9746e71ac.svg" width="20" height="20" alt="" style="vertical-align:middle; max-width:100%;" /> |
-| GitHub link | github.com/flawsom/MandiIQ | Same | N/A | <img src="docs/assets/svg/icon-dfc9746e71ac.svg" width="20" height="20" alt="" style="vertical-align:middle; max-width:100%;" /> |
+| GitHub link | github.com/flawsom/test-mandi | Same | N/A | <img src="docs/assets/svg/icon-dfc9746e71ac.svg" width="20" height="20" alt="" style="vertical-align:middle; max-width:100%;" /> |
 | Instagram link | instagram.com/vibes.him | Same | N/A | <img src="docs/assets/svg/icon-dfc9746e71ac.svg" width="20" height="20" alt="" style="vertical-align:middle; max-width:100%;" /> |
-| Live app URL | mandiiq.streamlit.app | mandiiq.streamlit.app | N/A | <img src="docs/assets/svg/icon-dfc9746e71ac.svg" width="20" height="20" alt="" style="vertical-align:middle; max-width:100%;" /> |
+| Live app URL | test-mandi-keae7eruks2n4cqvumjfu8.streamlit.app | test-mandi-keae7eruks2n4cqvumjfu8.streamlit.app | N/A | <img src="docs/assets/svg/icon-dfc9746e71ac.svg" width="20" height="20" alt="" style="vertical-align:middle; max-width:100%;" /> |
 | API URL | Internal health endpoint | Same | N/A | <img src="docs/assets/svg/icon-dfc9746e71ac.svg" width="20" height="20" alt="" style="vertical-align:middle; max-width:100%;" /> |
 
 **Note:** README numbers are a snapshot labeled "(Counts reflect the latest pipeline run; see the live status page for current numbers)." The docs page fetches numbers live from the API. Both are sourced from the same DuckDB → API pipeline.
@@ -409,7 +409,7 @@ The documentation page (`docs/index.html`) was fully rewritten to match the app'
 
 ### Streamlit App — 10 Routes
 
-All pages verified live at https://mandiiq.streamlit.app/ across 5 responsive breakpoints:
+All pages verified live at https://test-mandi-keae7eruks2n4cqvumjfu8.streamlit.app/ across 5 responsive breakpoints:
 
 | Route | 375px | 430px | 768px | 1280px | 1920px | Issues |
 |-------|-------|-------|-------|--------|--------|--------|
@@ -472,7 +472,7 @@ All pages verified live at https://mandiiq.streamlit.app/ across 5 responsive br
 
 | Issue | Status | Impact |
 |-------|--------|--------|
-| **HTTPS cert for `mandiiq.unifies.codes`** | Still provisioning — GitHub Pages auto-provisions after DNS resolves; may take 24-48h | Docs page fetch to HTTPS API blocked on HTTP; JS fallback uses localStorage cache |
+| **HTTPS cert for `flawsom.github.io/test-mandi`** | Still provisioning — GitHub Pages auto-provisions after DNS resolves; may take 24-48h | Docs page fetch to HTTPS API blocked on HTTP; JS fallback uses localStorage cache |
 | **Full NDVI run incomplete** | 2,385 records / 475 districts cached; remaining 39 districts on next scheduled run | Minor coverage gap |
 | **Price-outcome RDD** | All 18 results have null effect — 3-day price window insufficient for multi-year backtest | Core feature limitation |
 | **FAINT contrast ratio** | #5B6572 on #0B0F1E = 3.22:1 — fails WCAG AA for small text | Metadata/tertiary text only; low risk |

@@ -24,9 +24,9 @@ MandiIQ has three deployable surfaces:
 
 | Surface | Technology | Purpose | URL |
 |---------|-----------|---------|-----|
-| **API Server** | FastAPI + DuckDB | Data endpoints, health checks, pipeline execution | `mandiiq-api.onrender.com` |
-| **Streamlit Dashboard** | Streamlit 1.59 | Interactive data exploration UI | `mandiiq.streamlit.app` |
-| **Static Pages** | HTML + JS (GitHub Pages) | Landing page, docs, heartbeat dashboard | `flawsom.github.io/MandiIQ` |
+| **API Server** | FastAPI + DuckDB | Data endpoints, health checks, pipeline execution | `p01--mandiiq--zbvjrztgjqgw.code.run` |
+| **Streamlit Dashboard** | Streamlit 1.59 | Interactive data exploration UI | `test-mandi-keae7eruks2n4cqvumjfu8.streamlit.app` |
+| **Static Pages** | HTML + JS (GitHub Pages) | Landing page, docs, heartbeat dashboard | `flawsom.github.io/test-mandi/` |
 
 This guide covers **three deployment providers**:
 
@@ -98,7 +98,7 @@ Both share a **Persistent Volume** so the cron job writes to the same DuckDB tha
 ### 1.2.1 Create the Service
 
 1. Go to **Northflank Dashboard → Services → Create Service**
-2. Choose **"From Git Repository"** → select `flawsom/MandiIQ` (or your fork)
+2. Choose **"From Git Repository"** → select `flawsom/test-mandi` (or your fork)
 3. Branch: `master`
 4. Service Type: **Web Service**
 
@@ -616,7 +616,7 @@ vercel env add DATA_GOV_IN_API_KEY
 ### Option B: Vercel Dashboard
 
 1. Go to [vercel.com](https://vercel.com) → **Add New Project**
-2. Import `flawsom/MandiIQ`
+2. Import `flawsom/test-mandi`
 3. Framework preset: **Other** (not FastAPI — the auto-detection only works for simple projects)
 4. Root directory: `./`
 5. Build command: *leave empty*
@@ -750,7 +750,7 @@ User Browser → Streamlit Cloud (dashboard UI)
 
 | Field | Value |
 |-------|-------|
-| Repository | `flawsom/MandiIQ` |
+| Repository | `flawsom/test-mandi` |
 | Branch | `master` |
 | Main file path | `mandi_rdd/dashboard/app.py` |
 | Python version | 3.11 (auto-detected from `runtime.txt`) |
@@ -795,7 +795,7 @@ Streamlit Cloud does NOT read `secrets.toml` from the repo (this would be a secu
 ```toml
 # MandiIQ Streamlit Secrets
 # API server URL — points to your Northflank or Render deployment
-MANDIQ_API_URL = "https://mandiiq-api.onrender.com"
+MANDIQ_API_URL = "https://p01--mandiiq--zbvjrztgjqgw.code.run"
 
 # AI API keys (optional — used by Ask MandiIQ feature)
 OPENROUTER_API_KEY = "sk-or-v1-..."
@@ -930,7 +930,7 @@ jobs:
         run: |
           curl -s -o /dev/null -w "%{http_code}" \
             --max-time 60 \
-            "https://mandiiq.streamlit.app/" \
+            "https://test-mandi-keae7eruks2n4cqvumjfu8.streamlit.app/" \
             || echo "Wake-up triggered (non-200 is normal for cold start)"
 ```
 
@@ -957,10 +957,10 @@ Streamlit Cloud supports custom domains on the **Team** plan ($30/month). For Ho
 To add a custom domain on a paid plan:
 
 1. **Streamlit Dashboard → App → Settings → Custom Domain**
-2. Enter `mandiiq.unifies.codes`
+2. Enter your custom domain (e.g. `dashboard.mandiiq.in`)
 3. Add a `CNAME` record in your DNS provider:
    ```
-   mandiiq.unifies.codes → mandiiq.streamlit.app
+   dashboard.mandiiq.in → test-mandi-keae7eruks2n4cqvumjfu8.streamlit.app
    ```
 4. Wait for DNS propagation (5–30 minutes)
 5. Streamlit auto-provisions an SSL certificate via Let's Encrypt
@@ -1174,7 +1174,7 @@ services:
 # Copy to .streamlit/secrets.toml for local dev
 # For production, paste into Streamlit Cloud Settings → Secrets
 
-MANDIQ_API_URL = "https://mandiiq-api.onrender.com"
+MANDIQ_API_URL = "https://p01--mandiiq--zbvjrztgjqgw.code.run"
 OPENROUTER_API_KEY = ""
 GEMINI_API_KEY = ""
 ALL_INDIA_RAINFALL_API_KEY = ""
@@ -1248,7 +1248,7 @@ git push origin master
 
 # 3. Deploy Dashboard to Streamlit Cloud
 #    - Go to share.streamlit.io
-#    - Repo: flawsom/MandiIQ
+#    - Repo: flawsom/test-mandi
 #    - Main file: mandi_rdd/dashboard/app.py
 #    - Set secrets (MANDIQ_API_URL, API keys)
 
@@ -1259,7 +1259,7 @@ git push origin master
 #    - Mount SAME volume: mandiiq-data → /data
 
 # 5. Verify all endpoints
-curl https://mandiiq-api.onrender.com/health
+curl https://p01--mandiiq--zbvjrztgjqgw.code.run/health
 # → {"status":"healthy","n_prices":1334647,...}
 
 # 6. (Optional) Deploy Vercel as read-only fallback

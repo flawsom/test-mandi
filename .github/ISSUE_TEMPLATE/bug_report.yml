@@ -59,7 +59,7 @@ body:
       label: Environment
       description: Where did you encounter this bug?
       options:
-        - Streamlit Cloud (mandiiq.streamlit.app)
+        - Streamlit Cloud (test-mandi-keae7eruks2n4cqvumjfu8.streamlit.app)
         - Local development
         - Render deployment
       default: 0

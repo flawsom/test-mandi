@@ -31,7 +31,7 @@ git push origin HEAD
 #### Reconnect Blueprint (REQUIRED after repo recreate):
 1. Go to https://dashboard.render.com
 2. Click **Blueprints** in left sidebar
-3. Click **Connect Blueprint** → select `flawsom/MandiIQ`
+3. Click **Connect Blueprint** → select `flawsom/test-mandi`
 4. It will auto-detect `render.yaml` and deploy all services
 5. ⏳ Wait 2-5 minutes for build
 
@@ -60,7 +60,7 @@ git push origin HEAD
 ### Step 3: Deploy Dashboard to Streamlit Cloud
 1. Go to https://share.streamlit.io
 2. Click **Deploy an app**
-3. Set Repository: `flawsom/MandiIQ`
+3. Set Repository: `flawsom/test-mandi`
 4. Branch: `master`
 5. Main file: `mandi_rdd/dashboard/app.py`
 6. Click **Deploy**
@@ -68,7 +68,7 @@ git push origin HEAD
 #### Set these Secrets in Streamlit Cloud Dashboard:
 In Settings → Secrets:
 ```toml
-MANDIQ_API_URL = "https://mandiiq-api.onrender.com"
+MANDIQ_API_URL = "https://p01--mandiiq--zbvjrztgjqgw.code.run"
 OPENROUTER_API_KEY = "sk-or-v1-..."
 GEMINI_API_KEY = "..."
 ALL_INDIA_RAINFALL_API_KEY = "..."
@@ -77,16 +77,16 @@ ALL_INDIA_RAINFALL_RESOURCE_ID = "..."
 
 ### Step 4: Fix Custom Domain
 **Option A — Point DNS to Render (easiest):**
-Set `CNAME` record for `mandiiq.unifies.codes` → `mandiiq-api.onrender.com`
+Set `CNAME` record for your custom domain (e.g. `dashboard.mandiiq.in`) → `p01--mandiiq--zbvjrztgjqgw.code.run`
 
 **Option B — Vercel:**
 Add domain in Vercel project settings, deploy a wrapper/proxy
 
 ### Step 5: Verify all 4 URLs
-- ✅ https://mandiiq-api.onrender.com/health
-- ✅ https://mandiiq.streamlit.app
-- ❌ https://mandiiq.unifies.codes (needs DNS/deploy)
-- ✅ https://github.com/flawsom/MandiIQ
+- ✅ https://p01--mandiiq--zbvjrztgjqgw.code.run/health
+- ✅ https://test-mandi-keae7eruks2n4cqvumjfu8.streamlit.app
+- ✅ https://flawsom.github.io/test-mandi/
+- ✅ https://github.com/flawsom/test-mandi
 
 ---
 
@@ -108,7 +108,7 @@ Add domain in Vercel project settings, deploy a wrapper/proxy
 |-------|-----|
 | LFS pointer file in DuckDB | Add `git lfs pull` to Render build command |
 | OOM on free tier | Never set `--workers` beyond 1 (512 MB limit) |
-| GitHub 500 on push | Use SSH: `git remote set-url origin git@github.com:flawsom/MandiIQ.git` |
+| GitHub 500 on push | Use SSH: `git remote set-url origin git@github.com:flawsom/test-mandi.git` |
 | Rainfall 403 | Find working data.gov.in resource ID |
 | Render deploy hook fails | Set `RENDER_DEPLOY_HOOK_URL` in Render env vars |
 | API returns 404 for forecast | Fixed in code — now returns 200 with `"status":"unavailable"` |
@@ -128,7 +128,7 @@ Add domain in Vercel project settings, deploy a wrapper/proxy
   <img src="docs/assets/svg/icon-e22ec59e46bc.svg" width="25" height="25" alt="" style="vertical-align:middle; max-width:100%;" /> GitHub Secrets (for Actions workflows)
 </h2>
 
-Set in: https://github.com/flawsom/MandiIQ/settings/secrets/actions
+Set in: https://github.com/flawsom/test-mandi/settings/secrets/actions
 
 | Secret | Status |
 |--------|--------|
