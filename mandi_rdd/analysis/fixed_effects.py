@@ -11,7 +11,18 @@ Model: modal_price ~ rainfall_departure + district_dummies + month_dummies
 """
 import numpy as np
 import pandas as pd
-from scipy import stats
+
+# scipy + scikit-learn are heavy deps excluded from the Vercel serverless
+# bundle (500 MB cap). Both imports are guarded: with them missing the
+# cross-check returns a clear error instead of crashing.
+try:
+    from scipy import stats
+
+    SCIPY_AVAILABLE = True
+except ImportError:
+    stats = None
+    SCIPY_AVAILABLE = False
+
 import logging
 
 logger = logging.getLogger(__name__)
@@ -56,6 +67,8 @@ def fixed_effects_regression(
     """
     if not SKLEARN_AVAILABLE:
         return {"error": "scikit-learn not installed", "coefficient": None}
+    if not SCIPY_AVAILABLE:
+        return {"error": "scipy not installed", "coefficient": None}
 
     df = df.copy()
     df = df.dropna(subset=[price_col, running_col, entity_col])
@@ -121,7 +134,9 @@ def fixed_effects_regression(
     
     # t-stat and p-value
     t_stat = coefficient / se if se > 0 else 0
-    p_value = 2 * (1 - stats.t.cdf(abs(t_stat), df=dof))
+    p_value = (
+        2 * (1 - stats.t.cdf(abs(t_stat), df=dof)) if SCIPY_AVAILABLE else None
+    )
     
     # R-squared
     ss_res = np.sum(residuals ** 2)

@@ -1,7 +1,16 @@
 # MandiIQ Vercel — minimal requirements for read-only serverless API
 # Vercel copies this over requirements.txt during build via vercel.json buildCommand.
-# Heavy packages (streamlit, prophet, boto3) are excluded to keep the
-# serverless bundle under 500 MB and cold starts under 15 s.
+#
+# NOTE (2026-07): the full 16-dep set measured 504 MB installed (Windows) and
+# ~650-960 MB on Linux (xgboost's manylinux wheel alone is ~250 MB installed
+# + ~190 MB wheel), blowing Vercel's 500 MB function cap. Heavy ML deps are
+# therefore excluded here: scipy, scikit-learn, xgboost, openai, joblib.
+# The API still serves /health, /prices, /metrics, /rdd-result (DB reads) and
+# restores the 1.3M-row DuckDB from Cloudflare R2 at runtime; endpoints that
+# need scipy/sklearn/xgboost (/rdd-plot, /robustness, /risk-score, /ask)
+# return a clear error on Vercel — the full pipeline runs on Northflank.
+# All analysis imports are lazy (inside handlers), so these removals cannot
+# break module-level import of mandi_rdd/api/main.py.
 #
 # WARNING: every package here must be importable at module level by
 # mandi_rdd/api/main.py — if any import fails the entire function 500s.
@@ -15,11 +24,6 @@ pydantic>=2.0.0
 duckdb>=0.8.0
 pandas>=2.0.0
 numpy>=1.24.0
-scipy>=1.11.0
-scikit-learn>=1.2.0
-joblib>=1.2.0
-xgboost>=2.0.0          # /risk-score endpoint loads .json models
-openai>=1.0.0            # /ask endpoint (Ask MandiIQ)
 prometheus-client>=0.19.0 # /metrics endpoint
 python-dotenv>=1.0.0
 requests>=2.28.0

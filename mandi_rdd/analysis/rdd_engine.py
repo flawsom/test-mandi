@@ -18,7 +18,18 @@ interview. The math is straightforward:
 import numpy as np
 import pandas as pd
 from typing import Optional, Tuple
-from scipy import stats
+
+# scipy is a heavy dep excluded from the Vercel serverless bundle (500 MB cap).
+# All usage is guarded so the RDD engine still imports there — p-values are
+# simply None and run_rdd() returns a clear error instead of crashing.
+try:
+    from scipy import stats
+
+    SCIPY_AVAILABLE = True
+except ImportError:  # pragma: no cover
+    stats = None
+    SCIPY_AVAILABLE = False
+
 import logging
 
 logger = logging.getLogger(__name__)
@@ -172,7 +183,10 @@ def local_linear_rdd(
     # t-statistic and p-value
     if se_effect > 0 and effect is not None:
         t_stat = effect / se_effect
-        p_value = 2 * (1 - stats.t.cdf(abs(t_stat), df=n - 4))
+        if SCIPY_AVAILABLE:
+            p_value = 2 * (1 - stats.t.cdf(abs(t_stat), df=n - 4))
+        else:
+            p_value = None  # scipy not bundled on this deployment
     else:
         t_stat = 0
         p_value = 1.0
@@ -345,7 +359,16 @@ def run_rdd(
     """
     from mandi_rdd.storage.duckdb_store import get_monthly_avg_prices
     from mandi_rdd.ingestion.fetch_rainfall import load_district_subdivision_map
-    
+
+    if not SCIPY_AVAILABLE:
+        return {
+            "commodity": commodity,
+            "effect": None,
+            "bandwidth_sensitivity": None,
+            "error": "RDD computation requires scipy, which is not bundled on this "
+                      "deployment — use the full pipeline API (Northflank) instead.",
+        }
+
     if bandwidths is None:
         bandwidths = [15, 20, 25, 30]
     
