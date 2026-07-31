@@ -23,6 +23,10 @@
  *      churn the commit. document.fonts.ready is awaited so webfont
  *      metrics are identical across runs.
  *
+ * Gateway/error responses (5xx or a gateway error page with a 200, e.g.
+ * during a Northflank redeploy) are retried, never captured — the
+ * optimizer's MIN_BYTES guard remains the final backstop.
+ *
  * Exits non-zero if any surface fails (after 2 retries), so the workflow
  * never commits stale/partial captures.
  */
@@ -133,7 +137,22 @@ async function captureOne(browser, shot) {
   let lastErr = null;
   for (let attempt = 1; attempt <= 2; attempt++) {
     try {
-      await page.goto(shot.url, { waitUntil: 'networkidle', timeout: 45000 });
+      if (attempt > 1) await page.waitForTimeout(5000); // redeploy blips last seconds
+      const resp = await page.goto(shot.url, { waitUntil: 'networkidle', timeout: 45000 });
+      // A 5xx (or a gateway error page rendered with a 200, e.g. while the
+      // Northflank API is mid-redeploy) is retried, never captured — a
+      // blank/error page would otherwise pass the capture step and only
+      // trip the optimizer's MIN_BYTES guard later.
+      if (resp && resp.status() >= 400) {
+        throw new Error(`HTTP ${resp.status()} from ${shot.url}`);
+      }
+      const errorPage = await page.evaluate(() => {
+        const t = (document.body ? document.body.innerText : '').slice(0, 500);
+        return /502 bad gateway|503 service unavailable|504 gateway timeout|cloudflare|error code: 5\d\d/i.test(t);
+      });
+      if (errorPage) {
+        throw new Error('gateway/error page body detected');
+      }
       await shot.waitFor(page);
       await stabilizeForScreenshot(page);
       await page.screenshot({

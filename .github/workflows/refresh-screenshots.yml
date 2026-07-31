@@ -67,6 +67,7 @@ jobs:
         with:
           name: screenshot-raw-captures
           path: .browser_shots/
+          include-hidden-files: true   # v4 excludes hidden dirs by default
           if-no-files-found: warn
           retention-days: 14
 
