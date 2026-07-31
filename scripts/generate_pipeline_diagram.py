@@ -823,8 +823,12 @@ def main():
     parser.add_argument(
         "--output",
         type=str,
-        default=str(DIAGRAMS_DIR / "pipeline-flow-live.mmd"),
-        help=f"Output path (default: {DIAGRAMS_DIR / 'pipeline-flow-live.mmd'})",
+        default=None,
+        help=(
+            f"Output path for the full diagram (default: "
+            f"{DIAGRAMS_DIR / 'pipeline-flow-live.mmd'} when no --docs-output "
+            f"is given)"
+        ),
     )
     parser.add_argument(
         "--docs-output",
@@ -834,15 +838,23 @@ def main():
     )
     args = parser.parse_args()
 
-    output_path = None if args.stdout else args.output
-    generate(output_path=output_path, stdout=args.stdout)
+    # NOTE: --docs-output must NOT clobber the full diagram. The hourly
+    # workflow calls `--docs-output` as a belt-and-suspenders refresh while
+    # run_hourly.py already regenerates BOTH files via generate() +
+    # generate_docs() in the same cycle, so the full diagram is only written
+    # here when explicitly requested (--output/--stdout) or when the script is
+    # run bare (backwards-compatible default). This avoids a locked/unavailable
+    # DB silently overwriting diagrams/pipeline-flow-live.mmd with zeros.
+    if args.stdout:
+        generate(stdout=True)
+    elif args.output is not None:
+        generate(output_path=args.output)
+    elif args.docs_output is None:
+        # Bare invocation: keep the historical default behaviour.
+        generate(output_path=str(DIAGRAMS_DIR / "pipeline-flow-live.mmd"))
 
-    # The docs variant is only written when explicitly requested (the hourly
-    # pipeline calls generate_docs() directly so it runs alongside the full
-    # diagram in the same cycle).
     if args.docs_output:
-        docs_path = args.docs_output
-        generate_docs(output_path=docs_path)
+        generate_docs(output_path=args.docs_output)
 
 
 if __name__ == "__main__":
