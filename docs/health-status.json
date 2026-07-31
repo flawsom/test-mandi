@@ -1,16 +1,17 @@
 {
   "schema": 2,
-  "generated_at": "2026-07-31T17:19:23Z",
-  "overall": "healthy",
-  "exit_code": 0,
+  "generated_at": "2026-07-31T17:37:13Z",
+  "overall": "unhealthy",
+  "exit_code": 1,
   "min_prices": 1000000,
   "latest_db_reference": 1335093,
   "serving_latest": [
-    "Vercel",
-    "Northflank"
+    "Vercel"
   ],
   "stale": [],
-  "down": [],
+  "down": [
+    "Northflank"
+  ],
   "count_unavailable": [
     "Streamlit",
     "GitHub Pages"
@@ -27,14 +28,14 @@
       "retried": false
     },
     "Northflank": {
-      "verdict": "LATEST",
-      "n_prices": 1335093,
-      "http_status": 200,
+      "verdict": "DOWN",
+      "n_prices": null,
+      "http_status": 503,
       "kind": "api",
-      "note": "matches latest DB (1,335,093 rows)",
+      "note": "HTTP 503: Service Unavailable (after 3 attempts) [retried 3x]",
       "url": "https://p01--mandiiq--zbvjrztgjqgw.code.run/health",
-      "attempts": 1,
-      "retried": false
+      "attempts": 3,
+      "retried": true
     },
     "Streamlit": {
       "verdict": "UP (auth)",
@@ -57,10 +58,10 @@
       "retried": false
     }
   },
-  "table": "  Surface        | Verdict       |    n_prices | Notes\n  ---------------+---------------+-------------+-----------------------------\n  Vercel         | LATEST        |   1,335,093 | matches latest DB (1,335,093 rows)\n  Northflank     | LATEST        |   1,335,093 | matches latest DB (1,335,093 rows)\n  Streamlit      | UP (auth)     |           - | auth redirect \u2014 count unavailable\n  GitHub Pages   | UP (static)   |           - | HTTP 200 \u2014 no JSON count expected\n\n  Latest DB reference: 1,335,093 rows\n  Serving latest DB : Vercel, Northflank\n  Count unavailable : Streamlit, GitHub Pages",
+  "table": "  Surface        | Verdict       |    n_prices | Notes\n  ---------------+---------------+-------------+-----------------------------\n  Vercel         | LATEST        |   1,335,093 | matches latest DB (1,335,093 rows)\n  Northflank     | DOWN          |           - | HTTP 503: Service Unavailable (after 3 attempts) [retried 3x]\n  Streamlit      | UP (auth)     |           - | auth redirect \u2014 count unavailable\n  GitHub Pages   | UP (static)   |           - | HTTP 200 \u2014 no JSON count expected\n\n  Latest DB reference: 1,335,093 rows\n  Serving latest DB : Vercel\n  Down surfaces     : Northflank\n  Count unavailable : Streamlit, GitHub Pages",
   "history": [
     {
-      "generated_at": "2026-07-31T15:53:26Z",
+      "generated_at": "2026-07-31T17:35:02Z",
       "overall": "healthy",
       "exit_code": 0,
       "latest_db_reference": 1335093,
@@ -70,7 +71,19 @@
         "Streamlit": "UP (auth)",
         "GitHub Pages": "UP (static)"
       }
+    },
+    {
+      "generated_at": "2026-07-31T17:37:13Z",
+      "overall": "unhealthy",
+      "exit_code": 1,
+      "latest_db_reference": 1335093,
+      "verdicts": {
+        "Vercel": "LATEST",
+        "Northflank": "DOWN",
+        "Streamlit": "UP (auth)",
+        "GitHub Pages": "UP (static)"
+      }
     }
   ],
-  "signature": "4ce16870cb80cc25"
+  "signature": "0b096d029c888124"
 }
