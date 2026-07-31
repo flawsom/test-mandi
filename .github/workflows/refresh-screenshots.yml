@@ -5,9 +5,10 @@
 #
 #   1. Captures full-page screenshots of the three live surfaces via
 #      Playwright headless Chromium (scripts/_capture_screenshots.mjs).
-#      Captures are DETERMINISTIC — reducedMotion:'reduce' freezes the
-#      flowing-dots/cursor-trail canvases and the CSS background
-#      animations, and live timestamp meta-elements are removed — so a
+#      Captures are DETERMINISTIC — reducedMotion:'reduce' + a blanket
+#      animation freeze (finite animations finish, infinite ones cancel to
+#      base style), full-page scroll-through so IntersectionObserver
+#      reveals settle, and live timestamp meta-elements removed — so a
 #      git diff only fires on REAL content changes (KPI counts, layout,
 #      API spec), never on animation phase or clock drift.
 #   2. Optimizes the raw captures into the committed gallery PNGs

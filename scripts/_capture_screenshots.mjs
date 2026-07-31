@@ -1,16 +1,27 @@
 /* Capture live screenshots of the three README gallery surfaces.
  *
- * Deterministic for CI (refresh-screenshots.yml): each context is created
- * with reducedMotion:'reduce' so the flowing-dots / cursor-trail canvases
- * never start AND the CSS background animations (atmosphere drift, hero
- * frame draw, live-dot pulse, page loader) are disabled via the page's
- * own prefers-reduced-motion media rules — pixel output is then stable
- * between runs, so a git diff on screenshots/ only fires on REAL content
- * changes (KPI counts, layout, API spec), never on animation phase.
+ * Deterministic for CI (refresh-screenshots.yml): pixel output must be
+ * byte-identical between runs so a git diff on screenshots/ only fires on
+ * REAL content changes (KPI counts, layout, API spec), never on
+ * animation phase. Determinism is guaranteed in three layers:
  *
- * Live timestamp meta-elements (kpi-freshness, surface-status-ts) are
- * removed before capture so their per-minute text drift can't churn the
- * auto-commit either.
+ *   1. reducedMotion:'reduce' on every context — the flowing-dots /
+ *      cursor-trail canvases never start on pages that respect the media
+ *      query, and the landing page's own reduced-motion CSS block
+ *      disables its atmosphere drifters / hero frame draw / live-dot.
+ *   2. stabilizeForScreenshot() freezes EVERY CSS/WAAPI animation at a
+ *      deterministic end state (finite -> finish(), infinite -> cancel()
+ *      back to base style). This covers pages that ship NO
+ *      prefers-reduced-motion rules (docs/index.html has none — its
+ *      infinite .atmosphere-* / .groovy-* / mermaid-pulse animations were
+ *      churning the auto-commit by ~231 bytes per run).
+ *   3. The page is scrolled through a real viewport first so every
+ *      IntersectionObserver .reveal settles into its final visible state
+ *      (docs unobserves elements after revealing, so this is idempotent),
+ *      and live timestamp meta-elements (kpi-freshness,
+ *      surface-status-ts) are removed so per-minute text drift can't
+ *      churn the commit. document.fonts.ready is awaited so webfont
+ *      metrics are identical across runs.
  *
  * Exits non-zero if any surface fails (after 2 retries), so the workflow
  * never commits stale/partial captures.
@@ -31,6 +42,15 @@ const SHOTS = [
     url: 'https://flawsom.github.io/test-mandi/docs/',
     waitFor: async (page) => {
       await page.waitForSelector('[data-countup=n_prices]', { timeout: 20000 }).catch(() => {});
+      // Mermaid replaces the <pre class="mermaid"> with an SVG asynchronously —
+      // never capture the loading spinner state.
+      await page
+        .waitForFunction(() => {
+          const loading = document.querySelectorAll('.mermaid-wrapper.loading').length;
+          const svg = document.querySelector('.mermaid-wrapper svg') || document.querySelector('svg.mermaid');
+          return loading === 0 && !!svg;
+        }, { timeout: 30000 })
+        .catch(() => {});
       await page.waitForTimeout(2500);
     },
   },
@@ -55,6 +75,48 @@ async function stabilizeForScreenshot(page) {
       if (el) el.remove();
     }
   });
+  // Scroll the full page through a real viewport so every
+  // IntersectionObserver reveal fires and settles BEFORE the capture.
+  // Below-the-fold .reveal sections start at opacity 0; if we only relied
+  // on Playwright's fullPage viewport expansion, their 0.8s reveal
+  // transition would still be running — or not started — at capture time,
+  // which varies run-to-run. Both Pages surfaces unobserve elements once
+  // revealed, so scrolling back to top leaves everything in its final
+  // visible state (idempotent).
+  await page.evaluate(async () => {
+    const h = Math.max(document.body.scrollHeight, document.documentElement.scrollHeight);
+    for (let y = 0; y < h; y += 700) {
+      // behavior:'instant' — never let a page's scroll-behavior:smooth turn
+      // this loop into a lagging animation that misses reveals.
+      window.scrollTo({ top: y, behavior: 'instant' });
+      await new Promise((r) => setTimeout(r, 35));
+    }
+    window.scrollTo({ top: 0, behavior: 'instant' });
+  });
+  await page.waitForTimeout(1200); // let reveal transitions finish
+
+  // Freeze every CSS/WAAPI animation at a deterministic end state.
+  // Finite animations (hero frame draw, reveals) jump to completion;
+  // infinite ones (atmosphere drifters, groovy paths, live-dot pulse,
+  // mermaid-pulse dots) are cancelled back to their base style. This is
+  // what makes screenshots byte-identical between runs on pages that
+  // ship NO prefers-reduced-motion rules (docs/index.html has none — the
+  // landing page's own media block was the only reason IT converged).
+  await page.evaluate(() => {
+    if (!document.getAnimations) return;
+    for (const a of document.getAnimations()) {
+      try {
+        a.finish();
+      } catch (_) {
+        try {
+          a.cancel();
+        } catch (_2) {
+          /* element already gone */
+        }
+      }
+    }
+  });
+
   // Wait for webfonts to settle so text metrics are identical across runs
   // (a font loading late — or falling back — would otherwise create a
   // spurious pixel diff and an unwanted daily commit).
