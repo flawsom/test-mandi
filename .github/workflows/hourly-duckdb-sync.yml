@@ -1,9 +1,11 @@
 # MandiIQ — Hourly DuckDB Sync + Redeploy
 #
 # Runs the hourly ingestion (run_hourly.py) on a schedule in GitHub Actions,
-# detects whether the DuckDB's DATA actually changed (row counts + max date —
-# NOT raw file bytes, so spurious DuckDB churn never triggers a commit), and
-# when it did:
+# detects whether the DATA actually changed — the DuckDB's row counts + max
+# date (NOT raw file bytes, so spurious DuckDB churn never triggers a commit)
+# OR the ndvi_latest.json records payload (record count + content hash of the
+# records list, deliberately EXCLUDING the last_updated timestamp so identical
+# data never churns commits) — and when it did:
 #   1. Commits the refreshed DuckDB + the FULL live artifact set (ndvi_latest.json,
 #      last_hourly_run.json, last_ingest_status.json, last_step_timings.json,
 #      last_integrity_check.json, _ingestion_progress.json, _integrity_history.json,
@@ -84,10 +86,12 @@ jobs:
           python -m pip install --upgrade pip
           pip install -r requirements.txt
 
-      - name: Snapshot committed DB signature
+      - name: Snapshot committed DB + NDVI artifact signature
         id: snapshot
         run: |
           python - <<'PY'
+          import hashlib
+          import json
           import os
           import duckdb
 
@@ -117,9 +121,36 @@ jobs:
               finally:
                   conn.close()
 
+          def ndvi_signature(path):
+              # Stable signature of ndvi_latest.json: record count + SHA-256 of
+              # the records payload ONLY. Deliberately excludes the top-level
+              # "last_updated" timestamp (churns every run) so a re-export of
+              # identical data never triggers a commit, while a real NDVI
+              # records change always does.
+              if not os.path.exists(path):
+                  return ""
+              try:
+                  with open(path, encoding="utf-8") as f:
+                      data = json.load(f)
+                  recs = data.get("records", []) if isinstance(data, dict) else data
+                  # Normalize list order too: the Sentinel fetch is paged and
+                  # ordering can vary between runs, so identical data must hash
+                  # identically. sort_keys handles keys; this handles rows.
+                  recs = sorted(recs, key=lambda r: json.dumps(r, sort_keys=True, default=str))
+                  payload = json.dumps(recs, sort_keys=True, default=str)
+                  return "ndvi_records=%d|ndvi_hash=%s" % (
+                      len(recs),
+                      hashlib.sha256(payload.encode()).hexdigest()[:16],
+                  )
+              except Exception as exc:
+                  return "ndvi_err=" + type(exc).__name__
+
           with open("sig_before.txt", "w") as f:
               f.write(signature("mandi_rdd/data/mandi_iq.duckdb"))
+          with open("sig_ndvi_before.txt", "w") as f:
+              f.write(ndvi_signature("mandi_rdd/data/ndvi_latest.json"))
           print("committed signature:", open("sig_before.txt").read() or "(no DB)")
+          print("committed NDVI sig: ", open("sig_ndvi_before.txt").read() or "(no ndvi_latest.json)")
           PY
 
       - name: Run hourly ingestion
@@ -132,10 +163,12 @@ jobs:
         run: |
           python run_hourly.py || echo "::warning::run_hourly.py exited non-zero — continuing to check for data changes"
 
-      - name: Compare DB signature (real data change?)
+      - name: Compare data signature (DB or NDVI artifact change?)
         id: changed
         run: |
           python - <<'PY'
+          import hashlib
+          import json
           import os
           import duckdb
 
@@ -165,17 +198,47 @@ jobs:
               finally:
                   conn.close()
 
+          def ndvi_signature(path):
+              # Mirrors the snapshot step (must stay identical — it is the
+              # before/after comparison key).
+              if not os.path.exists(path):
+                  return ""
+              try:
+                  with open(path, encoding="utf-8") as f:
+                      data = json.load(f)
+                  recs = data.get("records", []) if isinstance(data, dict) else data
+                  # Normalize list order too: the Sentinel fetch is paged and
+                  # ordering can vary between runs, so identical data must hash
+                  # identically. sort_keys handles keys; this handles rows.
+                  recs = sorted(recs, key=lambda r: json.dumps(r, sort_keys=True, default=str))
+                  payload = json.dumps(recs, sort_keys=True, default=str)
+                  return "ndvi_records=%d|ndvi_hash=%s" % (
+                      len(recs),
+                      hashlib.sha256(payload.encode()).hexdigest()[:16],
+                  )
+              except Exception as exc:
+                  return "ndvi_err=" + type(exc).__name__
+
           before = open("sig_before.txt").read().strip()
           after = signature("mandi_rdd/data/mandi_iq.duckdb")
-          print("before:", before or "(no DB)")
-          print("after :", after or "(no DB)")
-          print("changed:", before != after)
+          ndvi_before = open("sig_ndvi_before.txt").read().strip()
+          ndvi_after = ndvi_signature("mandi_rdd/data/ndvi_latest.json")
+          db_changed = before != after
+          ndvi_changed = ndvi_before != ndvi_after
+          changed = db_changed or ndvi_changed
+          print("before:      ", before or "(no DB)")
+          print("after:       ", after or "(no DB)")
+          print("ndvi before: ", ndvi_before or "(none)")
+          print("ndvi after:  ", ndvi_after or "(none)")
+          print("db_changed:  ", db_changed)
+          print("ndvi_changed:", ndvi_changed)
+          print("changed:     ", changed)
           with open("changed.txt", "w") as f:
-              f.write("true" if before != after else "false")
+              f.write("true" if changed else "false")
           PY
           echo "changed=$(cat changed.txt)" >> "$GITHUB_OUTPUT"
           if [ "$(cat changed.txt)" = "false" ]; then
-            echo "::notice::No real data change (row counts + max date identical) — skipping commit & redeploy"
+            echo "::notice::No real data change (DB rows/max-date + NDVI artifact identical) — skipping commit & redeploy"
           fi
 
       - name: Regenerate docs pipeline diagram (live counts)
