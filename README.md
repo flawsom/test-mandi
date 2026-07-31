@@ -207,48 +207,56 @@
 <h2 style="font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Helvetica,Arial,sans-serif; font-size:1.5em; font-weight:600; color:#E0E0E0; display:flex; align-items:center; gap:10px; margin:0 0 16px 0; padding-bottom:8px; border-bottom:1px solid rgba(255,255,255,0.06);">
   <img src="docs/assets/svg/icon-e22ec59e46bc.svg" width="25" height="25" alt="" style="vertical-align:middle; max-width:100%;" /> Architecture
 </h2>
+<div align="center">
+<img src="docs/assets/svg/architecture-diagram.svg" width="100%" alt="MandiIQ Architecture" />
+<br />
+<em style="color:#94A3B8;">Pre-rendered pipeline diagram — crisp at any zoom, identical on every platform</em>
+</div>
+
+<details>
+<summary><strong>Architecture source (Mermaid)</strong> — click to expand</summary>
+
 ```mermaid
-%%{init: {'theme': 'dark', 'themeVariables': { 'primaryColor': '#0B0F1E', 'primaryTextColor': '#E0E0E0', 'lineColor': '#00FF88', 'secondaryColor': '#1A3A2A', 'tertiaryColor': '#1A1A3A' }}}%%
 flowchart TB
-    subgraph Sources["📡 Data Sources"]
-        A1["data.gov.in<br/><i>Daily Mandi Prices</i>"]
-        A2["Agmarknet<br/><i>Historical CSV Archive</i>"]
-        A3["IMD Rainfall<br/><i>Sub-division Grids</i>"]
-        A4["Sentinel Hub<br/><i>Satellite NDVI</i>"]
+    subgraph Sources["Data Sources"]
+        A1["data.gov.in / Daily Mandi Prices"]
+        A2["Agmarknet / Historical CSV Archive"]
+        A3["IMD Rainfall / Sub-division Grids"]
+        A4["Sentinel Hub / Satellite NDVI"]
     end
 
-    subgraph Ingest["⛓️ Ingestion Pipeline"]
-        B1["fetch_prices.py<br/>Retry + Quarantine"]
-        B2["fetch_varietywise.py<br/>Adaptive Probes"]
-        B3["fetch_rainfall.py<br/>IMD Monthly Data"]
-        B4["fetch_ndvi.py<br/>OAuth2 + Stats API"]
-        B5["backfill_state.py<br/>District → State"]
-        B6["data_lineage<br/>Source Tracking"]
+    subgraph Ingest["Ingestion Pipeline"]
+        B1["fetch_prices.py / Retry + Quarantine"]
+        B2["fetch_varietywise.py / Adaptive Probes"]
+        B3["fetch_rainfall.py / IMD Monthly Data"]
+        B4["fetch_ndvi.py / OAuth2 + Stats API"]
+        B5["backfill_state.py / District to State"]
+        B6["data_lineage / Source Tracking"]
     end
 
-    subgraph Store["💾 Analytical Warehouse"]
-        C1["DuckDB<br/><i>mandi_iq.duckdb</i>"]
-        C2["Prices · Varieties<br/>Lineage · Metrics"]
+    subgraph Store["Analytical Warehouse"]
+        C1["DuckDB / mandi_iq.duckdb / 1.3M rows"]
+        C2["Prices - Varieties - Lineage - Metrics"]
     end
 
-    subgraph Analysis["🧠 Analysis Engine"]
-        D1["RDD Causal Est.<br/>McCrary Density Test"]
-        D2["XGBoost Forecast<br/>Rolling Volatility"]
-        D3["Anomaly Detection<br/>>2σ Deviation"]
-        D4["Robustness Checks<br/>Bandwidth · Placebo"]
+    subgraph Analysis["Analysis Engine"]
+        D1["RDD Causal Est. / McCrary Density Test"]
+        D2["XGBoost Forecast / Rolling Volatility"]
+        D3["Anomaly Detection / 2 sigma Dev"]
+        D4["Robustness Checks / Bandwidth - Placebo"]
     end
 
-    subgraph AI["🤖 AI Orchestrator"]
-        E1["NVIDIA DeepSeek V4<br/>Primary LLM"]
-        E2["Gemini · OpenRouter<br/>Fallback Chain"]
-        E3["Nightly Narrative<br/>3-4 Sentence Summary"]
+    subgraph AI["AI Orchestrator"]
+        E1["NVIDIA DeepSeek V4 / Primary LLM"]
+        E2["Gemini - OpenRouter / Fallback Chain"]
+        E3["Nightly Narrative / 3-4 Sentence Summary"]
     end
 
-    subgraph Serve["🚀 Serving Layer"]
-        F1["FastAPI Gateway<br/>15 Endpoints"]
-        F2["Streamlit Dashboard<br/>11 Pages"]
-        F3["Grafana Dashboard<br/>31 Panels"]
-        F4["Prometheus Metrics<br/>Latency · Errors"]
+    subgraph Serve["Serving Layer"]
+        F1["FastAPI Gateway / 15 Endpoints"]
+        F2["Streamlit Dashboard / 11 Pages"]
+        F3["Grafana Dashboard / 31 Panels"]
+        F4["Prometheus Metrics / Latency - Errors"]
     end
 
     A1 --> B1
@@ -277,6 +285,8 @@ flowchart TB
     F1 --> F4
     F2 --> F3
 ```
+
+</details>
 </div>
 <br />
 <div style="position:relative; height:60px; overflow:hidden; width:100%; margin:8px 0;">
