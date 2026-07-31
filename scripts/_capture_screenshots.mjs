@@ -22,6 +22,12 @@
  *      surface-status-ts) are removed so per-minute text drift can't
  *      churn the commit. document.fonts.ready is awaited so webfont
  *      metrics are identical across runs.
+ *   4. A settle gate waits until the DOM is stable (two consecutive
+ *      identical innerHTML snapshots, polling 500ms) before capture —
+ *      on slow CI runners the docs page's async mermaid badge patch
+ *      (MutationObserver injecting live-value foreignObjects) and the
+ *      health-badge fetch can otherwise land at different stages
+ *      run-to-run.
  *
  * Gateway/error responses (5xx or a gateway error page with a 200, e.g.
  * during a Northflank redeploy) are retried, never captured — the
@@ -70,7 +76,7 @@ const SHOTS = [
   },
 ];
 
-async function stabilizeForScreenshot(page) {
+async function stabilizeForScreenshot(page, shotName) {
   // Hide live "last updated" meta text so its per-minute drift never
   // churns the CI auto-commit. Real content changes still show up.
   await page.evaluate(() => {
@@ -98,6 +104,35 @@ async function stabilizeForScreenshot(page) {
     window.scrollTo({ top: 0, behavior: 'instant' });
   });
   await page.waitForTimeout(1200); // let reveal transitions finish
+
+  // Settle gate: wait until the page DOM stops changing (two consecutive
+  // identical samples). On slow CI runners the docs page's deferred work —
+  // mermaid SVG render + the __patchMermaidMetrics MutationObserver that
+  // injects live-value foreignObject badges into the diagram + the health
+  // badge fetching docs/health-status.json — can land anywhere inside the
+  // wait windows above, so captures could catch pre-patch or post-patch
+  // states differently run-to-run. The settle gate makes the capture state
+  // deterministic regardless of how fast the runner is.
+  await page
+    .waitForFunction(
+      () => {
+        const len = document.body ? document.body.innerHTML.length : -1;
+        if (window.__mandiqSettleLen === undefined) {
+          window.__mandiqSettleLen = len;
+          return false;
+        }
+        const stable = window.__mandiqSettleLen === len;
+        window.__mandiqSettleLen = len;
+        return stable;
+      },
+      { timeout: 25000, polling: 500 }
+    )
+    .catch((e) => {
+      // Never block the capture — a genuinely churning page is caught by
+      // the optimizer's MIN_BYTES guard or the fail-fast design — but log
+      // the timeout so a persistent non-settle is visible in CI logs.
+      console.log(`settle gate timeout ${shotName}: ${e.message.split('\n')[0]}`);
+    });
 
   // Freeze every CSS/WAAPI animation at a deterministic end state.
   // Finite animations (hero frame draw, reveals) jump to completion;
@@ -154,7 +189,7 @@ async function captureOne(browser, shot) {
         throw new Error('gateway/error page body detected');
       }
       await shot.waitFor(page);
-      await stabilizeForScreenshot(page);
+      await stabilizeForScreenshot(page, shot.name);
       await page.screenshot({
         path: `.browser_shots/${shot.name}.png`,
         fullPage: true,
