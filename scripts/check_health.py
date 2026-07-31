@@ -35,6 +35,7 @@ import datetime
 import hashlib
 import json
 import sys
+import time
 import urllib.error
 import urllib.request
 
@@ -50,12 +51,24 @@ MIN_PRICES = 1_000_000  # sanity floor: below this we assume a broken/empty DB
 TIMEOUT_S = 60  # cold starts on Vercel may take ~35s for R2 download
 HISTORY_MAX = 30  # keep the last ~30 verdict sets for the landing sparkline
 
+# The Northflank API redeploys on every push to master, so a transient
+# 503 "no healthy upstream" mid-redeploy is expected. Retry each surface
+# up to MAX_ATTEMPTS times, RETRY_DELAY_S apart, before marking it down.
+MAX_ATTEMPTS = 3
+RETRY_DELAY_S = 20
+RETRYABLE_HTTP = {429, 500, 502, 503, 504}  # back-off + gateway errors
+
 
 def _probe(url: str, timeout: int = TIMEOUT_S) -> dict:
-    """Probe a URL and return parsed result dict.
+    """Probe a URL with retries and return parsed result dict.
+
+    Retries up to MAX_ATTEMPTS times (RETRY_DELAY_S apart) when the fetch
+    fails with a network error or a retryable HTTP status (429/5xx), which
+    covers the API being mid-redeploy right after a push. A definitive
+    answer (200, 303 auth redirect, 4xx client error) is returned at once.
 
     Returns dict with keys: url, http_status, n_prices (int or None),
-    status (str or None), error (str or None).
+    status (str or None), error (str or None), attempts (int).
     """
     result = {
         "url": url,
@@ -63,27 +76,49 @@ def _probe(url: str, timeout: int = TIMEOUT_S) -> dict:
         "n_prices": None,
         "status": None,
         "error": None,
+        "attempts": 0,
     }
-    req = urllib.request.Request(url, headers={"User-Agent": "MandiIQ/health-check"})
-    try:
-        with urllib.request.urlopen(req, timeout=timeout) as resp:
-            result["http_status"] = resp.status
-            body = resp.read().decode("utf-8", errors="replace")
-    except urllib.error.HTTPError as e:
-        result["http_status"] = e.code
-        # Streamlit Community Cloud private apps redirect to auth (303) —
-        # the app is alive, just behind the auth wall.
-        if e.code == 303:
-            result["status"] = "private (auth redirect)"
-        else:
+    body = None
+    for attempt in range(1, MAX_ATTEMPTS + 1):
+        result["attempts"] = attempt
+        req = urllib.request.Request(url, headers={"User-Agent": "MandiIQ/health-check"})
+        try:
+            with urllib.request.urlopen(req, timeout=timeout) as resp:
+                result["http_status"] = resp.status
+                body = resp.read().decode("utf-8", errors="replace")
+        except urllib.error.HTTPError as e:
+            result["http_status"] = e.code
+            # Streamlit Community Cloud private apps redirect to auth (303) —
+            # the app is alive, just behind the auth wall.
+            if e.code == 303:
+                result["status"] = "private (auth redirect)"
+                return result
+            if e.code in RETRYABLE_HTTP:
+                if attempt < MAX_ATTEMPTS:
+                    print(f"  [retry {attempt}/{MAX_ATTEMPTS}] {url} -> HTTP {e.code} ({e.reason}); retrying in {RETRY_DELAY_S}s")
+                    time.sleep(RETRY_DELAY_S)
+                    continue
+                result["error"] = f"HTTP {e.code}: {e.reason} (after {MAX_ATTEMPTS} attempts)"
+                return result
             result["error"] = f"HTTP {e.code}: {e.reason}"
-        return result
-    except urllib.error.URLError as e:
-        result["error"] = f"URLError: {e.reason}"
-        return result
-    except OSError as e:
-        result["error"] = f"OSError: {e}"
-        return result
+            return result
+        except urllib.error.URLError as e:
+            if attempt < MAX_ATTEMPTS:
+                print(f"  [retry {attempt}/{MAX_ATTEMPTS}] {url} -> {e.reason}; retrying in {RETRY_DELAY_S}s")
+                time.sleep(RETRY_DELAY_S)
+                continue
+            result["error"] = f"URLError: {e.reason} (after {MAX_ATTEMPTS} attempts)"
+            return result
+        except OSError as e:
+            if attempt < MAX_ATTEMPTS:
+                print(f"  [retry {attempt}/{MAX_ATTEMPTS}] {url} -> OSError: {e}; retrying in {RETRY_DELAY_S}s")
+                time.sleep(RETRY_DELAY_S)
+                continue
+            result["error"] = f"OSError: {e} (after {MAX_ATTEMPTS} attempts)"
+            return result
+
+        # Reached only on a successful HTTP exchange.
+        break
 
     # Try JSON parse — /health endpoints return JSON.
     # GitHub Pages returns HTML, so we just check HTTP 200.
@@ -226,6 +261,10 @@ def run_check(prev_history: list | None = None) -> tuple[bool, dict]:
             all_ok = False
             down.append(name)
 
+        # Surface when a surface needed retries (transient 503s mid-redeploy).
+        if r.get("attempts", 1) > 1:
+            note = f"{note} [retried {r['attempts']}x]"
+
         n_str = f"{n:,}" if n is not None else "-"
         lines.append(f"  {name:<14} | {verdict:<13} | {n_str:>11} | {note}")
 
@@ -257,7 +296,7 @@ def run_check(prev_history: list | None = None) -> tuple[bool, dict]:
         lines.append(f"  Count unavailable : {', '.join(count_unavailable)}")
 
     # 5. Build machine-readable report.
-    now_iso = datetime.datetime.now(datetime.timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ")
+    now_iso = datetime.datetime.now(datetime.UTC).strftime("%Y-%m-%dT%H:%M:%SZ")
     report = {
         "schema": 2,
         "generated_at": now_iso,

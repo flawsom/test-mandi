@@ -61,9 +61,25 @@ jobs:
         id: remote
         run: |
           echo "Fetching dashboard status from ${API_URL}/admin/dashboard-status..."
-          HTTP_CODE=$(curl -s -o /tmp/dashboard_status.json -w "%{http_code}" \
-            "${API_URL}/admin/dashboard-status" \
-            --max-time 15)
+          # The API redeploys on every push to master (Northflank is wired to
+          # the repo), so a transient 503 mid-redeploy is expected. Retry up to
+          # 3 times, 20s apart, before declaring the fetch failed.
+          HTTP_CODE=""
+          MAX_ATTEMPTS=3
+          RETRY_DELAY=20
+          for ((ATTEMPT=1; ATTEMPT<=MAX_ATTEMPTS; ATTEMPT++)); do
+            HTTP_CODE=$(curl -s -o /tmp/dashboard_status.json -w "%{http_code}" \
+              "${API_URL}/admin/dashboard-status" \
+              --max-time 15)
+            echo "Attempt ${ATTEMPT}/${MAX_ATTEMPTS}: HTTP ${HTTP_CODE}"
+            if [ "$HTTP_CODE" = "200" ]; then
+              break
+            fi
+            if [ "$ATTEMPT" -lt "$MAX_ATTEMPTS" ]; then
+              echo "  Not ready yet — retrying in ${RETRY_DELAY}s..."
+              sleep "$RETRY_DELAY"
+            fi
+          done
           echo "API responded with HTTP $HTTP_CODE"
           if [ "$HTTP_CODE" != "200" ]; then
             echo "::error::Failed to fetch dashboard status from production API (HTTP $HTTP_CODE)"
