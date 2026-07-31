@@ -24,7 +24,7 @@ on:
       api_url:
         description: "API base URL to check"
         required: false
-        default: "https://p01--mandiiq--x4n8x4gkmzht.code.run"
+        default: "https://p01--mandiiq--zbvjrztgjqgw.code.run"
         type: string
 
 env:
@@ -138,40 +138,40 @@ jobs:
         run: |
           TITLE="Dashboard drift detected: production JSON differs from repo"
           BODY=$(cat << EOF
-## Dashboard Drift Detected
-
-The production API is serving a dashboard JSON file that differs from the
-committed version in this repository. This means someone edited the dashboard
-directly in Grafana and did **not** commit the updated JSON.
-
-### Details
-
-| Field | Local (repo) | Production (API) |
-|-------|-------------|------------------|
-| **MD5 Hash** | \`${{ needs.detect-drift.outputs.local_hash }}\` | \`${{ needs.detect-drift.outputs.remote_hash }}\` |
-| **File mtime** | — | ${{ needs.detect-drift.outputs.remote_mtime }} |
-
-### How to fix
-
-1. Export the current dashboard from Grafana:
-   - Open the dashboard in Grafana
-   - **Share** → **Export** → **Save to file**
-2. Replace \`dashboards/mandiiq-pipeline.json\` in this repo
-3. Commit and push to \`master\`
-4. The \`Dashboard Sync\` workflow will auto-refresh the API cache
-5. Close this issue when done
-
-### Why this matters
-
-The dashboard JSON in the repo is the source of truth. If the production
-instance diverges, the next deploy will overwrite the Grafana-edited version
-with the stale repo version, losing any changes made directly in Grafana.
-
----
-
-_Automated by the Dashboard Drift Detector workflow._
-EOF
-)
+          ## Dashboard Drift Detected
+          
+          The production API is serving a dashboard JSON file that differs from the
+          committed version in this repository. This means someone edited the dashboard
+          directly in Grafana and did **not** commit the updated JSON.
+          
+          ### Details
+          
+          | Field | Local (repo) | Production (API) |
+          |-------|-------------|------------------|
+          | **MD5 Hash** | \`${{ needs.detect-drift.outputs.local_hash }}\` | \`${{ needs.detect-drift.outputs.remote_hash }}\` |
+          | **File mtime** | — | ${{ needs.detect-drift.outputs.remote_mtime }} |
+          
+          ### How to fix
+          
+          1. Export the current dashboard from Grafana:
+             - Open the dashboard in Grafana
+             - **Share** → **Export** → **Save to file**
+          2. Replace \`dashboards/mandiiq-pipeline.json\` in this repo
+          3. Commit and push to \`master\`
+          4. The \`Dashboard Sync\` workflow will auto-refresh the API cache
+          5. Close this issue when done
+          
+          ### Why this matters
+          
+          The dashboard JSON in the repo is the source of truth. If the production
+          instance diverges, the next deploy will overwrite the Grafana-edited version
+          with the stale repo version, losing any changes made directly in Grafana.
+          
+          ---
+          
+          _Automated by the Dashboard Drift Detector workflow._
+          EOF
+          )
           echo "Filing GitHub issue..."
           gh issue create \
             --repo ${{ github.repository }} \

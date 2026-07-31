@@ -113,6 +113,12 @@ def run_hourly(force_full: bool = False) -> dict:
     logger.info(f"Force full analysis: {force_full}")
     logger.info("=" * 60)
 
+    # R2-as-data-bus: on a volumeless cron (Northflank free tier) the
+    # ephemeral DB starts empty/tiny. Restore the last-known-good backup
+    # from R2 FIRST so ingestion adds on top of the 1.3M-row DB and the
+    # post-run upload grows the backup instead of clobbering it.
+    _restore_db_if_empty()
+
     try:
         from mandi_rdd.ingestion.scheduler import run_ingestion
 
@@ -170,6 +176,42 @@ def run_hourly(force_full: bool = False) -> dict:
             error=str(e),
         )
         return {"status": "error", "error": str(e)}
+
+def _restore_db_if_empty() -> None:
+    """Bootstrap the job DB from R2 when missing/tiny (volumeless cron).
+
+    The Northflank cron runs without the ReadWriteOnce volume (it lives on
+    the API), so its ephemeral DuckDB starts empty or near-empty. Download
+    the last-known-good backup from R2 first so the hourly ingest adds on
+    top of the 1.3M-row DB and the post-run upload keeps the backup whole.
+    Non-fatal: failures fall through to normal ingest-from-scratch.
+    """
+    try:
+        import duckdb  # type: ignore
+
+        from mandi_rdd.storage.duckdb_store import resolve_db_path
+
+        path = resolve_db_path()
+        n = 0
+        if path.exists():
+            try:
+                chk = duckdb.connect(str(path), read_only=True)
+                try:
+                    n = int(chk.execute("SELECT COUNT(*) FROM prices").fetchone()[0])
+                finally:
+                    chk.close()
+            except Exception:
+                n = 0
+        if n >= 100_000:
+            logger.info(f"R2 bootstrap: DB already has {n} prices — no restore needed")
+            return
+
+        from mandi_rdd.storage.r2_sync import restore_db
+        result = restore_db(path)
+        logger.info(f"R2 bootstrap: restored {result.get('prices')} prices before ingesting")
+    except Exception as e:  # noqa: BLE001
+        logger.warning(f"R2 bootstrap skipped (non-fatal): {e}")
+
 
 def _run_integrity_check() -> None:
     """Run the data integrity check and log warnings for any drifts."""

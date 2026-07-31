@@ -25,6 +25,7 @@ import gzip
 import hashlib
 import hmac
 import os
+import shutil
 import urllib.error
 import urllib.request
 from pathlib import Path
@@ -82,18 +83,24 @@ def _headers(
     body: Optional[bytes] = None,
     key: str = R2_KEY,
     query: str = "",
+    payload_hash_override: Optional[str] = None,
 ) -> dict:
     """Build SigV4 headers for a request against the R2 S3-compatible endpoint.
 
     ``query`` must be the exact (URL-encoded, sorted) query string sent in the
     URL — callers pass pre-encoded queries (e.g. 'list-type=2').
+    ``payload_hash_override`` lets streaming callers sign the body's SHA-256
+    without holding the whole body in memory.
     """
     account_id = creds["account_id"]
     now = datetime.datetime.now(datetime.timezone.utc)
     amz_date = now.strftime("%Y%m%dT%H%M%SZ")
     date_stamp = now.strftime("%Y%m%d")
     host = f"{account_id}.r2.cloudflarestorage.com"
-    payload_hash = hashlib.sha256(body if body is not None else b"").hexdigest()
+    if payload_hash_override is not None:
+        payload_hash = payload_hash_override
+    else:
+        payload_hash = hashlib.sha256(body if body is not None else b"").hexdigest()
     canonical_uri = f"/{creds['bucket']}/{key}" if key else f"/{creds['bucket']}"
     signed_headers = "host;x-amz-content-sha256;x-amz-date"
     canonical_headers = (
@@ -188,69 +195,142 @@ def list_objects(creds: dict) -> list[dict]:
 
 
 def gzip_db(db_path: Path) -> tuple[bytes, int]:
-    """Deterministic gzip of the DB file (mtime=0) — keeps --check md5 valid."""
+    """Deterministic gzip of the DB file (mtime=0) — keeps --check md5 valid.
+
+    In-memory (use ``_gzip_db_to_file`` for large DBs).
+    """
     raw = db_path.read_bytes()
     return gzip.compress(raw, compresslevel=6, mtime=0), len(raw)
 
 
-def upload_db(db_path: Optional[Path] = None) -> dict:
-    """Gzip the DuckDB and PUT it to R2 as mandi_iq.duckdb.gz.
+_MIN_UPLOAD_ROWS = 100_000
+"""Clobber guard: refuse to upload a DB with fewer prices than this.
 
-    Raises FileNotFoundError / PermissionError (locked DB on Windows) /
+The Northflank cron runs volumeless on the free tier, so its ephemeral DB
+starts empty/tiny; without this guard its post-ingest upload would overwrite
+the ~1.3M-row R2 backup with a few thousand rows.
+"""
+
+
+def _file_sha256(path: Path) -> str:
+    """Streaming SHA-256 of a file — flat memory for large DuckDBs."""
+    h = hashlib.sha256()
+    with open(path, "rb") as f:
+        for chunk in iter(lambda: f.read(1024 * 256), b""):
+            h.update(chunk)
+    return h.hexdigest()
+
+
+def _gzip_db_to_file(db_path: Path) -> Path:
+    """Stream a deterministic gzip (mtime=0) of the DB into a temp file.
+
+    Byte-identical to ``gzip_db``'s output (so --check md5 still matches the
+    remote ETag) but never holds the raw DB in memory.
+    """
+    gz_path = db_path.with_suffix(".duckdb.gz.tmp")
+    gz_path.unlink(missing_ok=True)
+    with open(db_path, "rb") as fin, gzip.GzipFile(
+        filename="", mode="wb", compresslevel=6, mtime=0, fileobj=open(gz_path, "wb")
+    ) as gout:
+        shutil.copyfileobj(fin, gout, length=1024 * 256)
+    return gz_path
+
+
+def _db_price_count(db_path: Path) -> int:
+    """Open the DB read-only and return the prices row count (-1 on failure)."""
+    try:
+        import duckdb  # type: ignore
+
+        chk = duckdb.connect(str(db_path), read_only=True)
+        try:
+            return int(chk.execute("SELECT COUNT(*) FROM prices").fetchone()[0])
+        finally:
+            chk.close()
+    except Exception:
+        return -1
+
+
+def upload_db(db_path: Optional[Path] = None) -> dict:
+    """Gzip the DuckDB and PUT it to R2 as mandi_iq.duckdb.gz (streamed).
+
+    Refuses to upload a DB with fewer than ``_MIN_UPLOAD_ROWS`` prices so a
+    volumeless cron that started from an empty DB can never clobber the good
+    backup with its tiny post-ingest state.
+
+    Raises FileNotFoundError / ValueError (clobber guard) /
     urllib.error.HTTPError (403 = read-only token, etc.) / R2NotConfigured.
     """
-    from mandi_rdd.storage.duckdb_store import DB_PATH
+    from mandi_rdd.storage.duckdb_store import resolve_db_path
 
-    path = db_path or DB_PATH
+    # resolve_db_path(): on the volumeless cron, MANDIIQ_DB_PATH=/data/...
+    # doesn't exist, so restore + ingest target the repo DB — upload the SAME
+    # file the pipeline actually wrote, never the un-created env path.
+    path = db_path or resolve_db_path()
     if not path.exists():
         raise FileNotFoundError(f"Database file not found: {path}")
+    n_prices = _db_price_count(path)
+    if n_prices < _MIN_UPLOAD_ROWS:
+        raise ValueError(
+            f"upload_db: refusing to upload — DB has {n_prices} prices "
+            f"(< {_MIN_UPLOAD_ROWS}). Volumeless crons must restore from R2 "
+            f"before ingesting so the backup never shrinks."
+        )
     creds = get_creds()
-    gz, raw_size = gzip_db(path)
-    url = f"{_base_url(creds)}/{creds['bucket']}/{R2_KEY}"
-    req = urllib.request.Request(
-        url,
-        data=gz,
-        method="PUT",
-        headers=_headers("PUT", creds, body=gz),
-    )
-    with urllib.request.urlopen(req, timeout=600) as resp:
-        resp.read()
-    return {
-        "status": "ok",
-        "r2_key": R2_KEY,
-        "raw_bytes": raw_size,
-        "compressed_bytes": len(gz),
-        "compression_pct": round(100 * (1 - len(gz) / raw_size), 1),
-    }
-
-
-def download_db(creds: dict) -> bytes:
-    """Download the gzipped DB backup from R2 (raw gzip bytes)."""
-    url = f"{_base_url(creds)}/{creds['bucket']}/{R2_KEY}"
-    req = urllib.request.Request(
-        url,
-        method="GET",
-        headers=_headers("GET", creds),
-    )
-    with urllib.request.urlopen(req, timeout=120) as resp:
-        return resp.read()
+    gz_path = _gzip_db_to_file(path)
+    try:
+        raw_size = path.stat().st_size
+        compressed_bytes = gz_path.stat().st_size
+        payload_hash = _file_sha256(gz_path)
+        url = f"{_base_url(creds)}/{creds['bucket']}/{R2_KEY}"
+        headers = _headers("PUT", creds, body=b"", payload_hash_override=payload_hash)
+        headers["Content-Length"] = str(compressed_bytes)
+        with open(gz_path, "rb") as fbody:
+            req = urllib.request.Request(url, data=fbody, method="PUT", headers=headers)
+            with urllib.request.urlopen(req, timeout=600) as resp:
+                resp.read()
+        return {
+            "status": "ok",
+            "r2_key": R2_KEY,
+            "raw_bytes": raw_size,
+            "compressed_bytes": compressed_bytes,
+            "compression_pct": round(100 * (1 - compressed_bytes / raw_size), 1),
+        }
+    finally:
+        gz_path.unlink(missing_ok=True)
 
 
 def restore_db(db_path: Optional[Path] = None) -> dict:
     """Download the R2 backup and atomically replace the local DuckDB file.
 
+    Fully streamed (download -> temp .gz file, then gzip -> temp .duckdb) so
+    peak memory stays flat — a 152 MB gz / ~500 MB DB restore fits in a 256 MB
+    container that the old in-memory ``gzip.decompress`` OOM-killed.
+
     Mirrors main.py's /admin/restore-from-r2 (temp file + rename). Used at API
     startup on a fresh/empty volume so the 1.3M-row DB is available instantly
     instead of re-ingesting from scratch.
     """
-    from mandi_rdd.storage.duckdb_store import DB_PATH
+    from mandi_rdd.storage.duckdb_store import resolve_db_path
 
-    path = db_path or DB_PATH
+    path = db_path or resolve_db_path()
     creds = get_creds()
-    compressed = download_db(creds)
-    decompressed = gzip.decompress(compressed)
+    gz_tmp = path.with_suffix(".duckdb.gz.tmp")
     tmp = path.with_suffix(".duckdb.tmp")
-    tmp.write_bytes(decompressed)
+    bytes_downloaded = 0
+    try:
+        # 1) stream the gzipped backup to a temp file
+        url = f"{_base_url(creds)}/{creds['bucket']}/{R2_KEY}"
+        req = urllib.request.Request(url, method="GET", headers=_headers("GET", creds))
+        with urllib.request.urlopen(req, timeout=600) as resp, open(gz_tmp, "wb") as out:
+            shutil.copyfileobj(resp, out, length=1024 * 256)
+        bytes_downloaded = gz_tmp.stat().st_size
+        # 2) stream-decompress to the temp DuckDB
+        with gzip.open(gz_tmp, "rb") as fin, open(tmp, "wb") as fout:
+            shutil.copyfileobj(fin, fout, length=1024 * 256)
+    except Exception as e:  # noqa: BLE001
+        gz_tmp.unlink(missing_ok=True)
+        tmp.unlink(missing_ok=True)
+        raise ValueError(f"R2 restore failed: {e}") from e
     # Sanity gate: never replace the volume DB with garbage. A corrupt,
     # truncated, or stale-LFS-pointer backup would brick the fresh volume
     # (init_schema + auto-pipeline would both fail on the broken file).
@@ -263,16 +343,20 @@ def restore_db(db_path: Optional[Path] = None) -> dict:
         finally:
             chk.close()
     except Exception as e:  # noqa: BLE001
+        gz_tmp.unlink(missing_ok=True)
         tmp.unlink(missing_ok=True)
-        raise ValueError(f"R2 restore: downloaded backup is not a valid DuckDB (prices query failed): {e}")
+        raise ValueError(f"R2 restore: downloaded backup is not a valid DuckDB (prices query failed): {e}") from e
     if not isinstance(n, int) or n <= 0:
+        gz_tmp.unlink(missing_ok=True)
         tmp.unlink(missing_ok=True)
         raise ValueError(f"R2 restore: backup has {n} prices — refusing to replace the DB.")
+    decompressed_bytes = tmp.stat().st_size
+    gz_tmp.unlink(missing_ok=True)
     tmp.replace(path)
     return {
         "status": "ok",
         "prices": n,
-        "bytes_downloaded": len(compressed),
-        "bytes_decompressed": len(decompressed),
+        "bytes_downloaded": bytes_downloaded,
+        "bytes_decompressed": decompressed_bytes,
         "db_path": str(path),
     }

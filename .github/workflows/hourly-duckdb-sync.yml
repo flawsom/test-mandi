@@ -42,7 +42,7 @@ concurrency:
   cancel-in-progress: false    # never cancel a run mid-push (binary LFS race safety)
 
 env:
-  RENDER_HOOK_URL: "https://p01--mandiiq--x4n8x4gkmzht.code.run/deploy"
+  RENDER_HOOK_URL: "https://p01--mandiiq--zbvjrztgjqgw.code.run/deploy"
 
 jobs:
   sync:

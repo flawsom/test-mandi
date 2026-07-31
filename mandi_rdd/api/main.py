@@ -1048,126 +1048,29 @@ async def backfill_historical():
 
 # ── R2 restore helpers ──────────────────────────────────────────────
 
-def _r2_download() -> bytes:
-    """Download the latest DuckDB backup from Cloudflare R2.
-    Uses the S3-compatible API with AWS Signature V4 auth via
-    urllib.request (no extra dependencies).
-    Returns the raw gzip-compressed bytes from R2.
-    Raises:
-        ValueError: If R2 credentials are not configured.
-        urllib.error.URLError: If the download fails.
-    """
-    bucket = os.environ.get("R2_BUCKET") or os.environ.get("R2_BUCKET_NAME") or ""
-    account_id = os.environ.get("R2_ACCOUNT_ID") or ""
-    access_key = os.environ.get("R2_ACCESS_KEY_ID") or ""
-    secret_key = os.environ.get("R2_SECRET_ACCESS_KEY") or ""
-    if not all([bucket, account_id, access_key, secret_key]):
-        missing = [k for k, v in [
-            ("R2_BUCKET", bucket), ("R2_ACCOUNT_ID", account_id),
-            ("R2_ACCESS_KEY_ID", access_key), ("R2_SECRET_ACCESS_KEY", secret_key),
-        ] if not v]
-        raise ValueError(f"R2 restore: missing credentials: {', '.join(missing)}")
-    endpoint = f"https://{account_id}.r2.cloudflarestorage.com"
-    key = "mandi_iq.duckdb.gz"
-    url = f"{endpoint}/{bucket}/{key}"
-    # AWS Signature V4 for S3 GET request
-    service = "s3"
-    region = "auto"
-    now = datetime.datetime.utcnow()
-    amz_date = now.strftime("%Y%m%dT%H%M%SZ")
-    date_stamp = now.strftime("%Y%m%d")
-    # Step 1: Create canonical request
-    method = "GET"
-    canonical_uri = f"/{bucket}/{key}"
-    canonical_querystring = ""
-    signed_headers = "host;x-amz-content-sha256;x-amz-date"
-    payload_hash = hashlib.sha256(b"").hexdigest()
-    canonical_headers = (
-        f"host:{account_id}.r2.cloudflarestorage.com\n"
-        f"x-amz-content-sha256:{payload_hash}\n"
-        f"x-amz-date:{amz_date}\n"
-    )
-    canonical_request = (
-        f"{method}\n{canonical_uri}\n{canonical_querystring}\n"
-        f"{canonical_headers}\n{signed_headers}\n{payload_hash}"
-    )
-    # Step 2: Create string to sign
-    algorithm = "AWS4-HMAC-SHA256"
-    credential_scope = f"{date_stamp}/{region}/{service}/aws4_request"
-    string_to_sign = (
-        f"{algorithm}\n{amz_date}\n{credential_scope}\n"
-        f"{hashlib.sha256(canonical_request.encode()).hexdigest()}"
-    )
-    # Step 3: Derive signing key
-    def _sign(key: bytes, msg: str) -> bytes:
-        return hmac.new(key, msg.encode(), hashlib.sha256).digest()
-    k_secret = f"AWS4{secret_key}".encode()
-    k_date = _sign(k_secret, date_stamp)
-    k_region = _sign(k_date, region)
-    k_service = _sign(k_region, service)
-    k_signing = _sign(k_service, "aws4_request")
-    signature = hmac.new(k_signing, string_to_sign.encode(), hashlib.sha256).hexdigest()
-    # Step 4: Build authorization header
-    auth_header = (
-        f"{algorithm} Credential={access_key}/{credential_scope}, "
-        f"SignedHeaders={signed_headers}, Signature={signature}"
-    )
-    # Step 5: Make the request
-    req = urllib.request.Request(url, headers={
-        "Host": f"{account_id}.r2.cloudflarestorage.com",
-        "x-amz-content-sha256": payload_hash,
-        "x-amz-date": amz_date,
-        "Authorization": auth_header,
-        "User-Agent": "MandiIQ/1.0",
-    })
-    with urllib.request.urlopen(req, timeout=120) as resp:
-        data = resp.read()
-    logger.info("R2 restore: downloaded %d bytes from s3://%s/%s", len(data), bucket, key)
-    return data
-
 @app.post("/admin/restore-from-r2", tags=["Admin"])
 async def admin_restore_from_r2():
     """Restore the DuckDB database from the latest Cloudflare R2 backup.
-    Downloads mandi_iq.duckdb.gz from R2, decompresses it, and replaces
-    the local DuckDB file. Existing connections to the old database will
-    continue working until closed; subsequent calls to get_connection()
-    will open the restored database.
-    Useful for disaster recovery after data corruption or when the git LFS
-    object is unavailable on a fresh deploy. Requires R2 credentials
-    (R2_BUCKET, R2_ACCOUNT_ID, R2_ACCESS_KEY_ID, R2_SECRET_ACCESS_KEY)
-    to be configured as environment variables.
+
+    Streamed end-to-end (download -> temp .gz file, gzip -> temp DuckDB,
+    sanity gate, atomic rename) via r2_sync.restore_db(), so it fits in
+    low-memory containers — the old in-memory gzip.decompress of a ~500 MB DB
+    OOM-killed the 256 MB API pod. Same validated backup path used by the
+    hourly cron and duckdb_store's R2 bootstrap.
+
     Returns:
-        dict with status, message, bytes downloaded, and file size.
+        dict with status, message, prices, bytes, and file size.
     """
     try:
-        compressed = _r2_download()
-    except ValueError as e:
-        return {"status": "error", "message": str(e)}
-    except urllib.error.HTTPError as e:
-        return {
-            "status": "error",
-            "message": f"R2 download failed (HTTP {e.code}): {e.reason}",
-        }
-    except (TimeoutError, urllib.error.URLError, OSError) as e:
-        return {"status": "error", "message": f"R2 download failed: {e}"}
-    # Decompress
-    try:
-        decompressed = gzip.decompress(compressed)
-    except Exception as e:
-        return {"status": "error", "message": f"gzip decompression failed: {e}"}
-    # Replace the local DuckDB file
-    try:
-        from mandi_rdd.storage.duckdb_store import DB_PATH
-        # Write to a temp file first, then rename (atomic on same filesystem)
-        tmp = DB_PATH.with_suffix(".duckdb.tmp")
-        tmp.write_bytes(decompressed)
-        tmp.replace(DB_PATH)
+        from mandi_rdd.storage.r2_sync import restore_db
+        result = restore_db()
         logger.info(
-            "R2 restore: replaced %s with %d bytes from R2 backup",
-            DB_PATH, len(decompressed),
+            "R2 restore: %s prices restored to %s",
+            result.get("prices"), result.get("db_path"),
         )
-    except Exception as e:
-        return {"status": "error", "message": f"File replacement failed: {e}"}
+    except Exception as e:  # noqa: BLE001
+        logger.warning("R2 restore failed: %s", e)
+        return {"status": "error", "message": f"R2 restore failed: {e}"}
     # Refresh the commodity list for the health endpoint
     try:
         conn = get_connection()
@@ -1180,9 +1083,10 @@ async def admin_restore_from_r2():
     return {
         "status": "ok",
         "message": "Database restored from R2 backup.",
-        "bytes_downloaded": len(compressed),
-        "bytes_decompressed": len(decompressed),
-        "db_path": str(DB_PATH),
+        "prices": result.get("prices"),
+        "bytes_downloaded": result.get("bytes_downloaded"),
+        "bytes_decompressed": result.get("bytes_decompressed"),
+        "db_path": result.get("db_path"),
     }
 
 

@@ -58,7 +58,7 @@ _FALLBACK_COUNT: int = 0
 
 
 def _get_api_base() -> str:
-    return os.environ.get("MANDIQ_API_URL") or os.environ.get("MANDIIQ_API_URL") or "https://p01--mandiiq--x4n8x4gkmzht.code.run"
+    return os.environ.get("MANDIQ_API_URL") or os.environ.get("MANDIIQ_API_URL") or "https://p01--mandiiq--zbvjrztgjqgw.code.run"
 
 
 def _warn_stale_fallback(endpoint: str, detail: str = ""):

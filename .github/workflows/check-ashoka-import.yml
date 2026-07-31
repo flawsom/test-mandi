@@ -24,7 +24,7 @@ jobs:
       - name: Check import status from Render API
         id: status
         run: |
-          RESP=$(curl -s --max-time 15 "https://p01--mandiiq--x4n8x4gkmzht.code.run/historical-import-status")
+          RESP=$(curl -s --max-time 15 "https://p01--mandiiq--zbvjrztgjqgw.code.run/historical-import-status")
           echo "Raw response: $RESP"
           STATE=$(echo "$RESP" | python3 -c "import sys,json; print(json.load(sys.stdin).get('state','unknown'))")
           PROGRESS=$(echo "$RESP" | python3 -c "import sys,json; d=json.load(sys.stdin); print(d.get('progress',''))")
@@ -53,13 +53,7 @@ jobs:
             gh issue create \
               --title "Ashoka CEDA historical import completed" \
               --label "ashoka-import" \
-              --body "The autonomous Ashoka CEDA historical price import has finished.
-
-- Cells processed: ${{ steps.status.outputs.cells_done }}
-- Rows written: ${{ steps.status.outputs.rows }}
-- Progress: ${{ steps.status.outputs.progress }}
-
-The imported data has been backfilled into DuckDB and is available for RDD analysis, forecasts, and classifier runs. Run the 'Nightly Ingestion' workflow to process it into the dashboard."
+              --body "The autonomous Ashoka CEDA historical price import has finished. Cells processed: ${{ steps.status.outputs.cells_done }}, rows written: ${{ steps.status.outputs.rows }}, progress: ${{ steps.status.outputs.progress }}. The imported data has been backfilled into DuckDB and is available for RDD analysis, forecasts, and classifier runs. Run the Nightly Ingestion workflow to process it into the dashboard."
           else
             echo "Issue already exists — skipping duplicate."
           fi

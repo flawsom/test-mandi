@@ -149,7 +149,14 @@ def _refresh_and_push() -> None:
                 )
             )
             def auth_handler(**kwargs):
-                kwargs.setdefault('headers', {}).update(http.headers)
+                # prometheus_client >= 0.21 passes headers as a list of
+                # (name, value) tuples; older versions used a dict.
+                # Normalize to a dict, merge in the basic-auth header, and
+                # hand back the list-of-tuples form default_handler expects.
+                headers = kwargs.get('headers') or []
+                merged = dict(headers or [])
+                merged.update(http.headers)
+                kwargs['headers'] = list(merged.items())
                 return default_handler(**kwargs)
             pushadd_to_gateway(
                 _PROM_URL,

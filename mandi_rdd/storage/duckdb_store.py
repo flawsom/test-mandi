@@ -26,6 +26,8 @@ stored in /sql/ and loadable via run_sql_query().
 
 """
 
+import threading
+
 from pathlib import Path
 
 from typing import Optional
@@ -135,6 +137,57 @@ def _try_fix_lfs_pointer(path: Path) -> bool:
         return False
 
 
+_DB_RESTORE_ATTEMPTED = False
+_RESTORE_LOCK = threading.Lock()
+
+REPO_DB_PATH = Path(__file__).resolve().parent.parent / "data" / "mandi_iq.duckdb"
+
+
+def resolve_db_path() -> Path:
+    """Return the DB path that actually exists, preferring the repo-default DB.
+
+    Streamlit Community Cloud has no Northflank volume at /data, so a
+    MANDIIQ_DB_PATH like /data/mandi_iq.duckdb must NOT win over the
+    git-LFS-pulled repo DB (mandi_rdd/data/mandi_iq.duckdb). Priority:
+      1. The configured MANDIIQ_DB_PATH if its file exists and is a real DB.
+      2. The repo-default DB if it exists and is a real DB.
+      3. The configured path unchanged (so callers still raise a clear error
+         and the R2 bootstrap can try to create it).
+    """
+    if DB_PATH.exists() and not _is_lfs_pointer(DB_PATH):
+        return DB_PATH
+    if REPO_DB_PATH.exists() and not _is_lfs_pointer(REPO_DB_PATH):
+        return REPO_DB_PATH
+    return DB_PATH
+
+
+def _bootstrap_db_from_r2() -> Path:
+    """Download the fresh DuckDB from Cloudflare R2 (once per process).
+
+    Called when the local DB is missing or is a stale LFS pointer (e.g. git
+    LFS smudge failed on Streamlit Community Cloud). Non-fatal: any failure
+    is logged and callers fall through to their normal error handling.
+    """
+    global _DB_RESTORE_ATTEMPTED
+    # Hold the lock across the whole bootstrap so concurrent Streamlit
+    # sessions block until the in-flight restore finishes, then re-resolve
+    # (now finding the restored file) instead of erroring mid-download.
+    with _RESTORE_LOCK:
+        if _DB_RESTORE_ATTEMPTED:
+            return resolve_db_path()
+        _DB_RESTORE_ATTEMPTED = True
+        try:
+            from mandi_rdd.storage.r2_sync import restore_db
+            result = restore_db(REPO_DB_PATH)
+            logger.info(
+                "R2 bootstrap: restored %s prices to %s",
+                result.get("prices"), REPO_DB_PATH,
+            )
+        except Exception as e:  # noqa: BLE001
+            logger.warning("R2 bootstrap unavailable: %s", e)
+    return resolve_db_path()
+
+
 def get_connection(db_path: Optional[Path] = None, read_only: bool = False) -> "duckdb.DuckDBPyConnection":
 
     """Get a DuckDB connection.
@@ -151,10 +204,16 @@ def get_connection(db_path: Optional[Path] = None, read_only: bool = False) -> "
 
     """
 
-    path = db_path or DB_PATH
+    path = db_path or resolve_db_path()
 
     # Detect and clean up stale LFS pointer before DuckDB tries to open it
     _try_fix_lfs_pointer(path)
+
+    # Missing or pointer-only DB (e.g. git LFS smudge failed on Streamlit
+    # Cloud, or MANDIIQ_DB_PATH points at a non-existent /data volume):
+    # bootstrap the fresh DB from Cloudflare R2 (once per process).
+    if not path.exists() or _is_lfs_pointer(path):
+        path = _bootstrap_db_from_r2()
 
     try:
 
