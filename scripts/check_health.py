@@ -268,6 +268,10 @@ def run_check(prev_history: list | None = None) -> tuple[bool, dict]:
         n_str = f"{n:,}" if n is not None else "-"
         lines.append(f"  {name:<14} | {verdict:<13} | {n_str:>11} | {note}")
 
+        # `attempts` / `retried` surface the probe retry count (transient
+        # 503s mid-redeploy) in the machine-readable JSON, not just the
+        # human table, so the landing badge can show which surfaces needed
+        # retries. attempts=1 means the first try succeeded.
         surfaces_out[name] = {
             "verdict": verdict,
             "n_prices": n,
@@ -275,6 +279,8 @@ def run_check(prev_history: list | None = None) -> tuple[bool, dict]:
             "kind": kind,
             "note": note,
             "url": r["url"],
+            "attempts": r.get("attempts", 1),
+            "retried": r.get("attempts", 1) > 1,
         }
 
     # 4. Summary line — which surfaces serve the latest DB?
