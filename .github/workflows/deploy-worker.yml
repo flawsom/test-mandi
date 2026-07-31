@@ -1,0 +1,93 @@
+# Deploy the MandiIQ SEO-proxy edge layer (worker/worker.js) to Cloudflare Workers.
+#
+# The worker intercepts text/html crawler hits to the Streamlit app URL and
+# serves a crawler-visible HTML shell carrying OG/Twitter/JSON-LD tags fetched
+# from the GitHub Pages landing page, proxying everything else to the live
+# Streamlit origin. Keeping this edge layer in sync on push means the canonical
+# URLs (Pages) and the upstream (Streamlit) never drift from the repo.
+#
+# PREREQUISITES (one-time setup):
+#   1. Create a Cloudflare API token with "Workers Scripts: Edit" permissions:
+#      https://dash.cloudflare.com/profile/api-tokens
+#   2. Add it as a repo secret named CF_API_TOKEN:
+#      https://github.com/flawsom/test-mandi/settings/secrets/actions
+#      (or: gh secret set CF_API_TOKEN)
+#
+# The worker config lives in worker/wrangler.toml (name: mandiiq-edge-proxy,
+# account_id, vars.UPSTREAM → the live Streamlit URL).
+
+name: Deploy Edge Worker to Cloudflare
+
+on:
+  push:
+    branches: [master]
+    paths:
+      - "worker/**"
+      - ".github/workflows/deploy-worker.yml"
+  workflow_dispatch:          # manual trigger via GitHub UI
+
+concurrency:
+  group: deploy-worker-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: worker
+    env:
+      # Expose the secret via job env (secrets.* is not allowed in `if:`).
+      # NOTE: wrangler authenticates via CLOUDFLARE_API_TOKEN — the repo
+      # secret itself is named CF_API_TOKEN but must be mapped to the env
+      # var wrangler actually reads.
+      CLOUDFLARE_API_TOKEN: ${{ secrets.CF_API_TOKEN }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Install wrangler
+        run: npm i -g wrangler
+
+      - name: Verify CF_API_TOKEN is configured
+        if: env.CLOUDFLARE_API_TOKEN == ''
+        run: |
+          echo "::error::CF_API_TOKEN secret is not set — Cloudflare deploy skipped."
+          echo "::error::1. Create a token (Workers Scripts: Edit) at"
+          echo "::error::   https://dash.cloudflare.com/profile/api-tokens"
+          echo "::error::2. Add it as a repo secret:  gh secret set CF_API_TOKEN"
+          exit 1
+
+      - name: Validate worker.js syntax (ESM via stdin — no package.json in worker/)
+        run: node --input-type=module --check < worker.js
+
+      - name: Validate wrangler config + dry-run deploy
+        if: env.CLOUDFLARE_API_TOKEN != ''
+        run: npx wrangler deploy --dry-run
+
+      - name: Deploy to Cloudflare Workers
+        if: env.CLOUDFLARE_API_TOKEN != ''
+        run: npx wrangler deploy
+
+      - name: Smoke-test the edge worker
+        if: env.CLOUDFLARE_API_TOKEN != '' && vars.CF_SUBDOMAIN != ''
+        env:
+          CF_SUBDOMAIN: ${{ vars.CF_SUBDOMAIN }}
+        run: |
+          URL="https://mandiiq-edge-proxy.$CF_SUBDOMAIN.workers.dev/"
+          echo "Smoke-testing $URL ..."
+          for i in 1 2 3; do
+            HTTP_CODE=$(curl -s -o /dev/null -w "%{http_code}" --max-time 20 "$URL" 2>/dev/null)
+            if [ "$HTTP_CODE" = "200" ] || [ "$HTTP_CODE" = "302" ] || [ "$HTTP_CODE" = "303" ]; then
+              echo " OK — edge worker responded HTTP $HTTP_CODE"
+              exit 0
+            fi
+            echo "Attempt $i: HTTP $HTTP_CODE — retrying in 5s..."
+            sleep 5
+          done
+          echo "::warning::Smoke-test failed — the worker did not respond 2xx after 3 attempts"
+          echo "::warning::Set the CF_SUBDOMAIN repository variable to enable this check."
