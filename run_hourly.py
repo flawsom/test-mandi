@@ -296,12 +296,26 @@ def _persist_step_timings() -> None:
 
 
 def _run_diagram_generator() -> None:
-    """Regenerate the Mermaid pipeline DAG with live timing from the last run."""
+    """Regenerate the Mermaid pipeline DAG + docs variant with live data.
+
+    Writes both the full diagram (``diagrams/pipeline-flow-live.mmd``) and the
+    GitHub-safe docs variant (``docs/assets/mermaid/pipeline-flow-live.mmd``)
+    so the docs' pre-rendered SVG source stays in sync with live DuckDB
+    counts after every successful cycle.
+    """
     try:
-        from scripts.generate_pipeline_diagram import generate
+        from scripts.generate_pipeline_diagram import generate, generate_docs
+
         output_path = Path(__file__).resolve().parent / "diagrams" / "pipeline-flow-live.mmd"
         generate(output_path=str(output_path))
         logger.info(f"Pipeline diagram regenerated -> {output_path}")
+
+        docs_path = (
+            Path(__file__).resolve().parent
+            / "docs" / "assets" / "mermaid" / "pipeline-flow-live.mmd"
+        )
+        generate_docs(output_path=str(docs_path))
+        logger.info(f"Docs pipeline diagram regenerated -> {docs_path}")
     except ImportError as e:
         logger.warning(f"Diagram generator module not available: {e}")
     except Exception as e:

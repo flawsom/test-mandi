@@ -164,6 +164,71 @@ jobs:
             echo "::notice::No real data change (row counts + max date identical) — skipping commit & redeploy"
           fi
 
+      - name: Regenerate docs pipeline diagram (live counts)
+        if: steps.changed.outputs.changed == 'true'
+        run: |
+          # run_hourly.py already regenerates both diagrams/ and
+          # docs/assets/mermaid/pipeline-flow-live.mmd (with live DuckDB
+          # counts) on success. This guard is a belt-and-suspenders so the
+          # docs .mmd is always fresh even if the analysis path skipped it.
+          python scripts/generate_pipeline_diagram.py --docs-output docs/assets/mermaid/pipeline-flow-live.mmd
+          echo "::notice::Docs pipeline .mmd regenerated with live counts"
+
+      - name: Set up Node.js (diagram render)
+        if: steps.changed.outputs.changed == 'true'
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+
+      - name: Install Mermaid CLI
+        if: steps.changed.outputs.changed == 'true'
+        run: |
+          npm install -g @mermaid-js/mermaid-cli
+          echo "mmdc $(mmdc --version)"
+
+      - name: Render docs pipeline SVG
+        if: steps.changed.outputs.changed == 'true'
+        run: |
+          MMD="docs/assets/mermaid/pipeline-flow-live.mmd"
+          SVG="docs/assets/svg/pipeline-flow-live.svg"
+          if [ ! -f "$MMD" ]; then
+            echo "::warning::No docs pipeline diagram source found at $MMD"
+            exit 0
+          fi
+          # Pre-render with the same Alche dark+lime theme + explicit
+          # dimensions used for the other docs diagrams, so GitHub renders
+          # it full-size on both light and dark mode.
+          mmdc \
+            -i "$MMD" \
+            -o "$SVG" \
+            -c docs/assets/mermaid/alche-config.json \
+            -p puppeteer.json \
+            -b "#0B0F1E" \
+            -s 2 \
+            -w 1600
+          # Sanitize + set explicit width/height from the root viewBox
+          # (mmdc emits width="100%" which collapses on GitHub <img>).
+          python - "$SVG" <<'PY'
+          import re, sys
+          path = sys.argv[1]
+          t = open(path, encoding="utf-8").read()
+          t = re.sub(r"<br(?![ /])", "<br/>", t)  # self-close any unclosed <br>
+          m = re.search(r"<svg[^>]*>", t)
+          if m:
+              root = m.group(0)
+              vm = re.search(r'viewBox="(-?[\d.]+) (-?[\d.]+) ([\d.]+) ([\d.]+)"', root)
+              if vm:
+                  w = str(int(float(vm.group(3))))
+                  h = str(int(float(vm.group(4))))
+                  root2 = re.sub(r'\s*width="[^"]*"', "", root, count=1)
+                  root2 = re.sub(r'\s*height="[^"]*"', "", root2, count=1)
+                  root2 = root2.replace("<svg", f'<svg width="{w}" height="{h}"', 1)
+                  t = t[:m.start()] + root2 + t[m.end():]
+                  print(f"  [svg] set explicit dims {w}x{h}")
+          open(path, "w", encoding="utf-8", newline="").write(t)
+          PY
+          echo "::notice::Docs pipeline SVG rendered: $(wc -c < "$SVG") bytes -> $SVG"
+
       - name: Validate DuckDB LFS object
         if: steps.changed.outputs.changed == 'true'
         uses: ./.github/actions/validate-duckdb
@@ -185,7 +250,9 @@ jobs:
             mandi_rdd/data/last_step_timings.json \
             mandi_rdd/data/_last_full_analysis.txt \
             mandi_rdd/data/r2_backup_metrics.json \
-            diagrams/pipeline-flow-live.mmd; do
+            diagrams/pipeline-flow-live.mmd \
+            docs/assets/mermaid/pipeline-flow-live.mmd \
+            docs/assets/svg/pipeline-flow-live.svg; do
             [ -f "$f" ] && git add "$f"
           done
           if git diff --cached --quiet; then

@@ -269,9 +269,14 @@ Every successful ingestion cycle — whether hourly quick-fetch or the daily ful
 <details>
 <summary><strong>Pipeline source (Mermaid)</strong> — click to expand</summary>
 
-<!-- Keep in sync with docs/assets/mermaid/pipeline-flow-live.mmd (regenerate the SVG with:
-     npx mmdc -i docs/assets/mermaid/pipeline-flow-live.mmd -o docs/assets/svg/pipeline-flow-live.svg \
-       -c docs/assets/mermaid/alche-config.json -p puppeteer.json -b "#0B0F1E" -s 2 -w 1600) -->
+<!-- SNAPSHOT of a past run. docs/assets/mermaid/pipeline-flow-live.mmd is now
+     auto-generated with LIVE counts by the hourly pipeline (run_hourly.py ->
+     scripts/generate_pipeline_diagram.py), and docs/assets/svg/pipeline-flow-live.svg
+     is re-rendered from it on every data change (hourly-duckdb-sync.yml). The source
+     below is only a historical snapshot; the embedded SVG above is the live one.
+     Manual re-render: npx mmdc -i docs/assets/mermaid/pipeline-flow-live.mmd \
+       -o docs/assets/svg/pipeline-flow-live.svg -c docs/assets/mermaid/alche-config.json \
+       -p puppeteer.json -b "#0B0F1E" -s 2 -w 1600 -->
 
 ```mermaid
 graph LR
