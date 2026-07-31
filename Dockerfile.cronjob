@@ -1,21 +1,24 @@
 # Northflank Cron Job Dockerfile for MandiIQ Hourly Ingestion
 #
 # Builds a lightweight image that runs `python run_hourly.py` every hour.
-# Shares the same Persistent Volume (/data) as the API server so both
-# read/write the same DuckDB file.
+# Runs VOLUMELESS on the free tier (the single ReadWriteOnce volume lives on
+# the API service). The R2-as-data-bus loop keeps it current:
+#   restore latest backup from R2 -> ingest fresh prices -> upload back to R2.
+# MANDIIQ_FORCE_QUICK=1 pins the job to the fast price-only path because the
+# job runtime is capped (~5 min) — full NDVI + analysis runs on the API's own
+# in-process hourly thread (no cap).
 #
 # Build:
 #   docker build -t mandiiq-cron -f Dockerfile.cronjob .
 #
 # Run (manual test):
-#   docker run --rm -v mandiiq_data:/data -e DATA_GOV_IN_API_KEY=xxx mandiiq-cron
+#   docker run --rm -e DATA_GOV_IN_API_KEY=xxx mandiiq-cron
 #
 # Northflank setup:
 #   1. Create a "Cron Job" service
 #   2. Schedule: 0 * * * *
 #   3. Dockerfile: Dockerfile.cronjob
-#   4. Mount the SAME Persistent Volume as the API server at /data
-#   5. Set environment variables (DATA_GOV_IN_API_KEY, etc.)
+#   4. Set environment variables (DATA_GOV_IN_API_KEY, R2_* for the upload)
 
 FROM python:3.12-slim
 
@@ -47,6 +50,10 @@ COPY scripts/generate_pipeline_diagram.py /app/scripts/generate_pipeline_diagram
 
 ENV PYTHONPATH=/app
 ENV MANDIIQ_DB_PATH=/data/mandi_iq.duckdb
+# The Northflank job runtime is capped (~5 min); the full NDVI + analysis
+# pipeline takes 15-30+ min, so the job stays on the fast price-only path.
+# Full analysis runs on the API's in-process hourly thread (no cap).
+ENV MANDIIQ_FORCE_QUICK=1
 
 # Run the hourly ingestion script
 # Smart logic: price fetch every hour, full analysis (RDD+FE+Forecast) every 24h

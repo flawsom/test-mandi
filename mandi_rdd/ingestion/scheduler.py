@@ -62,6 +62,7 @@ def run_ingestion(
     max_records: int = None,
     skip_rainfall: bool = False,
     skip_analysis: bool = False,
+    skip_ndvi: bool = False,
 ) -> dict:
     """
     Run the full nightly pipeline.
@@ -72,6 +73,8 @@ def run_ingestion(
         skip_rainfall: If True, skip rainfall data fetch (keeps hourly runs fast).
         skip_analysis: If True, skip RDD + FE + Forecast + Classifier + Narratives.
                        Use for quick hourly price-only ingestions.
+        skip_ndvi: If True, skip the full 144-district satellite NDVI fetch
+                   (takes >5 min — exceeds the Northflank job runtime cap).
     
     Returns summary dict with counts and timing.
     """
@@ -231,9 +234,14 @@ def run_ingestion(
     else:
         summary["steps"]["rainfall"] = {"status": "skipped", "reason": "no data source"}
 
-    # 4b. Ingest satellite NDVI (if Sentinel Hub credentials are set)
+    # 4b. Ingest satellite NDVI (if Sentinel Hub credentials are set).
+    #     Skipped on quick hourly runs: a full 144-district fetch takes
+    #     >5 minutes, which exceeds the Northflank job runtime cap.
     import os as _os
-    if _os.environ.get("SENTINEL_CLIENT_ID") and _os.environ.get("SENTINEL_CLIENT_SECRET"):
+    if skip_ndvi:
+        logger.info("skip_ndvi=True — skipping satellite NDVI ingestion")
+        summary["steps"]["ndvi"] = {"status": "skipped", "reason": "quick hourly run"}
+    elif _os.environ.get("SENTINEL_CLIENT_ID") and _os.environ.get("SENTINEL_CLIENT_SECRET"):
         with pipeline_metrics.step("fetch_ndvi"):
             logger.info("Fetching satellite NDVI data...")
             try:

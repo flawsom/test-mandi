@@ -122,9 +122,16 @@ def run_hourly(force_full: bool = False) -> dict:
     try:
         from mandi_rdd.ingestion.scheduler import run_ingestion
 
-        # Decide: full run or quick price-only?
-        do_full = force_full or _should_run_full_analysis()
-        logger.info(f"Full analysis pipeline: {'YES' if do_full else 'NO (quick price fetch only)'}")
+        # Decide: full run or quick price-only? The Northflank cron job
+        # runtime is capped (~5 min), so MANDIIQ_FORCE_QUICK=1 keeps it on
+        # the fast price-only path — full analysis runs on the API's own
+        # in-process hourly thread instead (no cap).
+        force_quick = os.environ.get("MANDIIQ_FORCE_QUICK") == "1"
+        do_full = (not force_quick) and (force_full or _should_run_full_analysis())
+        logger.info(
+            f"Full analysis pipeline: {'YES' if do_full else 'NO (quick price fetch only)'}"
+            + (" [forced quick by MANDIIQ_FORCE_QUICK]" if force_quick else "")
+        )
 
         if do_full:
             # Full pipeline: prices + rainfall + RDD + FE + Forecast + NDVI
@@ -132,9 +139,15 @@ def run_hourly(force_full: bool = False) -> dict:
             _touch_full_analysis_flag()
             logger.info("Full analysis pipeline complete — next full run in 24h")
         else:
-            # Quick run: prices only (skip rainfall, skip analysis)
-            # Makes the hourly call fast (~30s instead of ~5min)
-            summary = run_ingestion(max_records=10000, skip_rainfall=True, skip_analysis=True)
+            # Quick run: prices only (skip rainfall, analysis, and the >5-min
+            # NDVI full fetch) — keeps the hourly call well under the
+            # Northflank job runtime cap so the R2 upload always completes.
+            summary = run_ingestion(
+                max_records=10000,
+                skip_rainfall=True,
+                skip_analysis=True,
+                skip_ndvi=True,
+            )
 
         # Extract key stats
         steps = summary.get("steps", {})
