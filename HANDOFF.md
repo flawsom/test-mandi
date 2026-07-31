@@ -5,7 +5,7 @@
 
 <div style="position:relative; z-index:1;">
 <h1 style="margin:0; font-size:2.2em; font-weight:700; color:#E0E0E0; letter-spacing:-0.5px;">
-  <svg xmlns="http://www.w3.org/2000/svg" width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="#00FF88" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:middle"><path d="M12 2v18"/><path d="M8 6c0-2 4-4 4 0"/><path d="M16 6c0-2-4-4-4 0"/><path d="M8 12c0-2 4-4 4 0"/><path d="M16 12c0-2-4-4-4 0"/><path d="M6 18c0-3 6-5 6 0"/><path d="M18 18c0-3-6-5-6 0"/><path d="M9 22h6"/></svg>
+  <img src="docs/assets/svg/icon-f8867c21931f.svg" width="36" height="36" alt="" style="vertical-align:middle; max-width:100%;" />
   Mandiiq — Complete Codebase Handoff
 </h1>
 <h4 style="color:#94A3B8; font-weight:400; font-size:0.95em; margin:6px 0 0 0;">MandiIQ Documentation</h4>
@@ -26,19 +26,7 @@
 </div></div></div>
 <br />
 <div style="position:relative; height:60px; overflow:hidden; width:100%; margin:8px 0;">
-  <svg viewBox="0 0 1440 60" width="100%" height="60" preserveAspectRatio="none" style="position:absolute;bottom:0;">
-    <defs>
-      <linearGradient id="wg-1" x1="0%" y1="0%" x2="100%" y2="0%">
-        <stop offset="0%" stop-color="#0B0F1E" stop-opacity="0" />
-        <stop offset="25%" stop-color="#00FF88" stop-opacity="0.25" />
-        <stop offset="50%" stop-color="#00FF88" stop-opacity="0.4" />
-        <stop offset="75%" stop-color="#00FF88" stop-opacity="0.25" />
-        <stop offset="100%" stop-color="#0B0F1E" stop-opacity="0" />
-      </linearGradient>
-    </defs>
-    <path d="M0,30 C240,10 480,50 720,30 C960,10 1200,50 1440,30 L1440,60 L0,60 Z" fill="url(#wg)" opacity="0.6" />
-    <path d="M0,40 C240,25 480,55 720,40 C960,25 1200,55 1440,40 L1440,60 L0,60 Z" fill="url(#wg)" opacity="0.3" />
-  </svg>
+  <img src="docs/assets/svg/icon-4fe945889b5c.svg" width="100%" height="60" alt="" style="vertical-align:middle; max-width:100%;" />
 </div>
 <br />
 <div style="background:linear-gradient(135deg, rgba(255,255,255,0.04) 0%, rgba(255,255,255,0.01) 100%); border:1px solid rgba(255,255,255,0.06); border-radius:16px; padding:24px 28px; margin:16px 0; box-shadow:0 8px 32px rgba(0,0,0,0.4); position:relative; overflow:hidden;">
@@ -46,7 +34,7 @@
 <div style="position:absolute; top:-60px; right:-60px; width:120px; height:120px; background:radial-gradient(circle, rgba(0,255,136,0.15) 0%, transparent 70%);"></div>
 <a name="table-of-contents"></a>
 <h2 style="font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Helvetica,Arial,sans-serif; font-size:1.5em; font-weight:600; color:#E0E0E0; display:flex; align-items:center; gap:10px; margin:0 0 16px 0; padding-bottom:8px; border-bottom:1px solid rgba(255,255,255,0.06);">
-  <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:middle"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg> Table of Contents
+  <img src="docs/assets/svg/icon-f862fc7823f0.svg" width="25" height="25" alt="" style="vertical-align:middle; max-width:100%;" /> Table of Contents
 </h2>
 
 1. [Project Overview](#1-project-overview)
@@ -70,19 +58,7 @@
 </div></div></div>
 <br />
 <div style="position:relative; height:60px; overflow:hidden; width:100%; margin:8px 0;">
-  <svg viewBox="0 0 1440 60" width="100%" height="60" preserveAspectRatio="none" style="position:absolute;bottom:0;">
-    <defs>
-      <linearGradient id="wg-2" x1="0%" y1="0%" x2="100%" y2="0%">
-        <stop offset="0%" stop-color="#0B0F1E" stop-opacity="0" />
-        <stop offset="25%" stop-color="#00FF88" stop-opacity="0.25" />
-        <stop offset="50%" stop-color="#00FF88" stop-opacity="0.4" />
-        <stop offset="75%" stop-color="#00FF88" stop-opacity="0.25" />
-        <stop offset="100%" stop-color="#0B0F1E" stop-opacity="0" />
-      </linearGradient>
-    </defs>
-    <path d="M0,30 C240,10 480,50 720,30 C960,10 1200,50 1440,30 L1440,60 L0,60 Z" fill="url(#wg)" opacity="0.6" />
-    <path d="M0,40 C240,25 480,55 720,40 C960,25 1200,55 1440,40 L1440,60 L0,60 Z" fill="url(#wg)" opacity="0.3" />
-  </svg>
+  <img src="docs/assets/svg/icon-b5297f23fd61.svg" width="100%" height="60" alt="" style="vertical-align:middle; max-width:100%;" />
 </div>
 <br />
 <div style="background:linear-gradient(135deg, rgba(255,255,255,0.04) 0%, rgba(255,255,255,0.01) 100%); border:1px solid rgba(255,255,255,0.06); border-radius:16px; padding:24px 28px; margin:16px 0; box-shadow:0 8px 32px rgba(0,0,0,0.4); position:relative; overflow:hidden;">
@@ -90,7 +66,7 @@
 <div style="position:absolute; top:-60px; right:-60px; width:120px; height:120px; background:radial-gradient(circle, rgba(0,255,136,0.15) 0%, transparent 70%);"></div>
 <a name="1-project-overview"></a>
 <h2 style="font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Helvetica,Arial,sans-serif; font-size:1.5em; font-weight:600; color:#E0E0E0; display:flex; align-items:center; gap:10px; margin:0 0 16px 0; padding-bottom:8px; border-bottom:1px solid rgba(255,255,255,0.06);">
-  <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:middle"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg> 1. Project Overview
+  <img src="docs/assets/svg/icon-e22ec59e46bc.svg" width="25" height="25" alt="" style="vertical-align:middle; max-width:100%;" /> 1. Project Overview
 </h2>
 
 MandiIQ is an open-source analytical warehouse and dashboard that applies **Causal Regression Discontinuity Designs (RDD)** to test whether IMD rainfall-deficit thresholds drive structural margins in national commodity markets.
@@ -124,19 +100,7 @@ MandiIQ is an open-source analytical warehouse and dashboard that applies **Caus
 </div></div></div>
 <br />
 <div style="position:relative; height:60px; overflow:hidden; width:100%; margin:8px 0;">
-  <svg viewBox="0 0 1440 60" width="100%" height="60" preserveAspectRatio="none" style="position:absolute;bottom:0;">
-    <defs>
-      <linearGradient id="wg-3" x1="0%" y1="0%" x2="100%" y2="0%">
-        <stop offset="0%" stop-color="#0B0F1E" stop-opacity="0" />
-        <stop offset="25%" stop-color="#00FF88" stop-opacity="0.25" />
-        <stop offset="50%" stop-color="#00FF88" stop-opacity="0.4" />
-        <stop offset="75%" stop-color="#00FF88" stop-opacity="0.25" />
-        <stop offset="100%" stop-color="#0B0F1E" stop-opacity="0" />
-      </linearGradient>
-    </defs>
-    <path d="M0,30 C240,10 480,50 720,30 C960,10 1200,50 1440,30 L1440,60 L0,60 Z" fill="url(#wg)" opacity="0.6" />
-    <path d="M0,40 C240,25 480,55 720,40 C960,25 1200,55 1440,40 L1440,60 L0,60 Z" fill="url(#wg)" opacity="0.3" />
-  </svg>
+  <img src="docs/assets/svg/icon-47f7f2f791a1.svg" width="100%" height="60" alt="" style="vertical-align:middle; max-width:100%;" />
 </div>
 <br />
 <div style="background:linear-gradient(135deg, rgba(255,255,255,0.04) 0%, rgba(255,255,255,0.01) 100%); border:1px solid rgba(255,255,255,0.06); border-radius:16px; padding:24px 28px; margin:16px 0; box-shadow:0 8px 32px rgba(0,0,0,0.4); position:relative; overflow:hidden;">
@@ -144,7 +108,7 @@ MandiIQ is an open-source analytical warehouse and dashboard that applies **Caus
 <div style="position:absolute; top:-60px; right:-60px; width:120px; height:120px; background:radial-gradient(circle, rgba(0,255,136,0.15) 0%, transparent 70%);"></div>
 <a name="2-architecture-diagram"></a>
 <h2 style="font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Helvetica,Arial,sans-serif; font-size:1.5em; font-weight:600; color:#E0E0E0; display:flex; align-items:center; gap:10px; margin:0 0 16px 0; padding-bottom:8px; border-bottom:1px solid rgba(255,255,255,0.06);">
-  <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:middle"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg> 2. Architecture Diagram
+  <img src="docs/assets/svg/icon-e22ec59e46bc.svg" width="25" height="25" alt="" style="vertical-align:middle; max-width:100%;" /> 2. Architecture Diagram
 </h2>
 
 ```
@@ -206,19 +170,7 @@ MandiIQ is an open-source analytical warehouse and dashboard that applies **Caus
 </div></div></div>
 <br />
 <div style="position:relative; height:60px; overflow:hidden; width:100%; margin:8px 0;">
-  <svg viewBox="0 0 1440 60" width="100%" height="60" preserveAspectRatio="none" style="position:absolute;bottom:0;">
-    <defs>
-      <linearGradient id="wg-4" x1="0%" y1="0%" x2="100%" y2="0%">
-        <stop offset="0%" stop-color="#0B0F1E" stop-opacity="0" />
-        <stop offset="25%" stop-color="#00FF88" stop-opacity="0.25" />
-        <stop offset="50%" stop-color="#00FF88" stop-opacity="0.4" />
-        <stop offset="75%" stop-color="#00FF88" stop-opacity="0.25" />
-        <stop offset="100%" stop-color="#0B0F1E" stop-opacity="0" />
-      </linearGradient>
-    </defs>
-    <path d="M0,30 C240,10 480,50 720,30 C960,10 1200,50 1440,30 L1440,60 L0,60 Z" fill="url(#wg)" opacity="0.6" />
-    <path d="M0,40 C240,25 480,55 720,40 C960,25 1200,55 1440,40 L1440,60 L0,60 Z" fill="url(#wg)" opacity="0.3" />
-  </svg>
+  <img src="docs/assets/svg/icon-659fbdc3b394.svg" width="100%" height="60" alt="" style="vertical-align:middle; max-width:100%;" />
 </div>
 <br />
 <div style="background:linear-gradient(135deg, rgba(255,255,255,0.04) 0%, rgba(255,255,255,0.01) 100%); border:1px solid rgba(255,255,255,0.06); border-radius:16px; padding:24px 28px; margin:16px 0; box-shadow:0 8px 32px rgba(0,0,0,0.4); position:relative; overflow:hidden;">
@@ -226,7 +178,7 @@ MandiIQ is an open-source analytical warehouse and dashboard that applies **Caus
 <div style="position:absolute; top:-60px; right:-60px; width:120px; height:120px; background:radial-gradient(circle, rgba(0,255,136,0.15) 0%, transparent 70%);"></div>
 <a name="3-directory-structure"></a>
 <h2 style="font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Helvetica,Arial,sans-serif; font-size:1.5em; font-weight:600; color:#E0E0E0; display:flex; align-items:center; gap:10px; margin:0 0 16px 0; padding-bottom:8px; border-bottom:1px solid rgba(255,255,255,0.06);">
-  <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:middle"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"/></svg> 3. Directory Structure
+  <img src="docs/assets/svg/icon-d57309e9a53d.svg" width="25" height="25" alt="" style="vertical-align:middle; max-width:100%;" /> 3. Directory Structure
 </h2>
 
 ```
@@ -368,19 +320,7 @@ MandiIQ/
 </div></div></div>
 <br />
 <div style="position:relative; height:60px; overflow:hidden; width:100%; margin:8px 0;">
-  <svg viewBox="0 0 1440 60" width="100%" height="60" preserveAspectRatio="none" style="position:absolute;bottom:0;">
-    <defs>
-      <linearGradient id="wg-5" x1="0%" y1="0%" x2="100%" y2="0%">
-        <stop offset="0%" stop-color="#0B0F1E" stop-opacity="0" />
-        <stop offset="25%" stop-color="#00FF88" stop-opacity="0.25" />
-        <stop offset="50%" stop-color="#00FF88" stop-opacity="0.4" />
-        <stop offset="75%" stop-color="#00FF88" stop-opacity="0.25" />
-        <stop offset="100%" stop-color="#0B0F1E" stop-opacity="0" />
-      </linearGradient>
-    </defs>
-    <path d="M0,30 C240,10 480,50 720,30 C960,10 1200,50 1440,30 L1440,60 L0,60 Z" fill="url(#wg)" opacity="0.6" />
-    <path d="M0,40 C240,25 480,55 720,40 C960,25 1200,55 1440,40 L1440,60 L0,60 Z" fill="url(#wg)" opacity="0.3" />
-  </svg>
+  <img src="docs/assets/svg/icon-3b0384c03533.svg" width="100%" height="60" alt="" style="vertical-align:middle; max-width:100%;" />
 </div>
 <br />
 <div style="background:linear-gradient(135deg, rgba(255,255,255,0.04) 0%, rgba(255,255,255,0.01) 100%); border:1px solid rgba(255,255,255,0.06); border-radius:16px; padding:24px 28px; margin:16px 0; box-shadow:0 8px 32px rgba(0,0,0,0.4); position:relative; overflow:hidden;">
@@ -388,7 +328,7 @@ MandiIQ/
 <div style="position:absolute; top:-60px; right:-60px; width:120px; height:120px; background:radial-gradient(circle, rgba(0,255,136,0.15) 0%, transparent 70%);"></div>
 <a name="4-ingestion-pipeline"></a>
 <h2 style="font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Helvetica,Arial,sans-serif; font-size:1.5em; font-weight:600; color:#E0E0E0; display:flex; align-items:center; gap:10px; margin:0 0 16px 0; padding-bottom:8px; border-bottom:1px solid rgba(255,255,255,0.06);">
-  <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:middle"><path d="M4.5 16.5c-1.5 1.26-2 5-2 5s3.74-.5 5-2c.71-.84.7-2.13-.09-2.91a2.18 2.18 0 0 0-2.91-.09z"/><path d="M12 15l-3-3a22 22 0 0 1 2-3.95A12.88 12.88 0 0 1 22 2c0 2.72-.78 7.5-6 11a22.35 22.35 0 0 1-4 2z"/></svg> 4. Ingestion Pipeline
+  <img src="docs/assets/svg/icon-bee2875cc587.svg" width="25" height="25" alt="" style="vertical-align:middle; max-width:100%;" /> 4. Ingestion Pipeline
 </h2>
 
 ### 4.1 Scheduler (`mandi_rdd/ingestion/scheduler.py`)
@@ -459,19 +399,7 @@ The central orchestrator. Called by:
 </div></div></div>
 <br />
 <div style="position:relative; height:60px; overflow:hidden; width:100%; margin:8px 0;">
-  <svg viewBox="0 0 1440 60" width="100%" height="60" preserveAspectRatio="none" style="position:absolute;bottom:0;">
-    <defs>
-      <linearGradient id="wg-6" x1="0%" y1="0%" x2="100%" y2="0%">
-        <stop offset="0%" stop-color="#0B0F1E" stop-opacity="0" />
-        <stop offset="25%" stop-color="#00FF88" stop-opacity="0.25" />
-        <stop offset="50%" stop-color="#00FF88" stop-opacity="0.4" />
-        <stop offset="75%" stop-color="#00FF88" stop-opacity="0.25" />
-        <stop offset="100%" stop-color="#0B0F1E" stop-opacity="0" />
-      </linearGradient>
-    </defs>
-    <path d="M0,30 C240,10 480,50 720,30 C960,10 1200,50 1440,30 L1440,60 L0,60 Z" fill="url(#wg)" opacity="0.6" />
-    <path d="M0,40 C240,25 480,55 720,40 C960,25 1200,55 1440,40 L1440,60 L0,60 Z" fill="url(#wg)" opacity="0.3" />
-  </svg>
+  <img src="docs/assets/svg/icon-74ecabd2462c.svg" width="100%" height="60" alt="" style="vertical-align:middle; max-width:100%;" />
 </div>
 <br />
 <div style="background:linear-gradient(135deg, rgba(255,255,255,0.04) 0%, rgba(255,255,255,0.01) 100%); border:1px solid rgba(255,255,255,0.06); border-radius:16px; padding:24px 28px; margin:16px 0; box-shadow:0 8px 32px rgba(0,0,0,0.4); position:relative; overflow:hidden;">
@@ -479,7 +407,7 @@ The central orchestrator. Called by:
 <div style="position:absolute; top:-60px; right:-60px; width:120px; height:120px; background:radial-gradient(circle, rgba(0,255,136,0.15) 0%, transparent 70%);"></div>
 <a name="5-storage-layer"></a>
 <h2 style="font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Helvetica,Arial,sans-serif; font-size:1.5em; font-weight:600; color:#E0E0E0; display:flex; align-items:center; gap:10px; margin:0 0 16px 0; padding-bottom:8px; border-bottom:1px solid rgba(255,255,255,0.06);">
-  <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:middle"><ellipse cx="12" cy="5" rx="9" ry="3"/><path d="M21 12c0 1.66-4 3-9 3s-9-1.34-9-3"/><path d="M3 5v14c0 1.66 4 3 9 3s9-1.34 9-3V5"/></svg> 5. Storage Layer
+  <img src="docs/assets/svg/icon-a0c60dd90fca.svg" width="25" height="25" alt="" style="vertical-align:middle; max-width:100%;" /> 5. Storage Layer
 </h2>
 
 ### 5.1 DuckDB Store (`mandi_rdd/storage/duckdb_store.py`)
@@ -548,19 +476,7 @@ Cached data-access layer for the dashboard:
 </div></div></div>
 <br />
 <div style="position:relative; height:60px; overflow:hidden; width:100%; margin:8px 0;">
-  <svg viewBox="0 0 1440 60" width="100%" height="60" preserveAspectRatio="none" style="position:absolute;bottom:0;">
-    <defs>
-      <linearGradient id="wg-7" x1="0%" y1="0%" x2="100%" y2="0%">
-        <stop offset="0%" stop-color="#0B0F1E" stop-opacity="0" />
-        <stop offset="25%" stop-color="#00FF88" stop-opacity="0.25" />
-        <stop offset="50%" stop-color="#00FF88" stop-opacity="0.4" />
-        <stop offset="75%" stop-color="#00FF88" stop-opacity="0.25" />
-        <stop offset="100%" stop-color="#0B0F1E" stop-opacity="0" />
-      </linearGradient>
-    </defs>
-    <path d="M0,30 C240,10 480,50 720,30 C960,10 1200,50 1440,30 L1440,60 L0,60 Z" fill="url(#wg)" opacity="0.6" />
-    <path d="M0,40 C240,25 480,55 720,40 C960,25 1200,55 1440,40 L1440,60 L0,60 Z" fill="url(#wg)" opacity="0.3" />
-  </svg>
+  <img src="docs/assets/svg/icon-39164435e4b0.svg" width="100%" height="60" alt="" style="vertical-align:middle; max-width:100%;" />
 </div>
 <br />
 <div style="background:linear-gradient(135deg, rgba(255,255,255,0.04) 0%, rgba(255,255,255,0.01) 100%); border:1px solid rgba(255,255,255,0.06); border-radius:16px; padding:24px 28px; margin:16px 0; box-shadow:0 8px 32px rgba(0,0,0,0.4); position:relative; overflow:hidden;">
@@ -568,7 +484,7 @@ Cached data-access layer for the dashboard:
 <div style="position:absolute; top:-60px; right:-60px; width:120px; height:120px; background:radial-gradient(circle, rgba(0,255,136,0.15) 0%, transparent 70%);"></div>
 <a name="6-analysis-engine"></a>
 <h2 style="font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Helvetica,Arial,sans-serif; font-size:1.5em; font-weight:600; color:#E0E0E0; display:flex; align-items:center; gap:10px; margin:0 0 16px 0; padding-bottom:8px; border-bottom:1px solid rgba(255,255,255,0.06);">
-  <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:middle"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg> 6. Analysis Engine
+  <img src="docs/assets/svg/icon-f862fc7823f0.svg" width="25" height="25" alt="" style="vertical-align:middle; max-width:100%;" /> 6. Analysis Engine
 </h2>
 
 ### 6.1 RDD Engine (`mandi_rdd/analysis/rdd_engine.py`)
@@ -624,19 +540,7 @@ Combines RDD effect, risk score, and forecast into procurement recommendations:
 </div></div></div>
 <br />
 <div style="position:relative; height:60px; overflow:hidden; width:100%; margin:8px 0;">
-  <svg viewBox="0 0 1440 60" width="100%" height="60" preserveAspectRatio="none" style="position:absolute;bottom:0;">
-    <defs>
-      <linearGradient id="wg-8" x1="0%" y1="0%" x2="100%" y2="0%">
-        <stop offset="0%" stop-color="#0B0F1E" stop-opacity="0" />
-        <stop offset="25%" stop-color="#00FF88" stop-opacity="0.25" />
-        <stop offset="50%" stop-color="#00FF88" stop-opacity="0.4" />
-        <stop offset="75%" stop-color="#00FF88" stop-opacity="0.25" />
-        <stop offset="100%" stop-color="#0B0F1E" stop-opacity="0" />
-      </linearGradient>
-    </defs>
-    <path d="M0,30 C240,10 480,50 720,30 C960,10 1200,50 1440,30 L1440,60 L0,60 Z" fill="url(#wg)" opacity="0.6" />
-    <path d="M0,40 C240,25 480,55 720,40 C960,25 1200,55 1440,40 L1440,60 L0,60 Z" fill="url(#wg)" opacity="0.3" />
-  </svg>
+  <img src="docs/assets/svg/icon-64083f9b218a.svg" width="100%" height="60" alt="" style="vertical-align:middle; max-width:100%;" />
 </div>
 <br />
 <div style="background:linear-gradient(135deg, rgba(255,255,255,0.04) 0%, rgba(255,255,255,0.01) 100%); border:1px solid rgba(255,255,255,0.06); border-radius:16px; padding:24px 28px; margin:16px 0; box-shadow:0 8px 32px rgba(0,0,0,0.4); position:relative; overflow:hidden;">
@@ -644,7 +548,7 @@ Combines RDD effect, risk score, and forecast into procurement recommendations:
 <div style="position:absolute; top:-60px; right:-60px; width:120px; height:120px; background:radial-gradient(circle, rgba(0,255,136,0.15) 0%, transparent 70%);"></div>
 <a name="7-api-layer"></a>
 <h2 style="font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Helvetica,Arial,sans-serif; font-size:1.5em; font-weight:600; color:#E0E0E0; display:flex; align-items:center; gap:10px; margin:0 0 16px 0; padding-bottom:8px; border-bottom:1px solid rgba(255,255,255,0.06);">
-  <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:middle"><path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"/><line x1="7" y1="7" x2="7.01" y2="7"/></svg> 7. API Layer
+  <img src="docs/assets/svg/icon-e246b7163f05.svg" width="25" height="25" alt="" style="vertical-align:middle; max-width:100%;" /> 7. API Layer
 </h2>
 
 ### 7.1 FastAPI Endpoints (`mandi_rdd/api/main.py`)
@@ -706,19 +610,7 @@ Wide-open: `allow_origins=["*"]` (acceptable for data API, tighten for productio
 </div></div></div>
 <br />
 <div style="position:relative; height:60px; overflow:hidden; width:100%; margin:8px 0;">
-  <svg viewBox="0 0 1440 60" width="100%" height="60" preserveAspectRatio="none" style="position:absolute;bottom:0;">
-    <defs>
-      <linearGradient id="wg-9" x1="0%" y1="0%" x2="100%" y2="0%">
-        <stop offset="0%" stop-color="#0B0F1E" stop-opacity="0" />
-        <stop offset="25%" stop-color="#00FF88" stop-opacity="0.25" />
-        <stop offset="50%" stop-color="#00FF88" stop-opacity="0.4" />
-        <stop offset="75%" stop-color="#00FF88" stop-opacity="0.25" />
-        <stop offset="100%" stop-color="#0B0F1E" stop-opacity="0" />
-      </linearGradient>
-    </defs>
-    <path d="M0,30 C240,10 480,50 720,30 C960,10 1200,50 1440,30 L1440,60 L0,60 Z" fill="url(#wg)" opacity="0.6" />
-    <path d="M0,40 C240,25 480,55 720,40 C960,25 1200,55 1440,40 L1440,60 L0,60 Z" fill="url(#wg)" opacity="0.3" />
-  </svg>
+  <img src="docs/assets/svg/icon-a130f96a3d15.svg" width="100%" height="60" alt="" style="vertical-align:middle; max-width:100%;" />
 </div>
 <br />
 <div style="background:linear-gradient(135deg, rgba(255,255,255,0.04) 0%, rgba(255,255,255,0.01) 100%); border:1px solid rgba(255,255,255,0.06); border-radius:16px; padding:24px 28px; margin:16px 0; box-shadow:0 8px 32px rgba(0,0,0,0.4); position:relative; overflow:hidden;">
@@ -726,7 +618,7 @@ Wide-open: `allow_origins=["*"]` (acceptable for data API, tighten for productio
 <div style="position:absolute; top:-60px; right:-60px; width:120px; height:120px; background:radial-gradient(circle, rgba(0,255,136,0.15) 0%, transparent 70%);"></div>
 <a name="8-dashboard-streamlit"></a>
 <h2 style="font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Helvetica,Arial,sans-serif; font-size:1.5em; font-weight:600; color:#E0E0E0; display:flex; align-items:center; gap:10px; margin:0 0 16px 0; padding-bottom:8px; border-bottom:1px solid rgba(255,255,255,0.06);">
-  <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:middle"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg> 8. Dashboard (Streamlit)
+  <img src="docs/assets/svg/icon-f862fc7823f0.svg" width="25" height="25" alt="" style="vertical-align:middle; max-width:100%;" /> 8. Dashboard (Streamlit)
 </h2>
 
 ### 8.1 Architecture (`mandi_rdd/dashboard/app.py`)
@@ -811,19 +703,7 @@ Custom Plotly template with:
 </div></div></div>
 <br />
 <div style="position:relative; height:60px; overflow:hidden; width:100%; margin:8px 0;">
-  <svg viewBox="0 0 1440 60" width="100%" height="60" preserveAspectRatio="none" style="position:absolute;bottom:0;">
-    <defs>
-      <linearGradient id="wg-10" x1="0%" y1="0%" x2="100%" y2="0%">
-        <stop offset="0%" stop-color="#0B0F1E" stop-opacity="0" />
-        <stop offset="25%" stop-color="#00FF88" stop-opacity="0.25" />
-        <stop offset="50%" stop-color="#00FF88" stop-opacity="0.4" />
-        <stop offset="75%" stop-color="#00FF88" stop-opacity="0.25" />
-        <stop offset="100%" stop-color="#0B0F1E" stop-opacity="0" />
-      </linearGradient>
-    </defs>
-    <path d="M0,30 C240,10 480,50 720,30 C960,10 1200,50 1440,30 L1440,60 L0,60 Z" fill="url(#wg)" opacity="0.6" />
-    <path d="M0,40 C240,25 480,55 720,40 C960,25 1200,55 1440,40 L1440,60 L0,60 Z" fill="url(#wg)" opacity="0.3" />
-  </svg>
+  <img src="docs/assets/svg/icon-a4b3c8aa44d6.svg" width="100%" height="60" alt="" style="vertical-align:middle; max-width:100%;" />
 </div>
 <br />
 <div style="background:linear-gradient(135deg, rgba(255,255,255,0.04) 0%, rgba(255,255,255,0.01) 100%); border:1px solid rgba(255,255,255,0.06); border-radius:16px; padding:24px 28px; margin:16px 0; box-shadow:0 8px 32px rgba(0,0,0,0.4); position:relative; overflow:hidden;">
@@ -831,7 +711,7 @@ Custom Plotly template with:
 <div style="position:absolute; top:-60px; right:-60px; width:120px; height:120px; background:radial-gradient(circle, rgba(0,255,136,0.15) 0%, transparent 70%);"></div>
 <a name="9-frontend-react-vite"></a>
 <h2 style="font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Helvetica,Arial,sans-serif; font-size:1.5em; font-weight:600; color:#E0E0E0; display:flex; align-items:center; gap:10px; margin:0 0 16px 0; padding-bottom:8px; border-bottom:1px solid rgba(255,255,255,0.06);">
-  <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:middle"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg> 9. Frontend (React / Vite)
+  <img src="docs/assets/svg/icon-f862fc7823f0.svg" width="25" height="25" alt="" style="vertical-align:middle; max-width:100%;" /> 9. Frontend (React / Vite)
 </h2>
 
 ### 9.1 FlipBoard (`mandi_rdd/dashboard/frontend/src/FlipBoard.tsx`)
@@ -861,19 +741,7 @@ Three.js particle field using `@react-three/fiber` + `@react-three/drei`:
 </div></div></div>
 <br />
 <div style="position:relative; height:60px; overflow:hidden; width:100%; margin:8px 0;">
-  <svg viewBox="0 0 1440 60" width="100%" height="60" preserveAspectRatio="none" style="position:absolute;bottom:0;">
-    <defs>
-      <linearGradient id="wg-11" x1="0%" y1="0%" x2="100%" y2="0%">
-        <stop offset="0%" stop-color="#0B0F1E" stop-opacity="0" />
-        <stop offset="25%" stop-color="#00FF88" stop-opacity="0.25" />
-        <stop offset="50%" stop-color="#00FF88" stop-opacity="0.4" />
-        <stop offset="75%" stop-color="#00FF88" stop-opacity="0.25" />
-        <stop offset="100%" stop-color="#0B0F1E" stop-opacity="0" />
-      </linearGradient>
-    </defs>
-    <path d="M0,30 C240,10 480,50 720,30 C960,10 1200,50 1440,30 L1440,60 L0,60 Z" fill="url(#wg)" opacity="0.6" />
-    <path d="M0,40 C240,25 480,55 720,40 C960,25 1200,55 1440,40 L1440,60 L0,60 Z" fill="url(#wg)" opacity="0.3" />
-  </svg>
+  <img src="docs/assets/svg/icon-ee41fa0ceea0.svg" width="100%" height="60" alt="" style="vertical-align:middle; max-width:100%;" />
 </div>
 <br />
 <div style="background:linear-gradient(135deg, rgba(255,255,255,0.04) 0%, rgba(255,255,255,0.01) 100%); border:1px solid rgba(255,255,255,0.06); border-radius:16px; padding:24px 28px; margin:16px 0; box-shadow:0 8px 32px rgba(0,0,0,0.4); position:relative; overflow:hidden;">
@@ -881,7 +749,7 @@ Three.js particle field using `@react-three/fiber` + `@react-three/drei`:
 <div style="position:absolute; top:-60px; right:-60px; width:120px; height:120px; background:radial-gradient(circle, rgba(0,255,136,0.15) 0%, transparent 70%);"></div>
 <a name="10-ai-orchestrator"></a>
 <h2 style="font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Helvetica,Arial,sans-serif; font-size:1.5em; font-weight:600; color:#E0E0E0; display:flex; align-items:center; gap:10px; margin:0 0 16px 0; padding-bottom:8px; border-bottom:1px solid rgba(255,255,255,0.06);">
-  <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:middle"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg> 10. AI Orchestrator
+  <img src="docs/assets/svg/icon-f862fc7823f0.svg" width="25" height="25" alt="" style="vertical-align:middle; max-width:100%;" /> 10. AI Orchestrator
 </h2>
 
 ### 10.1 Router (`mandi_rdd/ai/router.py`)
@@ -916,19 +784,7 @@ Defines model endpoints, rate limits, and routing rules.
 </div></div></div>
 <br />
 <div style="position:relative; height:60px; overflow:hidden; width:100%; margin:8px 0;">
-  <svg viewBox="0 0 1440 60" width="100%" height="60" preserveAspectRatio="none" style="position:absolute;bottom:0;">
-    <defs>
-      <linearGradient id="wg-12" x1="0%" y1="0%" x2="100%" y2="0%">
-        <stop offset="0%" stop-color="#0B0F1E" stop-opacity="0" />
-        <stop offset="25%" stop-color="#00FF88" stop-opacity="0.25" />
-        <stop offset="50%" stop-color="#00FF88" stop-opacity="0.4" />
-        <stop offset="75%" stop-color="#00FF88" stop-opacity="0.25" />
-        <stop offset="100%" stop-color="#0B0F1E" stop-opacity="0" />
-      </linearGradient>
-    </defs>
-    <path d="M0,30 C240,10 480,50 720,30 C960,10 1200,50 1440,30 L1440,60 L0,60 Z" fill="url(#wg)" opacity="0.6" />
-    <path d="M0,40 C240,25 480,55 720,40 C960,25 1200,55 1440,40 L1440,60 L0,60 Z" fill="url(#wg)" opacity="0.3" />
-  </svg>
+  <img src="docs/assets/svg/icon-9bfc8c8cc8b3.svg" width="100%" height="60" alt="" style="vertical-align:middle; max-width:100%;" />
 </div>
 <br />
 <div style="background:linear-gradient(135deg, rgba(255,255,255,0.04) 0%, rgba(255,255,255,0.01) 100%); border:1px solid rgba(255,255,255,0.06); border-radius:16px; padding:24px 28px; margin:16px 0; box-shadow:0 8px 32px rgba(0,0,0,0.4); position:relative; overflow:hidden;">
@@ -936,7 +792,7 @@ Defines model endpoints, rate limits, and routing rules.
 <div style="position:absolute; top:-60px; right:-60px; width:120px; height:120px; background:radial-gradient(circle, rgba(0,255,136,0.15) 0%, transparent 70%);"></div>
 <a name="11-docs-landing-pages"></a>
 <h2 style="font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Helvetica,Arial,sans-serif; font-size:1.5em; font-weight:600; color:#E0E0E0; display:flex; align-items:center; gap:10px; margin:0 0 16px 0; padding-bottom:8px; border-bottom:1px solid rgba(255,255,255,0.06);">
-  <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:middle"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg> 11. Docs &amp; Landing Pages
+  <img src="docs/assets/svg/icon-f862fc7823f0.svg" width="25" height="25" alt="" style="vertical-align:middle; max-width:100%;" /> 11. Docs &amp; Landing Pages
 </h2>
 
 ### 11.1 Consolidated Docs (`docs/index.html`)
@@ -973,19 +829,7 @@ Single-page tabbed documentation site with full Alche Studio design system:
 </div></div></div>
 <br />
 <div style="position:relative; height:60px; overflow:hidden; width:100%; margin:8px 0;">
-  <svg viewBox="0 0 1440 60" width="100%" height="60" preserveAspectRatio="none" style="position:absolute;bottom:0;">
-    <defs>
-      <linearGradient id="wg-13" x1="0%" y1="0%" x2="100%" y2="0%">
-        <stop offset="0%" stop-color="#0B0F1E" stop-opacity="0" />
-        <stop offset="25%" stop-color="#00FF88" stop-opacity="0.25" />
-        <stop offset="50%" stop-color="#00FF88" stop-opacity="0.4" />
-        <stop offset="75%" stop-color="#00FF88" stop-opacity="0.25" />
-        <stop offset="100%" stop-color="#0B0F1E" stop-opacity="0" />
-      </linearGradient>
-    </defs>
-    <path d="M0,30 C240,10 480,50 720,30 C960,10 1200,50 1440,30 L1440,60 L0,60 Z" fill="url(#wg)" opacity="0.6" />
-    <path d="M0,40 C240,25 480,55 720,40 C960,25 1200,55 1440,40 L1440,60 L0,60 Z" fill="url(#wg)" opacity="0.3" />
-  </svg>
+  <img src="docs/assets/svg/icon-672211b064be.svg" width="100%" height="60" alt="" style="vertical-align:middle; max-width:100%;" />
 </div>
 <br />
 <div style="background:linear-gradient(135deg, rgba(255,255,255,0.04) 0%, rgba(255,255,255,0.01) 100%); border:1px solid rgba(255,255,255,0.06); border-radius:16px; padding:24px 28px; margin:16px 0; box-shadow:0 8px 32px rgba(0,0,0,0.4); position:relative; overflow:hidden;">
@@ -993,7 +837,7 @@ Single-page tabbed documentation site with full Alche Studio design system:
 <div style="position:absolute; top:-60px; right:-60px; width:120px; height:120px; background:radial-gradient(circle, rgba(0,255,136,0.15) 0%, transparent 70%);"></div>
 <a name="12-deployment-cicd"></a>
 <h2 style="font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Helvetica,Arial,sans-serif; font-size:1.5em; font-weight:600; color:#E0E0E0; display:flex; align-items:center; gap:10px; margin:0 0 16px 0; padding-bottom:8px; border-bottom:1px solid rgba(255,255,255,0.06);">
-  <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:middle"><path d="M4.5 16.5c-1.5 1.26-2 5-2 5s3.74-.5 5-2c.71-.84.7-2.13-.09-2.91a2.18 2.18 0 0 0-2.91-.09z"/><path d="M12 15l-3-3a22 22 0 0 1 2-3.95A12.88 12.88 0 0 1 22 2c0 2.72-.78 7.5-6 11a22.35 22.35 0 0 1-4 2z"/></svg> 12. Deployment &amp; CI/CD
+  <img src="docs/assets/svg/icon-bee2875cc587.svg" width="25" height="25" alt="" style="vertical-align:middle; max-width:100%;" /> 12. Deployment &amp; CI/CD
 </h2>
 
 ### 12.1 Docker
@@ -1054,19 +898,7 @@ Cloudflare Workers script that serves SEO-friendly HTML shell to bots while prox
 </div></div></div>
 <br />
 <div style="position:relative; height:60px; overflow:hidden; width:100%; margin:8px 0;">
-  <svg viewBox="0 0 1440 60" width="100%" height="60" preserveAspectRatio="none" style="position:absolute;bottom:0;">
-    <defs>
-      <linearGradient id="wg-14" x1="0%" y1="0%" x2="100%" y2="0%">
-        <stop offset="0%" stop-color="#0B0F1E" stop-opacity="0" />
-        <stop offset="25%" stop-color="#00FF88" stop-opacity="0.25" />
-        <stop offset="50%" stop-color="#00FF88" stop-opacity="0.4" />
-        <stop offset="75%" stop-color="#00FF88" stop-opacity="0.25" />
-        <stop offset="100%" stop-color="#0B0F1E" stop-opacity="0" />
-      </linearGradient>
-    </defs>
-    <path d="M0,30 C240,10 480,50 720,30 C960,10 1200,50 1440,30 L1440,60 L0,60 Z" fill="url(#wg)" opacity="0.6" />
-    <path d="M0,40 C240,25 480,55 720,40 C960,25 1200,55 1440,40 L1440,60 L0,60 Z" fill="url(#wg)" opacity="0.3" />
-  </svg>
+  <img src="docs/assets/svg/icon-dd24d242c628.svg" width="100%" height="60" alt="" style="vertical-align:middle; max-width:100%;" />
 </div>
 <br />
 <div style="background:linear-gradient(135deg, rgba(255,255,255,0.04) 0%, rgba(255,255,255,0.01) 100%); border:1px solid rgba(255,255,255,0.06); border-radius:16px; padding:24px 28px; margin:16px 0; box-shadow:0 8px 32px rgba(0,0,0,0.4); position:relative; overflow:hidden;">
@@ -1074,7 +906,7 @@ Cloudflare Workers script that serves SEO-friendly HTML shell to bots while prox
 <div style="position:absolute; top:-60px; right:-60px; width:120px; height:120px; background:radial-gradient(circle, rgba(0,255,136,0.15) 0%, transparent 70%);"></div>
 <a name="13-live-data-state"></a>
 <h2 style="font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Helvetica,Arial,sans-serif; font-size:1.5em; font-weight:600; color:#E0E0E0; display:flex; align-items:center; gap:10px; margin:0 0 16px 0; padding-bottom:8px; border-bottom:1px solid rgba(255,255,255,0.06);">
-  <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:middle"><ellipse cx="12" cy="5" rx="9" ry="3"/><path d="M21 12c0 1.66-4 3-9 3s-9-1.34-9-3"/><path d="M3 5v14c0 1.66 4 3 9 3s9-1.34 9-3V5"/></svg> 13. Live Data State
+  <img src="docs/assets/svg/icon-a0c60dd90fca.svg" width="25" height="25" alt="" style="vertical-align:middle; max-width:100%;" /> 13. Live Data State
 </h2>
 
 ### 13.1 Current Dataset (verified at 23:03 UTC, July 30, 2026)
@@ -1114,19 +946,7 @@ Cloudflare Workers script that serves SEO-friendly HTML shell to bots while prox
 </div></div></div>
 <br />
 <div style="position:relative; height:60px; overflow:hidden; width:100%; margin:8px 0;">
-  <svg viewBox="0 0 1440 60" width="100%" height="60" preserveAspectRatio="none" style="position:absolute;bottom:0;">
-    <defs>
-      <linearGradient id="wg-15" x1="0%" y1="0%" x2="100%" y2="0%">
-        <stop offset="0%" stop-color="#0B0F1E" stop-opacity="0" />
-        <stop offset="25%" stop-color="#00FF88" stop-opacity="0.25" />
-        <stop offset="50%" stop-color="#00FF88" stop-opacity="0.4" />
-        <stop offset="75%" stop-color="#00FF88" stop-opacity="0.25" />
-        <stop offset="100%" stop-color="#0B0F1E" stop-opacity="0" />
-      </linearGradient>
-    </defs>
-    <path d="M0,30 C240,10 480,50 720,30 C960,10 1200,50 1440,30 L1440,60 L0,60 Z" fill="url(#wg)" opacity="0.6" />
-    <path d="M0,40 C240,25 480,55 720,40 C960,25 1200,55 1440,40 L1440,60 L0,60 Z" fill="url(#wg)" opacity="0.3" />
-  </svg>
+  <img src="docs/assets/svg/icon-b350e4823cc5.svg" width="100%" height="60" alt="" style="vertical-align:middle; max-width:100%;" />
 </div>
 <br />
 <div style="background:linear-gradient(135deg, rgba(255,255,255,0.04) 0%, rgba(255,255,255,0.01) 100%); border:1px solid rgba(255,255,255,0.06); border-radius:16px; padding:24px 28px; margin:16px 0; box-shadow:0 8px 32px rgba(0,0,0,0.4); position:relative; overflow:hidden;">
@@ -1134,7 +954,7 @@ Cloudflare Workers script that serves SEO-friendly HTML shell to bots while prox
 <div style="position:absolute; top:-60px; right:-60px; width:120px; height:120px; background:radial-gradient(circle, rgba(0,255,136,0.15) 0%, transparent 70%);"></div>
 <a name="14-known-issues-pending-work"></a>
 <h2 style="font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Helvetica,Arial,sans-serif; font-size:1.5em; font-weight:600; color:#E0E0E0; display:flex; align-items:center; gap:10px; margin:0 0 16px 0; padding-bottom:8px; border-bottom:1px solid rgba(255,255,255,0.06);">
-  <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:middle"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg> 14. Known Issues &amp; Pending Work
+  <img src="docs/assets/svg/icon-f862fc7823f0.svg" width="25" height="25" alt="" style="vertical-align:middle; max-width:100%;" /> 14. Known Issues &amp; Pending Work
 </h2>
 
 ### 14.1 Urgent
@@ -1174,19 +994,7 @@ Cloudflare Workers script that serves SEO-friendly HTML shell to bots while prox
 </div></div></div>
 <br />
 <div style="position:relative; height:60px; overflow:hidden; width:100%; margin:8px 0;">
-  <svg viewBox="0 0 1440 60" width="100%" height="60" preserveAspectRatio="none" style="position:absolute;bottom:0;">
-    <defs>
-      <linearGradient id="wg-16" x1="0%" y1="0%" x2="100%" y2="0%">
-        <stop offset="0%" stop-color="#0B0F1E" stop-opacity="0" />
-        <stop offset="25%" stop-color="#00FF88" stop-opacity="0.25" />
-        <stop offset="50%" stop-color="#00FF88" stop-opacity="0.4" />
-        <stop offset="75%" stop-color="#00FF88" stop-opacity="0.25" />
-        <stop offset="100%" stop-color="#0B0F1E" stop-opacity="0" />
-      </linearGradient>
-    </defs>
-    <path d="M0,30 C240,10 480,50 720,30 C960,10 1200,50 1440,30 L1440,60 L0,60 Z" fill="url(#wg)" opacity="0.6" />
-    <path d="M0,40 C240,25 480,55 720,40 C960,25 1200,55 1440,40 L1440,60 L0,60 Z" fill="url(#wg)" opacity="0.3" />
-  </svg>
+  <img src="docs/assets/svg/icon-f49ec25352f2.svg" width="100%" height="60" alt="" style="vertical-align:middle; max-width:100%;" />
 </div>
 <br />
 <div style="background:linear-gradient(135deg, rgba(255,255,255,0.04) 0%, rgba(255,255,255,0.01) 100%); border:1px solid rgba(255,255,255,0.06); border-radius:16px; padding:24px 28px; margin:16px 0; box-shadow:0 8px 32px rgba(0,0,0,0.4); position:relative; overflow:hidden;">
@@ -1194,7 +1002,7 @@ Cloudflare Workers script that serves SEO-friendly HTML shell to bots while prox
 <div style="position:absolute; top:-60px; right:-60px; width:120px; height:120px; background:radial-gradient(circle, rgba(0,255,136,0.15) 0%, transparent 70%);"></div>
 <a name="15-local-development"></a>
 <h2 style="font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Helvetica,Arial,sans-serif; font-size:1.5em; font-weight:600; color:#E0E0E0; display:flex; align-items:center; gap:10px; margin:0 0 16px 0; padding-bottom:8px; border-bottom:1px solid rgba(255,255,255,0.06);">
-  <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:middle"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg> 15. Local Development
+  <img src="docs/assets/svg/icon-f862fc7823f0.svg" width="25" height="25" alt="" style="vertical-align:middle; max-width:100%;" /> 15. Local Development
 </h2>
 
 ### 15.1 Quick Start
@@ -1278,19 +1086,7 @@ mmdc -i diagrams/pipeline-flow-live.mmd -o diagrams/pipeline-flow-live.svg -b tr
 </div></div></div>
 <br />
 <div style="position:relative; height:60px; overflow:hidden; width:100%; margin:8px 0;">
-  <svg viewBox="0 0 1440 60" width="100%" height="60" preserveAspectRatio="none" style="position:absolute;bottom:0;">
-    <defs>
-      <linearGradient id="wg-17" x1="0%" y1="0%" x2="100%" y2="0%">
-        <stop offset="0%" stop-color="#0B0F1E" stop-opacity="0" />
-        <stop offset="25%" stop-color="#00FF88" stop-opacity="0.25" />
-        <stop offset="50%" stop-color="#00FF88" stop-opacity="0.4" />
-        <stop offset="75%" stop-color="#00FF88" stop-opacity="0.25" />
-        <stop offset="100%" stop-color="#0B0F1E" stop-opacity="0" />
-      </linearGradient>
-    </defs>
-    <path d="M0,30 C240,10 480,50 720,30 C960,10 1200,50 1440,30 L1440,60 L0,60 Z" fill="url(#wg)" opacity="0.6" />
-    <path d="M0,40 C240,25 480,55 720,40 C960,25 1200,55 1440,40 L1440,60 L0,60 Z" fill="url(#wg)" opacity="0.3" />
-  </svg>
+  <img src="docs/assets/svg/icon-b53c27cb21fd.svg" width="100%" height="60" alt="" style="vertical-align:middle; max-width:100%;" />
 </div>
 <br />
 <div style="background:linear-gradient(135deg, rgba(255,255,255,0.04) 0%, rgba(255,255,255,0.01) 100%); border:1px solid rgba(255,255,255,0.06); border-radius:16px; padding:24px 28px; margin:16px 0; box-shadow:0 8px 32px rgba(0,0,0,0.4); position:relative; overflow:hidden;">
@@ -1298,7 +1094,7 @@ mmdc -i diagrams/pipeline-flow-live.mmd -o diagrams/pipeline-flow-live.svg -b tr
 <div style="position:absolute; top:-60px; right:-60px; width:120px; height:120px; background:radial-gradient(circle, rgba(0,255,136,0.15) 0%, transparent 70%);"></div>
 <a name="recent-verifications"></a>
 <h2 style="font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Helvetica,Arial,sans-serif; font-size:1.5em; font-weight:600; color:#E0E0E0; display:flex; align-items:center; gap:10px; margin:0 0 16px 0; padding-bottom:8px; border-bottom:1px solid rgba(255,255,255,0.06);">
-  <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:middle"><path d="M14 2H10"/><path d="M12 2v10"/><path d="M9 10a4 4 0 0 0 6 0"/><path d="M14 6a4 4 0 0 1 0-4"/><path d="M6 18a4 4 0 0 0 4 4h4a4 4 0 0 0 4-4"/></svg> Recent Verifications
+  <img src="docs/assets/svg/icon-5fc91c87ca3d.svg" width="25" height="25" alt="" style="vertical-align:middle; max-width:100%;" /> Recent Verifications
 </h2>
 
 ### Syntax Bugs Found &amp; Fixed (July 30, 2026)

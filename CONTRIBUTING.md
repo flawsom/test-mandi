@@ -5,7 +5,7 @@
 
 <div style="position:relative; z-index:1;">
 <h1 style="margin:0; font-size:2.2em; font-weight:700; color:#E0E0E0; letter-spacing:-0.5px;">
-  <svg xmlns="http://www.w3.org/2000/svg" width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="#00FF88" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:middle"><path d="M12 2v18"/><path d="M8 6c0-2 4-4 4 0"/><path d="M16 6c0-2-4-4-4 0"/><path d="M8 12c0-2 4-4 4 0"/><path d="M16 12c0-2-4-4-4 0"/><path d="M6 18c0-3 6-5 6 0"/><path d="M18 18c0-3-6-5-6 0"/><path d="M9 22h6"/></svg>
+  <img src="docs/assets/svg/icon-f8867c21931f.svg" width="36" height="36" alt="" style="vertical-align:middle; max-width:100%;" />
   Contributing To Mandiiq
 </h1>
 <h4 style="color:#94A3B8; font-weight:400; font-size:0.95em; margin:6px 0 0 0;">MandiIQ Documentation</h4>
@@ -23,19 +23,7 @@ from the code alone.
 </div></div></div>
 <br />
 <div style="position:relative; height:60px; overflow:hidden; width:100%; margin:8px 0;">
-  <svg viewBox="0 0 1440 60" width="100%" height="60" preserveAspectRatio="none" style="position:absolute;bottom:0;">
-    <defs>
-      <linearGradient id="wg-1" x1="0%" y1="0%" x2="100%" y2="0%">
-        <stop offset="0%" stop-color="#0B0F1E" stop-opacity="0" />
-        <stop offset="25%" stop-color="#00FF88" stop-opacity="0.25" />
-        <stop offset="50%" stop-color="#00FF88" stop-opacity="0.4" />
-        <stop offset="75%" stop-color="#00FF88" stop-opacity="0.25" />
-        <stop offset="100%" stop-color="#0B0F1E" stop-opacity="0" />
-      </linearGradient>
-    </defs>
-    <path d="M0,30 C240,10 480,50 720,30 C960,10 1200,50 1440,30 L1440,60 L0,60 Z" fill="url(#wg)" opacity="0.6" />
-    <path d="M0,40 C240,25 480,55 720,40 C960,25 1200,55 1440,40 L1440,60 L0,60 Z" fill="url(#wg)" opacity="0.3" />
-  </svg>
+  <img src="docs/assets/svg/icon-4fe945889b5c.svg" width="100%" height="60" alt="" style="vertical-align:middle; max-width:100%;" />
 </div>
 <br />
 <div style="background:linear-gradient(135deg, rgba(255,255,255,0.04) 0%, rgba(255,255,255,0.01) 100%); border:1px solid rgba(255,255,255,0.06); border-radius:16px; padding:24px 28px; margin:16px 0; box-shadow:0 8px 32px rgba(0,0,0,0.4); position:relative; overflow:hidden;">
@@ -43,7 +31,7 @@ from the code alone.
 <div style="position:absolute; top:-60px; right:-60px; width:120px; height:120px; background:radial-gradient(circle, rgba(0,255,136,0.15) 0%, transparent 70%);"></div>
 <a name="canonical-remote"></a>
 <h2 style="font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Helvetica,Arial,sans-serif; font-size:1.5em; font-weight:600; color:#E0E0E0; display:flex; align-items:center; gap:10px; margin:0 0 16px 0; padding-bottom:8px; border-bottom:1px solid rgba(255,255,255,0.06);">
-  <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:middle"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg> Canonical remote
+  <img src="docs/assets/svg/icon-f862fc7823f0.svg" width="25" height="25" alt="" style="vertical-align:middle; max-width:100%;" /> Canonical remote
 </h2>
 
 The canonical remote for this repository is **`origin`** and it must point at:
@@ -72,19 +60,7 @@ unrelated repo as `origin` in a MandiIQ working copy.
 </div></div></div>
 <br />
 <div style="position:relative; height:60px; overflow:hidden; width:100%; margin:8px 0;">
-  <svg viewBox="0 0 1440 60" width="100%" height="60" preserveAspectRatio="none" style="position:absolute;bottom:0;">
-    <defs>
-      <linearGradient id="wg-2" x1="0%" y1="0%" x2="100%" y2="0%">
-        <stop offset="0%" stop-color="#0B0F1E" stop-opacity="0" />
-        <stop offset="25%" stop-color="#00FF88" stop-opacity="0.25" />
-        <stop offset="50%" stop-color="#00FF88" stop-opacity="0.4" />
-        <stop offset="75%" stop-color="#00FF88" stop-opacity="0.25" />
-        <stop offset="100%" stop-color="#0B0F1E" stop-opacity="0" />
-      </linearGradient>
-    </defs>
-    <path d="M0,30 C240,10 480,50 720,30 C960,10 1200,50 1440,30 L1440,60 L0,60 Z" fill="url(#wg)" opacity="0.6" />
-    <path d="M0,40 C240,25 480,55 720,40 C960,25 1200,55 1440,40 L1440,60 L0,60 Z" fill="url(#wg)" opacity="0.3" />
-  </svg>
+  <img src="docs/assets/svg/icon-b5297f23fd61.svg" width="100%" height="60" alt="" style="vertical-align:middle; max-width:100%;" />
 </div>
 <br />
 <div style="background:linear-gradient(135deg, rgba(255,255,255,0.04) 0%, rgba(255,255,255,0.01) 100%); border:1px solid rgba(255,255,255,0.06); border-radius:16px; padding:24px 28px; margin:16px 0; box-shadow:0 8px 32px rgba(0,0,0,0.4); position:relative; overflow:hidden;">
@@ -92,7 +68,7 @@ unrelated repo as `origin` in a MandiIQ working copy.
 <div style="position:absolute; top:-60px; right:-60px; width:120px; height:120px; background:radial-gradient(circle, rgba(0,255,136,0.15) 0%, transparent 70%);"></div>
 <a name="data-storage-decision-prd-phase-6-external-store"></a>
 <h2 style="font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Helvetica,Arial,sans-serif; font-size:1.5em; font-weight:600; color:#E0E0E0; display:flex; align-items:center; gap:10px; margin:0 0 16px 0; padding-bottom:8px; border-bottom:1px solid rgba(255,255,255,0.06);">
-  <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:middle"><ellipse cx="12" cy="5" rx="9" ry="3"/><path d="M21 12c0 1.66-4 3-9 3s-9-1.34-9-3"/><path d="M3 5v14c0 1.66 4 3 9 3s9-1.34 9-3V5"/></svg> Data storage decision (PRD Phase 6 — external store)
+  <img src="docs/assets/svg/icon-a0c60dd90fca.svg" width="25" height="25" alt="" style="vertical-align:middle; max-width:100%;" /> Data storage decision (PRD Phase 6 — external store)
 </h2>
 
 The ingestion pipeline writes its DuckDB database to `mandi_rdd/data/mandi_iq.duckdb`
@@ -113,19 +89,7 @@ the repo secrets, the git-commit fallback is no longer used.
 </div></div></div>
 <br />
 <div style="position:relative; height:60px; overflow:hidden; width:100%; margin:8px 0;">
-  <svg viewBox="0 0 1440 60" width="100%" height="60" preserveAspectRatio="none" style="position:absolute;bottom:0;">
-    <defs>
-      <linearGradient id="wg-3" x1="0%" y1="0%" x2="100%" y2="0%">
-        <stop offset="0%" stop-color="#0B0F1E" stop-opacity="0" />
-        <stop offset="25%" stop-color="#00FF88" stop-opacity="0.25" />
-        <stop offset="50%" stop-color="#00FF88" stop-opacity="0.4" />
-        <stop offset="75%" stop-color="#00FF88" stop-opacity="0.25" />
-        <stop offset="100%" stop-color="#0B0F1E" stop-opacity="0" />
-      </linearGradient>
-    </defs>
-    <path d="M0,30 C240,10 480,50 720,30 C960,10 1200,50 1440,30 L1440,60 L0,60 Z" fill="url(#wg)" opacity="0.6" />
-    <path d="M0,40 C240,25 480,55 720,40 C960,25 1200,55 1440,40 L1440,60 L0,60 Z" fill="url(#wg)" opacity="0.3" />
-  </svg>
+  <img src="docs/assets/svg/icon-47f7f2f791a1.svg" width="100%" height="60" alt="" style="vertical-align:middle; max-width:100%;" />
 </div>
 <br />
 <div style="background:linear-gradient(135deg, rgba(255,255,255,0.04) 0%, rgba(255,255,255,0.01) 100%); border:1px solid rgba(255,255,255,0.06); border-radius:16px; padding:24px 28px; margin:16px 0; box-shadow:0 8px 32px rgba(0,0,0,0.4); position:relative; overflow:hidden;">
@@ -133,7 +97,7 @@ the repo secrets, the git-commit fallback is no longer used.
 <div style="position:absolute; top:-60px; right:-60px; width:120px; height:120px; background:radial-gradient(circle, rgba(0,255,136,0.15) 0%, transparent 70%);"></div>
 <a name="ingestion-automation-branch-protection-prd-phase-8"></a>
 <h2 style="font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Helvetica,Arial,sans-serif; font-size:1.5em; font-weight:600; color:#E0E0E0; display:flex; align-items:center; gap:10px; margin:0 0 16px 0; padding-bottom:8px; border-bottom:1px solid rgba(255,255,255,0.06);">
-  <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:middle"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg> Ingestion automation &amp; branch protection (PRD Phase 8)
+  <img src="docs/assets/svg/icon-f862fc7823f0.svg" width="25" height="25" alt="" style="vertical-align:middle; max-width:100%;" /> Ingestion automation &amp; branch protection (PRD Phase 8)
 </h2>
 
 The nightly ingestion runs as a GitHub Actions schedule (`0 6 * * *`). Its commits
@@ -152,19 +116,7 @@ of automated data commits.
 </div></div></div>
 <br />
 <div style="position:relative; height:60px; overflow:hidden; width:100%; margin:8px 0;">
-  <svg viewBox="0 0 1440 60" width="100%" height="60" preserveAspectRatio="none" style="position:absolute;bottom:0;">
-    <defs>
-      <linearGradient id="wg-4" x1="0%" y1="0%" x2="100%" y2="0%">
-        <stop offset="0%" stop-color="#0B0F1E" stop-opacity="0" />
-        <stop offset="25%" stop-color="#00FF88" stop-opacity="0.25" />
-        <stop offset="50%" stop-color="#00FF88" stop-opacity="0.4" />
-        <stop offset="75%" stop-color="#00FF88" stop-opacity="0.25" />
-        <stop offset="100%" stop-color="#0B0F1E" stop-opacity="0" />
-      </linearGradient>
-    </defs>
-    <path d="M0,30 C240,10 480,50 720,30 C960,10 1200,50 1440,30 L1440,60 L0,60 Z" fill="url(#wg)" opacity="0.6" />
-    <path d="M0,40 C240,25 480,55 720,40 C960,25 1200,55 1440,40 L1440,60 L0,60 Z" fill="url(#wg)" opacity="0.3" />
-  </svg>
+  <img src="docs/assets/svg/icon-659fbdc3b394.svg" width="100%" height="60" alt="" style="vertical-align:middle; max-width:100%;" />
 </div>
 <br />
 <div style="background:linear-gradient(135deg, rgba(255,255,255,0.04) 0%, rgba(255,255,255,0.01) 100%); border:1px solid rgba(255,255,255,0.06); border-radius:16px; padding:24px 28px; margin:16px 0; box-shadow:0 8px 32px rgba(0,0,0,0.4); position:relative; overflow:hidden;">
@@ -172,7 +124,7 @@ of automated data commits.
 <div style="position:absolute; top:-60px; right:-60px; width:120px; height:120px; background:radial-gradient(circle, rgba(0,255,136,0.15) 0%, transparent 70%);"></div>
 <a name="local-setup"></a>
 <h2 style="font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Helvetica,Arial,sans-serif; font-size:1.5em; font-weight:600; color:#E0E0E0; display:flex; align-items:center; gap:10px; margin:0 0 16px 0; padding-bottom:8px; border-bottom:1px solid rgba(255,255,255,0.06);">
-  <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:middle"><path d="M4 15s1-1 4-1 5 2 8 2 4-1 4-1V3s-1 1-4 1-5-2-8-2-4 1-4 1z"/><line x1="4" y1="22" x2="4" y2="15"/></svg> Local setup
+  <img src="docs/assets/svg/icon-89b8e21f1290.svg" width="25" height="25" alt="" style="vertical-align:middle; max-width:100%;" /> Local setup
 </h2>
 
 ```bash
@@ -198,19 +150,7 @@ python -m mandi_rdd.run_nightly --max-records 5000
 </div></div></div>
 <br />
 <div style="position:relative; height:60px; overflow:hidden; width:100%; margin:8px 0;">
-  <svg viewBox="0 0 1440 60" width="100%" height="60" preserveAspectRatio="none" style="position:absolute;bottom:0;">
-    <defs>
-      <linearGradient id="wg-5" x1="0%" y1="0%" x2="100%" y2="0%">
-        <stop offset="0%" stop-color="#0B0F1E" stop-opacity="0" />
-        <stop offset="25%" stop-color="#00FF88" stop-opacity="0.25" />
-        <stop offset="50%" stop-color="#00FF88" stop-opacity="0.4" />
-        <stop offset="75%" stop-color="#00FF88" stop-opacity="0.25" />
-        <stop offset="100%" stop-color="#0B0F1E" stop-opacity="0" />
-      </linearGradient>
-    </defs>
-    <path d="M0,30 C240,10 480,50 720,30 C960,10 1200,50 1440,30 L1440,60 L0,60 Z" fill="url(#wg)" opacity="0.6" />
-    <path d="M0,40 C240,25 480,55 720,40 C960,25 1200,55 1440,40 L1440,60 L0,60 Z" fill="url(#wg)" opacity="0.3" />
-  </svg>
+  <img src="docs/assets/svg/icon-3b0384c03533.svg" width="100%" height="60" alt="" style="vertical-align:middle; max-width:100%;" />
 </div>
 <br />
 <div style="background:linear-gradient(135deg, rgba(255,255,255,0.04) 0%, rgba(255,255,255,0.01) 100%); border:1px solid rgba(255,255,255,0.06); border-radius:16px; padding:24px 28px; margin:16px 0; box-shadow:0 8px 32px rgba(0,0,0,0.4); position:relative; overflow:hidden;">
@@ -218,7 +158,7 @@ python -m mandi_rdd.run_nightly --max-records 5000
 <div style="position:absolute; top:-60px; right:-60px; width:120px; height:120px; background:radial-gradient(circle, rgba(0,255,136,0.15) 0%, transparent 70%);"></div>
 <a name="api-keys-secrets"></a>
 <h2 style="font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Helvetica,Arial,sans-serif; font-size:1.5em; font-weight:600; color:#E0E0E0; display:flex; align-items:center; gap:10px; margin:0 0 16px 0; padding-bottom:8px; border-bottom:1px solid rgba(255,255,255,0.06);">
-  <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:middle"><path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"/><line x1="7" y1="7" x2="7.01" y2="7"/></svg> API keys &amp; secrets
+  <img src="docs/assets/svg/icon-e246b7163f05.svg" width="25" height="25" alt="" style="vertical-align:middle; max-width:100%;" /> API keys &amp; secrets
 </h2>
 
 - `DATA_GOV_IN_API_KEY` — **required** for live price ingestion. A missing or invalid
@@ -231,19 +171,7 @@ Never commit secrets or a fallback API key.
 </div></div></div>
 <br />
 <div style="position:relative; height:60px; overflow:hidden; width:100%; margin:8px 0;">
-  <svg viewBox="0 0 1440 60" width="100%" height="60" preserveAspectRatio="none" style="position:absolute;bottom:0;">
-    <defs>
-      <linearGradient id="wg-6" x1="0%" y1="0%" x2="100%" y2="0%">
-        <stop offset="0%" stop-color="#0B0F1E" stop-opacity="0" />
-        <stop offset="25%" stop-color="#00FF88" stop-opacity="0.25" />
-        <stop offset="50%" stop-color="#00FF88" stop-opacity="0.4" />
-        <stop offset="75%" stop-color="#00FF88" stop-opacity="0.25" />
-        <stop offset="100%" stop-color="#0B0F1E" stop-opacity="0" />
-      </linearGradient>
-    </defs>
-    <path d="M0,30 C240,10 480,50 720,30 C960,10 1200,50 1440,30 L1440,60 L0,60 Z" fill="url(#wg)" opacity="0.6" />
-    <path d="M0,40 C240,25 480,55 720,40 C960,25 1200,55 1440,40 L1440,60 L0,60 Z" fill="url(#wg)" opacity="0.3" />
-  </svg>
+  <img src="docs/assets/svg/icon-74ecabd2462c.svg" width="100%" height="60" alt="" style="vertical-align:middle; max-width:100%;" />
 </div>
 <br />
 <div style="background:linear-gradient(135deg, rgba(255,255,255,0.04) 0%, rgba(255,255,255,0.01) 100%); border:1px solid rgba(255,255,255,0.06); border-radius:16px; padding:24px 28px; margin:16px 0; box-shadow:0 8px 32px rgba(0,0,0,0.4); position:relative; overflow:hidden;">
@@ -251,7 +179,7 @@ Never commit secrets or a fallback API key.
 <div style="position:absolute; top:-60px; right:-60px; width:120px; height:120px; background:radial-gradient(circle, rgba(0,255,136,0.15) 0%, transparent 70%);"></div>
 <a name="tests"></a>
 <h2 style="font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Helvetica,Arial,sans-serif; font-size:1.5em; font-weight:600; color:#E0E0E0; display:flex; align-items:center; gap:10px; margin:0 0 16px 0; padding-bottom:8px; border-bottom:1px solid rgba(255,255,255,0.06);">
-  <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:middle"><path d="M14 2H10"/><path d="M12 2v10"/><path d="M9 10a4 4 0 0 0 6 0"/><path d="M14 6a4 4 0 0 1 0-4"/><path d="M6 18a4 4 0 0 0 4 4h4a4 4 0 0 0 4-4"/></svg> Tests
+  <img src="docs/assets/svg/icon-5fc91c87ca3d.svg" width="25" height="25" alt="" style="vertical-align:middle; max-width:100%;" /> Tests
 </h2>
 
 ```bash
@@ -265,19 +193,7 @@ no-`[skip ci]` on the ingest commit).
 </div></div></div>
 <br />
 <div style="position:relative; height:60px; overflow:hidden; width:100%; margin:8px 0;">
-  <svg viewBox="0 0 1440 60" width="100%" height="60" preserveAspectRatio="none" style="position:absolute;bottom:0;">
-    <defs>
-      <linearGradient id="wg-7" x1="0%" y1="0%" x2="100%" y2="0%">
-        <stop offset="0%" stop-color="#0B0F1E" stop-opacity="0" />
-        <stop offset="25%" stop-color="#00FF88" stop-opacity="0.25" />
-        <stop offset="50%" stop-color="#00FF88" stop-opacity="0.4" />
-        <stop offset="75%" stop-color="#00FF88" stop-opacity="0.25" />
-        <stop offset="100%" stop-color="#0B0F1E" stop-opacity="0" />
-      </linearGradient>
-    </defs>
-    <path d="M0,30 C240,10 480,50 720,30 C960,10 1200,50 1440,30 L1440,60 L0,60 Z" fill="url(#wg)" opacity="0.6" />
-    <path d="M0,40 C240,25 480,55 720,40 C960,25 1200,55 1440,40 L1440,60 L0,60 Z" fill="url(#wg)" opacity="0.3" />
-  </svg>
+  <img src="docs/assets/svg/icon-39164435e4b0.svg" width="100%" height="60" alt="" style="vertical-align:middle; max-width:100%;" />
 </div>
 <br />
 <div style="background:linear-gradient(135deg, rgba(255,255,255,0.04) 0%, rgba(255,255,255,0.01) 100%); border:1px solid rgba(255,255,255,0.06); border-radius:16px; padding:24px 28px; margin:16px 0; box-shadow:0 8px 32px rgba(0,0,0,0.4); position:relative; overflow:hidden;">
@@ -285,7 +201,7 @@ no-`[skip ci]` on the ingest commit).
 <div style="position:absolute; top:-60px; right:-60px; width:120px; height:120px; background:radial-gradient(circle, rgba(0,255,136,0.15) 0%, transparent 70%);"></div>
 <a name="authorship-tooling-note"></a>
 <h2 style="font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Helvetica,Arial,sans-serif; font-size:1.5em; font-weight:600; color:#E0E0E0; display:flex; align-items:center; gap:10px; margin:0 0 16px 0; padding-bottom:8px; border-bottom:1px solid rgba(255,255,255,0.06);">
-  <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:middle"><path d="M21 2l-2 2m-7.61 7.61a5.5 5.5 0 1 1-7.78 7.78 5.5 5.5 0 0 1 7.78-7.78zm0 0L15.5 7.5m0 0l3 3L22 7l-3-3m-3.5 3.5L19 4"/></svg> Authorship &amp; tooling note
+  <img src="docs/assets/svg/icon-62349b00e07f.svg" width="25" height="25" alt="" style="vertical-align:middle; max-width:100%;" /> Authorship &amp; tooling note
 </h2>
 
 All commits in this repository are authored by **Siba Prasad Panda** (sibaprasadpanda56@gmail.com)

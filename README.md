@@ -9,14 +9,14 @@
 
 <!-- Banner -->
 <div style="position:relative; z-index:1;">
-<img src="https://capsule-render.vercel.app/api?type=waving&amp;color=0:0B0F1E,50:1A3A2A,100:00FF88&amp;height=280&amp;section=header&amp;text=MandiIQ&amp;fontSize=90&amp;fontColor=FFFFFF&amp;animation=fadeIn&amp;fontAlignY=38&amp;desc=Agricultural%20Price%20Intelligence%20%26%20Causal%20RDD%20System&amp;descAlignY=55&amp;descSize=20" width="100%" alt="MandiIQ Banner" style="border-radius:12px;" />
+<img src="docs/assets/svg/mandiq-banner.svg" width="100%" alt="MandiIQ Banner" style="border-radius:12px;" />
 </div>
 
 <br />
 
 <div style="position:relative; z-index:1;">
 <h3 style="margin:0; font-size:1.3em; font-weight:600;">
-  <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#00FF88" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:middle"><path d="M12 2v18"/><path d="M8 6c0-2 4-4 4 0"/><path d="M16 6c0-2-4-4-4 0"/><path d="M8 12c0-2 4-4 4 0"/><path d="M16 12c0-2-4-4-4 0"/><path d="M6 18c0-3 6-5 6 0"/><path d="M18 18c0-3-6-5-6 0"/><path d="M9 22h6"/></svg>
+  <img src="docs/assets/svg/icon-ceb9cc767a06.svg" width="28" height="28" alt="" style="vertical-align:middle; max-width:100%;" />
   <span style="color:#E0E0E0;">Open-Source Agricultural Price-Intelligence Platform</span>
 </h3>
 <h4 style="color:#94A3B8; font-weight:400; font-style:italic; margin:8px 0 0 0;">Causal RDD + ML Forecasting + DuckDB Warehouse &middot; Built with Streamlit, FastAPI &amp; Dark-Mode Pixel-Perfect UI</h4>
@@ -60,26 +60,14 @@
 </div>
 <br />
 <div style="position:relative; height:60px; overflow:hidden; width:100%; margin:8px 0;">
-  <svg viewBox="0 0 1440 60" width="100%" height="60" preserveAspectRatio="none" style="position:absolute;bottom:0;">
-    <defs>
-      <linearGradient id="wg" x1="0%" y1="0%" x2="100%" y2="0%">
-        <stop offset="0%" stop-color="#0B0F1E" stop-opacity="0" />
-        <stop offset="25%" stop-color="#00FF88" stop-opacity="0.25" />
-        <stop offset="50%" stop-color="#00FF88" stop-opacity="0.4" />
-        <stop offset="75%" stop-color="#00FF88" stop-opacity="0.25" />
-        <stop offset="100%" stop-color="#0B0F1E" stop-opacity="0" />
-      </linearGradient>
-    </defs>
-    <path d="M0,30 C240,10 480,50 720,30 C960,10 1200,50 1440,30 L1440,60 L0,60 Z" fill="url(#wg)" opacity="0.6" />
-    <path d="M0,40 C240,25 480,55 720,40 C960,25 1200,55 1440,40 L1440,60 L0,60 Z" fill="url(#wg)" opacity="0.3" />
-  </svg>
+  <img src="docs/assets/svg/icon-c1bf05813fc8.svg" width="100%" height="60" alt="" style="vertical-align:middle; max-width:100%;" />
 </div>
 <br />
 <div style="background:linear-gradient(135deg, rgba(255,255,255,0.04) 0%, rgba(255,255,255,0.01) 100%); border:1px solid rgba(255,255,255,0.06); border-radius:16px; padding:24px 28px; margin:16px 0; box-shadow:0 8px 32px rgba(0,0,0,0.4); position:relative; overflow:hidden; style="margin-top:0;"">
 <div style="position:absolute; top:0; left:0; right:0; height:2px; background:linear-gradient(90deg, transparent, #00FF88, transparent); opacity:0.6;"></div>
 <div style="position:absolute; top:-60px; right:-60px; width:120px; height:120px; background:radial-gradient(circle, rgba(0,255,136,0.15) 0%, transparent 70%);"></div>
 <h2 style="font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Helvetica,Arial,sans-serif; font-size:1.5em; font-weight:600; color:#E0E0E0; display:flex; align-items:center; gap:10px; margin:0 0 16px 0; padding-bottom:8px; border-bottom:1px solid rgba(255,255,255,0.06);">
-  <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:middle"><path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/></svg> Contents
+  <img src="docs/assets/svg/icon-1c384fdfb213.svg" width="25" height="25" alt="" style="vertical-align:middle; max-width:100%;" /> Contents
 </h2>
 <div align="center" style="line-height:2.4;">
   <a href="#deployment--monitoring" style="display:inline-block; padding:6px 14px; background:rgba(255,255,255,0.04); border:1px solid rgba(255,255,255,0.06); border-radius:8px; color:#94A3B8; text-decoration:none; font-size:14px; transition:all 0.2s; margin:3px;">Deployment</a> <a href="#features" style="display:inline-block; padding:6px 14px; background:rgba(255,255,255,0.04); border:1px solid rgba(255,255,255,0.06); border-radius:8px; color:#94A3B8; text-decoration:none; font-size:14px; transition:all 0.2s; margin:3px;">Features</a> <a href="#architecture" style="display:inline-block; padding:6px 14px; background:rgba(255,255,255,0.04); border:1px solid rgba(255,255,255,0.06); border-radius:8px; color:#94A3B8; text-decoration:none; font-size:14px; transition:all 0.2s; margin:3px;">Architecture</a> <a href="#tech-stack" style="display:inline-block; padding:6px 14px; background:rgba(255,255,255,0.04); border:1px solid rgba(255,255,255,0.06); border-radius:8px; color:#94A3B8; text-decoration:none; font-size:14px; transition:all 0.2s; margin:3px;">Tech Stack</a>
@@ -92,19 +80,7 @@
 </div>
 <br />
 <div style="position:relative; height:60px; overflow:hidden; width:100%; margin:8px 0;">
-  <svg viewBox="0 0 1440 60" width="100%" height="60" preserveAspectRatio="none" style="position:absolute;bottom:0;">
-    <defs>
-      <linearGradient id="wg" x1="0%" y1="0%" x2="100%" y2="0%">
-        <stop offset="0%" stop-color="#0B0F1E" stop-opacity="0" />
-        <stop offset="25%" stop-color="#00FF88" stop-opacity="0.25" />
-        <stop offset="50%" stop-color="#00FF88" stop-opacity="0.4" />
-        <stop offset="75%" stop-color="#00FF88" stop-opacity="0.25" />
-        <stop offset="100%" stop-color="#0B0F1E" stop-opacity="0" />
-      </linearGradient>
-    </defs>
-    <path d="M0,30 C240,10 480,50 720,30 C960,10 1200,50 1440,30 L1440,60 L0,60 Z" fill="url(#wg)" opacity="0.6" />
-    <path d="M0,40 C240,25 480,55 720,40 C960,25 1200,55 1440,40 L1440,60 L0,60 Z" fill="url(#wg)" opacity="0.3" />
-  </svg>
+  <img src="docs/assets/svg/icon-c1bf05813fc8.svg" width="100%" height="60" alt="" style="vertical-align:middle; max-width:100%;" />
 </div>
 <br />
 <a name="deployment--monitoring"></a>
@@ -113,7 +89,7 @@
 <div style="position:absolute; top:-60px; right:-60px; width:120px; height:120px; background:radial-gradient(circle, rgba(0,255,136,0.15) 0%, transparent 70%);"></div>
 <a name="deployment--monitoring"></a>
 <h2 style="font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Helvetica,Arial,sans-serif; font-size:1.5em; font-weight:600; color:#E0E0E0; display:flex; align-items:center; gap:10px; margin:0 0 16px 0; padding-bottom:8px; border-bottom:1px solid rgba(255,255,255,0.06);">
-  <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:middle"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg> Deployment &amp; Monitoring
+  <img src="docs/assets/svg/icon-b7fb4e54351a.svg" width="25" height="25" alt="" style="vertical-align:middle; max-width:100%;" /> Deployment &amp; Monitoring
 </h2>
 <details open>
 <summary><strong>Live Services</strong> &mdash; click to collapse</summary>
@@ -132,19 +108,7 @@
 </div>
 <br />
 <div style="position:relative; height:60px; overflow:hidden; width:100%; margin:8px 0;">
-  <svg viewBox="0 0 1440 60" width="100%" height="60" preserveAspectRatio="none" style="position:absolute;bottom:0;">
-    <defs>
-      <linearGradient id="wg" x1="0%" y1="0%" x2="100%" y2="0%">
-        <stop offset="0%" stop-color="#0B0F1E" stop-opacity="0" />
-        <stop offset="25%" stop-color="#00FF88" stop-opacity="0.25" />
-        <stop offset="50%" stop-color="#00FF88" stop-opacity="0.4" />
-        <stop offset="75%" stop-color="#00FF88" stop-opacity="0.25" />
-        <stop offset="100%" stop-color="#0B0F1E" stop-opacity="0" />
-      </linearGradient>
-    </defs>
-    <path d="M0,30 C240,10 480,50 720,30 C960,10 1200,50 1440,30 L1440,60 L0,60 Z" fill="url(#wg)" opacity="0.6" />
-    <path d="M0,40 C240,25 480,55 720,40 C960,25 1200,55 1440,40 L1440,60 L0,60 Z" fill="url(#wg)" opacity="0.3" />
-  </svg>
+  <img src="docs/assets/svg/icon-c1bf05813fc8.svg" width="100%" height="60" alt="" style="vertical-align:middle; max-width:100%;" />
 </div>
 <br />
 <a name="features"></a>
@@ -153,14 +117,14 @@
 <div style="position:absolute; top:-60px; right:-60px; width:120px; height:120px; background:radial-gradient(circle, rgba(0,255,136,0.15) 0%, transparent 70%);"></div>
 <a name="features"></a>
 <h2 style="font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Helvetica,Arial,sans-serif; font-size:1.5em; font-weight:600; color:#E0E0E0; display:flex; align-items:center; gap:10px; margin:0 0 16px 0; padding-bottom:8px; border-bottom:1px solid rgba(255,255,255,0.06);">
-  <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:middle"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg> Features
+  <img src="docs/assets/svg/icon-b7fb4e54351a.svg" width="25" height="25" alt="" style="vertical-align:middle; max-width:100%;" /> Features
 </h2>
 <div align="center">
 <table style="border-collapse:separate; border-spacing:8px;">
 <tr>
   <td width="33%" align="center" style="background:rgba(255,255,255,0.03); border:1px solid rgba(255,255,255,0.06); border-radius:12px; padding:20px 12px;">
     <br />
-    <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="#00FF88" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:middle"><rect x="3" y="12" width="4" height="9"/><rect x="10" y="7" width="4" height="14"/><rect x="17" y="3" width="4" height="18"/></svg>
+    <img src="docs/assets/svg/icon-f8d3342fc2ad.svg" width="48" height="48" alt="" style="vertical-align:middle; max-width:100%;" />
     <br /><br />
     <strong style="color:#E0E0E0; font-size:1.05em;">Causal Inference Engine</strong>
     <br /><br />
@@ -171,7 +135,7 @@
   </td>
   <td width="33%" align="center" style="background:rgba(255,255,255,0.03); border:1px solid rgba(255,255,255,0.06); border-radius:12px; padding:20px 12px;">
     <br />
-    <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:middle"><rect x="3" y="11" width="18" height="10" rx="2"/><circle cx="12" cy="5" r="2"/><path d="M12 7v4"/></svg>
+    <img src="docs/assets/svg/icon-d13468aec9e0.svg" width="48" height="48" alt="" style="vertical-align:middle; max-width:100%;" />
     <br /><br />
     <strong style="color:#E0E0E0; font-size:1.05em;">AI Orchestrator</strong>
     <br /><br />
@@ -182,7 +146,7 @@
   </td>
   <td width="33%" align="center" style="background:rgba(255,255,255,0.03); border:1px solid rgba(255,255,255,0.06); border-radius:12px; padding:20px 12px;">
     <br />
-    <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:middle"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+    <img src="docs/assets/svg/icon-80af3649ffc9.svg" width="48" height="48" alt="" style="vertical-align:middle; max-width:100%;" />
     <br /><br />
     <strong style="color:#E0E0E0; font-size:1.05em;">Predictive Analytics</strong>
     <br /><br />
@@ -195,7 +159,7 @@
 <tr>
   <td width="33%" align="center" style="background:rgba(255,255,255,0.03); border:1px solid rgba(255,255,255,0.06); border-radius:12px; padding:20px 12px;">
     <br />
-    <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:middle"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/></svg>
+    <img src="docs/assets/svg/icon-93580b55d1aa.svg" width="48" height="48" alt="" style="vertical-align:middle; max-width:100%;" />
     <br /><br />
     <strong style="color:#E0E0E0; font-size:1.05em;">DuckDB Warehouse</strong>
     <br /><br />
@@ -206,7 +170,7 @@
   </td>
   <td width="33%" align="center" style="background:rgba(255,255,255,0.03); border:1px solid rgba(255,255,255,0.06); border-radius:12px; padding:20px 12px;">
     <br />
-    <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:middle"><path d="M4.5 16.5c-1.5 1.26-2 5-2 5s3.74-.5 5-2c.71-.84.7-2.13-.09-2.91a2.18 2.18 0 0 0-2.91-.09z"/><path d="M12 15l-3-3a22 22 0 0 1 2-3.95A12.88 12.88 0 0 1 22 2c0 2.72-.78 7.5-6 11a22.35 22.35 0 0 1-4 2z"/></svg>
+    <img src="docs/assets/svg/icon-ba528c70b01a.svg" width="48" height="48" alt="" style="vertical-align:middle; max-width:100%;" />
     <br /><br />
     <strong style="color:#E0E0E0; font-size:1.05em;">15-Endpoint API</strong>
     <br /><br />
@@ -217,7 +181,7 @@
   </td>
   <td width="33%" align="center" style="background:rgba(255,255,255,0.03); border:1px solid rgba(255,255,255,0.06); border-radius:12px; padding:20px 12px;">
     <br />
-    <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:middle"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/></svg>
+    <img src="docs/assets/svg/icon-80515a1bc0a0.svg" width="48" height="48" alt="" style="vertical-align:middle; max-width:100%;" />
     <br /><br />
     <strong style="color:#E0E0E0; font-size:1.05em;">11-Page Dashboard</strong>
     <br /><br />
@@ -232,19 +196,7 @@
 </div>
 <br />
 <div style="position:relative; height:60px; overflow:hidden; width:100%; margin:8px 0;">
-  <svg viewBox="0 0 1440 60" width="100%" height="60" preserveAspectRatio="none" style="position:absolute;bottom:0;">
-    <defs>
-      <linearGradient id="wg" x1="0%" y1="0%" x2="100%" y2="0%">
-        <stop offset="0%" stop-color="#0B0F1E" stop-opacity="0" />
-        <stop offset="25%" stop-color="#00FF88" stop-opacity="0.25" />
-        <stop offset="50%" stop-color="#00FF88" stop-opacity="0.4" />
-        <stop offset="75%" stop-color="#00FF88" stop-opacity="0.25" />
-        <stop offset="100%" stop-color="#0B0F1E" stop-opacity="0" />
-      </linearGradient>
-    </defs>
-    <path d="M0,30 C240,10 480,50 720,30 C960,10 1200,50 1440,30 L1440,60 L0,60 Z" fill="url(#wg)" opacity="0.6" />
-    <path d="M0,40 C240,25 480,55 720,40 C960,25 1200,55 1440,40 L1440,60 L0,60 Z" fill="url(#wg)" opacity="0.3" />
-  </svg>
+  <img src="docs/assets/svg/icon-c1bf05813fc8.svg" width="100%" height="60" alt="" style="vertical-align:middle; max-width:100%;" />
 </div>
 <br />
 <a name="architecture"></a>
@@ -253,7 +205,7 @@
 <div style="position:absolute; top:-60px; right:-60px; width:120px; height:120px; background:radial-gradient(circle, rgba(0,255,136,0.15) 0%, transparent 70%);"></div>
 <a name="architecture"></a>
 <h2 style="font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Helvetica,Arial,sans-serif; font-size:1.5em; font-weight:600; color:#E0E0E0; display:flex; align-items:center; gap:10px; margin:0 0 16px 0; padding-bottom:8px; border-bottom:1px solid rgba(255,255,255,0.06);">
-  <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:middle"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg> Architecture
+  <img src="docs/assets/svg/icon-e22ec59e46bc.svg" width="25" height="25" alt="" style="vertical-align:middle; max-width:100%;" /> Architecture
 </h2>
 ```mermaid
 %%{init: {'theme': 'dark', 'themeVariables': { 'primaryColor': '#0B0F1E', 'primaryTextColor': '#E0E0E0', 'lineColor': '#00FF88', 'secondaryColor': '#1A3A2A', 'tertiaryColor': '#1A1A3A' }}}%%
@@ -328,19 +280,7 @@ flowchart TB
 </div>
 <br />
 <div style="position:relative; height:60px; overflow:hidden; width:100%; margin:8px 0;">
-  <svg viewBox="0 0 1440 60" width="100%" height="60" preserveAspectRatio="none" style="position:absolute;bottom:0;">
-    <defs>
-      <linearGradient id="wg" x1="0%" y1="0%" x2="100%" y2="0%">
-        <stop offset="0%" stop-color="#0B0F1E" stop-opacity="0" />
-        <stop offset="25%" stop-color="#00FF88" stop-opacity="0.25" />
-        <stop offset="50%" stop-color="#00FF88" stop-opacity="0.4" />
-        <stop offset="75%" stop-color="#00FF88" stop-opacity="0.25" />
-        <stop offset="100%" stop-color="#0B0F1E" stop-opacity="0" />
-      </linearGradient>
-    </defs>
-    <path d="M0,30 C240,10 480,50 720,30 C960,10 1200,50 1440,30 L1440,60 L0,60 Z" fill="url(#wg)" opacity="0.6" />
-    <path d="M0,40 C240,25 480,55 720,40 C960,25 1200,55 1440,40 L1440,60 L0,60 Z" fill="url(#wg)" opacity="0.3" />
-  </svg>
+  <img src="docs/assets/svg/icon-c1bf05813fc8.svg" width="100%" height="60" alt="" style="vertical-align:middle; max-width:100%;" />
 </div>
 <br />
 <a name="tech-stack"></a>
@@ -349,7 +289,7 @@ flowchart TB
 <div style="position:absolute; top:-60px; right:-60px; width:120px; height:120px; background:radial-gradient(circle, rgba(0,255,136,0.15) 0%, transparent 70%);"></div>
 <a name="tech-stack"></a>
 <h2 style="font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Helvetica,Arial,sans-serif; font-size:1.5em; font-weight:600; color:#E0E0E0; display:flex; align-items:center; gap:10px; margin:0 0 16px 0; padding-bottom:8px; border-bottom:1px solid rgba(255,255,255,0.06);">
-  <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:middle"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/></svg> Tech Stack
+  <img src="docs/assets/svg/icon-705569eec14b.svg" width="25" height="25" alt="" style="vertical-align:middle; max-width:100%;" /> Tech Stack
 </h2>
 <div align="center">
 
@@ -396,19 +336,7 @@ flowchart TB
 </div>
 <br />
 <div style="position:relative; height:60px; overflow:hidden; width:100%; margin:8px 0;">
-  <svg viewBox="0 0 1440 60" width="100%" height="60" preserveAspectRatio="none" style="position:absolute;bottom:0;">
-    <defs>
-      <linearGradient id="wg" x1="0%" y1="0%" x2="100%" y2="0%">
-        <stop offset="0%" stop-color="#0B0F1E" stop-opacity="0" />
-        <stop offset="25%" stop-color="#00FF88" stop-opacity="0.25" />
-        <stop offset="50%" stop-color="#00FF88" stop-opacity="0.4" />
-        <stop offset="75%" stop-color="#00FF88" stop-opacity="0.25" />
-        <stop offset="100%" stop-color="#0B0F1E" stop-opacity="0" />
-      </linearGradient>
-    </defs>
-    <path d="M0,30 C240,10 480,50 720,30 C960,10 1200,50 1440,30 L1440,60 L0,60 Z" fill="url(#wg)" opacity="0.6" />
-    <path d="M0,40 C240,25 480,55 720,40 C960,25 1200,55 1440,40 L1440,60 L0,60 Z" fill="url(#wg)" opacity="0.3" />
-  </svg>
+  <img src="docs/assets/svg/icon-c1bf05813fc8.svg" width="100%" height="60" alt="" style="vertical-align:middle; max-width:100%;" />
 </div>
 <br />
 <a name="the-causal-finding"></a>
@@ -417,7 +345,7 @@ flowchart TB
 <div style="position:absolute; top:-60px; right:-60px; width:120px; height:120px; background:radial-gradient(circle, rgba(0,255,136,0.15) 0%, transparent 70%);"></div>
 <a name="the-causal-finding"></a>
 <h2 style="font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Helvetica,Arial,sans-serif; font-size:1.5em; font-weight:600; color:#E0E0E0; display:flex; align-items:center; gap:10px; margin:0 0 16px 0; padding-bottom:8px; border-bottom:1px solid rgba(255,255,255,0.06);">
-  <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:middle"><path d="M9 18h6"/><path d="M10 22h4"/><path d="M15.09 14c.18-.98.65-1.74 1.41-2.5A4.65 4.65 0 0 0 18 8 6 6 0 0 0 6 8c0 1 .23 2.23 1.5 3.5A4.61 4.61 0 0 1 8.91 14"/></svg> The Causal Finding
+  <img src="docs/assets/svg/icon-119c3d0aaf5c.svg" width="25" height="25" alt="" style="vertical-align:middle; max-width:100%;" /> The Causal Finding
 </h2>
 > <strong>Districts crossing IMD's &minus;19% rainfall-deficiency threshold see a <span style="color:#00FF88">&#x20B9;350 (+24.5%) jump in onion modal prices</span> (p=0.003, robust across 4 bandwidths, placebo-tested, cross-checked by fixed-effects regression).</strong>
 
@@ -440,19 +368,7 @@ flowchart TB
 </div>
 <br />
 <div style="position:relative; height:60px; overflow:hidden; width:100%; margin:8px 0;">
-  <svg viewBox="0 0 1440 60" width="100%" height="60" preserveAspectRatio="none" style="position:absolute;bottom:0;">
-    <defs>
-      <linearGradient id="wg" x1="0%" y1="0%" x2="100%" y2="0%">
-        <stop offset="0%" stop-color="#0B0F1E" stop-opacity="0" />
-        <stop offset="25%" stop-color="#00FF88" stop-opacity="0.25" />
-        <stop offset="50%" stop-color="#00FF88" stop-opacity="0.4" />
-        <stop offset="75%" stop-color="#00FF88" stop-opacity="0.25" />
-        <stop offset="100%" stop-color="#0B0F1E" stop-opacity="0" />
-      </linearGradient>
-    </defs>
-    <path d="M0,30 C240,10 480,50 720,30 C960,10 1200,50 1440,30 L1440,60 L0,60 Z" fill="url(#wg)" opacity="0.6" />
-    <path d="M0,40 C240,25 480,55 720,40 C960,25 1200,55 1440,40 L1440,60 L0,60 Z" fill="url(#wg)" opacity="0.3" />
-  </svg>
+  <img src="docs/assets/svg/icon-c1bf05813fc8.svg" width="100%" height="60" alt="" style="vertical-align:middle; max-width:100%;" />
 </div>
 <br />
 <a name="quick-start"></a>
@@ -461,7 +377,7 @@ flowchart TB
 <div style="position:absolute; top:-60px; right:-60px; width:120px; height:120px; background:radial-gradient(circle, rgba(0,255,136,0.15) 0%, transparent 70%);"></div>
 <a name="quick-start"></a>
 <h2 style="font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Helvetica,Arial,sans-serif; font-size:1.5em; font-weight:600; color:#E0E0E0; display:flex; align-items:center; gap:10px; margin:0 0 16px 0; padding-bottom:8px; border-bottom:1px solid rgba(255,255,255,0.06);">
-  <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:middle"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg> Quick Start
+  <img src="docs/assets/svg/icon-b7fb4e54351a.svg" width="25" height="25" alt="" style="vertical-align:middle; max-width:100%;" /> Quick Start
 </h2>
 <details open>
 <summary><strong>Get from zero to dashboard in 8 steps &mdash; ~10 minutes</strong></summary>
@@ -567,19 +483,7 @@ curl "http://localhost:8000/prices?commodity=Onion&limit=3"
 </div>
 <br />
 <div style="position:relative; height:60px; overflow:hidden; width:100%; margin:8px 0;">
-  <svg viewBox="0 0 1440 60" width="100%" height="60" preserveAspectRatio="none" style="position:absolute;bottom:0;">
-    <defs>
-      <linearGradient id="wg" x1="0%" y1="0%" x2="100%" y2="0%">
-        <stop offset="0%" stop-color="#0B0F1E" stop-opacity="0" />
-        <stop offset="25%" stop-color="#00FF88" stop-opacity="0.25" />
-        <stop offset="50%" stop-color="#00FF88" stop-opacity="0.4" />
-        <stop offset="75%" stop-color="#00FF88" stop-opacity="0.25" />
-        <stop offset="100%" stop-color="#0B0F1E" stop-opacity="0" />
-      </linearGradient>
-    </defs>
-    <path d="M0,30 C240,10 480,50 720,30 C960,10 1200,50 1440,30 L1440,60 L0,60 Z" fill="url(#wg)" opacity="0.6" />
-    <path d="M0,40 C240,25 480,55 720,40 C960,25 1200,55 1440,40 L1440,60 L0,60 Z" fill="url(#wg)" opacity="0.3" />
-  </svg>
+  <img src="docs/assets/svg/icon-c1bf05813fc8.svg" width="100%" height="60" alt="" style="vertical-align:middle; max-width:100%;" />
 </div>
 <br />
 <a name="environment-variables"></a>
@@ -588,7 +492,7 @@ curl "http://localhost:8000/prices?commodity=Onion&limit=3"
 <div style="position:absolute; top:-60px; right:-60px; width:120px; height:120px; background:radial-gradient(circle, rgba(0,255,136,0.15) 0%, transparent 70%);"></div>
 <a name="environment-variables"></a>
 <h2 style="font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Helvetica,Arial,sans-serif; font-size:1.5em; font-weight:600; color:#E0E0E0; display:flex; align-items:center; gap:10px; margin:0 0 16px 0; padding-bottom:8px; border-bottom:1px solid rgba(255,255,255,0.06);">
-  <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:middle"><path d="M21 2l-2 2m-7.61 7.61a5.5 5.5 0 1 1-7.78 7.78 5.5 5.5 0 0 1 7.78-7.78zm0 0L15.5 7.5m0 0l3 3L22 7l-3-3m-3.5 3.5L19 4"/></svg> Environment Variables
+  <img src="docs/assets/svg/icon-62349b00e07f.svg" width="25" height="25" alt="" style="vertical-align:middle; max-width:100%;" /> Environment Variables
 </h2>
 <details open>
 <summary><strong>Complete Reference</strong> &mdash; 24 vars across 7 categories</summary>
@@ -633,19 +537,7 @@ curl "http://localhost:8000/prices?commodity=Onion&limit=3"
 </div>
 <br />
 <div style="position:relative; height:60px; overflow:hidden; width:100%; margin:8px 0;">
-  <svg viewBox="0 0 1440 60" width="100%" height="60" preserveAspectRatio="none" style="position:absolute;bottom:0;">
-    <defs>
-      <linearGradient id="wg" x1="0%" y1="0%" x2="100%" y2="0%">
-        <stop offset="0%" stop-color="#0B0F1E" stop-opacity="0" />
-        <stop offset="25%" stop-color="#00FF88" stop-opacity="0.25" />
-        <stop offset="50%" stop-color="#00FF88" stop-opacity="0.4" />
-        <stop offset="75%" stop-color="#00FF88" stop-opacity="0.25" />
-        <stop offset="100%" stop-color="#0B0F1E" stop-opacity="0" />
-      </linearGradient>
-    </defs>
-    <path d="M0,30 C240,10 480,50 720,30 C960,10 1200,50 1440,30 L1440,60 L0,60 Z" fill="url(#wg)" opacity="0.6" />
-    <path d="M0,40 C240,25 480,55 720,40 C960,25 1200,55 1440,40 L1440,60 L0,60 Z" fill="url(#wg)" opacity="0.3" />
-  </svg>
+  <img src="docs/assets/svg/icon-c1bf05813fc8.svg" width="100%" height="60" alt="" style="vertical-align:middle; max-width:100%;" />
 </div>
 <br />
 <a name="api-documentation"></a>
@@ -654,7 +546,7 @@ curl "http://localhost:8000/prices?commodity=Onion&limit=3"
 <div style="position:absolute; top:-60px; right:-60px; width:120px; height:120px; background:radial-gradient(circle, rgba(0,255,136,0.15) 0%, transparent 70%);"></div>
 <a name="api-documentation"></a>
 <h2 style="font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Helvetica,Arial,sans-serif; font-size:1.5em; font-weight:600; color:#E0E0E0; display:flex; align-items:center; gap:10px; margin:0 0 16px 0; padding-bottom:8px; border-bottom:1px solid rgba(255,255,255,0.06);">
-  <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:middle"><path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/></svg> API Documentation
+  <img src="docs/assets/svg/icon-1c384fdfb213.svg" width="25" height="25" alt="" style="vertical-align:middle; max-width:100%;" /> API Documentation
 </h2>
 <details open>
 <summary><strong>15 Endpoints</strong> &mdash; OpenAPI docs at <code>/docs</code></summary>
@@ -704,19 +596,7 @@ curl -s -X POST http://localhost:8000/ask \
 </div>
 <br />
 <div style="position:relative; height:60px; overflow:hidden; width:100%; margin:8px 0;">
-  <svg viewBox="0 0 1440 60" width="100%" height="60" preserveAspectRatio="none" style="position:absolute;bottom:0;">
-    <defs>
-      <linearGradient id="wg" x1="0%" y1="0%" x2="100%" y2="0%">
-        <stop offset="0%" stop-color="#0B0F1E" stop-opacity="0" />
-        <stop offset="25%" stop-color="#00FF88" stop-opacity="0.25" />
-        <stop offset="50%" stop-color="#00FF88" stop-opacity="0.4" />
-        <stop offset="75%" stop-color="#00FF88" stop-opacity="0.25" />
-        <stop offset="100%" stop-color="#0B0F1E" stop-opacity="0" />
-      </linearGradient>
-    </defs>
-    <path d="M0,30 C240,10 480,50 720,30 C960,10 1200,50 1440,30 L1440,60 L0,60 Z" fill="url(#wg)" opacity="0.6" />
-    <path d="M0,40 C240,25 480,55 720,40 C960,25 1200,55 1440,40 L1440,60 L0,60 Z" fill="url(#wg)" opacity="0.3" />
-  </svg>
+  <img src="docs/assets/svg/icon-c1bf05813fc8.svg" width="100%" height="60" alt="" style="vertical-align:middle; max-width:100%;" />
 </div>
 <br />
 <div style="background:linear-gradient(135deg, rgba(255,255,255,0.04) 0%, rgba(255,255,255,0.01) 100%); border:1px solid rgba(255,255,255,0.06); border-radius:16px; padding:24px 28px; margin:16px 0; box-shadow:0 8px 32px rgba(0,0,0,0.4); position:relative; overflow:hidden;">
@@ -724,7 +604,7 @@ curl -s -X POST http://localhost:8000/ask \
 <div style="position:absolute; top:-60px; right:-60px; width:120px; height:120px; background:radial-gradient(circle, rgba(0,255,136,0.15) 0%, transparent 70%);"></div>
 <a name="usage-examples"></a>
 <h2 style="font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Helvetica,Arial,sans-serif; font-size:1.5em; font-weight:600; color:#E0E0E0; display:flex; align-items:center; gap:10px; margin:0 0 16px 0; padding-bottom:8px; border-bottom:1px solid rgba(255,255,255,0.06);">
-  <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:middle"><polygon points="23 7 16 12 23 17 23 7"/><rect x="1" y="5" width="15" height="14" rx="2" ry="2"/></svg> Usage Examples
+  <img src="docs/assets/svg/icon-1bfca3b2f32c.svg" width="25" height="25" alt="" style="vertical-align:middle; max-width:100%;" /> Usage Examples
 </h2>
 <details open>
 <summary><strong>Real-world Scenarios</strong></summary>
@@ -786,19 +666,7 @@ def get_forecast(commodity: str) -> dict:
 </div>
 <br />
 <div style="position:relative; height:60px; overflow:hidden; width:100%; margin:8px 0;">
-  <svg viewBox="0 0 1440 60" width="100%" height="60" preserveAspectRatio="none" style="position:absolute;bottom:0;">
-    <defs>
-      <linearGradient id="wg" x1="0%" y1="0%" x2="100%" y2="0%">
-        <stop offset="0%" stop-color="#0B0F1E" stop-opacity="0" />
-        <stop offset="25%" stop-color="#00FF88" stop-opacity="0.25" />
-        <stop offset="50%" stop-color="#00FF88" stop-opacity="0.4" />
-        <stop offset="75%" stop-color="#00FF88" stop-opacity="0.25" />
-        <stop offset="100%" stop-color="#0B0F1E" stop-opacity="0" />
-      </linearGradient>
-    </defs>
-    <path d="M0,30 C240,10 480,50 720,30 C960,10 1200,50 1440,30 L1440,60 L0,60 Z" fill="url(#wg)" opacity="0.6" />
-    <path d="M0,40 C240,25 480,55 720,40 C960,25 1200,55 1440,40 L1440,60 L0,60 Z" fill="url(#wg)" opacity="0.3" />
-  </svg>
+  <img src="docs/assets/svg/icon-c1bf05813fc8.svg" width="100%" height="60" alt="" style="vertical-align:middle; max-width:100%;" />
 </div>
 <br />
 <a name="screenshots"></a>
@@ -807,7 +675,7 @@ def get_forecast(commodity: str) -> dict:
 <div style="position:absolute; top:-60px; right:-60px; width:120px; height:120px; background:radial-gradient(circle, rgba(0,255,136,0.15) 0%, transparent 70%);"></div>
 <a name="screenshots"></a>
 <h2 style="font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Helvetica,Arial,sans-serif; font-size:1.5em; font-weight:600; color:#E0E0E0; display:flex; align-items:center; gap:10px; margin:0 0 16px 0; padding-bottom:8px; border-bottom:1px solid rgba(255,255,255,0.06);">
-  <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:middle"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg> Screenshots
+  <img src="docs/assets/svg/icon-34fa2da4efbb.svg" width="25" height="25" alt="" style="vertical-align:middle; max-width:100%;" /> Screenshots
 </h2>
 <details open>
 <summary><strong>Gallery</strong></summary>
@@ -839,19 +707,7 @@ def get_forecast(commodity: str) -> dict:
 </div>
 <br />
 <div style="position:relative; height:60px; overflow:hidden; width:100%; margin:8px 0;">
-  <svg viewBox="0 0 1440 60" width="100%" height="60" preserveAspectRatio="none" style="position:absolute;bottom:0;">
-    <defs>
-      <linearGradient id="wg" x1="0%" y1="0%" x2="100%" y2="0%">
-        <stop offset="0%" stop-color="#0B0F1E" stop-opacity="0" />
-        <stop offset="25%" stop-color="#00FF88" stop-opacity="0.25" />
-        <stop offset="50%" stop-color="#00FF88" stop-opacity="0.4" />
-        <stop offset="75%" stop-color="#00FF88" stop-opacity="0.25" />
-        <stop offset="100%" stop-color="#0B0F1E" stop-opacity="0" />
-      </linearGradient>
-    </defs>
-    <path d="M0,30 C240,10 480,50 720,30 C960,10 1200,50 1440,30 L1440,60 L0,60 Z" fill="url(#wg)" opacity="0.6" />
-    <path d="M0,40 C240,25 480,55 720,40 C960,25 1200,55 1440,40 L1440,60 L0,60 Z" fill="url(#wg)" opacity="0.3" />
-  </svg>
+  <img src="docs/assets/svg/icon-c1bf05813fc8.svg" width="100%" height="60" alt="" style="vertical-align:middle; max-width:100%;" />
 </div>
 <br />
 <a name="demo"></a>
@@ -860,7 +716,7 @@ def get_forecast(commodity: str) -> dict:
 <div style="position:absolute; top:-60px; right:-60px; width:120px; height:120px; background:radial-gradient(circle, rgba(0,255,136,0.15) 0%, transparent 70%);"></div>
 <a name="demo"></a>
 <h2 style="font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Helvetica,Arial,sans-serif; font-size:1.5em; font-weight:600; color:#E0E0E0; display:flex; align-items:center; gap:10px; margin:0 0 16px 0; padding-bottom:8px; border-bottom:1px solid rgba(255,255,255,0.06);">
-  <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:middle"><line x1="6" y1="11" x2="10" y2="11"/><line x1="8" y1="9" x2="8" y2="13"/><line x1="15" y1="12" x2="15.01" y2="12"/><line x1="18" y1="10" x2="18.01" y2="10"/><path d="M17.32 5H6.68a4 4 0 0 0-3.978 3.59c-.006.052-.01.101-.017.152C2.604 9.416 2 14.456 2 16a3 3 0 0 0 3 3c1 0 1.5-.5 2-1l1.414-1.414A2 2 0 0 1 9.828 16h4.344a2 2 0 0 1 1.414.586L17 18c.5.5 1 1 2 1a3 3 0 0 0 3-3c0-1.545-.604-6.584-.685-7.258-.007-.05-.011-.1-.017-.151A4 4 0 0 0 17.32 5z"/></svg> Demo
+  <img src="docs/assets/svg/icon-08e630146ac7.svg" width="25" height="25" alt="" style="vertical-align:middle; max-width:100%;" /> Demo
 </h2>
 <details open>
 <summary><strong>See MandiIQ in Action</strong></summary>
@@ -894,19 +750,7 @@ def get_forecast(commodity: str) -> dict:
 </div>
 <br />
 <div style="position:relative; height:60px; overflow:hidden; width:100%; margin:8px 0;">
-  <svg viewBox="0 0 1440 60" width="100%" height="60" preserveAspectRatio="none" style="position:absolute;bottom:0;">
-    <defs>
-      <linearGradient id="wg" x1="0%" y1="0%" x2="100%" y2="0%">
-        <stop offset="0%" stop-color="#0B0F1E" stop-opacity="0" />
-        <stop offset="25%" stop-color="#00FF88" stop-opacity="0.25" />
-        <stop offset="50%" stop-color="#00FF88" stop-opacity="0.4" />
-        <stop offset="75%" stop-color="#00FF88" stop-opacity="0.25" />
-        <stop offset="100%" stop-color="#0B0F1E" stop-opacity="0" />
-      </linearGradient>
-    </defs>
-    <path d="M0,30 C240,10 480,50 720,30 C960,10 1200,50 1440,30 L1440,60 L0,60 Z" fill="url(#wg)" opacity="0.6" />
-    <path d="M0,40 C240,25 480,55 720,40 C960,25 1200,55 1440,40 L1440,60 L0,60 Z" fill="url(#wg)" opacity="0.3" />
-  </svg>
+  <img src="docs/assets/svg/icon-c1bf05813fc8.svg" width="100%" height="60" alt="" style="vertical-align:middle; max-width:100%;" />
 </div>
 <br />
 <a name="project-structure"></a>
@@ -915,7 +759,7 @@ def get_forecast(commodity: str) -> dict:
 <div style="position:absolute; top:-60px; right:-60px; width:120px; height:120px; background:radial-gradient(circle, rgba(0,255,136,0.15) 0%, transparent 70%);"></div>
 <a name="project-structure"></a>
 <h2 style="font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Helvetica,Arial,sans-serif; font-size:1.5em; font-weight:600; color:#E0E0E0; display:flex; align-items:center; gap:10px; margin:0 0 16px 0; padding-bottom:8px; border-bottom:1px solid rgba(255,255,255,0.06);">
-  <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:middle"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"/></svg> Project Structure
+  <img src="docs/assets/svg/icon-d57309e9a53d.svg" width="25" height="25" alt="" style="vertical-align:middle; max-width:100%;" /> Project Structure
 </h2>
 <details>
 <summary><strong>Full directory tree</strong> &mdash; click to expand</summary>
@@ -955,19 +799,7 @@ dashboards/                       # Grafana dashboard JSON (31 panels)
 </div>
 <br />
 <div style="position:relative; height:60px; overflow:hidden; width:100%; margin:8px 0;">
-  <svg viewBox="0 0 1440 60" width="100%" height="60" preserveAspectRatio="none" style="position:absolute;bottom:0;">
-    <defs>
-      <linearGradient id="wg" x1="0%" y1="0%" x2="100%" y2="0%">
-        <stop offset="0%" stop-color="#0B0F1E" stop-opacity="0" />
-        <stop offset="25%" stop-color="#00FF88" stop-opacity="0.25" />
-        <stop offset="50%" stop-color="#00FF88" stop-opacity="0.4" />
-        <stop offset="75%" stop-color="#00FF88" stop-opacity="0.25" />
-        <stop offset="100%" stop-color="#0B0F1E" stop-opacity="0" />
-      </linearGradient>
-    </defs>
-    <path d="M0,30 C240,10 480,50 720,30 C960,10 1200,50 1440,30 L1440,60 L0,60 Z" fill="url(#wg)" opacity="0.6" />
-    <path d="M0,40 C240,25 480,55 720,40 C960,25 1200,55 1440,40 L1440,60 L0,60 Z" fill="url(#wg)" opacity="0.3" />
-  </svg>
+  <img src="docs/assets/svg/icon-c1bf05813fc8.svg" width="100%" height="60" alt="" style="vertical-align:middle; max-width:100%;" />
 </div>
 <br />
 <div style="background:linear-gradient(135deg, rgba(255,255,255,0.04) 0%, rgba(255,255,255,0.01) 100%); border:1px solid rgba(255,255,255,0.06); border-radius:16px; padding:24px 28px; margin:16px 0; box-shadow:0 8px 32px rgba(0,0,0,0.4); position:relative; overflow:hidden;">
@@ -975,7 +807,7 @@ dashboards/                       # Grafana dashboard JSON (31 panels)
 <div style="position:absolute; top:-60px; right:-60px; width:120px; height:120px; background:radial-gradient(circle, rgba(0,255,136,0.15) 0%, transparent 70%);"></div>
 <a name="testing"></a>
 <h2 style="font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Helvetica,Arial,sans-serif; font-size:1.5em; font-weight:600; color:#E0E0E0; display:flex; align-items:center; gap:10px; margin:0 0 16px 0; padding-bottom:8px; border-bottom:1px solid rgba(255,255,255,0.06);">
-  <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:middle"><path d="M6 18h8"/><path d="M3 22h18"/><path d="M14 22a7 7 0 1 0 0-14h-1"/><path d="M9 14h2"/><path d="M9 12a2 2 0 0 1-2-2V5l3-3 3 3v5a2 2 0 0 1-2 2z"/></svg> Testing
+  <img src="docs/assets/svg/icon-f8e362863261.svg" width="25" height="25" alt="" style="vertical-align:middle; max-width:100%;" /> Testing
 </h2>
 <details open>
 <summary><strong>29 tests passing</strong> &mdash; CI runs on every push</summary>
@@ -1007,19 +839,7 @@ pytest mandi_rdd/tests/test_rdd_engine.py -v
 </div>
 <br />
 <div style="position:relative; height:60px; overflow:hidden; width:100%; margin:8px 0;">
-  <svg viewBox="0 0 1440 60" width="100%" height="60" preserveAspectRatio="none" style="position:absolute;bottom:0;">
-    <defs>
-      <linearGradient id="wg" x1="0%" y1="0%" x2="100%" y2="0%">
-        <stop offset="0%" stop-color="#0B0F1E" stop-opacity="0" />
-        <stop offset="25%" stop-color="#00FF88" stop-opacity="0.25" />
-        <stop offset="50%" stop-color="#00FF88" stop-opacity="0.4" />
-        <stop offset="75%" stop-color="#00FF88" stop-opacity="0.25" />
-        <stop offset="100%" stop-color="#0B0F1E" stop-opacity="0" />
-      </linearGradient>
-    </defs>
-    <path d="M0,30 C240,10 480,50 720,30 C960,10 1200,50 1440,30 L1440,60 L0,60 Z" fill="url(#wg)" opacity="0.6" />
-    <path d="M0,40 C240,25 480,55 720,40 C960,25 1200,55 1440,40 L1440,60 L0,60 Z" fill="url(#wg)" opacity="0.3" />
-  </svg>
+  <img src="docs/assets/svg/icon-c1bf05813fc8.svg" width="100%" height="60" alt="" style="vertical-align:middle; max-width:100%;" />
 </div>
 <br />
 <div style="background:linear-gradient(135deg, rgba(255,255,255,0.04) 0%, rgba(255,255,255,0.01) 100%); border:1px solid rgba(255,255,255,0.06); border-radius:16px; padding:24px 28px; margin:16px 0; box-shadow:0 8px 32px rgba(0,0,0,0.4); position:relative; overflow:hidden;">
@@ -1027,7 +847,7 @@ pytest mandi_rdd/tests/test_rdd_engine.py -v
 <div style="position:absolute; top:-60px; right:-60px; width:120px; height:120px; background:radial-gradient(circle, rgba(0,255,136,0.15) 0%, transparent 70%);"></div>
 <a name="cicd-workflows"></a>
 <h2 style="font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Helvetica,Arial,sans-serif; font-size:1.5em; font-weight:600; color:#E0E0E0; display:flex; align-items:center; gap:10px; margin:0 0 16px 0; padding-bottom:8px; border-bottom:1px solid rgba(255,255,255,0.06);">
-  <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:middle"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09a1.65 1.65 0 0 0-1.08-1.51 1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09a1.65 1.65 0 0 0 1.51-1.08 1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1.08 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1.08z"/></svg> CI/CD Workflows
+  <img src="docs/assets/svg/icon-cb393f3fcabc.svg" width="25" height="25" alt="" style="vertical-align:middle; max-width:100%;" /> CI/CD Workflows
 </h2>
 <details>
 <summary><strong>19 automated workflows</strong> &mdash; 18 active + 1 legacy</summary>
@@ -1059,19 +879,7 @@ pytest mandi_rdd/tests/test_rdd_engine.py -v
 </div>
 <br />
 <div style="position:relative; height:60px; overflow:hidden; width:100%; margin:8px 0;">
-  <svg viewBox="0 0 1440 60" width="100%" height="60" preserveAspectRatio="none" style="position:absolute;bottom:0;">
-    <defs>
-      <linearGradient id="wg" x1="0%" y1="0%" x2="100%" y2="0%">
-        <stop offset="0%" stop-color="#0B0F1E" stop-opacity="0" />
-        <stop offset="25%" stop-color="#00FF88" stop-opacity="0.25" />
-        <stop offset="50%" stop-color="#00FF88" stop-opacity="0.4" />
-        <stop offset="75%" stop-color="#00FF88" stop-opacity="0.25" />
-        <stop offset="100%" stop-color="#0B0F1E" stop-opacity="0" />
-      </linearGradient>
-    </defs>
-    <path d="M0,30 C240,10 480,50 720,30 C960,10 1200,50 1440,30 L1440,60 L0,60 Z" fill="url(#wg)" opacity="0.6" />
-    <path d="M0,40 C240,25 480,55 720,40 C960,25 1200,55 1440,40 L1440,60 L0,60 Z" fill="url(#wg)" opacity="0.3" />
-  </svg>
+  <img src="docs/assets/svg/icon-c1bf05813fc8.svg" width="100%" height="60" alt="" style="vertical-align:middle; max-width:100%;" />
 </div>
 <br />
 <a name="deployment"></a>
@@ -1080,7 +888,7 @@ pytest mandi_rdd/tests/test_rdd_engine.py -v
 <div style="position:absolute; top:-60px; right:-60px; width:120px; height:120px; background:radial-gradient(circle, rgba(0,255,136,0.15) 0%, transparent 70%);"></div>
 <a name="deployment"></a>
 <h2 style="font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Helvetica,Arial,sans-serif; font-size:1.5em; font-weight:600; color:#E0E0E0; display:flex; align-items:center; gap:10px; margin:0 0 16px 0; padding-bottom:8px; border-bottom:1px solid rgba(255,255,255,0.06);">
-  <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:middle"><path d="M4.5 16.5c-1.5 1.26-2 5-2 5s3.74-.5 5-2c.71-.84.7-2.13-.09-2.91a2.18 2.18 0 0 0-2.91-.09z"/><path d="M12 15l-3-3a22 22 0 0 1 2-3.95A12.88 12.88 0 0 1 22 2c0 2.72-.78 7.5-6 11a22.35 22.35 0 0 1-4 2z"/></svg> Deployment
+  <img src="docs/assets/svg/icon-bee2875cc587.svg" width="25" height="25" alt="" style="vertical-align:middle; max-width:100%;" /> Deployment
 </h2>
 <details>
 <summary><strong>5 deployment platforms</strong> &mdash; click to expand</summary>
@@ -1099,19 +907,7 @@ pytest mandi_rdd/tests/test_rdd_engine.py -v
 </div>
 <br />
 <div style="position:relative; height:60px; overflow:hidden; width:100%; margin:8px 0;">
-  <svg viewBox="0 0 1440 60" width="100%" height="60" preserveAspectRatio="none" style="position:absolute;bottom:0;">
-    <defs>
-      <linearGradient id="wg" x1="0%" y1="0%" x2="100%" y2="0%">
-        <stop offset="0%" stop-color="#0B0F1E" stop-opacity="0" />
-        <stop offset="25%" stop-color="#00FF88" stop-opacity="0.25" />
-        <stop offset="50%" stop-color="#00FF88" stop-opacity="0.4" />
-        <stop offset="75%" stop-color="#00FF88" stop-opacity="0.25" />
-        <stop offset="100%" stop-color="#0B0F1E" stop-opacity="0" />
-      </linearGradient>
-    </defs>
-    <path d="M0,30 C240,10 480,50 720,30 C960,10 1200,50 1440,30 L1440,60 L0,60 Z" fill="url(#wg)" opacity="0.6" />
-    <path d="M0,40 C240,25 480,55 720,40 C960,25 1200,55 1440,40 L1440,60 L0,60 Z" fill="url(#wg)" opacity="0.3" />
-  </svg>
+  <img src="docs/assets/svg/icon-c1bf05813fc8.svg" width="100%" height="60" alt="" style="vertical-align:middle; max-width:100%;" />
 </div>
 <br />
 <div style="background:linear-gradient(135deg, rgba(255,255,255,0.04) 0%, rgba(255,255,255,0.01) 100%); border:1px solid rgba(255,255,255,0.06); border-radius:16px; padding:24px 28px; margin:16px 0; box-shadow:0 8px 32px rgba(0,0,0,0.4); position:relative; overflow:hidden;">
@@ -1119,7 +915,7 @@ pytest mandi_rdd/tests/test_rdd_engine.py -v
 <div style="position:absolute; top:-60px; right:-60px; width:120px; height:120px; background:radial-gradient(circle, rgba(0,255,136,0.15) 0%, transparent 70%);"></div>
 <a name="roadmap"></a>
 <h2 style="font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Helvetica,Arial,sans-serif; font-size:1.5em; font-weight:600; color:#E0E0E0; display:flex; align-items:center; gap:10px; margin:0 0 16px 0; padding-bottom:8px; border-bottom:1px solid rgba(255,255,255,0.06);">
-  <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:middle"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg> Roadmap
+  <img src="docs/assets/svg/icon-e22ec59e46bc.svg" width="25" height="25" alt="" style="vertical-align:middle; max-width:100%;" /> Roadmap
 </h2>
 <details>
 <summary><strong>Completed, in progress, and planned</strong></summary>
@@ -1167,19 +963,7 @@ pytest mandi_rdd/tests/test_rdd_engine.py -v
 </div>
 <br />
 <div style="position:relative; height:60px; overflow:hidden; width:100%; margin:8px 0;">
-  <svg viewBox="0 0 1440 60" width="100%" height="60" preserveAspectRatio="none" style="position:absolute;bottom:0;">
-    <defs>
-      <linearGradient id="wg" x1="0%" y1="0%" x2="100%" y2="0%">
-        <stop offset="0%" stop-color="#0B0F1E" stop-opacity="0" />
-        <stop offset="25%" stop-color="#00FF88" stop-opacity="0.25" />
-        <stop offset="50%" stop-color="#00FF88" stop-opacity="0.4" />
-        <stop offset="75%" stop-color="#00FF88" stop-opacity="0.25" />
-        <stop offset="100%" stop-color="#0B0F1E" stop-opacity="0" />
-      </linearGradient>
-    </defs>
-    <path d="M0,30 C240,10 480,50 720,30 C960,10 1200,50 1440,30 L1440,60 L0,60 Z" fill="url(#wg)" opacity="0.6" />
-    <path d="M0,40 C240,25 480,55 720,40 C960,25 1200,55 1440,40 L1440,60 L0,60 Z" fill="url(#wg)" opacity="0.3" />
-  </svg>
+  <img src="docs/assets/svg/icon-c1bf05813fc8.svg" width="100%" height="60" alt="" style="vertical-align:middle; max-width:100%;" />
 </div>
 <br />
 <div style="background:linear-gradient(135deg, rgba(255,255,255,0.04) 0%, rgba(255,255,255,0.01) 100%); border:1px solid rgba(255,255,255,0.06); border-radius:16px; padding:24px 28px; margin:16px 0; box-shadow:0 8px 32px rgba(0,0,0,0.4); position:relative; overflow:hidden;">
@@ -1187,7 +971,7 @@ pytest mandi_rdd/tests/test_rdd_engine.py -v
 <div style="position:absolute; top:-60px; right:-60px; width:120px; height:120px; background:radial-gradient(circle, rgba(0,255,136,0.15) 0%, transparent 70%);"></div>
 <a name="contributing"></a>
 <h2 style="font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Helvetica,Arial,sans-serif; font-size:1.5em; font-weight:600; color:#E0E0E0; display:flex; align-items:center; gap:10px; margin:0 0 16px 0; padding-bottom:8px; border-bottom:1px solid rgba(255,255,255,0.06);">
-  <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:middle"><path d="M20.42 4.58a5.4 5.4 0 0 0-7.65 0l-.77.78-.77-.78a5.4 5.4 0 0 0-7.65 0C1.46 6.7 1.33 10.28 4 13l8 8 8-8c2.67-2.72 2.54-6.3.42-8.42z"/></svg> Contributing
+  <img src="docs/assets/svg/icon-e1be6fa03919.svg" width="25" height="25" alt="" style="vertical-align:middle; max-width:100%;" /> Contributing
 </h2>
 <details>
 <summary><strong>Guidelines &amp; conventions</strong></summary>
@@ -1228,19 +1012,7 @@ We follow [Conventional Commits](https://www.conventionalcommits.org/):
 </div>
 <br />
 <div style="position:relative; height:60px; overflow:hidden; width:100%; margin:8px 0;">
-  <svg viewBox="0 0 1440 60" width="100%" height="60" preserveAspectRatio="none" style="position:absolute;bottom:0;">
-    <defs>
-      <linearGradient id="wg" x1="0%" y1="0%" x2="100%" y2="0%">
-        <stop offset="0%" stop-color="#0B0F1E" stop-opacity="0" />
-        <stop offset="25%" stop-color="#00FF88" stop-opacity="0.25" />
-        <stop offset="50%" stop-color="#00FF88" stop-opacity="0.4" />
-        <stop offset="75%" stop-color="#00FF88" stop-opacity="0.25" />
-        <stop offset="100%" stop-color="#0B0F1E" stop-opacity="0" />
-      </linearGradient>
-    </defs>
-    <path d="M0,30 C240,10 480,50 720,30 C960,10 1200,50 1440,30 L1440,60 L0,60 Z" fill="url(#wg)" opacity="0.6" />
-    <path d="M0,40 C240,25 480,55 720,40 C960,25 1200,55 1440,40 L1440,60 L0,60 Z" fill="url(#wg)" opacity="0.3" />
-  </svg>
+  <img src="docs/assets/svg/icon-c1bf05813fc8.svg" width="100%" height="60" alt="" style="vertical-align:middle; max-width:100%;" />
 </div>
 <br />
 <div style="background:linear-gradient(135deg, rgba(255,255,255,0.04) 0%, rgba(255,255,255,0.01) 100%); border:1px solid rgba(255,255,255,0.06); border-radius:16px; padding:24px 28px; margin:16px 0; box-shadow:0 8px 32px rgba(0,0,0,0.4); position:relative; overflow:hidden;">
@@ -1248,7 +1020,7 @@ We follow [Conventional Commits](https://www.conventionalcommits.org/):
 <div style="position:absolute; top:-60px; right:-60px; width:120px; height:120px; background:radial-gradient(circle, rgba(0,255,136,0.15) 0%, transparent 70%);"></div>
 <a name="faq"></a>
 <h2 style="font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Helvetica,Arial,sans-serif; font-size:1.5em; font-weight:600; color:#E0E0E0; display:flex; align-items:center; gap:10px; margin:0 0 16px 0; padding-bottom:8px; border-bottom:1px solid rgba(255,255,255,0.06);">
-  <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:middle"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg> FAQ
+  <img src="docs/assets/svg/icon-da4a634619e1.svg" width="25" height="25" alt="" style="vertical-align:middle; max-width:100%;" /> FAQ
 </h2>
 <details>
 <summary><strong>Frequently asked questions</strong></summary>
@@ -1277,19 +1049,7 @@ We follow [Conventional Commits](https://www.conventionalcommits.org/):
 </div>
 <br />
 <div style="position:relative; height:60px; overflow:hidden; width:100%; margin:8px 0;">
-  <svg viewBox="0 0 1440 60" width="100%" height="60" preserveAspectRatio="none" style="position:absolute;bottom:0;">
-    <defs>
-      <linearGradient id="wg" x1="0%" y1="0%" x2="100%" y2="0%">
-        <stop offset="0%" stop-color="#0B0F1E" stop-opacity="0" />
-        <stop offset="25%" stop-color="#00FF88" stop-opacity="0.25" />
-        <stop offset="50%" stop-color="#00FF88" stop-opacity="0.4" />
-        <stop offset="75%" stop-color="#00FF88" stop-opacity="0.25" />
-        <stop offset="100%" stop-color="#0B0F1E" stop-opacity="0" />
-      </linearGradient>
-    </defs>
-    <path d="M0,30 C240,10 480,50 720,30 C960,10 1200,50 1440,30 L1440,60 L0,60 Z" fill="url(#wg)" opacity="0.6" />
-    <path d="M0,40 C240,25 480,55 720,40 C960,25 1200,55 1440,40 L1440,60 L0,60 Z" fill="url(#wg)" opacity="0.3" />
-  </svg>
+  <img src="docs/assets/svg/icon-c1bf05813fc8.svg" width="100%" height="60" alt="" style="vertical-align:middle; max-width:100%;" />
 </div>
 <br />
 <div style="background:linear-gradient(135deg, rgba(255,255,255,0.04) 0%, rgba(255,255,255,0.01) 100%); border:1px solid rgba(255,255,255,0.06); border-radius:16px; padding:24px 28px; margin:16px 0; box-shadow:0 8px 32px rgba(0,0,0,0.4); position:relative; overflow:hidden;">
@@ -1297,7 +1057,7 @@ We follow [Conventional Commits](https://www.conventionalcommits.org/):
 <div style="position:absolute; top:-60px; right:-60px; width:120px; height:120px; background:radial-gradient(circle, rgba(0,255,136,0.15) 0%, transparent 70%);"></div>
 <a name="performance"></a>
 <h2 style="font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Helvetica,Arial,sans-serif; font-size:1.5em; font-weight:600; color:#E0E0E0; display:flex; align-items:center; gap:10px; margin:0 0 16px 0; padding-bottom:8px; border-bottom:1px solid rgba(255,255,255,0.06);">
-  <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:middle"><rect x="3" y="12" width="4" height="9"/><rect x="10" y="7" width="4" height="14"/><rect x="17" y="3" width="4" height="18"/></svg> Performance
+  <img src="docs/assets/svg/icon-6486c93dca42.svg" width="25" height="25" alt="" style="vertical-align:middle; max-width:100%;" /> Performance
 </h2>
 <details>
 <summary><strong>Benchmarks &amp; metrics</strong></summary>
@@ -1321,19 +1081,7 @@ We follow [Conventional Commits](https://www.conventionalcommits.org/):
 </div>
 <br />
 <div style="position:relative; height:60px; overflow:hidden; width:100%; margin:8px 0;">
-  <svg viewBox="0 0 1440 60" width="100%" height="60" preserveAspectRatio="none" style="position:absolute;bottom:0;">
-    <defs>
-      <linearGradient id="wg" x1="0%" y1="0%" x2="100%" y2="0%">
-        <stop offset="0%" stop-color="#0B0F1E" stop-opacity="0" />
-        <stop offset="25%" stop-color="#00FF88" stop-opacity="0.25" />
-        <stop offset="50%" stop-color="#00FF88" stop-opacity="0.4" />
-        <stop offset="75%" stop-color="#00FF88" stop-opacity="0.25" />
-        <stop offset="100%" stop-color="#0B0F1E" stop-opacity="0" />
-      </linearGradient>
-    </defs>
-    <path d="M0,30 C240,10 480,50 720,30 C960,10 1200,50 1440,30 L1440,60 L0,60 Z" fill="url(#wg)" opacity="0.6" />
-    <path d="M0,40 C240,25 480,55 720,40 C960,25 1200,55 1440,40 L1440,60 L0,60 Z" fill="url(#wg)" opacity="0.3" />
-  </svg>
+  <img src="docs/assets/svg/icon-c1bf05813fc8.svg" width="100%" height="60" alt="" style="vertical-align:middle; max-width:100%;" />
 </div>
 <br />
 <a name="acknowledgements"></a>
@@ -1342,7 +1090,7 @@ We follow [Conventional Commits](https://www.conventionalcommits.org/):
 <div style="position:absolute; top:-60px; right:-60px; width:120px; height:120px; background:radial-gradient(circle, rgba(0,255,136,0.15) 0%, transparent 70%);"></div>
 <a name="acknowledgements"></a>
 <h2 style="font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Helvetica,Arial,sans-serif; font-size:1.5em; font-weight:600; color:#E0E0E0; display:flex; align-items:center; gap:10px; margin:0 0 16px 0; padding-bottom:8px; border-bottom:1px solid rgba(255,255,255,0.06);">
-  <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" viewBox="0 0 24 24" fill="none" stroke="#FF4B4B" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:middle"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg> Acknowledgements
+  <img src="docs/assets/svg/icon-16120ba71e6d.svg" width="25" height="25" alt="" style="vertical-align:middle; max-width:100%;" /> Acknowledgements
 </h2>
 * [data.gov.in](https://data.gov.in/) for daily mandi price data via their open API.
 * [India Meteorological Department](https://mausam.imd.gov.in/) for sub-division rainfall grids.
@@ -1356,19 +1104,7 @@ We follow [Conventional Commits](https://www.conventionalcommits.org/):
 </div>
 <br />
 <div style="position:relative; height:60px; overflow:hidden; width:100%; margin:8px 0;">
-  <svg viewBox="0 0 1440 60" width="100%" height="60" preserveAspectRatio="none" style="position:absolute;bottom:0;">
-    <defs>
-      <linearGradient id="wg" x1="0%" y1="0%" x2="100%" y2="0%">
-        <stop offset="0%" stop-color="#0B0F1E" stop-opacity="0" />
-        <stop offset="25%" stop-color="#00FF88" stop-opacity="0.25" />
-        <stop offset="50%" stop-color="#00FF88" stop-opacity="0.4" />
-        <stop offset="75%" stop-color="#00FF88" stop-opacity="0.25" />
-        <stop offset="100%" stop-color="#0B0F1E" stop-opacity="0" />
-      </linearGradient>
-    </defs>
-    <path d="M0,30 C240,10 480,50 720,30 C960,10 1200,50 1440,30 L1440,60 L0,60 Z" fill="url(#wg)" opacity="0.6" />
-    <path d="M0,40 C240,25 480,55 720,40 C960,25 1200,55 1440,40 L1440,60 L0,60 Z" fill="url(#wg)" opacity="0.3" />
-  </svg>
+  <img src="docs/assets/svg/icon-c1bf05813fc8.svg" width="100%" height="60" alt="" style="vertical-align:middle; max-width:100%;" />
 </div>
 <br />
 <a name="support"></a>
@@ -1377,7 +1113,7 @@ We follow [Conventional Commits](https://www.conventionalcommits.org/):
 <div style="position:absolute; top:-60px; right:-60px; width:120px; height:120px; background:radial-gradient(circle, rgba(0,255,136,0.15) 0%, transparent 70%);"></div>
 <a name="support"></a>
 <h2 style="font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Helvetica,Arial,sans-serif; font-size:1.5em; font-weight:600; color:#E0E0E0; display:flex; align-items:center; gap:10px; margin:0 0 16px 0; padding-bottom:8px; border-bottom:1px solid rgba(255,255,255,0.06);">
-  <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" viewBox="0 0 24 24" fill="none" stroke="#FF4B4B" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:middle"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg> Support
+  <img src="docs/assets/svg/icon-e5918558c035.svg" width="25" height="25" alt="" style="vertical-align:middle; max-width:100%;" /> Support
 </h2>
 <div align="center">
 
@@ -1397,19 +1133,7 @@ If MandiIQ helps you make better procurement decisions or advances your agri-dat
 </div>
 <br />
 <div style="position:relative; height:60px; overflow:hidden; width:100%; margin:8px 0;">
-  <svg viewBox="0 0 1440 60" width="100%" height="60" preserveAspectRatio="none" style="position:absolute;bottom:0;">
-    <defs>
-      <linearGradient id="wg" x1="0%" y1="0%" x2="100%" y2="0%">
-        <stop offset="0%" stop-color="#0B0F1E" stop-opacity="0" />
-        <stop offset="25%" stop-color="#00FF88" stop-opacity="0.25" />
-        <stop offset="50%" stop-color="#00FF88" stop-opacity="0.4" />
-        <stop offset="75%" stop-color="#00FF88" stop-opacity="0.25" />
-        <stop offset="100%" stop-color="#0B0F1E" stop-opacity="0" />
-      </linearGradient>
-    </defs>
-    <path d="M0,30 C240,10 480,50 720,30 C960,10 1200,50 1440,30 L1440,60 L0,60 Z" fill="url(#wg)" opacity="0.6" />
-    <path d="M0,40 C240,25 480,55 720,40 C960,25 1200,55 1440,40 L1440,60 L0,60 Z" fill="url(#wg)" opacity="0.3" />
-  </svg>
+  <img src="docs/assets/svg/icon-c1bf05813fc8.svg" width="100%" height="60" alt="" style="vertical-align:middle; max-width:100%;" />
 </div>
 <br />
 <div style="background:linear-gradient(135deg, rgba(255,255,255,0.04) 0%, rgba(255,255,255,0.01) 100%); border:1px solid rgba(255,255,255,0.06); border-radius:16px; padding:24px 28px; margin:16px 0; box-shadow:0 8px 32px rgba(0,0,0,0.4); position:relative; overflow:hidden;">
@@ -1417,7 +1141,7 @@ If MandiIQ helps you make better procurement decisions or advances your agri-dat
 <div style="position:absolute; top:-60px; right:-60px; width:120px; height:120px; background:radial-gradient(circle, rgba(0,255,136,0.15) 0%, transparent 70%);"></div>
 <a name="license"></a>
 <h2 style="font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Helvetica,Arial,sans-serif; font-size:1.5em; font-weight:600; color:#E0E0E0; display:flex; align-items:center; gap:10px; margin:0 0 16px 0; padding-bottom:8px; border-bottom:1px solid rgba(255,255,255,0.06);">
-  <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:middle"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg> License
+  <img src="docs/assets/svg/icon-f862fc7823f0.svg" width="25" height="25" alt="" style="vertical-align:middle; max-width:100%;" /> License
 </h2>
 ```
 MIT License
@@ -1445,19 +1169,7 @@ SOFTWARE.
 </div>
 <br />
 <div style="position:relative; height:60px; overflow:hidden; width:100%; margin:8px 0;">
-  <svg viewBox="0 0 1440 60" width="100%" height="60" preserveAspectRatio="none" style="position:absolute;bottom:0;">
-    <defs>
-      <linearGradient id="wg" x1="0%" y1="0%" x2="100%" y2="0%">
-        <stop offset="0%" stop-color="#0B0F1E" stop-opacity="0" />
-        <stop offset="25%" stop-color="#00FF88" stop-opacity="0.25" />
-        <stop offset="50%" stop-color="#00FF88" stop-opacity="0.4" />
-        <stop offset="75%" stop-color="#00FF88" stop-opacity="0.25" />
-        <stop offset="100%" stop-color="#0B0F1E" stop-opacity="0" />
-      </linearGradient>
-    </defs>
-    <path d="M0,30 C240,10 480,50 720,30 C960,10 1200,50 1440,30 L1440,60 L0,60 Z" fill="url(#wg)" opacity="0.6" />
-    <path d="M0,40 C240,25 480,55 720,40 C960,25 1200,55 1440,40 L1440,60 L0,60 Z" fill="url(#wg)" opacity="0.3" />
-  </svg>
+  <img src="docs/assets/svg/icon-c1bf05813fc8.svg" width="100%" height="60" alt="" style="vertical-align:middle; max-width:100%;" />
 </div>
 <br />
 <div align="center">
