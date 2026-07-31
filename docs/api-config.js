@@ -28,7 +28,7 @@ const API_CONFIG = {
    * Dashboard URL
    */
   get dashboardUrl() {
-    return 'https://mandiiq.streamlit.app';
+    return 'https://test-mandi-keae7eruks2n4cqvumjfu8.streamlit.app';
   },
 
   /**
