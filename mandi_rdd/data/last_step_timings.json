@@ -1,23 +1,15 @@
 {
   "steps": {
     "historical_backfill": 0.0,
-    "fetch_prices": 0.0,
-    "upsert_prices": 0.0,
-    "prices_varietywise": 0.0,
-    "backfill_state": 1.22,
-    "fetch_rainfall": 83.5,
-    "forecast_training": 0.03,
-    "classifier_training": 0.14,
-    "forecast_persist": 0.02,
-    "rdd_analysis": 34.53,
-    "nightly_narratives": 259.33
+    "fetch_prices": 20.35,
+    "upsert_prices": 46.49,
+    "prices_varietywise": 0.02,
+    "backfill_state": 1.29
   },
   "rows_fetched": {
-    "fetch_prices": 0,
-    "fetch_rainfall": 2278
+    "fetch_prices": 10000
   },
   "rows_new": {
-    "fetch_prices": 0,
-    "fetch_rainfall": 0
+    "fetch_prices": 82
   }
 }
