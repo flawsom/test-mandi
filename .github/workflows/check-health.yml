@@ -7,12 +7,16 @@
 #
 #   1. Posts a GitHub Check Run with the pass/fail verdict table
 #   2. Uploads the machine-readable verdicts as a workflow artifact
-#      (docs/health-status.json — surface verdicts, n_prices, timestamps)
+#      (docs/health-status.json — surface verdicts, n_prices, timestamps,
+#      and a transition-gated `history` array for the landing sparkline)
 #   3. Commits docs/health-status.json back to master and dispatches
 #      deploy-pages so the landing page's status badge stays fresh.
 #      The commit is gated on the STABLE signature (payload hash excluding
-#      generated_at) — a timestamp-only change never commits, so this
-#      workflow cannot loop with the workflow_run trigger above.
+#      generated_at and history) AND the history length — history only
+#      grows on verdict transitions, and the first schema-2 run appends
+#      entry #1 with an otherwise-identical signature, so both must match
+#      to skip.  A timestamp-only change never commits, so this workflow
+#      cannot loop with the workflow_run trigger above.
 #
 # The health check script (scripts/check_health.py) is stdlib-only so it
 # runs directly on the ubuntu runner with no pip install needed.
@@ -89,18 +93,26 @@ jobs:
             exit 0
           fi
 
-          # Read the committed signature (may not exist on first run).
+          # Read the committed signature + history length (may not exist on first run).
           OLD_SIG=""
+          OLD_HLEN=""
           if git cat-file -e HEAD:docs/health-status.json 2>/dev/null; then
             OLD_SIG=$(git show HEAD:docs/health-status.json | python3 -c "import sys,json; print(json.load(sys.stdin).get('signature',''))")
+            OLD_HLEN=$(git show HEAD:docs/health-status.json | python3 -c "import sys,json; print(len(json.load(sys.stdin).get('history',[])))")
           fi
           NEW_SIG=$(python3 -c "import json; print(json.load(open('docs/health-status.json')).get('signature',''))")
+          NEW_HLEN=$(python3 -c "import json; print(len(json.load(open('docs/health-status.json')).get('history',[])))")
 
-          echo "old signature: ${OLD_SIG:-<none>}"
-          echo "new signature: ${NEW_SIG}"
+          echo "old signature: ${OLD_SIG:-<none>} (history ${OLD_HLEN:-0})"
+          echo "new signature: ${NEW_SIG} (history ${NEW_HLEN})"
 
-          if [ -n "$OLD_SIG" ] && [ "$OLD_SIG" = "$NEW_SIG" ]; then
-            echo "Status unchanged (signature identical) — no commit, no Pages dispatch."
+          # Skip only when BOTH the stable signature and the history length
+          # are unchanged.  History grows only on verdict transitions, but the
+          # very first schema-2 run appends entry #1 with an otherwise-
+          # identical signature — comparing the signature alone would skip
+          # that commit and the sparkline would never appear.
+          if [ -n "$OLD_SIG" ] && [ "$OLD_SIG" = "$NEW_SIG" ] && [ "${OLD_HLEN:-0}" = "$NEW_HLEN" ]; then
+            echo "Status unchanged (signature + history identical) — no commit, no Pages dispatch."
             exit 0
           fi
 

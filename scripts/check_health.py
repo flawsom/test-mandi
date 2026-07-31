@@ -8,8 +8,15 @@ any unreachable surface is down.
 In addition to the human-readable table it writes a machine-readable
 status JSON (default: docs/health-status.json) containing the per-surface
 verdicts and a STABLE signature — the payload hash EXCLUDING the
-generated_at timestamp — so CI can gate commits/redeploys on real status
-changes without a timestamp churn loop.
+generated_at timestamp and the history array — so CI can gate
+commits/redeploys on real status changes without a timestamp churn loop.
+
+History: the JSON carries a `history` array (last ~30 verdict sets with
+timestamps, oldest first) for the landing-page sparkline.  A new entry
+is appended ONLY when the verdict state actually changed since the last
+recorded entry (transition-gated), never on a plain re-run — this keeps
+the stable signature deterministic between runs so the workflow's
+commit/Pages-dispatch gate can't loop via its own workflow_run trigger.
 
 Usage:
     python scripts/check_health.py [--json-out PATH] [--no-json]
@@ -41,6 +48,7 @@ SURFACES = {
 
 MIN_PRICES = 1_000_000  # sanity floor: below this we assume a broken/empty DB
 TIMEOUT_S = 60  # cold starts on Vercel may take ~35s for R2 download
+HISTORY_MAX = 30  # keep the last ~30 verdict sets for the landing sparkline
 
 
 def _probe(url: str, timeout: int = TIMEOUT_S) -> dict:
@@ -90,21 +98,58 @@ def _probe(url: str, timeout: int = TIMEOUT_S) -> dict:
 
 
 def _stable_signature(report: dict) -> str:
-    """SHA-256 of the status payload EXCLUDING generated_at.
+    """SHA-256 of the status payload EXCLUDING generated_at and history.
 
     CI compares this across runs: a timestamp-only change must never
     trigger a commit/redeploy, but any real verdict/row-count change does.
+    History is excluded because it only grows on verdict transitions (see
+    run_check) — including it would make the signature churn every run and
+    defeat the workflow's loop-prevention gate.
     """
-    payload = {k: v for k, v in report.items() if k != "generated_at"}
+    payload = {k: v for k, v in report.items() if k not in ("generated_at", "history")}
     canonical = json.dumps(payload, sort_keys=True, separators=(",", ":"))
     return hashlib.sha256(canonical.encode("utf-8")).hexdigest()[:16]
 
 
-def run_check() -> tuple[bool, dict]:
+def _verdict_state_key(entry: dict) -> str:
+    """Hash of the verdict-relevant fields of a history entry.
+
+    Used for transition detection: two entries with identical overall
+    status and per-surface verdicts are the same state, regardless of the
+    timestamps or the DB reference row count.
+    """
+    key = {
+        "overall": entry.get("overall"),
+        "verdicts": entry.get("verdicts"),
+    }
+    canonical = json.dumps(key, sort_keys=True, separators=(",", ":"))
+    return hashlib.sha256(canonical.encode("utf-8")).hexdigest()[:16]
+
+
+def _load_prev_history(path: str) -> list:
+    """Load the `history` array from a previously written status JSON.
+
+    Returns [] if the file is missing, malformed, or predates the history
+    field (schema 1 files have no history).
+    """
+    try:
+        with open(path, "r", encoding="utf-8") as f:
+            data = json.load(f)
+        return data.get("history", []) or []
+    except (OSError, ValueError, json.JSONDecodeError):
+        return []
+
+
+def run_check(prev_history: list | None = None) -> tuple[bool, dict]:
     """Probe all surfaces, compute DB freshness parity, print verdicts.
 
+    Args:
+        prev_history: the `history` array from the previously written JSON
+            (may be None/[] on first run).  A new entry is appended only
+            when the verdict state changed since the last recorded entry.
+
     Returns (all_ok, report) where report is the machine-readable status
-    dict (including a stable signature and the human table text).
+    dict (including history, a stable signature and the human table text).
     """
     # 1. Probe everything
     results = {}
@@ -212,9 +257,10 @@ def run_check() -> tuple[bool, dict]:
         lines.append(f"  Count unavailable : {', '.join(count_unavailable)}")
 
     # 5. Build machine-readable report.
+    now_iso = datetime.datetime.now(datetime.timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ")
     report = {
-        "schema": 1,
-        "generated_at": datetime.datetime.now(datetime.timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ"),
+        "schema": 2,
+        "generated_at": now_iso,
         "overall": "healthy" if all_ok else "unhealthy",
         "exit_code": 0 if all_ok else 1,
         "min_prices": MIN_PRICES,
@@ -226,6 +272,23 @@ def run_check() -> tuple[bool, dict]:
         "surfaces": surfaces_out,
         "table": "\n".join(lines),
     }
+
+    # 6. Transition-gated history for the landing sparkline.  Append only
+    # when the verdict state differs from the last recorded entry, and cap
+    # at HISTORY_MAX.  Plain re-runs with unchanged verdicts do NOT append,
+    # keeping the stable signature deterministic between runs.
+    history = list(prev_history or [])[-HISTORY_MAX:]
+    entry = {
+        "generated_at": now_iso,
+        "overall": report["overall"],
+        "exit_code": report["exit_code"],
+        "latest_db_reference": ref,
+        "verdicts": {name: s["verdict"] for name, s in surfaces_out.items()},
+    }
+    if not history or _verdict_state_key(history[-1]) != _verdict_state_key(entry):
+        history.append(entry)
+    report["history"] = history[-HISTORY_MAX:]
+
     report["signature"] = _stable_signature(report)
 
     print("\n".join(lines))
@@ -243,7 +306,10 @@ def main() -> int:
     print("MandiIQ multi-surface health check — latest-DB parity")
     print(f"  min_prices={MIN_PRICES}, timeout={TIMEOUT_S}s")
     print()
-    all_ok, report = run_check()
+    prev_history = _load_prev_history(args.json_out) if not args.no_json else []
+    all_ok, report = run_check(prev_history=prev_history)
+    print()
+    print(f"  History: {len(report.get('history', []))}/{HISTORY_MAX} entries")
     print()
     if all_ok:
         print("All surfaces healthy — every reachable API serves the latest DB.")

@@ -144,7 +144,17 @@ section:last-of-type{border-bottom:none}
 .surface-status-title{font-family:var(--font-mono);font-size:0.7rem;color:var(--color-text-med);text-transform:uppercase;letter-spacing:0.08em}
 .surface-status-ts{font-family:var(--font-mono);font-size:0.7rem;color:var(--color-primary);letter-spacing:0.04em}
 .surface-status-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:0.7rem}
-.surface-chip{display:flex;align-items:center;gap:0.5rem;border:1px solid var(--hairline);border-radius:6px;padding:0.55rem 0.7rem;font-family:var(--font-mono);font-size:0.72rem;transition:border-color 0.3s ease}
+.surface-chip{display:flex;flex-direction:column;align-items:stretch;gap:0.45rem;border:1px solid var(--hairline);border-radius:6px;padding:0.55rem 0.7rem;font-family:var(--font-mono);font-size:0.72rem;transition:border-color 0.3s ease}
+.surface-chip-top{display:flex;align-items:center;gap:0.5rem}
+.surface-spark{display:flex;align-items:flex-end;gap:2px;height:16px;padding-top:2px}
+.surface-spark i{flex:1;min-width:2px;border-radius:1px;background:#3a3a3a;opacity:0.55;transition:opacity .2s ease,transform .2s ease}
+.surface-spark i:hover{opacity:1;transform:translateY(-2px)}
+.surface-spark i.l{background:#5ddb6c}.surface-spark i.s{background:#ffb020}.surface-spark i.d{background:#ff4d5e}.surface-spark i.u{background:#4da3ff}
+.surface-spark .spark-empty{color:var(--color-text-low);font-size:0.6rem;line-height:16px}
+.surface-meta{font-family:var(--font-mono);font-size:0.62rem;color:var(--color-text-med);letter-spacing:0.03em;line-height:1.4}
+.surface-status-legend{display:flex;gap:1rem;margin-top:0.7rem;font-family:var(--font-mono);font-size:0.6rem;color:var(--color-text-med);text-transform:uppercase;letter-spacing:0.06em}
+.surface-status-legend i{width:8px;height:8px;border-radius:1px;display:inline-block;margin-right:4px;vertical-align:middle}
+.surface-status-legend i.l{background:#5ddb6c}.surface-status-legend i.s{background:#ffb020}.surface-status-legend i.d{background:#ff4d5e}.surface-status-legend i.u{background:#4da3ff}
 .surface-chip .dot{width:8px;height:8px;border-radius:50%;flex:0 0 auto}
 .surface-chip .sname{color:var(--color-paper)}
 .surface-chip .sverdict{margin-left:auto;font-weight:500;text-transform:uppercase;font-size:0.66rem;letter-spacing:0.06em}
@@ -345,6 +355,9 @@ footer{padding:2.5rem 0;display:flex;align-items:center;justify-content:space-be
                 <span class="surface-status-ts" id="surface-status-ts">checking…</span>
             </div>
             <div class="surface-status-grid" id="surface-status-grid"><!-- per-surface badges injected --></div>
+            <div class="surface-status-legend">
+                <span><i class="l"></i>LATEST</span><span><i class="s"></i>STALE</span><span><i class="d"></i>DOWN</span><span><i class="u"></i>AUTH/STATIC</span>
+            </div>
         </div>
     </section>
 
@@ -635,17 +648,39 @@ const API_CONFIG = {
     });
 
     grid.innerHTML = '';
+    var hist = data.history || [];
+    var INCIDENTS = { STALE: 1, DOWN: 1, BROKEN: 1 };
     names.forEach(function(name) {
       var s = data.surfaces[name];
       var meta = VERDICT_META[s.verdict] || { cls: 'up', label: s.verdict };
       var chip = document.createElement('div');
       chip.className = 'surface-chip';
       var nStr = (s.n_prices != null) ? ' · ' + Number(s.n_prices).toLocaleString() : '';
+
+      // Sparkline: one segment per history entry, colored by that surface's verdict.
+      var spark = '';
+      var incidents = 0, lastIncident = null;
+      if (hist.length) {
+        for (var i = 0; i < hist.length; i++) {
+          var v = (hist[i].verdicts || {})[name] || null;
+          var cls = v === 'LATEST' ? 'l' : (v === 'STALE' ? 's' : (v === 'DOWN' || v === 'BROKEN' ? 'd' : (v ? 'u' : '')));
+          spark += '<i class="' + cls + '" title="' + (hist[i].generated_at || '') + ' — ' + (v || 'n/a') + '"></i>';
+          if (INCIDENTS[v]) { incidents++; lastIncident = hist[i].generated_at || lastIncident; }
+        }
+      }
+      var metaTxt = hist.length
+        ? (incidents ? incidents + ' incident' + (incidents !== 1 ? 's' : '') + (lastIncident ? ' · last ' + fmtAgo(lastIncident) : '') : 'stable · no incidents')
+        : 'history not published yet';
+
       chip.innerHTML =
-        '<span class="dot ' + meta.cls + '"></span>' +
-        '<span class="sname">' + name.replace(/ /g, '\u00A0') + '</span>' +
-        '<span class="sverdict ' + meta.cls + '">' + meta.label + '</span>' +
-        '<span class="sn">' + nStr + '</span>';
+        '<div class="surface-chip-top">' +
+          '<span class="dot ' + meta.cls + '"></span>' +
+          '<span class="sname">' + name.replace(/ /g, '\u00A0') + '</span>' +
+          '<span class="sverdict ' + meta.cls + '">' + meta.label + '</span>' +
+          '<span class="sn">' + nStr + '</span>' +
+        '</div>' +
+        '<div class="surface-spark">' + (spark || '<span class="spark-empty">—</span>') + '</div>' +
+        '<div class="surface-meta">' + metaTxt + '</div>';
       chip.title = s.note || s.verdict;
       grid.appendChild(chip);
     });
