@@ -337,7 +337,6 @@ flowchart TB
 <img src="https://img.shields.io/badge/Docker-2496ED?style=for-the-badge&amp;logo=docker&amp;logoColor=white" alt="Docker" />
 <img src="https://img.shields.io/badge/GitHub_Actions-2088FF?style=for-the-badge&amp;logo=githubactions&amp;logoColor=white" alt="GitHub Actions" />
 <img src="https://img.shields.io/badge/Vercel-000000?style=for-the-badge&amp;logo=vercel&amp;logoColor=white" alt="Vercel" />
-<img src="https://img.shields.io/badge/Render-46E3B7?style=for-the-badge&amp;logo=render&amp;logoColor=black" alt="Render" />
 <img src="https://img.shields.io/badge/Northflank-000000?style=for-the-badge&amp;logo=northflank&amp;logoColor=white" alt="Northflank" />
 <img src="https://img.shields.io/badge/Cloudflare_R2-FF6600?style=for-the-badge&amp;logo=cloudflare&amp;logoColor=white" alt="Cloudflare R2" />
 <img src="https://img.shields.io/badge/Grafana-FF6600?style=for-the-badge&amp;logo=grafana&amp;logoColor=white" alt="Grafana" />

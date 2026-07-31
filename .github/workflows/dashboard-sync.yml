@@ -5,16 +5,12 @@
 # from what the production API is currently serving. Only if they differ
 # does it POST to /webhook/grafana-dashboard-update.
 #
-# This avoids unnecessary cache clears (and Render deploys) when a commit
-# touches the file but its content hasn't actually changed — e.g. a merge
-# conflict resolution, a revert, or a workflow_dispatch with no real diff.
+# This avoids unnecessary cache clears when a commit touches the file but
+# its content hasn't actually changed — e.g. a merge conflict resolution,
+# a revert, or a workflow_dispatch with no real diff.
 #
-# SETUP (optional):
-#   To also trigger a Render deploy after the webhook, set the
-#   RENDER_DEPLOY_HOOK_URL secret:
-#   https://github.com/flawsom/MandiIQ/settings/secrets/actions
-#
-#   Without it, only the cache clear is performed.
+# Note: the API runs on Northflank now (no Render deploy hook anymore),
+# so the legacy Render-deploy job was removed — only the cache clear runs.
 
 name: Dashboard Sync
 
@@ -124,23 +120,3 @@ jobs:
             cat /tmp/webhook_response.txt
           fi
 
-  trigger-render-deploy:
-    if: needs.check-hash.outputs.changed == 'true'
-    runs-on: ubuntu-latest
-    needs: notify-api
-    steps:
-      - name: Trigger Render deploy hook
-        env:
-          RENDER_HOOK: ${{ secrets.RENDER_DEPLOY_HOOK_URL }}
-        run: |
-          echo "Sync: triggering Render deploy hook..."
-          HTTP_CODE=$(curl -s -o /tmp/render_response.txt -w "%{http_code}" \
-            -X POST "$RENDER_HOOK" \
-            --max-time 30)
-          echo "Render responded with HTTP $HTTP_CODE"
-          if [ "$HTTP_CODE" = "200" ] || [ "$HTTP_CODE" = "201" ]; then
-            echo "Sync: Render deploy triggered successfully."
-          else
-            echo "::warning::Sync: Render deploy hook returned HTTP $HTTP_CODE"
-            cat /tmp/render_response.txt
-          fi
