@@ -4,7 +4,12 @@
 # detects whether the DuckDB's DATA actually changed (row counts + max date —
 # NOT raw file bytes, so spurious DuckDB churn never triggers a commit), and
 # when it did:
-#   1. Commits the refreshed DuckDB + status JSONs back to master (Git LFS)
+#   1. Commits the refreshed DuckDB + the FULL live artifact set (ndvi_latest.json,
+#      last_hourly_run.json, last_ingest_status.json, last_step_timings.json,
+#      last_integrity_check.json, _ingestion_progress.json, _integrity_history.json,
+#      _last_full_analysis.txt, r2_backup_metrics.json, analysis PNGs, pipeline
+#      diagrams) back to master (Git LFS) — artifacts always ride along with the
+#      DB so they can never drift from it
 #   2. Pushes with --force-with-lease (safe for bot-only binary commits)
 #   3. Triggers every deployment surface:
 #        - Vercel:   gh workflow run deploy-vercel.yml
@@ -253,12 +258,23 @@ jobs:
           # after later steps / 24h full runs. An unmatched `git add` pathspec is a
           # hard fatal (exit 128) even with --ignore-errors, so guard each path
           # with an existence check before staging.
+          # Commit the FULL live artifact set that describes this DB state so
+          # the committed artifacts can NEVER drift from the committed DB: the
+          # status JSONs (ndvi_latest.json, last_hourly_run.json, ...), analysis
+          # PNGs, and live pipeline diagrams all travel with the DuckDB.
           for f in \
             mandi_rdd/data/mandi_iq.duckdb \
+            mandi_rdd/data/ndvi_latest.json \
             mandi_rdd/data/last_hourly_run.json \
+            mandi_rdd/data/last_ingest_status.json \
             mandi_rdd/data/last_step_timings.json \
+            mandi_rdd/data/last_integrity_check.json \
+            mandi_rdd/data/_ingestion_progress.json \
+            mandi_rdd/data/_integrity_history.json \
             mandi_rdd/data/_last_full_analysis.txt \
             mandi_rdd/data/r2_backup_metrics.json \
+            mandi_rdd/data/ndvi_rainfall_analysis.png \
+            mandi_rdd/data/district_stress_map.png \
             diagrams/pipeline-flow-live.mmd \
             docs/assets/mermaid/pipeline-flow-live.mmd \
             docs/assets/svg/pipeline-flow-live.svg; do
