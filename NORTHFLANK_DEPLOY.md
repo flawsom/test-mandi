@@ -84,6 +84,7 @@
 #    - PYTHONPATH=/app
 #    - MANDIIQ_DB_PATH=/data/mandi_iq.duckdb
 #    - DATA_GOV_IN_API_KEY=your_key_here
+#    - MANDIIQ_FORCE_QUICK=1   # pins the job to the fast price-only path (~30s)
 #    - SENTINEL_CLIENT_ID (optional, for NDVI)
 #    - SENTINEL_CLIENT_SECRET (optional, for NDVI)
 #    - GEMINI_API_KEY (optional, for AI narratives)
