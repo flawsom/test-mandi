@@ -111,6 +111,8 @@ jobs:
     runs-on: ubuntu-latest
     needs: detect-drift
     timeout-minutes: 5
+    permissions:
+      issues: write
 
     steps:
       - name: Ensure issue labels exist
