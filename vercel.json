@@ -1,5 +1,10 @@
 {
   "$schema": "https://openapi.vercel.sh/vercel.json",
+  "git": {
+    "deploymentEnabled": {
+      "gh-pages": false
+    }
+  },
   "functions": {
     "api/index.py": {
       "maxDuration": 60,
@@ -7,5 +12,6 @@
       "excludeFiles": "{tests/**,data/mandi_iq.duckdb.*,**/__pycache__/**,**.git/**,**.vercel/**,**.streamlit/**,scripts/**,mandi_rdd/dashboard/**,mandi_rdd/styles/**,landing/**,docs/**}"
     }
   },
-  "buildCommand": "cp requirements-vercel.txt requirements.txt"
+  "buildCommand": "cp requirements-vercel.txt requirements.txt",
+  "_comment": "git.deploymentEnabled.gh-pages=false: best-effort guard. The gh-pages branch is a pure static site with no FastAPI entrypoint, so Vercel's FastAPI preset fails it with 'No FastAPI entrypoint found'. THE authoritative fix is the Vercel dashboard: project -> Settings -> Git -> Production Branch = master (the read-only API lives on master at api/index.py). This guard only applies to automatic deployments of branches whose deployed config includes it, so it may not stop a production-branch gh-pages build on its own."
 }

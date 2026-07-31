@@ -6,7 +6,13 @@
 #   3. Link project:        vercel link  (creates .vercel/project.json)
 #   4. Create a Vercel token at https://vercel.com/account/tokens
 #   5. Add the token as a GitHub secret named VERCEL_TOKEN:
-#      https://github.com/flawsom/MandiIQ/settings/secrets/actions
+#      https://github.com/flawsom/test-mandi/settings/secrets/actions
+#
+# IMPORTANT: the Vercel project's Production Branch must be `master`
+# (Vercel -> project -> Settings -> Git -> Production Branch). The `gh-pages`
+# branch is a pure static site with no FastAPI entrypoint, so Vercel builds of
+# that branch fail with "No FastAPI entrypoint found" (see git.deploymentEnabled
+# in vercel.json, which disables auto-builds of gh-pages).
 #
 # WHY: The Vercel serverless function exposes a read-only subset of the
 # FastAPI endpoints (/health, /prices, /rdd-result, /forecast, /risk-score)
