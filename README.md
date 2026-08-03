@@ -469,7 +469,7 @@ store = DuckDBStore()
 n = store.query('SELECT COUNT(*) as c FROM prices')[0]['c']
 print(f'Price records: {n:,}')
 "
-# Expected: Price records: 1,335,093
+# Expected: Price records: 1,358,159
 ```
 
 ### Step 5 &mdash; Launch Dashboard
@@ -499,7 +499,7 @@ docker compose up --build
 
 ```bash
 curl http://localhost:8000/health
-# {"status":"healthy","n_prices":1335093,"n_rainfall":438,...}
+# {"status":"healthy","n_prices":1358159,"n_rainfall":2278,...}
 
 curl "http://localhost:8000/prices?commodity=Onion&limit=3"
 # Array of price records with modal prices, markets, dates

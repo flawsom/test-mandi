@@ -288,14 +288,14 @@ Every successful ingestion cycle — whether hourly quick-fetch or the daily ful
 
 | Metric | Value |
 |--------|-------|
-| Price rows | 1,333,993 |
-| Commodities tracked | 303 |
+| Price rows | 1,358,159 |
+| Commodities tracked | 332 |
 | States covered | 36 |
-| Districts covered | 610 |
+| Districts covered | 626 |
 | Rainfall records | 2,278 (34 sub-divisions, 2021–2026) |
 | NDVI records | 3,663 (605 districts) |
-| RDD causal results | 26 |
-| Forecast models | 15 (15 valid, 2 noisy: Wheat, Garlic) |
+| RDD causal results | 327 |
+| Forecast models | 444 (444 valid) |
 | Narratives | 0 (API key optional) |
 | Data integrity | WARN (1 warning: 2 noisy forecasts) |
 | Step timings persisted | `last_step_timings.json` (written by `_persist_step_timings()` after every run) |
@@ -307,8 +307,8 @@ When `last_step_timings.json` exists (it gets written after every successful hou
 ```
     fetch_prices.py
     data.gov.in API           [12.3s]
-    1,333,993 records ingested
-    303 commodities ~ 36 states
+    1,358,159 records ingested
+    332 commodities ~ 36 states
 ```
 
 | Step | Display location in diagram | Shows |
