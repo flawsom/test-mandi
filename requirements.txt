@@ -1,6 +1,9 @@
 pandas>=2.0.0,<3.0.0
 numpy>=1.24.0
-streamlit>=1.28.0
+# EXACT pin: the injected CSS layer targets Streamlit 1.59.x internal markup
+# (data-testid/class attributes) — bump deliberately and re-verify the
+# Executive Overview CSS. Streamlit Community Cloud reads THIS root file only.
+streamlit==1.59.2
 plotly==6.9.0
 duckdb>=0.8.0
 scikit-learn>=1.2.0

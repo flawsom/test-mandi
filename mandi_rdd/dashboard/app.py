@@ -68,9 +68,12 @@ from mandi_rdd.dashboard.theme import (
 
 )# ═══════════════════════════════════════════════════════════
 # Dependency preflight — the dashboard hard-requires plotly, and Streamlit
-# Cloud can deploy with a partial/cached env (e.g. if its "Requirements file"
-# setting points at requirements-vercel.txt, which excludes plotly). Turn the
-# redacted ModuleNotFoundError box into an actionable message with the exact fix.
+# Cloud can deploy with a stale/partial cached env. Turn the redacted
+# ModuleNotFoundError box into an actionable message with the exact fix.
+# NOTE: Streamlit Community Cloud has NO "requirements file" path setting — it
+# strictly installs from `requirements.txt` at the repo ROOT (which pins
+# plotly==6.9.0). Subdirectory requirements files are ignored. If plotly is
+# missing despite the root file listing it, the env cache is stale → Rebuild.
 # ═══════════════════════════════════════════════════════════
 
 try:
@@ -81,11 +84,16 @@ except ImportError as _plotly_missing:
         "MandiIQ dashboard can't start — **plotly is not installed** in this "
         "Streamlit environment ("
         f"`{_miss_name}`).\n\n"
-        "Fix — in the Streamlit Cloud dashboard (share.streamlit.io → app → "
-        "**Settings → General → 'Python requirements file'**) make sure it points "
-        "at **`mandi_rdd/requirements.txt`** (which includes `plotly`), not "
-        "`requirements-vercel.txt` (a Vercel-only file that excludes plotly). "
-        "Then click **Rerun / Rebuild app** so dependencies reinstall from scratch."
+        "**How Streamlit Cloud installs deps:** it reads **`requirements.txt` at the "
+        "repo root** — there is **no** 'Python requirements file' setting in the "
+        "dashboard. The root file already pins `plotly==6.9.0`, so this is a stale "
+        "dependency cache.\n\n"
+        "**Fix (one click):** in the Streamlit Cloud dashboard, open this app → "
+        "click the **⋮ (kebab) menu → Rebuild** (or **⋮ → Settings → Rerun / "
+        "Rebuild**) to force a fresh `pip install -r requirements.txt` from the "
+        "repo root. Also confirm the app is deployed from branch **`master`** with "
+        "main file **`mandi_rdd/dashboard/app.py`** (never the `gh-pages` branch, "
+        "which has no requirements.txt)."
     )
     st.stop()
 

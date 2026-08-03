@@ -759,32 +759,52 @@ User Browser → Streamlit Cloud (dashboard UI)
 
 ### 3.2.1 Dependencies
 
-Streamlit Cloud reads **two** dependency files:
+Streamlit Community Cloud installs dependencies from the **repo root only** — there
+is **no "requirements file" setting** in the dashboard, and subdirectory files are
+**ignored**. The two files that matter:
 
-**`mandi_rdd/requirements.txt`** (Python packages):
+**`requirements.txt`** at the repo root (Python packages) — **this is the file
+Streamlit Cloud actually reads**; it already pins `plotly==6.9.0` (the dashboard
+imports `plotly.graph_objects` at module load) and `streamlit==1.59.2` (the injected
+CSS targets 1.59.x internal markup):
 ```
-pandas>=1.5.0
+pandas>=2.0.0,<3.0.0
 numpy>=1.24.0
-scipy>=1.11.0
-fastapi>=0.110.0
 streamlit==1.59.2
 plotly==6.9.0
-requests>=2.28.0
 duckdb>=0.8.0
-xgboost>=2.0.0
-shap>=0.41.0
-scikit-learn>=1.3.0
+scikit-learn>=1.2.0
+joblib>=1.2.0
+scipy>=1.11.0
 openai>=1.0.0
+fastapi>=0.100.0
+uvicorn>=0.23.0
+python-dotenv>=1.0.0
+requests>=2.28.0
+boto3>=1.34.0
 ```
 
-**`mandi_rdd/packages.txt`** (system packages — one per line):
+**`packages.txt`** at the repo root (apt system packages — one per line):
 ```
 git
 ```
 
 > **Why git?** It's required by the app to run `git log` for version info and for Git LFS operations during startup. Streamlit Cloud runs Debian, so packages are installed via `apt-get`.
 
-> **Note on Prophet:** Prophet is listed in the requirements but installing it on Streamlit Cloud's free tier can OOM the build. If the forecast page isn't needed, remove `prophet>=1.1.0` from the requirements to save ~200 MB.
+> ⚠️ **Do NOT point the app at the `gh-pages` branch** — it contains no
+> `requirements.txt` and no app code. The Streamlit app must deploy from
+> **`master`** with main file **`mandi_rdd/dashboard/app.py`**.
+
+> **Stale dependency cache ("ModuleNotFoundError: plotly")**: if the deployed env
+> reports plotly missing even though root `requirements.txt` pins it, the Cloud
+> dependency cache is stale. Fix: **⋮ (kebab) menu → Rebuild** (or **⋮ → Settings →
+> Rerun**) to force a fresh `pip install -r requirements.txt`. Pushing a change to
+> the root `requirements.txt` content also invalidates the cache.
+
+> **Note on Prophet:** Prophet is listed in `mandi_rdd/requirements.txt` but that
+> file is **not read by Streamlit Cloud** (root-only), so it never OOMs the Cloud
+> build. If the forecast page isn't needed in a local/Vercel context, remove
+> `prophet>=1.1.0` there to save ~200 MB.
 
 ### 3.2.2 Secrets (`.streamlit/secrets.toml`)
 
