@@ -75,11 +75,12 @@ from mandi_rdd.dashboard.theme import (
 
 try:
     import plotly  # noqa: F401
-except ModuleNotFoundError as _plotly_missing:
+except ImportError as _plotly_missing:
+    _miss_name = getattr(_plotly_missing, "name", None) or "a charting dependency"
     st.error(
         "MandiIQ dashboard can't start — **plotly is not installed** in this "
         "Streamlit environment ("
-        f"`{_plotly_missing.name}`).\n\n"
+        f"`{_miss_name}`).\n\n"
         "Fix — in the Streamlit Cloud dashboard (share.streamlit.io → app → "
         "**Settings → General → 'Python requirements file'**) make sure it points "
         "at **`mandi_rdd/requirements.txt`** (which includes `plotly`), not "

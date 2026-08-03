@@ -768,7 +768,7 @@ numpy>=1.24.0
 scipy>=1.11.0
 fastapi>=0.110.0
 streamlit==1.59.2
-plotly>=5.15.0
+plotly==6.9.0
 requests>=2.28.0
 duckdb>=0.8.0
 xgboost>=2.0.0
