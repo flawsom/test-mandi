@@ -1,10 +1,10 @@
 {
   "schema": 2,
-  "generated_at": "2026-08-02T19:10:40Z",
+  "generated_at": "2026-08-03T02:50:16Z",
   "overall": "unhealthy",
   "exit_code": 1,
   "min_prices": 1000000,
-  "latest_db_reference": 1335627,
+  "latest_db_reference": 1345727,
   "serving_latest": [
     "Northflank"
   ],
@@ -22,17 +22,17 @@
       "n_prices": 1335561,
       "http_status": 200,
       "kind": "api",
-      "note": "behind latest DB (1,335,561 vs 1,335,627)",
+      "note": "behind latest DB (1,335,561 vs 1,345,727)",
       "url": "https://test-mandi.vercel.app/health",
       "attempts": 1,
       "retried": false
     },
     "Northflank": {
       "verdict": "LATEST",
-      "n_prices": 1335627,
+      "n_prices": 1345727,
       "http_status": 200,
       "kind": "api",
-      "note": "matches latest DB (1,335,627 rows)",
+      "note": "matches latest DB (1,345,727 rows)",
       "url": "https://p01--mandiiq--zbvjrztgjqgw.code.run/health",
       "attempts": 1,
       "retried": false
@@ -58,7 +58,7 @@
       "retried": false
     }
   },
-  "table": "  Surface        | Verdict       |    n_prices | Notes\n  ---------------+---------------+-------------+-----------------------------\n  Vercel         | STALE         |   1,335,561 | behind latest DB (1,335,561 vs 1,335,627)\n  Northflank     | LATEST        |   1,335,627 | matches latest DB (1,335,627 rows)\n  Streamlit      | UP (auth)     |           - | auth redirect \u2014 count unavailable\n  GitHub Pages   | UP (static)   |           - | HTTP 200 \u2014 no JSON count expected\n\n  Latest DB reference: 1,335,627 rows\n  Serving latest DB : Northflank\n  Stale surfaces    : Vercel\n  Count unavailable : Streamlit, GitHub Pages",
+  "table": "  Surface        | Verdict       |    n_prices | Notes\n  ---------------+---------------+-------------+-----------------------------\n  Vercel         | STALE         |   1,335,561 | behind latest DB (1,335,561 vs 1,345,727)\n  Northflank     | LATEST        |   1,345,727 | matches latest DB (1,345,727 rows)\n  Streamlit      | UP (auth)     |           - | auth redirect \u2014 count unavailable\n  GitHub Pages   | UP (static)   |           - | HTTP 200 \u2014 no JSON count expected\n\n  Latest DB reference: 1,345,727 rows\n  Serving latest DB : Northflank\n  Stale surfaces    : Vercel\n  Count unavailable : Streamlit, GitHub Pages",
   "history": [
     {
       "generated_at": "2026-07-31T17:35:02Z",
@@ -109,5 +109,5 @@
       }
     }
   ],
-  "signature": "5ef4782c2d361783"
+  "signature": "d2f45a968276b4f4"
 }
