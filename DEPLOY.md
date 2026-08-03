@@ -843,6 +843,27 @@ The dashboard reads the DuckDB via `get_connection()` in `mandi_rdd/storage/duck
 
 The fallback logs a `WARNING` naming both paths, so a failing deployment is diagnosable from the app logs instead of showing a bare `Cannot open database` error. Because the repo DB is fetched via Git LFS, make sure the build pulls it — Streamlit Cloud does run the LFS smudge filter on tracked files, but it can fail (the actual build logs showed `Smudge error ... git@github.com: Permission denied` / `smudge filter lfs failed`). If that happens, `mandi_rdd/data/mandi_iq.duckdb` stays a ~100-byte pointer and the fallback treats it as missing — re-trigger a redeploy, or seed the repo DB object via the R2 bootstrap, to recover.
 
+### 3.2.6 Symptom: `ModuleNotFoundError` for `plotly` at app start
+
+**Symptom:** the app page shows `ModuleNotFoundError` (message redacted) with a traceback ending at `mandi_rdd/dashboard/plotly_theme.py, line 10, in <module> import plotly.graph_objects as go`. The dashboard hard-requires plotly at module load, and Streamlit Cloud can deploy with a **partial or cached dependency environment** where plotly never installed.
+
+**Root cause (most common):** the app's **"Python requirements file"** setting in the Streamlit Cloud dashboard points at the wrong file. The repo ships three requirements files:
+
+| File | Contains plotly? | Used by |
+|------|------------------|---------|
+| `mandi_rdd/requirements.txt` | ✅ `plotly==6.9.0` | **Streamlit Cloud** (set this as the requirements file) |
+| `requirements.txt` (root) | ✅ `plotly==6.9.0` | local dev / generic |
+| `requirements-vercel.txt` | ❌ no plotly | **Vercel only** — Vercel copies it over `requirements.txt` during build |
+
+If the Streamlit app's requirements-file setting points at `requirements-vercel.txt` (or at any file without plotly), or if a stale build cache skipped plotly, the app crashes at startup.
+
+**Fix:**
+1. Streamlit Cloud → app → **Settings → General** → set **"Python requirements file"** to **`mandi_rdd/requirements.txt`**.
+2. Click **Rerun** (or **Rebuild app**) so dependencies install fresh from that file.
+3. Verify with `curl -sI https://your-app.streamlit.app/` — should return `200` (not the error page).
+
+**App-side guard:** `mandi_rdd/dashboard/app.py` now runs a plotly preflight before any page import — if plotly is missing it renders an actionable error message with the exact fix above instead of the redacted `ModuleNotFoundError` box.
+
 ---
 
 </div></div></div>

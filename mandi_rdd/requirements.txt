@@ -10,7 +10,7 @@ pydantic>=2.0.0
 # Bump deliberately and re-verify the Executive Overview CSS after any upgrade.
 # See README §"Design System" → "Fragility & maintenance".
 streamlit==1.59.2
-plotly>=5.15.0
+plotly==6.9.0   # EXACT pin: the dashboard's plotly_theme module imports plotly.graph_objects at module load; a stale/partial Streamlit Cloud env missing plotly crashes with ModuleNotFoundError. Pin exact for deterministic installs.
 requests>=2.28.0
 joblib>=1.2.0
 prophet>=1.1.0

@@ -66,14 +66,30 @@ from mandi_rdd.dashboard.theme import (
 
     INK, SLATE, PAPER, MUTED, FAINT, TURMERIC, RUST, SAGE,
 
-)
-
-
-
+)# ═══════════════════════════════════════════════════════════
+# Dependency preflight — the dashboard hard-requires plotly, and Streamlit
+# Cloud can deploy with a partial/cached env (e.g. if its "Requirements file"
+# setting points at requirements-vercel.txt, which excludes plotly). Turn the
+# redacted ModuleNotFoundError box into an actionable message with the exact fix.
 # ═══════════════════════════════════════════════════════════
 
-# SVG Icons — from shared icon library
+try:
+    import plotly  # noqa: F401
+except ModuleNotFoundError as _plotly_missing:
+    st.error(
+        "MandiIQ dashboard can't start — **plotly is not installed** in this "
+        "Streamlit environment ("
+        f"`{_plotly_missing.name}`).\n\n"
+        "Fix — in the Streamlit Cloud dashboard (share.streamlit.io → app → "
+        "**Settings → General → 'Python requirements file'**) make sure it points "
+        "at **`mandi_rdd/requirements.txt`** (which includes `plotly`), not "
+        "`requirements-vercel.txt` (a Vercel-only file that excludes plotly). "
+        "Then click **Rerun / Rebuild app** so dependencies reinstall from scratch."
+    )
+    st.stop()
 
+# ═══════════════════════════════════════════════════════════
+# SVG Icons — from shared icon library
 # ═══════════════════════════════════════════════════════════
 
 
