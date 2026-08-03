@@ -715,6 +715,10 @@ def get_forecast(commodity: str) -> dict:
 > **Live captures:** these screenshots were captured automatically from the deployed services (Pages, API).
 > Regenerate them anytime with `node scripts/_capture_screenshots.mjs`.
 
+<br />
+
+<a href="https://github.com/flawsom/test-mandi/actions/workflows/refresh-screenshots.yml"><img src="https://img.shields.io/badge/dynamic/json?url=https%3A%2F%2Fapi.github.com%2Frepos%2Fflawsom%2Ftest-mandi%2Factions%2Fworkflows%2Frefresh-screenshots.yml%2Fruns%3Fper_page%3D1&amp;query=workflow_runs.0.created_at&amp;label=Gallery%20last%20refreshed&amp;color=00FF88&amp;cacheSeconds=3600" alt="Gallery last refreshed — from the latest Refresh README Screenshots workflow run" /></a>
+
 </div>
 
 </details>
@@ -1157,6 +1161,7 @@ If MandiIQ helps you make better procurement decisions or advances your agri-dat
 <h2 style="font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Helvetica,Arial,sans-serif; font-size:1.5em; font-weight:600; color:#E0E0E0; display:flex; align-items:center; gap:10px; margin:0 0 16px 0; padding-bottom:8px; border-bottom:1px solid rgba(255,255,255,0.06);">
   <img src="docs/assets/svg/icon-f862fc7823f0.svg" width="25" height="25" alt="" style="vertical-align:middle; max-width:100%;" /> License
 </h2>
+
 ```
 MIT License
 

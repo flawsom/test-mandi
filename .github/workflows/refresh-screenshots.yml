@@ -20,6 +20,12 @@
 #
 # The capture script exits non-zero if any surface fails (after 2
 # retries), so a stale/partial gallery is never committed.
+#
+# Triggered by: the daily schedule, manual dispatch, a push to master that
+# changes a live surface's source (landing/docs/static/api), or a PR touching
+# those files. PR runs validate the pipeline and upload preview artifacts but
+# NEVER auto-commit — the push trigger (and schedule/dispatch) own the commits,
+# so the gallery refreshes the moment a page change lands on master.
 
 name: Refresh README Screenshots
 
@@ -27,6 +33,21 @@ on:
   schedule:
     - cron: "17 4 * * *"      # daily 04:17 UTC — after the hourly sync, before peak usage
   workflow_dispatch: {}        # manual "Run workflow" from the Actions tab
+  push:                        # regenerate immediately when a live surface's source changes
+    branches: [master]
+    paths:
+      - "landing/**"          # landing page → GitHub Pages root
+      - "docs/**"             # docs page → GitHub Pages /docs/
+      - "static/**"           # shared assets (cursor-effect.js, robots.txt, sitemap)
+      - "mandi_rdd/api/**"    # FastAPI app → the captured api-docs surface (Northflank rebuilds on push)
+      - ".github/workflows/refresh-screenshots.yml"
+  pull_request:                # preview + pipeline validation on PRs touching the same surfaces
+    paths:
+      - "landing/**"
+      - "docs/**"
+      - "static/**"
+      - "mandi_rdd/api/**"
+      - ".github/workflows/refresh-screenshots.yml"
 
 permissions:
   contents: write
@@ -92,6 +113,10 @@ jobs:
 
       - name: Commit if screenshots changed
         id: commit
+        # PR runs capture the LIVE (master) surfaces as a preview/validation
+        # pass — they must never commit to master from a PR context. Only
+        # push/schedule/dispatch runs may commit the refreshed gallery.
+        if: github.event_name != 'pull_request'
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
@@ -114,4 +139,5 @@ jobs:
 
       - name: Summary
         run: |
+          echo "event=${{ github.event_name }}"
           echo "committed=${{ steps.commit.outputs.committed }}"

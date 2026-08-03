@@ -555,16 +555,60 @@ const API_CONFIG = {
     if (fresh && lastUpdated) fresh.textContent = 'Last updated: ' + fmtAgo(lastUpdated);
   }
 
+  window.__metricsCache = {};
+
+  /* ── Patch Mermaid SVGs: replace {{placeholders}} with live /health values ── */
+  window.__patchMermaidMetrics = function(data){
+    if (!data) return;
+    /* The SVG may live inside pre.mermaid OR replace it entirely (mermaid's
+       run() swaps the <pre> for the <svg>) — match both shapes. */
+    var svgs = document.querySelectorAll('.mermaid svg, .mermaid-wrapper svg, pre.mermaid svg');
+    svgs.forEach(function(svg){
+      var walker = document.createTreeWalker(svg, 4, null, false); // NodeFilter.SHOW_TEXT = 4
+      var nodes = [];
+      while (walker.nextNode()) nodes.push(walker.currentNode);
+      nodes.forEach(function(node){
+        var text = node.textContent || '';
+        var match = text.match(/\{\{(\w+)\}\}/g);
+        if (!match) return;
+        match.forEach(function(ph){
+          var key = ph.replace(/\{\{|\}\}/g, '');
+          if (data[key] === undefined) return;
+          var val = Number(data[key]).toLocaleString();
+          /* Build a live-value badge as a sibling foreignObject */
+          var parent = node.parentElement;
+          if (!parent || parent.tagName === 'foreignObject') return;
+          var fo = document.createElementNS('http://www.w3.org/2000/svg', 'foreignObject');
+          fo.setAttribute('width', (val.length * 9 + 28) + '');
+          fo.setAttribute('height', '22');
+          var fx = parseFloat(parent.getAttribute('x') || 0);
+          var fy = parseFloat(parent.getAttribute('y') || 0);
+          fo.setAttribute('x', (fx + 4) + '');
+          fo.setAttribute('y', (fy - 10) + '');
+          fo.innerHTML = '<span style="display:inline-flex;align-items:center;gap:3px;font-size:11px;font-weight:600;color:#d7ff00;font-family:monospace;background:rgba(0,0,0,0.7);padding:1px 6px;border-radius:3px;border:1px solid rgba(215,255,0,0.3);white-space:nowrap;">' +
+            '<span style="display:inline-block;width:6px;height:6px;border-radius:50%;background:#d7ff00;animation:mermaid-pulse 2s ease-in-out infinite;box-shadow:0 0 6px rgba(215,255,0,0.5);"></span>' +
+            val + '</span>';
+          parent.insertBefore(fo, parent.firstChild);
+          /* Clear the SVG text so only the HTML badge shows */
+          var txt = text.replace(ph, '').replace(/^[\s,;]+/,'');
+          node.textContent = txt;
+        });
+      });
+    });
+  };
+
   function fetchMetrics() {
     fetch(base + '/health')
       .then(function(r) { return r.json(); })
       .then(function(data) {
+        window.__metricsCache = data;
         document.querySelectorAll('[data-countup]').forEach(function(el) {
           var key = el.dataset.countup;
           // /health exposes the RDD count as n_rdd_results — accept both names.
           if (key === 'n_rdd' && data['n_rdd_results'] !== undefined) key = 'n_rdd_results';
           if (data[key] !== undefined) el.textContent = Number(data[key]).toLocaleString();
         });
+        window.__patchMermaidMetrics(data);
         lastUpdated = new Date();
         // Create freshness indicator on first success
         var fresh = document.getElementById('kpi-freshness');
@@ -590,6 +634,65 @@ const API_CONFIG = {
   fetchMetrics();
   setInterval(fetchMetrics, interval);
   setInterval(updateFreshness, 30000);
+
+  /* Patch once Mermaid has finished rendering (deferred) */
+  setTimeout(function(){
+    if (Object.keys(window.__metricsCache).length) window.__patchMermaidMetrics(window.__metricsCache);
+  }, 500);
+
+  /* Watch for SVGs appearing in mermaid wrappers */
+  var mo = new MutationObserver(function(){
+    if (!Object.keys(window.__metricsCache).length) return;
+    var svgs = document.querySelectorAll('.mermaid svg');
+    if (svgs.length) window.__patchMermaidMetrics(window.__metricsCache);
+  });
+  mo.observe(document.body, { childList: true, subtree: true });
+
+  /* Cleanup observer after 30s */
+  setTimeout(function(){ mo.disconnect(); }, 30000);
+})();
+
+/* ═══════════════════════════════════════════════════════════
+   MERMAID — explicit deterministic render
+   ═══════════════════════════════════════════════════════════
+   The CDN mermaid UMD auto-startOnLoad silently fails on this page: it
+   marks <pre class="mermaid"> data-processed="true" without emitting the
+   SVG, so the diagram shows as raw source text. Take control explicitly —
+   disable auto-run, then mermaid.run() on the <pre> (clearing the stale
+   processed marker) once the DOM is ready. The docs page does the same.
+*/
+(function() {
+  if (typeof window.mermaid === 'undefined') return;
+  try {
+    window.mermaid.initialize({ startOnLoad: false, securityLevel: 'strict', theme: 'dark' });
+  } catch (e) { /* non-fatal */ }
+
+  var rendered = false;
+  function render() {
+    if (rendered) return;
+    var pre = document.querySelector('pre.mermaid');
+    if (!pre) return;
+    pre.removeAttribute('data-processed'); // clear stale marker from failed auto-run
+    window.mermaid.run({ nodes: [pre] })
+      .then(function() {
+        rendered = true;
+        if (window.__metricsCache && Object.keys(window.__metricsCache).length) {
+          window.__patchMermaidMetrics(window.__metricsCache);
+        }
+      })
+      .catch(function(e) {
+        console.warn('mermaid render failed:', e && e.message ? e.message : e);
+      });
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', render);
+  } else {
+    render();
+  }
+  // Belt-and-suspenders retries in case the wrapper mounts late
+  setTimeout(render, 500);
+  setTimeout(render, 1500);
 })();
 
 /* ═══════════════════════════════════════════════════════════

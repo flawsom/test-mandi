@@ -128,3 +128,6 @@ verify_dashboard.mjs
 # IDE/agent directories
 .qoder/
 .freebuff/
+
+# Vercel CLI local state
+.vercel/
