@@ -1,0 +1,132 @@
+/* ═══════════════════════════════════════════════════════════════
+   MANDIIQ CREATIVE NAVIGATION — portal card styles
+   Dark glassmorphism matching the Alche Studio design tokens.
+   ═══════════════════════════════════════════════════════════════ */
+
+.mandiq-nav{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(250px,1fr));
+  gap:1.2rem;
+}
+
+.mandiq-portal{
+  --portal-a:#94a3b8;
+  --portal-b:#475569;
+  position:relative;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  height:200px;
+  border-radius:14px;
+  background:linear-gradient(135deg,rgba(255,255,255,0.03) 0%,rgba(255,255,255,0.008) 100%);
+  border:1px solid var(--hairline);
+  overflow:hidden;
+  text-decoration:none;
+  isolation:isolate;
+  touch-action:manipulation;
+  transition:transform 0.35s var(--ease-bounce),border-color 0.35s ease,box-shadow 0.35s ease;
+}
+.mandiq-portal[data-type="pipeline"] { --portal-a:#3ec6ff; --portal-b:#1565c0; }
+.mandiq-portal[data-type="report"]   { --portal-a:#ffc857; --portal-b:#d97706; }
+.mandiq-portal[data-type="dashboard"]{ --portal-a:#4ade80; --portal-b:#15803d; }
+.mandiq-portal[data-type="docs"]     { --portal-a:#c084fc; --portal-b:#7e22ce; }
+
+.mandiq-portal:hover{
+  transform:translateY(-3px);
+  /* fallbacks for browsers without color-mix() */
+  border-color:var(--portal-a);
+  box-shadow:0 14px 40px rgba(0,0,0,0.5),0 0 42px var(--portal-a);
+  border-color:color-mix(in srgb,var(--portal-a) 45%,transparent);
+  box-shadow:0 14px 40px rgba(0,0,0,0.5),0 0 0 1px color-mix(in srgb,var(--portal-a) 18%,transparent),0 0 42px color-mix(in srgb,var(--portal-a) 14%,transparent);
+}
+.mandiq-portal:focus-visible{
+  outline:2px solid var(--portal-a);
+  outline-offset:3px;
+}
+.mandiq-portal.is-blooming{
+  border-color:var(--portal-a);
+  box-shadow:0 0 60px var(--portal-a); /* fallback */
+  box-shadow:0 0 60px color-mix(in srgb,var(--portal-a) 55%,transparent);
+}
+
+.mandiq-portal__canvas{
+  position:absolute;
+  inset:0;
+  width:100%;
+  height:100%;
+  pointer-events:none;
+  z-index:0;
+}
+
+.mandiq-portal__content{
+  position:relative;
+  z-index:1;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
+  gap:0.5rem;
+  padding:1.2rem;
+  text-align:center;
+  pointer-events:none;
+}
+.mandiq-portal__icon{
+  width:38px;
+  height:38px;
+  margin-bottom:0.15rem;
+  color:var(--portal-a);
+  filter:drop-shadow(0 0 10px color-mix(in srgb,var(--portal-a) 60%,transparent));
+  opacity:0.92;
+  transition:transform 0.45s var(--ease-bounce),filter 0.3s ease;
+}
+.mandiq-portal:hover .mandiq-portal__icon{
+  transform:translateY(-3px) scale(1.06);
+  filter:drop-shadow(0 0 16px color-mix(in srgb,var(--portal-a) 85%,transparent));
+}
+.mandiq-portal__title{
+  font-family:var(--font-display);
+  font-weight:500;
+  font-size:1.05rem;
+  letter-spacing:0.06em;
+  text-transform:uppercase;
+  color:var(--color-paper);
+  transition:color 0.3s ease;
+}
+.mandiq-portal:hover .mandiq-portal__title{color:var(--portal-a)}
+.mandiq-portal__subtitle{
+  font-family:var(--font-mono);
+  font-size:0.72rem;
+  letter-spacing:0.04em;
+  color:var(--color-text-med);
+}
+.mandiq-portal__tag{
+  position:absolute;
+  top:0.9rem;
+  right:1rem;
+  z-index:1;
+  font-family:var(--font-mono);
+  font-size:0.6rem;
+  letter-spacing:0.14em;
+  text-transform:uppercase;
+  color:var(--color-text-low);
+  pointer-events:none;
+}
+.mandiq-portal__arrow{
+  position:absolute;
+  bottom:0.85rem;
+  right:1rem;
+  z-index:1;
+  font-family:var(--font-mono);
+  font-size:1.1rem;
+  color:var(--portal-a);
+  opacity:0;
+  transform:translateX(-8px);
+  transition:opacity 0.3s var(--ease-soft),transform 0.35s var(--ease-bounce);
+  pointer-events:none;
+}
+.mandiq-portal:hover .mandiq-portal__arrow{opacity:1;transform:translateX(0)}
+
+@media (max-width:480px){
+  .mandiq-nav{grid-template-columns:1fr}
+  .mandiq-portal{height:170px}
+}
