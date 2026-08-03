@@ -761,7 +761,17 @@ User Browser → Streamlit Cloud (dashboard UI)
 
 Streamlit Community Cloud installs dependencies from the **repo root only** — there
 is **no "requirements file" setting** in the dashboard, and subdirectory files are
-**ignored**. The two files that matter:
+**ignored**. The files that matter:
+
+> ⚠️ **CRITICAL — uv.lock / pyproject.toml take precedence over requirements.txt.**
+> If a `uv.lock` (or `pyproject.toml` with a `[project]` table) exists at the repo
+> root, Streamlit Cloud installs via **uv from that lockfile and ignores
+> `requirements.txt` entirely**. This repo's `uv.lock` (built for Vercel's lean
+> API bundle) contained no plotly/streamlit/scipy — which caused the
+> `ModuleNotFoundError: plotly` crash. **Do NOT re-add `pyproject.toml`/`uv.lock`
+> to the repo root.** They were removed in 2026-08 precisely so Cloud reads
+> `requirements.txt`. Vercel does not need them either: `vercel.json` now
+> pip-installs the lean `requirements-vercel.txt` via `installCommand`.
 
 **`requirements.txt`** at the repo root (Python packages) — **this is the file
 Streamlit Cloud actually reads**; it already pins `plotly==6.9.0` (the dashboard
@@ -795,11 +805,13 @@ git
 > `requirements.txt` and no app code. The Streamlit app must deploy from
 > **`master`** with main file **`mandi_rdd/dashboard/app.py`**.
 
-> **Stale dependency cache ("ModuleNotFoundError: plotly")**: if the deployed env
-> reports plotly missing even though root `requirements.txt` pins it, the Cloud
-> dependency cache is stale. Fix: **⋮ (kebab) menu → Rebuild** (or **⋮ → Settings →
-> Rerun**) to force a fresh `pip install -r requirements.txt`. Pushing a change to
-> the root `requirements.txt` content also invalidates the cache.
+> **"ModuleNotFoundError: plotly" — root causes in order**: (1) **uv.lock /
+> pyproject.toml present at repo root** → Cloud installs from the lockfile and
+> skips requirements.txt (this was the real cause; both files are now removed),
+> or (2) **stale dependency cache**. If it recurs, check no uv files exist at the
+> root, then **⋮ (kebab) menu → Rebuild** (or **⋮ → Settings → Rerun**) to force a
+> fresh `pip install -r requirements.txt`. Pushing a change to the root
+> `requirements.txt` content also invalidates the cache.
 
 > **Note on Prophet:** Prophet is listed in `mandi_rdd/requirements.txt` but that
 > file is **not read by Streamlit Cloud** (root-only), so it never OOMs the Cloud

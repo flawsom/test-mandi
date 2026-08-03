@@ -33,12 +33,15 @@ on:
       - "mandi_rdd/data/**"   # DuckDB — redeploy API whenever the DB syncs
       - "mandi_rdd/analysis/**"  # scipy-guarded modules; API degrades gracefully
       - "requirements/**"
+      - "requirements.txt"    # installCommand pip-installs this (lean file swapped in)
       - "requirements-vercel.txt"
       - "vercel.json"
-      - "pyproject.toml"   # Vercel Python runtime installs via uv from this
-      - "uv.lock"
       - ".python-version"
       - ".github/workflows/deploy-vercel.yml"
+      # NOTE (2026-08): pyproject.toml / uv.lock were REMOVED from the repo
+      # root — Streamlit Cloud reads those with priority over requirements.txt
+      # (its uv.lock lacked plotly → ModuleNotFoundError on Streamlit). Vercel
+      # now installs via installCommand from requirements-vercel.txt instead.
   workflow_dispatch:          # manual trigger via GitHub UI
 
 concurrency:

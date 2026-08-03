@@ -1,34 +1,17 @@
-# ---------------------------------------------------------------------------
-# Vercel build fix: the Python runtime detects pyproject.toml and installs via
-# `uv lock`. This repo's pyproject.toml is a Skylos lint config with no PEP 621
-# metadata, so `uv lock` failed with "No `project` table found". Adding a valid
-# [project] table (deps mirror requirements-vercel.txt) + [tool.uv] package=false
-# lets Vercel's uv install succeed without trying to build the repo as a package.
-# The committed uv.lock makes the build deterministic. Skylos config below is
-# untouched.
-# ---------------------------------------------------------------------------
-
-[project]
-name = "mandiiq"
-version = "0.1.0"
-description = "MandiIQ Agricultural Price Intelligence Platform"
-requires-python = ">=3.11,<3.13"
-dependencies = [
-    "fastapi>=0.100.0",
-    "uvicorn>=0.23.0",
-    "python-multipart>=0.0.6",
-    "pydantic>=2.0.0",
-    "duckdb>=0.8.0",
-    "pandas>=2.0.0",
-    "numpy>=1.24.0",
-    "prometheus-client>=0.19.0",
-    "python-dotenv>=1.0.0",
-    "requests>=2.28.0",
-    "urllib3>=2.0.0",
-]
-
-[tool.uv]
-package = false
+# Skylos lint configuration (AI-defect scanner).
+#
+# IMPORTANT: this config used to live in [tool.skylos] inside pyproject.toml,
+# but pyproject.toml + uv.lock were removed from the repo root in 2026-08.
+# WHY: Streamlit Community Cloud installs dependencies from uv.lock /
+# pyproject.toml when either exists at the repo root, IGNORING requirements.txt.
+# The committed uv.lock (built for Vercel's lean 500 MB API bundle) contained
+# no plotly/streamlit/scipy, which caused the dashboard's ModuleNotFoundError.
+# With both files gone, Cloud falls back to root requirements.txt (full
+# dashboard deps) and Vercel falls back to requirements.txt, which vercel.json
+# swaps for the lean requirements-vercel.txt at install time.
+#
+# Skylos reads this file via:  skylos . --config-file skylos.toml
+# (see .github/workflows/ci.yml → skylos-scan job)
 
 [tool.skylos]
 complexity = 10
