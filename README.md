@@ -191,6 +191,19 @@
     <br /><br />
   </td>
 </tr>
+<tr>
+  <td colspan="3" align="center" style="background:rgba(255,255,255,0.03); border:1px solid rgba(255,255,255,0.06); border-radius:12px; padding:20px 12px;">
+    <br />
+    <img src="docs/assets/svg/icon-portal-spark.svg" width="48" height="48" alt="" style="vertical-align:middle; max-width:100%;" />
+    <br /><br />
+    <strong style="color:#E0E0E0; font-size:1.05em;">Creative Particle Navigation</strong>
+    <br /><br />
+    <em style="color:#94A3B8; font-size:0.9em;">The landing page&rsquo;s nav is a living particle field &mdash; blue data-flow streams through the Pipeline portal, gold clusters straddle the RDD cutoff, the Dashboard pulses like a heartbeat, and the Docs lattice dissolves on hover. Cursor-wake, click-bloom navigation, touch taps, and reduced-motion static frames, all zero-dependency.</em>
+    <br /><br />
+    <span style="color:#00FF88; font-size:0.85em;">Canvas portals at flawsom.github.io/test-mandi &mdash; navigation that feels like the data</span>
+    <br /><br />
+  </td>
+</tr>
 </table>
 </div>
 </div>
@@ -712,8 +725,9 @@ def get_forecast(commodity: str) -> dict:
 
 <br /><br />
 
-> **Live captures:** these screenshots were captured automatically from the deployed services (Pages, API).
-> Regenerate them anytime with `node scripts/_capture_screenshots.mjs`.
+> **Live captures:** these screenshots were captured automatically from the deployed services (Pages, API) —
+> the landing shot includes the particle-portal navigation. Regenerate them anytime with
+> `node scripts/_capture_screenshots.mjs`.
 
 <br />
 
