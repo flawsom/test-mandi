@@ -86,7 +86,7 @@ jobs:
           python -m pip install --upgrade pip
           pip install -r requirements.txt
 
-      - name: Snapshot committed DB + NDVI artifact signature
+      - name: Snapshot committed DB + NDVI artifact + metadata signature
         id: snapshot
         run: |
           python - <<'PY'
@@ -145,12 +145,30 @@ jobs:
               except Exception as exc:
                   return "ndvi_err=" + type(exc).__name__
 
+          def metadata_signature(path):
+              # Signature for last_hourly_run.json — use the last_run_utc timestamp
+              # so a fresh hourly run always counts as a change even if DB rows
+              # didn't increase. This ensures Northflank metadata stays current.
+              if not os.path.exists(path):
+                  return ""
+              try:
+                  with open(path, encoding="utf-8") as f:
+                      data = json.load(f)
+                  # Use last_run_utc as the change signal
+                  ts = data.get("last_run_utc", "")
+                  return f"last_hourly_run_ts={ts}"
+              except Exception:
+                  return ""
+
           with open("sig_before.txt", "w") as f:
               f.write(signature("mandi_rdd/data/mandi_iq.duckdb"))
           with open("sig_ndvi_before.txt", "w") as f:
               f.write(ndvi_signature("mandi_rdd/data/ndvi_latest.json"))
+          with open("sig_meta_before.txt", "w") as f:
+              f.write(metadata_signature("mandi_rdd/data/last_hourly_run.json"))
           print("committed signature:", open("sig_before.txt").read() or "(no DB)")
           print("committed NDVI sig: ", open("sig_ndvi_before.txt").read() or "(no ndvi_latest.json)")
+          print("committed meta sig: ", open("sig_meta_before.txt").read() or "(no last_hourly_run.json)")
           PY
 
       - name: Run hourly ingestion
@@ -163,7 +181,7 @@ jobs:
         run: |
           python run_hourly.py || echo "::warning::run_hourly.py exited non-zero — continuing to check for data changes"
 
-      - name: Compare data signature (DB or NDVI artifact change?)
+      - name: Compare data signature (DB or NDVI artifact or metadata change?)
         id: changed
         run: |
           python - <<'PY'
@@ -219,26 +237,44 @@ jobs:
               except Exception as exc:
                   return "ndvi_err=" + type(exc).__name__
 
+          def metadata_signature(path):
+              # Mirrors the snapshot step.
+              if not os.path.exists(path):
+                  return ""
+              try:
+                  with open(path, encoding="utf-8") as f:
+                      data = json.load(f)
+                  ts = data.get("last_run_utc", "")
+                  return f"last_hourly_run_ts={ts}"
+              except Exception:
+                  return ""
+
           before = open("sig_before.txt").read().strip()
           after = signature("mandi_rdd/data/mandi_iq.duckdb")
           ndvi_before = open("sig_ndvi_before.txt").read().strip()
           ndvi_after = ndvi_signature("mandi_rdd/data/ndvi_latest.json")
+          meta_before = open("sig_meta_before.txt").read().strip()
+          meta_after = metadata_signature("mandi_rdd/data/last_hourly_run.json")
           db_changed = before != after
           ndvi_changed = ndvi_before != ndvi_after
-          changed = db_changed or ndvi_changed
+          meta_changed = meta_before != meta_after
+          changed = db_changed or ndvi_changed or meta_changed
           print("before:      ", before or "(no DB)")
           print("after:       ", after or "(no DB)")
           print("ndvi before: ", ndvi_before or "(none)")
           print("ndvi after:  ", ndvi_after or "(none)")
+          print("meta before: ", meta_before or "(none)")
+          print("meta after:  ", meta_after or "(none)")
           print("db_changed:  ", db_changed)
           print("ndvi_changed:", ndvi_changed)
+          print("meta_changed:", meta_changed)
           print("changed:     ", changed)
           with open("changed.txt", "w") as f:
               f.write("true" if changed else "false")
           PY
           echo "changed=$(cat changed.txt)" >> "$GITHUB_OUTPUT"
           if [ "$(cat changed.txt)" = "false" ]; then
-            echo "::notice::No real data change (DB rows/max-date + NDVI artifact identical) — skipping commit & redeploy"
+            echo "::notice::No real data change (DB rows/max-date + NDVI artifact + metadata identical) — skipping commit & redeploy"
           fi
 
       - name: Regenerate docs pipeline diagram (live counts)
