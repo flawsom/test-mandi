@@ -1,0 +1,354 @@
+# MandiIQ — Daily Full Analysis (RDD + Forecasts + NDVI + Integrity)
+#
+# Runs the complete analysis pipeline in GitHub Actions (no Northflank CPU needed):
+#   1. Restores DB from R2 (or uses committed DB)
+#   2. Runs full analysis: RDD, Prophet forecasts, NDVI fetch, integrity checks
+#   3. Generates analysis artifacts (PNGs, JSON status files)
+#   4. Commits artifacts + updated DB back to master
+#   5. Backs up to R2 and restores to Northflank volume
+#
+# Runs daily at 02:30 UTC (after hourly at :30 has latest prices)
+# and on workflow_dispatch.
+
+name: Daily Full Analysis
+
+on:
+  schedule:
+    - cron: "30 2 * * *"      # 02:30 UTC daily
+  workflow_dispatch: {}
+
+permissions:
+  contents: write
+  actions: write
+
+concurrency:
+  group: daily-full-analysis
+  cancel-in-progress: false
+
+env:
+  VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
+  API_BASE: "https://p01--mandiiq--zbvjrztgjqgw.code.run"
+
+jobs:
+  analyze:
+    runs-on: ubuntu-latest
+    timeout-minutes: 120
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          lfs: true
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+          # Extra deps for analysis
+          pip install prophet neuralprophet || echo "::warning::Prophet install may have issues, continuing"
+
+      - name: Snapshot committed DB signature
+        id: snapshot
+        run: |
+          python - <<'PY'
+          import hashlib, json, os, duckdb
+          TABLES = ("prices", "rainfall", "rdd_results", "ndvi", "forecast_metrics", "integrity_checks")
+          def signature(path):
+              if not os.path.exists(path):
+                  return ""
+              conn = duckdb.connect(path, read_only=True)
+              try:
+                  parts = []
+                  for t in TABLES:
+                      try:
+                          n = conn.execute(f"SELECT COUNT(*) FROM {t}").fetchone()[0]
+                          parts.append(f"{t}={n}")
+                      except Exception:
+                          parts.append(f"{t}=n/a")
+                  try:
+                      parts.append("max_date=" + str(conn.execute(
+                          "SELECT MAX(arrival_date) FROM prices").fetchone()[0]))
+                  except Exception:
+                      pass
+                  return "|".join(parts)
+              finally:
+                  conn.close()
+          with open("sig_before.txt", "w") as f:
+              f.write(signature("mandi_rdd/data/mandi_iq.duckdb"))
+          print("committed signature:", open("sig_before.txt").read() or "(no DB)")
+          PY
+
+      - name: Restore latest DB from R2 (if local is stale)
+        if: env.R2_ACCOUNT_ID != '' && env.R2_BUCKET != ''
+        env:
+          AWS_ACCESS_KEY_ID: ${{ secrets.R2_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.R2_SECRET_ACCESS_KEY }}
+          R2_ACCOUNT_ID: ${{ secrets.R2_ACCOUNT_ID }}
+          R2_BUCKET: ${{ secrets.R2_BUCKET }}
+        run: |
+          if [ -f mandi_rdd/data/mandi_iq.duckdb ]; then
+            LOCAL_SIZE=$(stat -c%s mandi_rdd/data/mandi_iq.duckdb 2>/dev/null || stat -f%z mandi_rdd/data/mandi_iq.duckdb 2>/dev/null)
+            echo "Local DB size: $LOCAL_SIZE bytes"
+          else
+            LOCAL_SIZE=0
+            echo "No local DB"
+          fi
+          
+          # Download R2 backup
+          BACKUP_FILE="/tmp/mandi_iq.duckdb.gz"
+          if aws s3 cp "s3://${R2_BUCKET}/mandi_iq.duckdb.gz" "$BACKUP_FILE" \
+            --endpoint-url "https://${R2_ACCOUNT_ID}.r2.cloudflarestorage.com" \
+            --region auto --only-show-errors 2>/dev/null; then
+            gzip -dc "$BACKUP_FILE" > mandi_rdd/data/mandi_iq.duckdb
+            R2_SIZE=$(stat -c%s mandi_rdd/data/mandi_iq.duckdb 2>/dev/null || stat -f%z mandi_rdd/data/mandi_iq.duckdb 2>/dev/null)
+            echo "Restored from R2: $R2_SIZE bytes"
+            if [ "$R2_SIZE" -gt "$LOCAL_SIZE" ]; then
+              echo "R2 DB is newer/larger — using R2 version"
+            else
+              echo "Local DB is current or newer"
+            fi
+          else
+            echo "::warning::R2 download failed — using local DB"
+          fi
+          rm -f "$BACKUP_FILE"
+
+      - name: Run FULL analysis (RDD + Forecasts + NDVI + Integrity)
+        env:
+          DATA_GOV_IN_API_KEY: ${{ secrets.DATA_GOV_IN_API_KEY }}
+          SENTINEL_CLIENT_ID: ${{ secrets.SENTINEL_CLIENT_ID }}
+          SENTINEL_CLIENT_SECRET: ${{ secrets.SENTINEL_CLIENT_SECRET }}
+          OPENROUTER_API_KEY: ${{ secrets.OPENROUTER_API_KEY }}
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+        run: |
+          # This runs the complete analysis pipeline
+          python - <<'PY'
+          import os
+          os.environ['MANDIIQ_DB_PATH'] = 'mandi_rdd/data/mandi_iq.duckdb'
+          os.environ['PYTHONPATH'] = '.'
+          
+          # Import and run the full scheduler with all analyses
+          from mandi_rdd.ingestion.scheduler import run_ingestion
+          
+          result = run_ingestion(
+              skip_analysis=False,   # Run RDD + forecasts
+              skip_ndvi=False,       # Fetch NDVI
+              skip_rainfall=False,   # Fetch rainfall
+              max_records=50000      # Full fetch
+          )
+          print(f"Full analysis result: {result}")
+          PY
+
+      - name: Run integrity checks
+        run: |
+          python - <<'PY'
+          import os
+          os.environ['MANDIIQ_DB_PATH'] = 'mandi_rdd/data/mandi_iq.duckdb'
+          os.environ['PYTHONPATH'] = '.'
+          
+          from mandi_rdd.ingestion.scheduler import run_integrity_checks
+          result = run_integrity_checks()
+          print(f"Integrity checks: {result}")
+          PY
+
+      - name: Compare DB signature (detect real changes)
+        id: changed
+        run: |
+          python - <<'PY'
+          import hashlib, json, os, duckdb
+          TABLES = ("prices", "rainfall", "rdd_results", "ndvi", "forecast_metrics", "integrity_checks")
+          def signature(path):
+              if not os.path.exists(path):
+                  return ""
+              conn = duckdb.connect(path, read_only=True)
+              try:
+                  parts = []
+                  for t in TABLES:
+                      try:
+                          n = conn.execute(f"SELECT COUNT(*) FROM {t}").fetchone()[0]
+                          parts.append(f"{t}={n}")
+                      except Exception:
+                          parts.append(f"{t}=n/a")
+                  try:
+                      parts.append("max_date=" + str(conn.execute(
+                          "SELECT MAX(arrival_date) FROM prices").fetchone()[0]))
+                  except Exception:
+                      pass
+                  return "|".join(parts)
+              finally:
+                  conn.close()
+          
+          before = open("sig_before.txt").read().strip()
+          after = signature("mandi_rdd/data/mandi_iq.duckdb")
+          changed = before != after
+          print("before:", before or "(no DB)")
+          print("after:", after or "(no DB)")
+          print("changed:", changed)
+          with open("changed.txt", "w") as f:
+              f.write("true" if changed else "false")
+          PY
+          echo "changed=$(cat changed.txt)" >> "$GITHUB_OUTPUT"
+
+      - name: Set up Node.js (diagram render)
+        if: steps.changed.outputs.changed == 'true'
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+
+      - name: Install Mermaid CLI
+        if: steps.changed.outputs.changed == 'true'
+        run: npm install -g @mermaid-js/mermaid-cli
+
+      - name: Regenerate & render docs pipeline diagram
+        if: steps.changed.outputs.changed == 'true'
+        run: |
+          python scripts/generate_pipeline_diagram.py --docs-output docs/assets/mermaid/pipeline-flow-live.mmd
+          MMD="docs/assets/mermaid/pipeline-flow-live.mmd"
+          SVG="docs/assets/svg/pipeline-flow-live.svg"
+          if [ -f "$MMD" ]; then
+            mmdc -i "$MMD" -o "$SVG" -c docs/assets/mermaid/alche-config.json -p puppeteer.json -b "#0B0F1E" -s 2 -w 1600
+            # Sanitize SVG
+            python - "$SVG" <<'PY'
+            import re, sys
+            path = sys.argv[1]
+            t = open(path, encoding="utf-8").read()
+            t = re.sub(r"<br(?![ /])", "<br/>", t)
+            m = re.search(r"<svg[^>]*>", t)
+            if m:
+                root = m.group(0)
+                vm = re.search(r'viewBox="(-?[\d.]+) (-?[\d.]+) ([\d.]+) ([\d.]+)"', root)
+                if vm:
+                    w = str(int(float(vm.group(3))))
+                    h = str(int(float(vm.group(4))))
+                    root2 = re.sub(r'\s*width="[^"]*"', "", root, count=1)
+                    root2 = re.sub(r'\s*height="[^"]*"', "", root2, count=1)
+                    root2 = root2.replace("<svg", f'<svg width="{w}" height="{h}"', 1)
+                    t = t[:m.start()] + root2 + t[m.end():]
+            open(path, "w", encoding="utf-8", newline="").write(t)
+            PY
+            echo "Docs pipeline SVG updated"
+          fi
+
+      - name: Validate DuckDB LFS object
+        if: steps.changed.outputs.changed == 'true'
+        uses: ./.github/actions/validate-duckdb
+
+      - id: commit
+        name: Commit analysis artifacts + updated DB
+        if: steps.changed.outputs.changed == 'true'
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git lfs install --local 2>/dev/null || true
+          
+          # Commit DB + ALL analysis artifacts (they travel together so never drift)
+          for f in \
+            mandi_rdd/data/mandi_iq.duckdb \
+            mandi_rdd/data/ndvi_latest.json \
+            mandi_rdd/data/last_hourly_run.json \
+            mandi_rdd/data/last_ingest_status.json \
+            mandi_rdd/data/last_step_timings.json \
+            mandi_rdd/data/last_integrity_check.json \
+            mandi_rdd/data/_ingestion_progress.json \
+            mandi_rdd/data/_integrity_history.json \
+            mandi_rdd/data/_last_full_analysis.txt \
+            mandi_rdd/data/r2_backup_metrics.json \
+            mandi_rdd/data/ndvi_rainfall_analysis.png \
+            mandi_rdd/data/district_stress_map.png \
+            diagrams/pipeline-flow-live.mmd \
+            docs/assets/mermaid/pipeline-flow-live.mmd \
+            docs/assets/svg/pipeline-flow-live.svg; do
+            [ -f "$f" ] && git add "$f"
+          done
+          
+          if git diff --cached --quiet; then
+            echo "No changes to commit."
+            echo "committed=false" >> "$GITHUB_OUTPUT"
+          else
+            git commit -m "chore: daily full analysis ($(date -u +%Y-%m-%dT%H:%M:%SZ))"
+            git push --force-with-lease origin master 2>&1
+            git lfs push origin master 2>&1 || true
+            echo "committed=true" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Redeploy Vercel
+        if: steps.commit.outputs.committed == 'true' && env.VERCEL_TOKEN != ''
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: gh workflow run deploy-vercel.yml --ref master
+
+      - name: Redeploy GitHub Pages
+        if: steps.commit.outputs.committed == 'true'
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: gh workflow run deploy-pages.yml --ref master
+
+      - name: Backup to R2
+        if: steps.commit.outputs.committed == 'true'
+        continue-on-error: true
+        env:
+          AWS_ACCESS_KEY_ID: ${{ secrets.R2_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.R2_SECRET_ACCESS_KEY }}
+          R2_ACCOUNT_ID: ${{ secrets.R2_ACCOUNT_ID }}
+          R2_BUCKET: ${{ secrets.R2_BUCKET }}
+        run: |
+          if [ -z "$R2_ACCOUNT_ID" ] || [ -z "$R2_BUCKET" ]; then
+            echo "::warning::R2 secrets not configured — skipping backup"
+            exit 0
+          fi
+          BACKUP_FILE="/tmp/mandi_iq.duckdb.gz"
+          METRICS_FILE="mandi_rdd/data/r2_backup_metrics.json"
+          gzip -c mandi_rdd/data/mandi_iq.duckdb > "$BACKUP_FILE"
+          if [ ! -s "$BACKUP_FILE" ]; then
+            echo "::warning::gzip failed"
+            rm -f "$BACKUP_FILE"
+            exit 0
+          fi
+          if aws s3 cp "$BACKUP_FILE" "s3://${R2_BUCKET}/mandi_iq.duckdb.gz" \
+            --endpoint-url "https://${R2_ACCOUNT_ID}.r2.cloudflarestorage.com" \
+            --region auto --content-encoding gzip --only-show-errors; then
+            touch /tmp/r2_backup_ok
+            ORIG_SIZE=$(stat -c%s mandi_rdd/data/mandi_iq.duckdb 2>/dev/null || stat -f%z mandi_rdd/data/mandi_iq.duckdb 2>/dev/null)
+            GZ_SIZE=$(stat -c%s "$BACKUP_FILE" 2>/dev/null || stat -f%z "$BACKUP_FILE" 2>/dev/null)
+            PCT=$(( (ORIG_SIZE - GZ_SIZE) * 100 / ORIG_SIZE ))
+            echo "::notice::DuckDB backed up to R2 (${PCT}% smaller)"
+            DB_SHA256=$(sha256sum mandi_rdd/data/mandi_iq.duckdb | cut -d' ' -f1)
+            if [ -n "$DB_SHA256" ]; then
+              python3 -c "import json; json.dump({'raw_bytes': ${ORIG_SIZE}, 'compressed_bytes': ${GZ_SIZE}, 'compression_pct': ${PCT}, 'sha256': '${DB_SHA256}', 'timestamp_utc': '$(date -u +%Y-%m-%dT%H:%M:%SZ)', 'timestamp_epoch': $(date +%s)}, open('${METRICS_FILE}', 'w'))"
+            else
+              python3 -c "import json; json.dump({'raw_bytes': ${ORIG_SIZE}, 'compressed_bytes': ${GZ_SIZE}, 'compression_pct': ${PCT}, 'timestamp_utc': '$(date -u +%Y-%m-%dT%H:%M:%SZ)', 'timestamp_epoch': $(date +%s)}, open('${METRICS_FILE}', 'w'))"
+            fi
+          else
+            echo "::warning::R2 backup failed"
+          fi
+          rm -f "$BACKUP_FILE"
+
+      - name: Restore to Northflank volume
+        if: steps.commit.outputs.committed == 'true'
+        continue-on-error: true
+        run: |
+          if [ ! -f /tmp/r2_backup_ok ]; then
+            echo "::warning::R2 backup did not succeed — skipping restore"
+            exit 0
+          fi
+          echo "Restoring to Northflank via POST ${API_BASE}/admin/restore-from-r2 ..."
+          RESPONSE=$(curl -s -X POST "${API_BASE}/admin/restore-from-r2" --max-time 600 2>/dev/null || true)
+          echo "$RESPONSE"
+          if echo "$RESPONSE" | grep -q '"status": "ok"'; then
+            echo "::notice::Northflank volume restored"
+          else
+            echo "::error::Restore failed"
+          fi
+
+      - name: Summary
+        run: |
+          echo "changed=${{ steps.changed.outputs.changed }}"
+          echo "committed=${{ steps.commit.outputs.committed }}"
+          if [ "${{ steps.changed.outputs.changed }}" = "false" ]; then
+            echo "No analysis changes — all surfaces current."
+          else
+            echo "Full analysis complete — commit + redeploys triggered."
+          fi
