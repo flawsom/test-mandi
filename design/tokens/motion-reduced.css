@@ -1,0 +1,69 @@
+/* ═══════════════════════════════════════════════════════════════════════
+   MandiIQ OMEGA — MOTION & ACCESSIBILITY LAYER
+   quantum-glow / particle-portal · WCAG AA · prefers-reduced-motion
+   Load AFTER quantum-tokens.css.
+   ═══════════════════════════════════════════════════════════════════════ */
+
+/* ── Motion defaults (calm by default, spring only on intent) ────────── */
+*,
+*::before,
+*::after {
+  transition-duration: var(--q-dur-base, 280ms);
+  transition-timing-function: var(--q-ease, cubic-bezier(0.16,1,0.3,1));
+}
+
+/* ── prefers-reduced-motion: kill all animation/transitions/glow-drift ── */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+
+  /* Portal blots become static background washes — no drift, no pulse */
+  .q-blot,
+  [class*="blot"] {
+    animation: none !important;
+    transform: none !important;
+  }
+
+  /* Cursor/particle canvas is disabled; static radial sheen only */
+  .q-particle-field,
+  #particle-canvas,
+  canvas[data-particle] {
+    display: none !important;
+  }
+
+  /* Glow pulses flattened to a static shadow */
+  .q-glow, .q-glow-primary, .q-glow-cyan, .q-glow-violet {
+    animation: none !important;
+    box-shadow: 0 0 12px rgba(215,255,0,0.18) !important;
+  }
+
+  /* No parallax or scroll-linked effects */
+  [data-parallax], .q-parallax {
+    transform: none !important;
+    will-change: auto !important;
+  }
+}
+
+/* ── Focus visibility · keyboard navigation (WCAG 2.4.7) ─────────────── */
+:focus-visible {
+  outline: 2px solid var(--q-primary, #d7ff00);
+  outline-offset: 2px;
+  border-radius: var(--q-radius-sm, 6px);
+}
+
+/* ── Reduced-motion preference surfaced for JS (feat. detect) ─────────── */
+.q-motion-reduced {
+  --q-reduced: 1;
+}
+
+/* ── Respecting WCAG 1.4.10/1.4.12: no content overflow with
+   text zoom to 200% — fluid clamp() type is already in tokens. ───────── */
+
+/* ── Light-mode fallback (optional, for printed/report use) ───────────── */
+@media (prefers-color-scheme: light) and (max-width: 0px) {
+  /* disabled — system is dark-first by design; keep single source of truth */
+}

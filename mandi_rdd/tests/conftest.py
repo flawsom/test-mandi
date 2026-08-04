@@ -161,7 +161,8 @@ async def browser():
     tests when it is unavailable instead of failing collection for the whole
     test directory (which also hosts plain unit tests).
     """
-    async_playwright = pytest.importorskip("playwright.async_api")
+    async_playwright_mod = pytest.importorskip("playwright.async_api")
+    async_playwright = async_playwright_mod.async_playwright
     async with async_playwright() as pw:
         browser = await pw.chromium.launch(
             headless=True,

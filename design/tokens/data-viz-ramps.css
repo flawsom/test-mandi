@@ -1,0 +1,76 @@
+/* ═══════════════════════════════════════════════════════════════════════
+   MandiIQ OMEGA — DATA-VIS RAMPS  ·  quantum-glow / particle-portal
+   Chart, status, and field-color ramps for dashboards & the landing
+   commodity readouts. All categorical ramps are colorblind-safe paired
+   with distinct glyph/border, not pure hue. Dark-first.
+   ═══════════════════════════════════════════════════════════════════════ */
+
+:root {
+  /* ── STATUS · semantic (continuity with health-badge / portals.css) ─── */
+  --viz-status-latest: #57e389;  /* live    (was #5ddb6c)                  */
+  --viz-status-warning: #f5c211; /* stale   (was #ffb020)                  */
+  --viz-status-down:    #ff4d5e; /* down    (kept)                        */
+  --viz-status-up:      #4da3ff; /* up      (kept)                        */
+  --viz-status-neutral: #8a93a8;
+
+  /* ── COMMODITY · Mandi market field palette ─────────────────────────────
+     Continuity with existing: onion #8B6BC4, tomato #D9663B,
+     wheat #D4A94E, potato #B98354. Boosted toward quantum spectrum.      */
+  --viz-commodity-onion:   #a78bfa;   /* violet  (portal)                  */
+  --viz-commodity-tomato:  #ff6b81;   /* rose                              */
+  --viz-commodity-wheat:   #fcd34d;   /* amber                              */
+  --viz-commodity-potato:  #c8a06b;   /* earth                              */
+  --viz-commodity-rice:    #67e8f9;   /* cyan                               */
+  --viz-commodity-other:   #d7ff00;   /* brand lime                         */
+
+  /* ── SERIES · qualitative (Tableau-10-unfriendly -> quantum-safe) ───── */
+  --viz-series-1: #67e8f9;
+  --viz-series-2: #d7ff00;
+  --viz-series-3: #a78bfa;
+  --viz-series-4: #f0abfc;
+  --viz-series-5: #fcd34d;
+  --viz-series-6: #ff6b81;
+  --viz-series-7: #4da3ff;
+  --viz-series-8: #57e389;
+
+  /* ── SEQUENTIAL · single-hue ramps (for heatmaps / density) ─────────── */
+  --viz-seq-lime-0:#0d0a18; --viz-seq-lime-1:#38490a; --viz-seq-lime-2:#6a8f00;
+  --viz-seq-lime-3:#a3cf00; --viz-seq-lime-4:#d7ff00; --viz-seq-lime-5:#eaff7a;
+
+  --viz-seq-cyan-0:#0d0a18; --viz-seq-cyan-1:#063238; --viz-seq-cyan-2:#0b5f6e;
+  --viz-seq-cyan-3:#2ba9bd; --viz-seq-cyan-4:#67e8f9; --viz-seq-cyan-5:#c7f7ff;
+
+  --viz-seq-violet-0:#0d0a18; --viz-seq-violet-1:#2a1c55; --viz-seq-violet-2:#4c3a8c;
+  --viz-seq-violet-3:#745ac7; --viz-seq-violet-4:#a78bfa; --viz-seq-violet-5:#ddd0ff;
+
+  /* ── DIVERGING · causal RDD effect (frost→null→flux) ──────────────────
+     Semantic center = #8a93a8 neutral; + effect = rose;  − effect = cyan. */
+  --viz-div-neg-4:#08313c; --viz-div-neg-3:#0a4a5c; --viz-div-neg-2:#1e7184;
+  --viz-div-neg-1:#55b8cc; --viz-div-0:#8a93a8;
+  --viz-div-pos-1:#e8738a; --viz-div-pos-2:#d33648; --viz-div-pos-3:#94303f;
+  --viz-div-pos-4:#5c121f;
+
+  /* ── GRID / AXES · dashboards ──────────────────────────────────────── */
+  --viz-grid:        rgba(232,236,244,0.07);
+  --viz-axis:        rgba(232,236,244,0.16);
+  --viz-tick:        #8a93a8;
+  --viz-label:       #c3c9d6;
+  --viz-fill-area:   rgba(215,255,0,0.08);
+  --viz-band:        rgba(167,139,250,0.10); /* forecasts / CI band        */
+}
+
+/* Numeric figures use tabular alignment for clean dashboards */
+.viz-numeric, .viz-metric, td[data-metric="true"] {
+  font-family: var(--q-font-numeric);
+  font-variant-numeric: tabular-nums;
+  letter-spacing: 0.02em;
+}
+
+/* Accessibility: never color-only. Each categorical carries a distinct
+   marker/glyph/pattern via these helper classes. */
+.viz-marker-dot      { width:10px;height:10px;border-radius:50%; }
+.viz-marker-tri      { width:0;height:0;border-left:6px transparent;border-right:6px transparent;border-bottom:11px solid; }
+.viz-marker-square   { width:9px;height:9px;border-radius:2px; }
+.viz-marker-x        { position:relative;width:11px;height:11px; }
+.viz-marker-x::before,.viz-marker-x::after{content:"";position:absolute;left:5px;top:0;width:1.5px;height:11px;background:currentColor;}
+.viz-marker-x::before{transform:rotate(45deg);} .viz-marker-x::after{transform:rotate(-45deg);}

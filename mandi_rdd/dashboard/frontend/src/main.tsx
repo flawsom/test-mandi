@@ -3,6 +3,7 @@ import ReactDOM from "react-dom/client";
 import { Streamlit } from "streamlit-component-lib";
 import FlipBoard from "./FlipBoard";
 import WebGLHero from "./WebGLHero";
+import { QuantumField } from "./quantum/QuantumField";
 import type { KpiData } from "./FlipBoard";
 
 /**
@@ -44,6 +45,32 @@ root.render(
     heroRoot.appendChild(heroContainer);
     const heroReactRoot = ReactDOM.createRoot(heroContainer);
     heroReactRoot.render(React.createElement(WebGLHero));
+  }
+})();
+
+// ── Quantum Field auto-mount ──
+// The inject_quantum_field() Python function injects this same bundle onto a
+// page with a <div id="mandiq-quantum-field-root"> to render the interactive
+// QVE particle universe as a dashboard view. Same single-chunk constraint —
+// QuantumField is statically imported above.
+(function autoMountQuantumField() {
+  const qfRoot = document.getElementById("mandiq-quantum-field-root");
+  if (qfRoot && !qfRoot.dataset.mandiqQfMounted) {
+    qfRoot.dataset.mandiqQfMounted = "true";
+    const container = document.createElement("div");
+    container.id = "mandiq-quantum-field-container";
+    qfRoot.appendChild(container);
+    const reactRoot = ReactDOM.createRoot(container);
+    reactRoot.render(
+      React.createElement(QuantumField, {
+        commodity:
+          qfRoot.dataset.commodity === "all" || !qfRoot.dataset.commodity
+            ? undefined
+            : qfRoot.dataset.commodity,
+        limit: qfRoot.dataset.limit ? Number(qfRoot.dataset.limit) : 60,
+        seed: qfRoot.dataset.seed ? Number(qfRoot.dataset.seed) : 20240701,
+      }),
+    );
   }
 })();
 

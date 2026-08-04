@@ -81,9 +81,12 @@ superstore_clean.csv
 superstore_dashboard.png
 
 # Scratch test and check scripts (one-off, not for deploy)
-test_*.py
+/test_*.py
 !mandi_rdd/tests/test_verification.py
 !mandi_rdd/tests/test_db_fallback.py
+!mandi_rdd/tests/test_omega_*.py
+!mandi_rdd/tests/test_dashboard_smoke.py
+!mandi_rdd/tests/test_screenshots.py
 _check_*.py
 _fix_*.py
 _test_*.py

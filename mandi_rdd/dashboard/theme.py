@@ -9,6 +9,7 @@ inspired by Alche Studio (alche.studio).
 """
 
 from pathlib import Path
+import json
 import os
 import streamlit as st
 
@@ -1258,6 +1259,56 @@ def inject_webgl_hero():
         return
 
     st.markdown(
+        '<script type="module">\n' + _WEBGL_BUNDLE_CACHE + '\n</script>',
+        unsafe_allow_html=True,
+    )
+
+
+def inject_quantum_field(commodity: str | None = None, limit: int = 60, seed: int = 20240701):
+    """Inject the interactive QVE 3D quantum particle field as a dashboard view.
+
+    Mounts the same Vite bundle (auto-mounted by main.tsx on
+    <div id="mandiq-quantum-field-root">) and feeds it the resolved API base
+    so the frontend can call /qve/placement without hardcoding a host.
+
+    Falls back gracefully: if the bundle is missing or the backend is
+    unreachable, the React component renders a deterministic offline field,
+    so the dashboard never breaks.
+    """
+    global _WEBGL_BUNDLE_CACHE, _WEBGL_BUNDLE_TRIED
+
+    # API base handed to the bundle via a window global (same resolution the
+    # rest of the dashboard uses).
+    api_base = get_api_base()
+
+    # ── Container div (re-injected every page) ──
+    st.markdown(
+        '<div id="mandiq-quantum-field-root"'
+        f' data-commodity="{commodity or "all"}"'
+        f' data-limit="{limit}"'
+        f' data-seed="{seed}"'
+        "></div>",
+        unsafe_allow_html=True,
+    )
+
+    # ── Bundle (module-level cache avoids disc I/O on every page) ──
+    if not _WEBGL_BUNDLE_TRIED:
+        _WEBGL_BUNDLE_TRIED = True
+        _FRONTEND_DIST = Path(__file__).resolve().parent / "frontend" / "dist"
+        bundle_paths = sorted(_FRONTEND_DIST.glob("assets/index-*.js")) if _FRONTEND_DIST.exists() else []
+        if bundle_paths:
+            try:
+                _WEBGL_BUNDLE_CACHE = bundle_paths[0].read_text(encoding="utf-8")
+            except Exception:
+                pass
+
+    if _WEBGL_BUNDLE_CACHE is None:
+        return
+
+    st.markdown(
+        '<script>window.__MANDIIQ_API_BASE__ = '
+        + json.dumps(api_base)
+        + ";</script>"
         '<script type="module">\n' + _WEBGL_BUNDLE_CACHE + '\n</script>',
         unsafe_allow_html=True,
     )

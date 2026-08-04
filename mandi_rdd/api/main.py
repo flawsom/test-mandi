@@ -57,6 +57,13 @@ from mandi_rdd.ai.router import (
 )
 from mandi_rdd.api import metrics_push
 from mandi_rdd.api.svg_compositor import composite_kpi_svg as _composite_kpi_svg
+from mandi_rdd.omega.qve import compute_placement as _qve_compute_placement
+from mandi_rdd.omega.core import OmegaCore as _OmegaCore
+from mandi_rdd.omega.core import pipeline_status_summary as _pipeline_status_summary
+from mandi_rdd.omega.aas import engine_status as _aas_engine_status
+from mandi_rdd.omega.aas import run_agent_swarm as _run_agent_swarm
+from mandi_rdd.omega.eic import generate_insights as _generate_insights
+from mandi_rdd.omega.eic import engine_status as _eic_engine_status
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
@@ -2345,6 +2352,136 @@ def proxy_github(path: str, request: Request):
         return JSONResponse(status_code=e.code, content=err_body)
     except Exception as e:
         return JSONResponse(status_code=502, content={'error': str(e)})
+@app.get('/qve/placement', tags=['Omega'])
+def qve_placement(
+    commodity: Optional[str] = None,
+    limit: int = 60,
+    n_iter: int = 4000,
+    seed: Optional[int] = None,
+):
+    """QVE — Quantum Valuation Engine: optimal particle placement.
+
+    Solves a QUBO (commodity similarity + temporal proximity + SHAP edges;
+    significance/recency/confidence bias) via simulated annealing, emulating
+    quantum annealing locally. Builds particles from DuckDB (rdd_results,
+    forecast_metrics, prices) and returns their 3D positions + energy.
+    """
+    try:
+        conn = get_connection()
+        try:
+            result = _qve_compute_placement(
+                conn,
+                commodity=commodity,
+                limit=int(limit),
+                n_iter=int(n_iter),
+                seed=seed,
+            )
+        finally:
+            conn.close()
+        return result
+    except Exception as e:
+        logger.exception("QVE placement failed")
+        return JSONResponse(status_code=500, content={"error": str(e)})
+
+
+@app.get('/omega/status', tags=['Omega'])
+def omega_status():
+    """Full OMEGA PROTOCOL module registry + health report."""
+    try:
+        core = _OmegaCore()
+        return core.module_status()
+    except Exception as e:
+        logger.exception("omega status failed")
+        return JSONResponse(status_code=500, content={"error": str(e)})
+
+
+@app.post('/omega/pipeline', tags=['Omega'])
+def omega_pipeline(
+    limit: int = 60,
+    n_iter: int = 4000,
+    seed: Optional[int] = None,
+    n_agents: int = 2000,
+    max_lag: int = 3,
+    top_k: int = 10,
+):
+    """Run the full OMEGA PROTOCOL pipeline (QVE → AAS → EIC → CRSM)."""
+    conn = get_connection()
+    try:
+        core = _OmegaCore(conn)
+        result = core.run_pipeline(
+            limit=int(limit),
+            n_iter=int(n_iter),
+            seed=seed,
+            n_agents=int(n_agents),
+            max_lag=int(max_lag),
+            top_k=int(top_k),
+        )
+        # Merge operator summary at top level for dashboard consumption.
+        summary = _pipeline_status_summary(result)
+        result.update(summary)
+        return result
+    except Exception as e:
+        logger.exception("omega pipeline failed")
+        return JSONResponse(status_code=500, content={"error": str(e)})
+    finally:
+        conn.close()
+
+
+@app.get('/aas/status', tags=['Omega'])
+def aas_status():
+    """AAS (Adaptive Alert System) capability report."""
+    try:
+        return _aas_engine_status()
+    except Exception as e:
+        logger.exception("aas status failed")
+        return JSONResponse(status_code=500, content={"error": str(e)})
+
+
+@app.post('/aas/run', tags=['Omega'])
+def aas_run(
+    limit: int = 60,
+    n_agents: int = 2000,
+    seed: Optional[int] = None,
+):
+    """Run the BDI agent swarm after placing particles via QVE."""
+    conn = get_connection()
+    try:
+        placement = _qve_compute_placement(conn, limit=int(limit), n_iter=2000, seed=seed)
+        return _run_agent_swarm(placement['particles'], n_agents=int(n_agents), seed=seed)
+    except Exception as e:
+        logger.exception("aas run failed")
+        return JSONResponse(status_code=500, content={"error": str(e)})
+    finally:
+        conn.close()
+
+
+@app.get('/eic/insights', tags=['Omega'])
+def eic_insights(
+    limit: int = 60,
+    max_lag: int = 3,
+    top_k: int = 10,
+):
+    """EIC (Emergent Intelligence) causal insights over commodity price series."""
+    conn = get_connection()
+    try:
+        return _generate_insights(conn, limit=int(limit), max_lag=int(max_lag), top_k=int(top_k))
+    except Exception as e:
+        logger.exception("eic insights failed")
+        return JSONResponse(status_code=500, content={"error": str(e)})
+    finally:
+        conn.close()
+
+
+@app.get('/eic/status', tags=['Omega'])
+def eic_status():
+    """EIC capability report."""
+    try:
+        return _eic_engine_status()
+    except Exception as e:
+        logger.exception("eic status failed")
+        return JSONResponse(status_code=500, content={"error": str(e)})
+
+
 if __name__ == "__main__":
     port = int(os.getenv("PORT", 8000))
     uvicorn.run("mandi_rdd.api.main:app", host="0.0.0.0", port=port, reload=True)

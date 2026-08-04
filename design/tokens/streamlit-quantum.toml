@@ -1,0 +1,29 @@
+# ═══════════════════════════════════════════════════════════════════════
+# MandiIQ OMEGA — Streamlit Quantum Theme
+# "quantum-glow / particle-portal" · dark-first · WCAG AA
+# Drop-in replacement for the [theme] block in .streamlit/config.toml
+# (or copy these values over the existing [theme] section).
+# ═══════════════════════════════════════════════════════════════════════
+
+[theme]
+base = "dark"
+
+# Brand acid-lime CTA (unchanged primary)
+primaryColor = "#d7ff00"
+
+# Background: near-black with violet hint (q-bg-deep)
+backgroundColor = "#0a0814"
+
+# Elevated cards/sidebars (q-bg-elevated, kept close to previous #1a1a2e)
+secondaryBackgroundColor = "#12101f"
+
+# Body text — AA on #0a0814 (~11:1)
+textColor = "#e8ecf4"
+
+# Typography: IBM Plex Sans body (keep "sans serif" for cloud portability)
+font = "sans serif"
+
+# ── Optional: Streamlit theming is limited to these six keys.
+#    The richer token set (glow, ramps, motion) lives in
+#    design/tokens/*.css, injected via the app's style_utils /
+#    st.markdown("<style>...</style>") loader.

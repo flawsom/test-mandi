@@ -24,3 +24,12 @@ PIXEL_THRESHOLD = 10   # Min channel difference to count as changed
 
 # Streamlit boot timeout (seconds)
 BOOT_TIMEOUT = 60
+
+# Omega FastAPI endpoints (NOT Streamlit screenshot routes — keep out of ROUTES
+# above so dashboard-integration E2E navigation is unaffected). These are API
+# contract-checked by mandi_rdd/tests/test_omega_*.py.
+OMEGA_API_PATHS = [
+    ("GET", "/qve/placement", "Omega QVE particle placement"),
+    ("GET", "/omega/status", "Omega layer registry/health"),
+    ("GET", "/omega/pipeline", "Omega pipeline"),
+]

@@ -29,7 +29,7 @@ import plotly.graph_objects as go
 import streamlit as st
 
 from mandi_rdd.dashboard.theme import (
-    inject_theme, inject_webgl_hero, inject_countup_js, countup_card,
+    inject_theme, inject_webgl_hero, inject_quantum_field, inject_countup_js, countup_card,
     TURMERIC, RUST, SAGE, SLATE, MUTED, FAINT, INK, get_api_base
 )
 from mandi_rdd.dashboard.plotly_theme import make_themed_figure
@@ -137,6 +137,25 @@ def render():
     with c4:
         st.markdown(countup_card("Days of data", n_days), unsafe_allow_html=True)
     st.markdown('</div>', unsafe_allow_html=True)
+
+    # ── Quantum particle field (QVE) ──
+    st.markdown("""
+        <div style="margin-top:2rem;">
+          <div style="font-family:'IBM Plex Mono',monospace;font-size:0.75rem;color:#d7ff00;text-transform:uppercase;letter-spacing:0.1em;margin-bottom:0.5rem;">
+            01½ / Quantum field
+          </div>
+          <h2 style="font-family:'Space Grotesk',system-ui,sans-serif;font-weight:400;font-size:1.3rem;color:#ffffff;text-transform:uppercase;letter-spacing:0.05em;margin-bottom:0.5rem;">
+            QVE particle universe — {selected}
+          </h2>
+          <p style="color:#7e7e7e;font-size:0.85rem;max-width:680px;margin-bottom:1rem;">
+            Every particle is a commodity/region prediction placed by the quantum
+            solver (QUBO simulated annealing). Hover a particle to observe it —
+            its superposition cloud collapses to a solid state. Lines entangle
+            related markets.
+          </p>
+        </div>
+    """, unsafe_allow_html=True)
+    inject_quantum_field(commodity=selected, limit=60, seed=20240701)
 
     # ── Price distribution across districts (latest day) ──
     st.markdown("""

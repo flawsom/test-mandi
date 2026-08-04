@@ -1,0 +1,131 @@
+/* ═══════════════════════════════════════════════════════════════════════
+   MandiIQ OMEGA — SURFACES & GLOW  ·  particle-portal treatments
+   Cards, glass panels, portal blots, metric tiles. Dark-first.
+   Load AFTER quantum-tokens.css + motion-reduced.css.
+   ═══════════════════════════════════════════════════════════════════════ */
+
+/* ── Portal field · the particle background ──────────────────────────── */
+.q-field {
+  position: relative;
+  isolation: isolate;
+  background: var(--q-bg-void);
+}
+.q-field::before { /* cyan portal */
+  content: "";
+  position: absolute; inset: 0; z-index: -2;
+  background: radial-gradient(var(--q-blot-1), rgba(103,232,249,0.05) 0, transparent 60%);
+}
+.q-field::after {  /* violet portal */
+  content: "";
+  position: absolute; inset: 0; z-index: -1;
+  background: radial-gradient(var(--q-blot-2), rgba(167,139,250,0.05) 0, transparent 60%),
+              radial-gradient(var(--q-blot-3), rgba(252,211,77,0.03) 0, transparent 60%);
+  animation: q-blot-drift 18s var(--q-ease-soft) infinite alternate;
+}
+
+/* ── Card · quantum glass ─────────────────────────────────────────────── */
+.q-card {
+  background: var(--q-glass);
+  -webkit-backdrop-filter: blur(var(--q-glass-blur));
+  backdrop-filter: blur(var(--q-glass-blur));
+  border: 1px solid var(--q-hairline);
+  border-radius: var(--q-radius-lg);
+  box-shadow: var(--q-glow-soft);
+  padding: var(--q-space-lg);
+  transition: border-color var(--q-dur-fast) var(--q-ease),
+              box-shadow var(--q-dur-fast) var(--q-ease);
+}
+.q-card:hover {
+  border-color: var(--q-hairline-strong);
+  box-shadow: var(--q-glow-soft), 0 0 18px rgba(167,139,250,0.12);
+  cursor: pointer;
+}
+
+/* ── Metric tile · numeric readout ───────────────────────────────────── */
+.q-metric {
+  font-family: var(--q-font-numeric);
+  font-variant-numeric: tabular-nums;
+  font-size: 1.75rem; font-weight: 600; line-height: 1.1;
+  color: var(--q-text-high);
+}
+.q-metric .q-unit {
+  font-size: 0.85rem; color: var(--q-text-muted); font-weight: 400;
+}
+.q-metric-label {
+  font: var(--q-type-overline);
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  color: var(--q-text-muted);
+}
+
+/* ── Accent glow chips (status) ──────────────────────────────────────── */
+.q-chip {
+  display: inline-flex; align-items: center; gap: 0.5rem;
+  font: var(--q-type-overline);
+  padding: 0.3rem 0.75rem;
+  border-radius: var(--q-radius-pill);
+  border: 1px solid var(--q-hairline);
+  color: var(--q-text-body);
+  background: rgba(13,10,24,0.5);
+}
+.q-chip::before { content: ""; width: 8px; height: 8px; border-radius: 50%; }
+.q-chip-live::before   { background: var(--viz-status-latest); box-shadow: 0 0 8px rgba(87,227,137,0.8); }
+.q-chip-stale::before  { background: var(--viz-status-warning); box-shadow: 0 0 8px rgba(245,194,17,0.7); }
+.q-chip-down::before   { background: var(--viz-status-down); box-shadow: 0 0 8px rgba(255,77,94,0.8); }
+.q-chip-up::before     { background: var(--viz-status-up); box-shadow: 0 0 8px rgba(77,163,255,0.8); }
+.q-chip-neutral::before{ background: var(--viz-status-neutral); }
+
+/* ── Buttons · primary quantum CTA ───────────────────────────────────── */
+.q-btn {
+  font: 500 0.9375rem/1 var(--q-font-body);
+  color: var(--q-text-inverse);
+  background: var(--q-primary);
+  border: 0; border-radius: var(--q-radius-md);
+  padding: 0.8rem 1.5rem;
+  box-shadow: var(--q-glow-primary);
+  cursor: pointer;
+  transition: background var(--q-dur-fast) var(--q-ease),
+              transform var(--q-dur-fast) var(--q-ease-spring),
+              box-shadow var(--q-dur-fast) var(--q-ease);
+}
+.q-btn:hover  { background: var(--q-primary-hi); box-shadow: 0 0 18px rgba(234,255,122,0.45); }
+.q-btn:active { transform: scale(0.98); }
+.q-btn:disabled { background: var(--q-primary-dim); box-shadow: none; cursor: not-allowed; }
+
+.q-btn-ghost {
+  background: transparent;
+  color: var(--q-text-body);
+  border: 1px solid var(--q-hairline-strong);
+  box-shadow: none;
+}
+.q-btn-ghost:hover { border-color: var(--q-primary); color: var(--q-primary-hi); }
+
+/* ── Tables / data readouts ──────────────────────────────────────────── */
+.q-table {
+  width: 100%;
+  border-collapse: collapse;
+  font: var(--q-type-body);
+}
+.q-table th {
+  font: var(--q-type-overline);
+  text-transform: uppercase; letter-spacing: 0.1em;
+  text-align: left;
+  color: var(--q-text-muted);
+  border-bottom: 1px solid var(--q-hairline-strong);
+  padding: 0.6rem 0.8rem;
+}
+.q-table td {
+  border-bottom: 1px solid var(--q-hairline);
+  color: var(--q-text-body);
+  padding: 0.7rem 0.8rem;
+}
+.q-table tr:hover td { background: rgba(232,236,244,0.03); }
+
+/* ── Divider / hairline ──────────────────────────────────────────────── */
+.q-rule { height: 1px; border: 0; background: linear-gradient(90deg, transparent, var(--q-hairline-strong), transparent); }
+
+/* ── Keyframe: slow portal drift (respects reduced-motion via motion CSS) */
+@keyframes q-blot-drift {
+  from { transform: translate3d(0,0,0) scale(1); }
+  to   { transform: translate3d(2%, -2%, 0) scale(1.06); }
+}

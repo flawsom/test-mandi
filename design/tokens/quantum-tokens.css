@@ -1,0 +1,85 @@
+/* ═══════════════════════════════════════════════════════════════════════
+   MandiIQ OMEGA — DESIGN TOKENS  ·  "quantum-glow / particle-portal"
+   Post-human visual system · Dark-first · WCAG AA · reduced-motion ready
+   ----------------------------------------------------------------------
+   Build: Design Director (019fcc12-72ee-7100-b7dd-d22b3d0ae484)
+   Replaces/extends the "Alche Studio" token block in landing/:root,
+   docs/mandiq-portals.css and .streamlit/config.toml.
+   ═══════════════════════════════════════════════════════════════════════ */
+
+:root {
+  /* ── 1. QUANTUM BACKGROUND · post-human void ──────────────────────────── */
+  --q-bg-void:       #05040a;   /* app base · near-black w/ violet hint    */
+  --q-bg-deep:       #0a0814;   /* hero field · deepest particle field     */
+  --q-bg-surface:    #0d0a18;   /* cards                                   */
+  --q-bg-elevated:   #12101f;   /* modals / menus / toolbars               */
+  --q-bg-inset:      #08060f;   /* wells, code, focus trap                 */
+
+  /* ── 2. GLASS · surface treatments ──────────────────────────────────── */
+  --q-glass:              rgba(13,10,24,0.72);
+  --q-glass-strong:       rgba(18,16,31,0.88);
+  --q-glass-blur:         18px;
+  --q-hairline:           rgba(232,236,244,0.08);
+  --q-hairline-strong:    rgba(232,236,244,0.16);
+
+  /* ── 3. QUANTUM ACCENT SPECTRUM · particle portals ──────────────────── */
+  --q-primary:       #d7ff00;   /* BRAND acid-lime · CTA · retained        */
+  --q-primary-hi:    #eaff7a;   /* glow peak / hover                        */
+  --q-primary-dim:   #9fc400;   /* pressed / disabled                       */
+  --q-cyan:          #67e8f9;   /* data-stream · telemetry                 */
+  --q-violet:        #a78bfa;   /* prediction · ML · future-state          */
+  --q-magenta:       #f0abfc;   /* anomaly · alert-ring                     */
+  --q-amber:         #fcd34d;   /* warning chip · stale                     */
+  --q-rose:          #ff6b81;   /* hazard · below-threshold                */
+
+  /* ── 4. TEXT · dark-first (AA ratios @ 16px on q-bg-surface) ────────── */
+  --q-text-high:     #e8ecf4;   /* ~17:1  headings                         */
+  --q-text-body:     #c3c9d6;   /* ~11:1  body                             */
+  --q-text-muted:    #8a93a8;   /* ~6:1   secondary  (>= AA)               */
+  --q-text-faint:    #6a7286;   /* ~4.6:1 tertiary labels                  */
+  --q-text-inverse:  #05040a;   /* on primary                               */
+
+  /* ── 5. TYPOGRAPHY · paired (import via Landing Google Fonts sheet) ──── */
+  --q-font-display:  "Space Grotesk", system-ui, -apple-system, sans-serif;
+  --q-font-body:     "IBM Plex Sans", "Inter", system-ui, sans-serif;
+  --q-font-mono:     "IBM Plex Mono", "JetBrains Mono", ui-monospace, monospace;
+  --q-font-numeric:  "Barlow", "IBM Plex Sans", sans-serif;
+
+  --q-type-display:  600 2.25rem/1.1 var(--q-font-display);
+  --q-type-title:    600 1.5rem/1.2  var(--q-font-display);
+  --q-type-subhead:  500 1rem/1.4   var(--q-font-body);
+  --q-type-body:     400 0.9375rem/1.6 var(--q-font-body);
+  --q-type-mono:     400 0.8125rem/1.5 var(--q-font-mono);
+  --q-type-overline: 600 0.7rem/1    var(--q-font-mono);
+  --q-type-numeric:  600 1.25rem/1.1 var(--q-font-numeric); /* tabular figures */
+
+  /* ── 6. BLOT / GLOW · particle-portal field ─────────────────────────── */
+  --q-glow-primary:   0 0 12px  rgba(215,255,0,0.35),  0 0 42px rgba(215,255,0,0.18);
+  --q-glow-cyan:      0 0 12px  rgba(103,232,249,0.32), 0 0 40px rgba(103,232,249,0.16);
+  --q-glow-violet:    0 0 12px  rgba(167,139,250,0.34), 0 0 40px rgba(167,139,250,0.18);
+  --q-glow-soft:      0 10px 30px rgba(5,4,10,0.55), 0 0 24px rgba(167,139,250,0.08);
+  --q-blot-1:         34% 42% 70% 46% at  18% 8%;   /* cyan portal          */
+  --q-blot-2:         40% 38% 80% 42% at  82% 6%;   /* violet portal        */
+  --q-blot-3:         36% 40% 76% 44% at  55% 96%;  /* amber faint          */
+
+  /* ── 7. MOTION · eased, reduced-motion safe (see motion-reduced.css) ── */
+  --q-dur-fast:   160ms;
+  --q-dur-base:   280ms;
+  --q-dur-slow:   600ms;
+  --q-ease:       cubic-bezier(0.16,1,0.3,1);      /* ease-out expo         */
+  --q-ease-soft:  cubic-bezier(0.25,0.46,0.45,0.94);
+  --q-ease-spring:cubic-bezier(0.34,1.56,0.64,1);
+
+  /* ── 8. SHAPE · radius & spacing scale ──────────────────────────────── */
+  --q-radius-sm:   6px;
+  --q-radius-md:   12px;
+  --q-radius-lg:   18px;
+  --q-radius-pill: 999px;
+  --q-space-xs:  0.25rem;
+  --q-space-sm:  0.5rem;
+  --q-space-md:  1rem;
+  --q-space-lg:  2rem;
+  --q-space-xl:  4rem;
+  --q-gutter:       clamp(1rem, 5vw, 3rem);
+  --q-stack:        1.25rem;
+}
