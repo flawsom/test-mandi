@@ -636,7 +636,7 @@ def upsert_prices(conn, records: list[dict]) -> int:
 
     if "arrival_date" in df.columns:
 
-        df["arrival_date"] = pd.to_datetime(df["arrival_date"], errors="coerce")
+        df["arrival_date"] = pd.to_datetime(df["arrival_date"], errors="coerce", dayfirst=True)
 
     # Register temp table and INSERT OR IGNORE via DuckDB
 
@@ -1002,7 +1002,7 @@ def record_lineage_batch(
                 states.add(str(s).title())
             if ad:
                 try:
-                    d = pd.to_datetime(ad)
+                    d = pd.to_datetime(ad, dayfirst=True)
                     if first_date is None or d < first_date:
                         first_date = d
                     if last_date is None or d > last_date:
