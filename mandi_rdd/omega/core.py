@@ -161,6 +161,8 @@ def pipeline_status_summary(result: dict) -> dict:
         "n_particles": stages.get("qve", {}).get("n_particles", 0),
         "n_alerts": stages.get("aas", {}).get("n_alerts", 0),
         "n_edges": stages.get("eic", {}).get("n_edges", 0),
+        "n_insights": stages.get("eic", {}).get("n_insights", 0),
+        "market_drivers": stages.get("eic", {}).get("market_drivers", []),
         "state_hash": result.get("state_mesh", {}).get("hash"),
         "wall_time_s": result.get("wall_time_s", 0.0),
     }

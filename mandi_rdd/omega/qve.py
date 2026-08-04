@@ -212,6 +212,11 @@ def solve_placement_simulated_annealing(
     binary decision is *which site*), and annealing moves particles between
     sites to minimize total pairwise + linear energy.
 
+    Uses incremental energy updates: a single move of particle *i* only alters
+    the linear term of *i* and the pairwise terms (i, j) for j != i, so each
+    annealing step costs O(n) instead of O(|Q|) ~ O(n^2).  This keeps the
+    solver tractable on production-size commodity sets (e.g. 305 commodities).
+
     Returns a dict with:
         positions: list of (x, y, z) per particle index
         energy: final objective value
@@ -220,33 +225,44 @@ def solve_placement_simulated_annealing(
     """
     rng = random.Random(seed)
     n = len(particles)
+    if n == 0:
+        return {
+            "positions": [], "energy": 0.0,
+            "schedule": {"iterations": 0, "t_start": t_start, "t_end": t_end},
+            "wall_time_s": 0.0,
+        }
 
     # Candidate grid: evenly spread lattice
     grid = _build_lattice(n, scale=grid_scale)
+    n_sites = len(grid)
 
-    # Random initial assignment
-    assign = [rng.randrange(len(grid)) for _ in range(n)]
-    # Force uniqueness for the first pass (helps convergence)
-    _dedupe(assign, len(grid), rng)
+    # Pre-compute pairwise coupling Q[(i,j)] for i<j as dense rows for speed.
+    pair: Dict[Tuple[int, int], float] = {}
+    for (i, j), v in Q.items():
+        if i != j:
+            pair[(min(i, j), max(i, j))] = v
 
-    def energy_of(assignment: List[int]) -> float:
-        total = 0.0
-        for (i, j), v in Q.items():
-            if i == j:
-                if assignment[i] == 0:
-                    total += v  # linear term applies when site==origin-ish
-            else:
-                # Pairwise: penalize co-location by coupling strength
-                if assignment[i] == assignment[j]:
-                    total += v
-                else:
-                    # Slight distance-based cost (cheap approximation)
-                    total += _dist(grid[assignment[i]], grid[assignment[j]]) * 0.02
-        return total
+    # Distances between lattice sites (lazily cached, symmetric).
+    _dist_cache: Dict[Tuple[int, int], float] = {}
 
-    cur = assign[:]
-    cur_e = energy_of(cur)
-    best = cur[:]
+    def dist(a: int, b: int) -> float:
+        if a == b:
+            return 0.0
+        key = (a, b) if a < b else (b, a)
+        d = _dist_cache.get(key)
+        if d is None:
+            d = _dist(grid[a], grid[b])
+            _dist_cache[key] = d
+        return d
+
+    # Random initial assignment with forced uniqueness (helps convergence).
+    assign = [rng.randrange(n_sites) for _ in range(n)]
+    _dedupe(assign, n_sites, rng)
+
+    site_of = assign[:]
+    # Seed exact energy with the canonical O(|Q|) scan (one-time startup cost).
+    cur_e = _canonical_energy(site_of, Q, grid, dist)
+    best = site_of[:]
     best_e = cur_e
 
     t = t_start
@@ -258,22 +274,36 @@ def solve_placement_simulated_annealing(
         t = t_start * (t_end / t_start) ** (it / max(1, n_iter))
 
         i = rng.randrange(n)
-        old_site = cur[i]
-        new_site = rng.randrange(len(grid))
+        old_site = site_of[i]
+        new_site = rng.randrange(n_sites)
         if new_site == old_site:
             continue
 
-        cur[i] = new_site
-        new_e = energy_of(cur)
+        # Incremental delta: only pairs (i, j) change.
+        delta = 0.0
+        if old_site == 0 and new_site != 0:
+            delta -= Q.get((i, i), 0.0)
+        elif old_site != 0 and new_site == 0:
+            delta += Q.get((i, i), 0.0)
 
-        delta = new_e - cur_e
+        for j in range(n):
+            if j == i:
+                continue
+            v = pair.get((min(i, j), max(i, j)))
+            if v is None:
+                continue
+            sj = site_of[j]
+            old_term = v if sj == old_site else dist(old_site, sj) * 0.02
+            new_term = v if sj == new_site else dist(new_site, sj) * 0.02
+            delta += new_term - old_term
+
         if delta <= 0 or rng.random() < math.exp(-delta / max(t, 1e-9)):
-            cur_e = new_e
+            site_of[i] = new_site
+            cur_e += delta
             if cur_e < best_e:
                 best_e = cur_e
-                best = cur[:]
-        else:
-            cur[i] = old_site  # revert
+                best = site_of[:]
+        # else: reject (no change)
 
         if verbose and it % dt_iter == 0:
             logger.info("SA iter=%d t=%.4f E=%.4f", it, t, cur_e)
@@ -287,6 +317,25 @@ def solve_placement_simulated_annealing(
         "wall_time_s": round(time.time() - start, 3),
     }
 
+
+def _canonical_energy(
+    site_of: List[int],
+    Q: Dict[Tuple[int, int], float],
+    grid: List[Tuple[float, float, float]],
+    dist: callable,
+) -> float:
+    """Reference O(|Q|) energy used to seed the incremental tracker exactly."""
+    total = 0.0
+    for (i, j), v in Q.items():
+        if i == j:
+            if site_of[i] == 0:
+                total += v
+        else:
+            if site_of[i] == site_of[j]:
+                total += v
+            else:
+                total += dist(site_of[i], site_of[j]) * 0.02
+    return total
 
 def _build_lattice(n: int, scale: float) -> List[Tuple[float, float, float]]:
     """Generate ~4n candidate sites on a Fibonacci-sphere-ish lattice."""

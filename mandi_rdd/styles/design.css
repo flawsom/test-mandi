@@ -7,11 +7,11 @@
 
 :root {
     /* Background & Surface */
-    --color-bg-base: #000000;
-    --color-bg-radial-end: #0a0a0a;
-    --color-surface: #111111;
-    --color-surface-glass: rgba(255, 255, 255, 0.04);
-    --color-surface-glass-hover: rgba(255, 255, 255, 0.08);
+    --color-bg-base: #05040a;
+    --color-bg-radial-end: #0a0814;
+    --color-surface: #0d0a18;
+    --color-surface-glass: rgba(13, 10, 24, 0.72);
+    --color-surface-glass-hover: rgba(18, 16, 31, 0.88);
 
     /* Accents */
     --color-primary: #d7ff00;      /* Alche Lime Accent */

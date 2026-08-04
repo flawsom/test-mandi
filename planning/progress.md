@@ -15,7 +15,7 @@
 
 ### Phase 2: Roadmap Authoring
 
-- **Status:** in_progress
+- **Status:** complete
 - **Started:** 2026-08-04
 - **Actions taken:**
   - Authored Omega layer architecture (QVE/AAS/EIC/HRP/CRSM/SMCL/NIL) with working definitions
@@ -35,7 +35,7 @@
 
 ### Phase 4: Test Suite Expansion — prep (task 019fcc12-ee5f-7662-b231-0e0062924d08)
 
-- **Status:** in_progress (drafting; execution gated on AAS/EIC landing)
+- **Status:** complete (drafting; execution gated on AAS/EIC landing)
 - **Actions taken:**
   - Marked test task in_progress
   - Identified pytest layout: `mandi_rdd/tests/` package, `test_<name>.py`, importorskip/_require_module guards, `skipif(not DB_PATH)` for DB tests, TestClient for API, `routes.py` inventory
@@ -76,11 +76,75 @@
 - **Determinism note:** comparisons exclude `wall_time_s` (non-deterministic by nature); placement/positions/energy are seed-reproducible.
 - **Next:** verify CI `paths:` include `mandi_rdd/omega/**`; when leader lifts gate → run full pytest suite + E2E → consolidated status report.
 
+### Phase 5: FINAL — Integration Verification + Consolidated Build Report
+
+- **Status:** complete ✅ (task `019fcc12-ee5f-7662-b231-0e0062924d08` deliverable)
+- **Actions taken:** full suite run, endpoint probes, repo audit for Northflank/3D status.
+
+---
+
+# CONSOLIDATED OMEGA WAVE-2 BUILD REPORT (2026-08-04)
+
+## 1. Test results — FULL SUITE GREEN ✅
+Command: `python -m pytest -q --ignore=scripts --ignore=mandi_rdd/tests/test_screenshots.py` (screenshots = Playwright E2E, environment-gated)
+**Result: 60 passed in 6.40s — 0 failed, 0 skipped.** Matches leader-reported 60. No regressions.
+
+| Test file | Result |
+|---|---|
+| `mandi_rdd/tests/test_omega_qve.py` (14) | pass |
+| `mandi_rdd/tests/test_omega_core.py` (4) | pass |
+| `mandi_rdd/tests/test_omega_aas.py` (5) | pass |
+| `mandi_rdd/tests/test_omega_eic.py` (6) | pass |
+| `test_omega_endpoints.py` (leader's, seeded in-mem DB, 6) | pass |
+| root `test_omega_eic.py` (leader's EIC-fix tests, 9) | pass |
+| legacy suite (test_verification, test_db_fallback, test_dashboard_smoke, test_backfill_lifecycle, data_integrity, test_ensemble, test_forecast_model, …) | pass |
+
+Leader-fixed pre-existing bugs confirmed resolved: malformed CSS-brace regex in `test_dashboard_smoke.py`; `'module' object is not callable` Playwright importorskip in `conftest.py`; stale 500→422 contract test corrected (endpoint now typed `limit: int` → FastAPI 422 on `limit=abc`, verified live).
+
+## 2. Omega engines — LIVE & non-degraded ✅
+`mandi_rdd/omega/{core,aas,eic,qve}.py` all present; Vercel verified:
+- `/qve/placement` → **n_particles 60**, engine `simulated-annealing`, real particles w/ 3D-ready fields (position[3], color[3], glow, size)
+- `/omega/status` → layer registry, `dwave_emulated=True`
+- `/omega/pipeline` → **degraded=False**, n_particles=60 → n_alerts=117 → n_edges=414, state_hash=635d3e663681c1fc, wall_time_s≈5.26s
+- Top market drivers: Carrot (out-degree 21), Lentils-urad (16), Arhar (16), Bajra (14)
+- EIC blockers resolved by leader: granger lag-alignment (`series[max_lag:]`), zero-variance mask (std>1e-12), F-stat denominator guard (rss_u<=1e-12)
+
+## 3. Deployment — Vercel LIVE; **Northflank REDEPLOY GAP** ⚠️
+- **Vercel:** OMEGA wave-2 pushed to master → deployed → endpoints verified live (non-degraded).
+- **Northflank (PRIMARY prod target, per HANDOFF/DEPLOY):** `Dockerfile.northflank` (port 8080, persistent volume `/data`, includes Node.js + mmdc) — **wave-2 has NOT been redeployed there yet**. Two gaps:
+  1. **Redeploy needed:** push/redeploy OMEGA wave-2 (omega modules + typed endpoint contract) to Northflank to match Vercel.
+  2. **Hourly pipeline cron:** still Windows scheduled-task only; Northflank cron job not yet defined (HANDOFF:988) — should be added to `Dockerfile.northflank`/Northflank config.
+- CI: no `paths:` filters in any workflow → omega changes trigger full suite automatically (verified).
+
+## 4. Endpoint contract (reconciled, LIVE schema)
+- `GET /qve/placement?commodity&limit=60&n_iter=4000&seed` →
+  `{engine:"simulated-annealing", n_particles, energy, schedule{iterations,t_start,t_end}, wall_time_s, particles[{id,commodity,region,date,prediction,confidence,significance,shap_values,model_version,position[3],energy,color[3],glow,size}]}`
+- Validation error (non-int limit) → **422** (typed param). Empty → 200 + `warning`. Internal errors → 500 `{"error": str}`.
+- `POST /omega/pipeline` → merged `pipeline_status_summary` top-level (dashboard-friendly): `degraded`, `state_hash`, per-stage stats.
+
+## 5. 3D field status (Wave 5 NIL) ⏳
+- **Present (decorative):** Three.js/React-Three-Fiber WebGL hero particle field (2000 particles, `mandiq-webgl-hero-root`), `docs/mandiq-portals.js` canvas particle field, `mandiq-effects.js` flow-field.
+- **Not yet wired:** QVE placement 3D field (render `/qve/placement` particles w/ position/color/glow/size) — no omega Streamlit page exists yet (pages list has no `omega_*.py`). Contract is 3D-ready; **frontend binding is a Wave 5 NIL deliverable** (Visualization Engineer). Current visualization = 2D/Streamlit fallback via API JSON.
+
+## 6. DoD status (task `019fcc12-ee5f-7662-b231-0e0062924d08`)
+- [x] Contract reconciled (no [TBD])
+- [x] `test_omega_*.py` drafted (14+4+5+6) + leader's endpoint/EIC suites — all green
+- [x] `routes.py` updated (`OMEGA_API_PATHS`; kept out of Streamlit ROUTES)
+- [x] CI `paths:` verified (none exist → full suite always runs)
+- [x] Full suite green, no regressions (60 passed)
+- [x] Consolidated status report delivered to leader
+- ⚠️ Follow-ups for leader/team: Northflank wave-2 redeploy + cron; QVE 3D field binding (Wave 5, Viz Eng.)
+
 ## Test Results
 
 | Test | Input | Expected | Actual | Status |
 |---|---|---|---|---|
-| (none yet — planning task) | — | — | — | — |
+| full unit suite (excl. Playwright screenshots) | `pytest -q --ignore=scripts` | 60 passed, 0 fail | 60 passed in 6.40s | ✅ |
+| `/qve/placement?limit=10` | TestClient | 200, n_particles>0, schema 1:1 | 200, 10 particles | ✅ |
+| `/qve/placement?seed=42` ×2 | TestClient | identical (excl. wall_time_s) | identical | ✅ |
+| `/qve/placement?limit=0` | TestClient | 200 + warning | 200, n_particles 0, warning | ✅ |
+| `/qve/placement?limit=abc` | TestClient | 422 (typed param) | 422 | ✅ |
+| `run_pipeline(limit=10,n_iter=100)` | direct call | dict w/ protocol + stages{qve,eic} | pass | ✅ |
 
 ## Error Log
 
@@ -88,13 +152,16 @@
 |---|---|---|---|
 | 2026-08-04 | `team_send_message` MCP "local team tool returned an error" | 1–2 | CLI fallback 409 (runtime ctx missing); later MCP calls succeeded — transient |
 | 2026-08-04 | Grep for Omega/QVE/AAS… in repo → no matches | 1 | Authored layer definitions in task_plan.md; flagged for leader confirmation |
+| 2026-08-04 | Read tool glitch on large offsets (qve.py) | 3 | Switched to grep + probe scripts for interface verification |
+| 2026-08-04 | Edit tool CRLF mismatch on pushed files | 2 | Re-wrote files via Write tool (whole-file) |
+| 2026-08-04 | Initial full-suite timeout (Playwright screenshots hang locally) | 2 | Ran suite with `--ignore=mandi_rdd/tests/test_screenshots.py`; E2E is CI-gated |
 
 ## 5-Question Reboot Check
 
 | Question | Answer |
 |---|---|
-| Where am I? | Phase 4 (test-suite prep) — drafting done, execution gated on AAS/EIC |
-| Where am I going? | Reconcile contract w/ live QVE → update routes.py + CI paths → run full suite when AAS/EIC land → status report |
-| What's the goal? | Omega integration verified: full suite green, no regressions, backend→API→dashboard wired, `/qve/placement` contract tested |
-| What have I learned? | See `findings.md` + `integration_test_plan.md` (layout, CI, contract skeleton) |
-| What have I done? | Wrote roadmap + integration test plan; mapped pytest layout + CI |
+| Where am I? | Phase 5 complete — final deliverable delivered |
+| Where am I going? | Await leader feedback; follow-ups: Northflank redeploy, QVE 3D binding |
+| What's the goal? | Omega integration verified: full suite green, no regressions, `/qve/placement` contract tested |
+| What have I learned? | See `findings.md` + `integration_test_plan.md` (layout, CI, contract) |
+| What have I done? | Roadmap, test plan, 4 omega test suites, full-suite verification (60 green), consolidated report |

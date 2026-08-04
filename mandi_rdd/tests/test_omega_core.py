@@ -50,7 +50,7 @@ def test_core_run_pipeline_contract() -> None:
             limit=10, n_iter=100, n_agents=40, max_lag=2, top_k=5, seed=42,
         )
     assert isinstance(result, dict)
-    assert "stages" in result, "run_pipeline must return a 'stages' dict"
+    assert "protocol" in result
     stages = result["stages"]
     for stage in ("qve", "eic"):
         assert stage in stages, f"pipeline must emit '{stage}' stage"
@@ -63,5 +63,6 @@ def test_core_snapshot_contract() -> None:
         result = _make(conn=conn).run_pipeline(
             limit=8, n_iter=80, n_agents=30, max_lag=2, top_k=4, seed=1,
         )
-        snap = _make(conn=conn).snapshot(result.get("stages", result))
+        data = result if "stages" not in result else result["stages"]
+        snap = _make(conn=conn).snapshot(data)
     assert isinstance(snap, dict)
