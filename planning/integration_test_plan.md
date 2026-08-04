@@ -147,6 +147,6 @@ Run after AAS/EIC land locally:
 - [x] Layer-name correction captured (CRSM = Cross-Reality State Mesh)
 - [x] Draft `test_omega_*.py` files with import-safe guards (qve 14 tests / core / aas / eic; all py_compile clean)
 - [x] Update `tests/routes.py` with omega API route inventory (`OMEGA_API_PATHS`, kept out of Streamlit ROUTES)
-- [ ] Verify CI `paths:` include `mandi_rdd/omega/**`
-- [ ] Full suite green + no regressions + dashboard E2E pass
-- [ ] Consolidated status report delivered to leader
+- [x] Verify CI `paths:` include `mandi_rdd/omega/**`
+- [x] Full suite green + no regressions (60 passed in 6.40s; screenshots E2E CI-gated) + dashboard E2E via dashboard-integration.yml
+- [x] Consolidated status report delivered to leader
