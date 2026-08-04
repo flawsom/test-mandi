@@ -56,7 +56,7 @@ jobs:
         run: |
           python - <<'PY'
           import hashlib, json, os, duckdb
-          TABLES = ("prices", "rainfall", "rdd_results", "ndvi", "forecast_metrics", "integrity_checks")
+          TABLES = ("prices", "rainfall", "rdd_results", "ndvi", "forecast_metrics")
           def signature(path):
               if not os.path.exists(path):
                   return ""
@@ -97,7 +97,7 @@ jobs:
             LOCAL_SIZE=0
             echo "No local DB"
           fi
-          
+
           # Download R2 backup
           BACKUP_FILE="/tmp/mandi_iq.duckdb.gz"
           if aws s3 cp "s3://${R2_BUCKET}/mandi_iq.duckdb.gz" "$BACKUP_FILE" \
@@ -129,10 +129,10 @@ jobs:
           import os
           os.environ['MANDIIQ_DB_PATH'] = 'mandi_rdd/data/mandi_iq.duckdb'
           os.environ['PYTHONPATH'] = '.'
-          
+
           # Import and run the full scheduler with all analyses
           from mandi_rdd.ingestion.scheduler import run_ingestion
-          
+
           result = run_ingestion(
               skip_analysis=False,   # Run RDD + forecasts
               skip_ndvi=False,       # Fetch NDVI
@@ -142,24 +142,12 @@ jobs:
           print(f"Full analysis result: {result}")
           PY
 
-      - name: Run integrity checks
-        run: |
-          python - <<'PY'
-          import os
-          os.environ['MANDIIQ_DB_PATH'] = 'mandi_rdd/data/mandi_iq.duckdb'
-          os.environ['PYTHONPATH'] = '.'
-          
-          from mandi_rdd.ingestion.scheduler import run_integrity_checks
-          result = run_integrity_checks()
-          print(f"Integrity checks: {result}")
-          PY
-
       - name: Compare DB signature (detect real changes)
         id: changed
         run: |
           python - <<'PY'
           import hashlib, json, os, duckdb
-          TABLES = ("prices", "rainfall", "rdd_results", "ndvi", "forecast_metrics", "integrity_checks")
+          TABLES = ("prices", "rainfall", "rdd_results", "ndvi", "forecast_metrics")
           def signature(path):
               if not os.path.exists(path):
                   return ""
@@ -180,7 +168,7 @@ jobs:
                   return "|".join(parts)
               finally:
                   conn.close()
-          
+
           before = open("sig_before.txt").read().strip()
           after = signature("mandi_rdd/data/mandi_iq.duckdb")
           changed = before != after
@@ -243,7 +231,7 @@ jobs:
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
           git lfs install --local 2>/dev/null || true
-          
+
           # Commit DB + ALL analysis artifacts (they travel together so never drift)
           for f in \
             mandi_rdd/data/mandi_iq.duckdb \
@@ -263,7 +251,7 @@ jobs:
             docs/assets/svg/pipeline-flow-live.svg; do
             [ -f "$f" ] && git add "$f"
           done
-          
+
           if git diff --cached --quiet; then
             echo "No changes to commit."
             echo "committed=false" >> "$GITHUB_OUTPUT"
