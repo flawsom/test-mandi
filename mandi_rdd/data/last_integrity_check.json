@@ -1,5 +1,5 @@
 {
-  "run_utc": "2026-08-04T12:28:58.379511+00:00",
+  "run_utc": "2026-08-04T15:07:08.270624+00:00",
   "overall": "warn",
   "checks": {
     "connectivity": {
@@ -16,18 +16,18 @@
     },
     "row_count": {
       "status": "ok",
-      "message": "1,335,578 price rows across 305 commodities, 36 states",
+      "message": "1,335,561 price rows across 305 commodities, 36 states",
       "extras": {
-        "n_prices": 1335578
+        "n_prices": 1335561
       }
     },
     "row_count_drift": {
-      "status": "ok",
-      "message": "Row count grew 0.0% (1,335,570 -> 1,335,578)"
+      "status": "warn",
+      "message": "Row count dropped 0.0% (1,335,578 -> 1,335,561)"
     },
     "date_sanity": {
       "status": "ok",
-      "message": "Data range: 1994-01-15 \u2192 2026-08-04 (0:00:00 days old)"
+      "message": "Data range: 1994-01-15 \u2192 2026-07-31 (4 days, 0:00:00 days old)"
     },
     "forecast_mape": {
       "status": "warn",
@@ -47,7 +47,8 @@
     }
   },
   "alerts": [
+    "[WARN] row_count_drift: Row count dropped 0.0% (1,335,578 -> 1,335,561)",
     "[WARN] forecast_mape: No NaN/Inf. 414 valid, 30 noisy: Garlic, Garlic, Garlic, Garlic, Garlic"
   ],
-  "summary": "All passed with 1 warning(s), 9 checks ok"
+  "summary": "All passed with 2 warning(s), 8 checks ok"
 }
