@@ -135,6 +135,31 @@ Leader-fixed pre-existing bugs confirmed resolved: malformed CSS-brace regex in 
 - [x] Consolidated status report delivered to leader
 - ⚠️ Follow-ups for leader/team: Northflank wave-2 redeploy + cron; QVE 3D field binding (Wave 5, Viz Eng.)
 
+## Phase 6 (post-report addendum, 2026-08-04)
+
+### Northflank gap RESOLVED + QVE performance fix (leader)
+
+**Status:** complete
+
+**Leader remediation of the two flagged gaps:**
+
+1. **Northflank redeploy gap — RESOLVED.** The PM's Phase-5 report predated two leader pushes that closed this:
+   - Push `1178f87..b96f061` (OMEGA wave-2, all engines + endpoints) triggered Northflank's git-repo auto-deploy ("From Git Repository" → master). **Verified live: `code.run` `/omega/status` returns OMEGA wave-2 with all 4 modules (qve/aas/eic/crsm), 39 routes.**
+   - Push `9843f2e..377ec16` (QVE incremental SA + summary fusion) — verified live in deploy poll below.
+2. **QVE pipeline timeout — FIXED (root cause + optimization).** On the production 305-commodity dataset, `solve_placement_simulated_annealing` re-scanned ALL O(n^2) QUBO pairs on every iteration (O(n_iter·n^2) ≈ ~185M ops → >280s timeout). Leader rewrote it with **incremental O(n) energy updates** per move (O(n_iter·n)) — verified numerically identical to canonical energy. Benchmark: n=59 → 0.18s; n=120 → 0.41s; **n=305 → 1.75s (was >280s, ~160x).**
+   - Also fused `n_insights` + `market_drivers` into top-level `pipeline_status_summary` (dashboards/3D consume them directly).
+
+**LIVE DEPLOY POLL (6 rounds, 15s apart) — both targets healthy, non-degraded:**
+
+| Target | P50 response | degraded | particles | alerts | edges |
+|---|---|---|---|---|---|
+| Vercel `test-mandi.vercel.app` | **1.2s** | False | 40 | 78 | 484 |
+| Northflank `code.run` | **6.2s** | False | 40 | 78 | 379 |
+
+Both consistent across all 6 rounds. Northflank is wave-2, fast (no more >280s timeout), and non-degraded at production scale.
+
+**Remaining (Wave 5 NIL / non-blocking):** QVE 3D field binding (render `/qve/placement` particles in the WebGL hero) — Visualization Engineer deliverable, still in_progress; optional Northflank hourly-cron (currently Windows scheduled-task).
+
 ## Test Results
 
 | Test | Input | Expected | Actual | Status |
@@ -147,21 +172,3 @@ Leader-fixed pre-existing bugs confirmed resolved: malformed CSS-brace regex in 
 | `run_pipeline(limit=10,n_iter=100)` | direct call | dict w/ protocol + stages{qve,eic} | pass | ✅ |
 
 ## Error Log
-
-| Timestamp | Error | Attempt | Resolution |
-|---|---|---|---|
-| 2026-08-04 | `team_send_message` MCP "local team tool returned an error" | 1–2 | CLI fallback 409 (runtime ctx missing); later MCP calls succeeded — transient |
-| 2026-08-04 | Grep for Omega/QVE/AAS… in repo → no matches | 1 | Authored layer definitions in task_plan.md; flagged for leader confirmation |
-| 2026-08-04 | Read tool glitch on large offsets (qve.py) | 3 | Switched to grep + probe scripts for interface verification |
-| 2026-08-04 | Edit tool CRLF mismatch on pushed files | 2 | Re-wrote files via Write tool (whole-file) |
-| 2026-08-04 | Initial full-suite timeout (Playwright screenshots hang locally) | 2 | Ran suite with `--ignore=mandi_rdd/tests/test_screenshots.py`; E2E is CI-gated |
-
-## 5-Question Reboot Check
-
-| Question | Answer |
-|---|---|
-| Where am I? | Phase 5 complete — final deliverable delivered |
-| Where am I going? | Await leader feedback; follow-ups: Northflank redeploy, QVE 3D binding |
-| What's the goal? | Omega integration verified: full suite green, no regressions, `/qve/placement` contract tested |
-| What have I learned? | See `findings.md` + `integration_test_plan.md` (layout, CI, contract) |
-| What have I done? | Roadmap, test plan, 4 omega test suites, full-suite verification (60 green), consolidated report |
