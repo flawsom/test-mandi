@@ -13,7 +13,7 @@ import os
 import streamlit as st
 
 # ── Resilient API base resolution ──
-_DEFAULT_API_BASE = "http://localhost:8000"  # override via MANDIIQ_API_URL env var
+_DEFAULT_API_BASE = "https://p01--mandiiq--zbvjrztgjqgw.code.run"  # hosted API; override via MANDIIQ_API_URL env/secret for local dev
 
 def get_api_base() -> str:
     """Resolve the FastAPI base URL."""

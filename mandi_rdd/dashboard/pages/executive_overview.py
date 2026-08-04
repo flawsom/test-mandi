@@ -1044,13 +1044,13 @@ def _render_freshness_widget():
     # ── Freshness Table CSS ──
 
     # Render the freshness table as styled HTML
-    _FRESHNESS_TABLE_CSS = f"""
+    _FRESHNESS_TABLE_CSS = """
     <style>
-    .freshness-table {{
+    .freshness-table {
         width: 100%; border-collapse: collapse;
         font-family: "IBM Plex Sans", system-ui, sans-serif;
         font-size: 0.82rem;
-    }}
+    }
     .freshness-table th {
         text-align: left; padding: 0.6rem 0.75rem;
         color: #7e7e7e; font-weight: 500; font-size: 0.7rem;
@@ -1073,123 +1073,123 @@ def _render_freshness_widget():
     .freshness-table th:hover .sort-arrow {
         color: #7e7e7e;
     }
-    .freshness-table td {{
+    .freshness-table td {
         padding: 0.55rem 0.75rem;
         color: #ffffff;
         border-bottom: 1px solid rgba(255,255,255,0.04);
         white-space: nowrap;
-    }}
-    .freshness-table tbody tr {{
+    }
+    .freshness-table tbody tr {
         transition: transform 0.25s ease;
         transform: scale(1);
         transform-origin: center left;
         backface-visibility: hidden;
-    }}
-    .freshness-table tbody tr:hover {{
+    }
+    .freshness-table tbody tr:hover {
         transform: scale(1.02);
         position: relative;
         z-index: 1;
-    }}
-    .freshness-table tr:hover td {{
+    }
+    .freshness-table tr:hover td {
         background: rgba(255,255,255,0.06);
-    }}
-    .freshness-table .mono {{
+    }
+    .freshness-table .mono {
         font-family: "IBM Plex Mono", monospace;
         font-variant-numeric: tabular-nums;
-    }}
-    .freshness-table .num {{
+    }
+    .freshness-table .num {
         font-family: "IBM Plex Mono", monospace;
         text-align: right;
         font-variant-numeric: tabular-nums;
-    }}
-    .freshness-table .source-badge {{
+    }
+    .freshness-table .source-badge {
         display: inline-block;
         padding: 0.1rem 0.45rem;
         border-radius: 3px;
         font-size: 0.7rem;
         font-family: "IBM Plex Mono", monospace;
         font-weight: 500;
-    }}
-    .source-badge-api {{
+    }
+    .source-badge-api {
         background: rgba(215, 255, 0, 0.12);
         color: #d7ff00;
-    }}
-    .source-badge-csv {{
+    }
+    .source-badge-csv {
         background: rgba(139, 107, 196, 0.12);
         color: #8B6BC4;
-    }}
-    .source-badge-ashoka {{
+    }
+    .source-badge-ashoka {
         background: rgba(217, 102, 59, 0.12);
         color: #D9663B;
-    }}
-    .source-badge-rainfall {{
+    }
+    .source-badge-rainfall {
         background: rgba(143, 174, 137, 0.12);
         color: #8FAE89;
-    }}
-    .source-badge-varietywise {{
+    }
+    .source-badge-varietywise {
         background: rgba(180, 131, 84, 0.12);
         color: #B48354;
-    }}
-    .source-badge-other {{
+    }
+    .source-badge-other {
         background: rgba(186, 186, 186, 0.12);
         color: #bababa;
-    }}
-    .freshness-table .fresh-dot {{
+    }
+    .freshness-table .fresh-dot {
         display: inline-block;
         width: 7px; height: 7px;
         border-radius: 50%;
         margin-right: 4px;
-    }}
-    .fresh-dot-recent {{ background: #6BBF8A; }}
-    .fresh-dot-stale {{ background: #E8B14D; }}
-    .fresh-dot-old   {{ background: #C84B4B; }}
-    @keyframes freshRowSlide {{
-        0% {{ opacity: 0; transform: translateX(-16px); }}
-        100% {{ opacity: 1; transform: translateX(0); }}
-    }}
-    @keyframes freshHighlight {{
-        0% {{ background: rgba(215,255,0,0); box-shadow: inset 4px 0 0 rgba(215,255,0,0); }}
-        25% {{ background: rgba(215,255,0,0.05); box-shadow: inset 4px 0 0 rgba(215,255,0,0.4); }}
-        100% {{ background: rgba(215,255,0,0); box-shadow: inset 4px 0 0 rgba(215,255,0,0); }}
-    }}
-    .freshness-table tbody tr.district-expanded {{
+    }
+    .fresh-dot-recent { background: #6BBF8A; }
+    .fresh-dot-stale { background: #E8B14D; }
+    .fresh-dot-old   { background: #C84B4B; }
+    @keyframes freshRowSlide {
+        0% { opacity: 0; transform: translateX(-16px); }
+        100% { opacity: 1; transform: translateX(0); }
+    }
+    @keyframes freshHighlight {
+        0% { background: rgba(215,255,0,0); box-shadow: inset 4px 0 0 rgba(215,255,0,0); }
+        25% { background: rgba(215,255,0,0.05); box-shadow: inset 4px 0 0 rgba(215,255,0,0.4); }
+        100% { background: rgba(215,255,0,0); box-shadow: inset 4px 0 0 rgba(215,255,0,0); }
+    }
+    .freshness-table tbody tr.district-expanded {
         /* Subtle indicator that this row is expanded */
         border-left: 1.5px solid rgba(215,255,0,0.3);
-    }}
-    .freshness-subrow td {{
+    }
+    .freshness-subrow td {
         padding: 0 !important;
         border-bottom: none;
-    }}
-    .freshness-subrow-inner {{
+    }
+    .freshness-subrow-inner {
         max-height: 0;
         overflow: hidden;
         transition: max-height 0.3s cubic-bezier(0.16,1,0.3,1);
-    }}
-    .freshness-subrow-inner.open {{
+    }
+    .freshness-subrow-inner.open {
         max-height: 600px;
-    }}
-    .district-mini-table {{
+    }
+    .district-mini-table {
         width: 100%;
         border-collapse: collapse;
         font-size: 0.72rem;
         font-family: "IBM Plex Mono", monospace;
         background: rgba(255,255,255,0.02);
-    }}
-    .district-mini-table th {{
+    }
+    .district-mini-table th {
         text-align: left; padding: 0.4rem 0.6rem;
         color: #7e7e7e; font-weight: 500;
         border-bottom: 1px solid rgba(255,255,255,0.06);
-    }}
-    .district-mini-table td {{
+    }
+    .district-mini-table td {
         padding: 0.3rem 0.6rem;
         color: #bababa;
         border-bottom: 1px solid rgba(255,255,255,0.03);
-    }}
-    .district-mini-table td.num {{
+    }
+    .district-mini-table td.num {
         text-align: right;
         color: #ffffff;
         font-variant-numeric: tabular-nums;
-    }}
+    }
     </style>
     """
     st.markdown(_FRESHNESS_TABLE_CSS, unsafe_allow_html=True)
