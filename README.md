@@ -101,8 +101,24 @@
 | **FastAPI (Production)** | [p01--mandiiq--zbvjrztgjqgw.code.run](https://p01--mandiiq--zbvjrztgjqgw.code.run) | <img src="https://img.shields.io/badge/-Live-success?style=flat-square" /> | Northflank |
 | **Streamlit Dashboard** | [test-mandi-keae7eruks2n4cqvumjfu8.streamlit.app](https://test-mandi-keae7eruks2n4cqvumjfu8.streamlit.app) | <img src="https://img.shields.io/badge/-Live-brightgreen?style=flat-square" /> | Streamlit Cloud |
 | **Landing Page** | [flawsom.github.io/test-mandi](https://flawsom.github.io/test-mandi) | <img src="https://img.shields.io/badge/-Live-blue?style=flat-square" /> | GitHub Pages |
-| **Vercel API (Read-Only)** | — | <img src="https://img.shields.io/badge/-Auto--deployed-informational?style=flat-square" /> | Vercel + GitHub Actions |
+| **Vercel API** | [test-mandi.vercel.app](https://test-mandi.vercel.app) | <img src="https://img.shields.io/badge/-Live-success?style=flat-square" /> | Vercel + GitHub Actions |
+| **API Docs** | [p01--mandiiq--zbvjrztgjqgw.code.run/docs](https://p01--mandiiq--zbvjrztgjqgw.code.run/docs) | <img src="https://img.shields.io/badge/-Live-success?style=flat-square" /> | Northflank |
 | **GitHub Repo** | [github.com/flawsom/test-mandi](https://github.com/flawsom/test-mandi) | <img src="https://img.shields.io/badge/-Public-success?style=flat-square" /> | — |
+
+<br />
+
+**OMEGA Wave-2 Endpoints** (all live, non-degraded &mdash; auto-refresh on every run):
+
+| Endpoint | Method | Returns |
+|----------|--------|---------|
+| `/omega/pipeline` | `POST` | Full pipeline status: `n_particles`, `n_alerts`, `n_edges`, `n_insights`, `market_drivers`, per-stage timings & state hash |
+| `/omega/status` | `GET` | Quick health check (`degraded` flag) |
+| `/qve/placement` | `GET` | Quantum-optimized 3D particle placement (QUBO + simulated annealing) |
+| `/aas/status` | `GET` | Autonomous agent swarm status (BDI roles, consensus, attention entropy) |
+| `/eic/insights` | `GET` | Ranked causal insights from the Emergent Intelligence Core |
+| `/omega/qve/energy` | `POST` | QUBO energy diagnostics |
+
+Live numbers (update automatically with every pipeline run against the DuckDB warehouse): **60 particles &middot; 117 agent alerts &middot; 414+ causal edges &middot; 10 ranked insights &middot; 3 market drivers**.
 
 </details>
 </div>
