@@ -136,3 +136,4 @@ verify_dashboard.mjs
 .vercel/
 
 push*.log
+_audit_shots/
