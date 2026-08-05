@@ -20,7 +20,13 @@ def _get(path, timeout=TIMEOUT):
 
 @pytest.fixture(scope="module")
 def dashboard_ready():
-    """Wait until the dashboard answers 200 on its root (bounded wait)."""
+    """Wait until the dashboard answers 200 on its root (bounded wait).
+
+    Skipped (not failed) when no dashboard is present so this file can also
+    be collected by the plain unit-CI job, where no Streamlit instance runs.
+    The dashboard-integration workflow (which boots one on :8502) exercises
+    these tests fully.
+    """
     deadline = time.time() + 40
     while time.time() < deadline:
         try:
@@ -30,7 +36,7 @@ def dashboard_ready():
         except Exception:
             pass
         time.sleep(1)
-    pytest.fail("Dashboard never became ready on " + BASE)
+    pytest.skip("no live dashboard on " + BASE + " (integration-only test)")
 
 
 def test_dashboard_root_serves_200(dashboard_ready):
