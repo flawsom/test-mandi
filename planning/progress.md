@@ -182,3 +182,36 @@ Both consistent across all 6 rounds. Northflank is wave-2, fast (no more >280s t
 - **Bug 2 - Streamlit empty shell (backend never starts):** PEP 701 f-strings (backslash / nested same-quote) in theme.py + components.py are SyntaxErrors on Python 3.11 (Cloud runtime); local 3.12 masked them. **Fix:** backported to 3.11-compatible precomputed vars. All 89 files compile clean under Py3.11.15.
 - **Also added:** root streamlit_app.py entrypoint so Streamlit Cloud auto-detects the nested dashboard app; mandi_rdd/tests/live_audit.py (Playwright+Brave live monitor); README live-services correction (Vercel URL) + OMEGA wave-2 endpoints table.
 - **Committed/pushed:** cc2bc0a (docs), 57ceb74 (gitignore), 52633a0 (entrypoint), 56c223d (f-string fix). CI: green on all 3 latest.
+
+
+### Phase 7 addendum (final hardening pass)
+
+- **Streamlit Cloud free-tier now LIVE.** Rebuild finished. Verified at
+  https://test-mandi-keae7eruks2n4cqvumjfu8.streamlit.app : websocket
+  CONNECTED, sidebar renders all 10 pages (Executive Overview, Discontinuity,
+  Forecast, Risk Map, Satellite, Discount Simulator, Ask MandiIQ, Settings,
+  About, Components), 200-commodity freshness table paginated, 10/10 pages
+  audited via Brave (0 exceptions); Discount Simulator "Run Simulation"
+  functional (graceful "Model Not Available" when classifier absent, no crash).
+- **Fixed sidebar health dot** (was permanently "Degraded"): app.py imported
+  nonexistent `check_health` -> always hit except -> amber. Now uses real
+  `health_check_all()` and maps no-provider -> green. Live verified green +
+  "All healthy".
+- **Fixed `Dashboard Integration` GitHub workflow that had NEVER passed
+  (16/16 red since Jul 30).** Two root causes:
+  1. Boot step aborted on attempt 1 under `set -e`: curl returned nonzero
+     (ECONNREFUSED) while Streamlit cold-started. Fixed to map to `000` and
+     poll up to 110s with clear failure diagnostics.
+  2. `pytest`/`pytest-timeout` were never installed in that workflow; and
+     `test_dashboard_integration.py` did not exist. Added install of test deps
+     and a real integration test (root 200 /_stcore/health ok / static bundles
+     / page metadata) that skips gracefully when no dashboard is running.
+- Verified final live state (all autonomous numbers):
+  - Northflank `/omega/pipeline`: 60 particles, energy ~80, 117 alerts, 426+
+    edges, 10 insights, 5 drivers (scipy enabled, 305 commodities).
+  - Vercel `/omega/pipeline` (POST): 200, 60 particles, energy ~90 (root 404
+    is expected - API-only).
+  - 3D quantum field live at flawsom.github.io/test-mandi/dashboards/omega-field.html:
+    60 PARTICLES, energy 69.47, 114 alerts, 426 edges, market drivers (Carrot,
+    Arhar, Lentil...), full controls, no JS errors.
+  - CI all green incl. the previously-red Dashboard Integration workflow.
