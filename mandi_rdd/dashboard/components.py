@@ -133,7 +133,8 @@ def btn(label, key=None, variant="primary", disabled=False, loading=False, on_cl
 
     # Use st.button for functionality, apply styles via class
     btn_html = f'<button class="{css_class}" {"disabled" if disabled else ""}>'
-    btn_html += f'<span class="pulse-dots" style="display:{'inline' if loading else 'none'};">...</span>' if loading else ""
+    pulse_style = 'inline' if loading else 'none'
+    btn_html += f'<span class="pulse-dots" style="display:{pulse_style};">...</span>' if loading else ""
     btn_html += label
     btn_html += "</button>"
 

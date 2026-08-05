@@ -1661,12 +1661,13 @@ def countup_card(label: str, value_raw: float | int, prefix: str = "", suffix: s
         return f'<div class="countup-card"><div class="countup-label">{label}</div><div class="countup-value">—</div></div>'
     safe_prefix = prefix.replace('"', '&quot;').replace("'", "&#39;")
     safe_suffix = suffix.replace('"', '&quot;').replace("'", "&#39;")
+    cfmt = f' data-cfmt="{fmt}"' if fmt else ""
     return (
         f'<div class="countup-card">'
         f'<div class="countup-label">{label}</div>'
         f'<div class="countup-value" data-ctarget="{value_raw}"'
         f' data-cprefix="{safe_prefix}" data-csuffix="{safe_suffix}"'
-        f'{" data-cfmt=\"" + fmt + "\"" if fmt else ""}>0'
+        f'{cfmt}>0'
         f'</div></div>'
     )
 
