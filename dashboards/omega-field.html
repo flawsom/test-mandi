@@ -382,7 +382,7 @@ async function loadData() {
     if (API_BASE) {
       const ctl = new AbortController();
       const t = setTimeout(() => ctl.abort(), 8000);
-      resp = await fetch(API_BASE + '/omega/pipeline?n_agents=1500', { signal: ctl.signal });
+      resp = await fetch(API_BASE + '/omega/pipeline?n_agents=1500', { method: 'POST', signal: ctl.signal });
       clearTimeout(t);
       if (!resp.ok) throw new Error('HTTP ' + resp.status);
       const raw = await resp.json();
@@ -392,7 +392,7 @@ async function loadData() {
       const ctl = new AbortController();
       const t = setTimeout(() => ctl.abort(), 3000);
       try {
-        resp = await fetch('http://localhost:8000/omega/pipeline?n_agents=1500', { signal: ctl.signal });
+        resp = await fetch('http://localhost:8000/omega/pipeline?n_agents=1500', { method: 'POST', signal: ctl.signal });
         if (!resp.ok) throw new Error('HTTP ' + resp.status);
         data = normalizePayload(await resp.json());
       } catch {
