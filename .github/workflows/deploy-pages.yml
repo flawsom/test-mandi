@@ -7,6 +7,7 @@ on:
       - "landing/**"
       - "docs/**"
       - "static/**"
+      - "dashboards/omega-field.html"   # standalone 3D quantum field page
       - "mandi_rdd/data/**"   # DuckDB — landing/docs KPI freshness reads live data
       - ".github/workflows/deploy-pages.yml"
   workflow_dispatch:
@@ -54,6 +55,11 @@ jobs:
             for f in static/*; do
               [ -e "$f" ] && cp "$f" _site/
             done
+          fi
+          # ── Standalone 3D quantum field → /dashboards/omega-field.html ──
+          if [ -f dashboards/omega-field.html ]; then
+            mkdir -p _site/dashboards
+            cp dashboards/omega-field.html _site/dashboards/
           fi
           # .nojekyll prevents Jekyll processing
           touch _site/.nojekyll

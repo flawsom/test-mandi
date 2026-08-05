@@ -172,3 +172,13 @@ Both consistent across all 6 rounds. Northflank is wave-2, fast (no more >280s t
 | `run_pipeline(limit=10,n_iter=100)` | direct call | dict w/ protocol + stages{qve,eic} | pass | ✅ |
 
 ## Error Log
+
+---
+
+## Session: 2026-08-05 - Live-Deployment Monitoring & Hardening (Phase 7)
+
+- **Result:** All live deployments (Vercel, Northflank code.run, Streamlit, GitHub) audited end-to-end; two latent bugs found + fixed.
+- **Bug 1 - CI red (5 runs):** mandi_rdd/api/metrics_push.py imports prometheus_client at module load but it was missing from runtime reqs. CI clean env crashed on import. **Fix:** added prometheus-client, python-dotenv, jsonschema, urllib3 to mandi_rdd/requirements.txt. Verified on fresh Py3.11 env (51 passed, 0 failures). CI now green.
+- **Bug 2 - Streamlit empty shell (backend never starts):** PEP 701 f-strings (backslash / nested same-quote) in theme.py + components.py are SyntaxErrors on Python 3.11 (Cloud runtime); local 3.12 masked them. **Fix:** backported to 3.11-compatible precomputed vars. All 89 files compile clean under Py3.11.15.
+- **Also added:** root streamlit_app.py entrypoint so Streamlit Cloud auto-detects the nested dashboard app; mandi_rdd/tests/live_audit.py (Playwright+Brave live monitor); README live-services correction (Vercel URL) + OMEGA wave-2 endpoints table.
+- **Committed/pushed:** cc2bc0a (docs), 57ceb74 (gitignore), 52633a0 (entrypoint), 56c223d (f-string fix). CI: green on all 3 latest.
