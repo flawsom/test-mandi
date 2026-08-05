@@ -1,15 +1,16 @@
 {
   "schema": 2,
-  "generated_at": "2026-08-05T08:36:42Z",
-  "overall": "healthy",
-  "exit_code": 0,
+  "generated_at": "2026-08-05T14:09:37Z",
+  "overall": "unhealthy",
+  "exit_code": 1,
   "min_prices": 1000000,
-  "latest_db_reference": 1335567,
+  "latest_db_reference": 1335580,
   "serving_latest": [
-    "Vercel",
+    "Vercel"
+  ],
+  "stale": [
     "Northflank"
   ],
-  "stale": [],
   "down": [],
   "count_unavailable": [
     "Streamlit",
@@ -18,20 +19,20 @@
   "surfaces": {
     "Vercel": {
       "verdict": "LATEST",
-      "n_prices": 1335567,
+      "n_prices": 1335580,
       "http_status": 200,
       "kind": "api",
-      "note": "matches latest DB (1,335,567 rows)",
+      "note": "matches latest DB (1,335,580 rows)",
       "url": "https://test-mandi.vercel.app/health",
       "attempts": 1,
       "retried": false
     },
     "Northflank": {
-      "verdict": "LATEST",
-      "n_prices": 1335567,
+      "verdict": "STALE",
+      "n_prices": 1335573,
       "http_status": 200,
       "kind": "api",
-      "note": "matches latest DB (1,335,567 rows)",
+      "note": "behind latest DB (1,335,573 vs 1,335,580)",
       "url": "https://p01--mandiiq--zbvjrztgjqgw.code.run/health",
       "attempts": 1,
       "retried": false
@@ -57,7 +58,7 @@
       "retried": false
     }
   },
-  "table": "  Surface        | Verdict       |    n_prices | Notes\n  ---------------+---------------+-------------+-----------------------------\n  Vercel         | LATEST        |   1,335,567 | matches latest DB (1,335,567 rows)\n  Northflank     | LATEST        |   1,335,567 | matches latest DB (1,335,567 rows)\n  Streamlit      | UP (auth)     |           - | auth redirect \u2014 count unavailable\n  GitHub Pages   | UP (static)   |           - | HTTP 200 \u2014 no JSON count expected\n\n  Latest DB reference: 1,335,567 rows\n  Serving latest DB : Vercel, Northflank\n  Count unavailable : Streamlit, GitHub Pages",
+  "table": "  Surface        | Verdict       |    n_prices | Notes\n  ---------------+---------------+-------------+-----------------------------\n  Vercel         | LATEST        |   1,335,580 | matches latest DB (1,335,580 rows)\n  Northflank     | STALE         |   1,335,573 | behind latest DB (1,335,573 vs 1,335,580)\n  Streamlit      | UP (auth)     |           - | auth redirect \u2014 count unavailable\n  GitHub Pages   | UP (static)   |           - | HTTP 200 \u2014 no JSON count expected\n\n  Latest DB reference: 1,335,580 rows\n  Serving latest DB : Vercel\n  Stale surfaces    : Northflank\n  Count unavailable : Streamlit, GitHub Pages",
   "history": [
     {
       "generated_at": "2026-07-31T17:35:02Z",
@@ -154,7 +155,19 @@
         "Streamlit": "UP (auth)",
         "GitHub Pages": "UP (static)"
       }
+    },
+    {
+      "generated_at": "2026-08-05T14:09:37Z",
+      "overall": "unhealthy",
+      "exit_code": 1,
+      "latest_db_reference": 1335580,
+      "verdicts": {
+        "Vercel": "LATEST",
+        "Northflank": "STALE",
+        "Streamlit": "UP (auth)",
+        "GitHub Pages": "UP (static)"
+      }
     }
   ],
-  "signature": "23ec1393bbc3a581"
+  "signature": "7db0868e26515e55"
 }
