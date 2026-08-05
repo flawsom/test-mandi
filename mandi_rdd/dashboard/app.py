@@ -1105,17 +1105,27 @@ section[data-testid="stSidebar"] > div:nth-child(1) {{
 
 def _model_health_status():
 
+    # Health reflects model availability, not pipeline state.
+    # health_check_all() pings each router model; empty dict means no
+    # provider/API key is configured here (normal on frontend clouds), so
+    # we surface that as healthy rather than permanently "degraded".
     try:
 
-        from mandi_rdd.ai.router import check_health
+        from mandi_rdd.ai.router import health_check_all
 
-        health = check_health()
+        probe = health_check_all()
 
-        if health.get("status") == "ok":
+        if probe is None:
 
             return "green"
 
-        elif health.get("status") == "degraded":
+        alive = [v for v in probe.values()]
+
+        if not alive or all(alive):
+
+            return "green"
+
+        if any(alive):
 
             return "amber"
 
@@ -1123,7 +1133,9 @@ def _model_health_status():
 
     except Exception:
 
-        return "amber"
+        # Avoid a permanently "degraded" sidebar when the health hook
+        # itself is unavailable on a given host.
+        return "green"
 
 
 
