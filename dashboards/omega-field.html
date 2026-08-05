@@ -337,12 +337,17 @@ function normalizePayload(raw) {
       drivers: raw.market_drivers || raw.drivers || []
     };
   }
-  const stage = (raw.stages && raw.stages.eic) || {};
+  const stages = raw.stages || {};
+  const stage = stages.eic || {};
+  const qve = stages.qve || {};
   return {
-    n_particles: raw.n_particles, energy: raw.energy, n_alerts: raw.n_alerts,
-    n_edges: raw.n_edges, state_hash: raw.state_hash, degraded: raw.degraded,
-    particles: raw.particles || [],
-    insights: stage.insights || [],
+    n_particles: raw.n_particles ?? qve.n_particles,
+    energy: raw.energy ?? qve.energy,
+    n_alerts: raw.n_alerts ?? (stages.aas ? stages.aas.n_alerts : undefined),
+    n_edges: raw.n_edges,
+    state_hash: raw.state_hash, degraded: raw.degraded,
+    particles: raw.particles || qve.particles || [],
+    insights: raw.insights || stage.insights || [],
     drivers: raw.market_drivers || stage.market_drivers || []
   };
 }
