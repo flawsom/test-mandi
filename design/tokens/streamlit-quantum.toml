@@ -22,8 +22,3 @@ textColor = "#e8ecf4"
 
 # Typography: IBM Plex Sans body (keep "sans serif" for cloud portability)
 font = "sans serif"
-
-# ── Optional: Streamlit theming is limited to these six keys.
-#    The richer token set (glow, ramps, motion) lives in
-#    design/tokens/*.css, injected via the app's style_utils /
-#    st.markdown("<style>...</style>") loader.
