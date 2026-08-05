@@ -24,7 +24,26 @@ jobs:
       - name: Check import status from Render API
         id: status
         run: |
-          RESP=$(curl -s --max-time 15 "https://p01--mandiiq--zbvjrztgjqgw.code.run/historical-import-status")
+          # The API redeploys on every push to master (Northflank is wired to
+          # the repo), so a transient 503 "no healthy upstream" mid-redeploy is
+          # expected and can last several minutes. Retry with a generous budget
+          # (~7.5 min) before declaring the fetch failed.
+          RESP=""
+          MAX_ATTEMPTS=15
+          RETRY_DELAY=30
+          for ((ATTEMPT=1; ATTEMPT<=MAX_ATTEMPTS; ATTEMPT++)); do
+            RESP=$(curl -s --max-time 20 --retry 2 --retry-delay 5 --retry-all-errors \
+              "https://p01--mandiiq--zbvjrztgjqgw.code.run/historical-import-status" || true)
+            if echo "$RESP" | python3 -c "import sys,json; json.load(sys.stdin)" 2>/dev/null; then
+              echo "Got valid JSON on attempt ${ATTEMPT}/${MAX_ATTEMPTS}"
+              break
+            fi
+            echo "Attempt ${ATTEMPT}/${MAX_ATTEMPTS}: not valid JSON yet (${RESP:0:60})"
+            if [ "$ATTEMPT" -lt "$MAX_ATTEMPTS" ]; then
+              echo "  Retrying in ${RETRY_DELAY}s..."
+              sleep "$RETRY_DELAY"
+            fi
+          done
           echo "Raw response: $RESP"
           STATE=$(echo "$RESP" | python3 -c "import sys,json; print(json.load(sys.stdin).get('state','unknown'))")
           PROGRESS=$(echo "$RESP" | python3 -c "import sys,json; d=json.load(sys.stdin); print(d.get('progress',''))")

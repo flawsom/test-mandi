@@ -62,15 +62,17 @@ jobs:
         run: |
           echo "Fetching dashboard status from ${API_URL}/admin/dashboard-status..."
           # The API redeploys on every push to master (Northflank is wired to
-          # the repo), so a transient 503 mid-redeploy is expected. Retry up to
-          # 3 times, 20s apart, before declaring the fetch failed.
+          # the repo), so a transient 503 "no healthy upstream" mid-redeploy is
+          # expected and can last several minutes. Retry with a generous budget
+          # (~7.5 min) before declaring the fetch failed, and let curl itself
+          # retry transient connect failures.
           HTTP_CODE=""
-          MAX_ATTEMPTS=3
-          RETRY_DELAY=20
+          MAX_ATTEMPTS=15
+          RETRY_DELAY=30
           for ((ATTEMPT=1; ATTEMPT<=MAX_ATTEMPTS; ATTEMPT++)); do
             HTTP_CODE=$(curl -s -o /tmp/dashboard_status.json -w "%{http_code}" \
               "${API_URL}/admin/dashboard-status" \
-              --max-time 15)
+              --max-time 20 --retry 2 --retry-delay 5 --retry-all-errors)
             echo "Attempt ${ATTEMPT}/${MAX_ATTEMPTS}: HTTP ${HTTP_CODE}"
             if [ "$HTTP_CODE" = "200" ]; then
               break
