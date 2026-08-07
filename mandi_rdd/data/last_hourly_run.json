@@ -1,7 +1,7 @@
 {
-  "last_run_utc": "2026-08-07T22:08:07.048754+00:00",
+  "last_run_utc": "2026-08-07T23:08:11.827671+00:00",
   "outcome": "success",
-  "new_price_rows": 8785,
-  "duration_s": 18.7,
+  "new_price_rows": 10000,
+  "duration_s": 18.9,
   "error": null
 }

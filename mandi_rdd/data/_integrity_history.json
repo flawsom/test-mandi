@@ -2522,5 +2522,60 @@
       "[WARN] rainfall: No rainfall data recorded yet"
     ],
     "summary": "1 check(s) FAILED, 3 warning(s), 6 passed"
+  },
+  {
+    "run_utc": "2026-08-07T23:08:11.842436+00:00",
+    "overall": "warn",
+    "checks": {
+      "connectivity": {
+        "status": "ok",
+        "message": "Connected. Tables: 10"
+      },
+      "min_commodities": {
+        "status": "ok",
+        "message": "233 distinct commodities"
+      },
+      "min_districts": {
+        "status": "ok",
+        "message": "491 distinct districts"
+      },
+      "row_count": {
+        "status": "ok",
+        "message": "10,000 price rows across 233 commodities, 30 states",
+        "extras": {
+          "n_prices": 10000
+        }
+      },
+      "row_count_drift": {
+        "status": "ok",
+        "message": "Row count grew 13.8% (8,785 -> 10,000)"
+      },
+      "date_sanity": {
+        "status": "ok",
+        "message": "Data range: 2026-08-07 \u2192 2026-08-07 (0:00:00 days old)"
+      },
+      "forecast_mape": {
+        "status": "warn",
+        "message": "No forecast metrics recorded yet \u2014 skipping"
+      },
+      "rdd_sanity": {
+        "status": "warn",
+        "message": "No RDD results recorded yet"
+      },
+      "rainfall": {
+        "status": "warn",
+        "message": "No rainfall data recorded yet"
+      },
+      "ndvi": {
+        "status": "ok",
+        "message": "NDVI table exists but is empty (no credentials?)"
+      }
+    },
+    "alerts": [
+      "[WARN] forecast_mape: No forecast metrics recorded yet \u2014 skipping",
+      "[WARN] rdd_sanity: No RDD results recorded yet",
+      "[WARN] rainfall: No rainfall data recorded yet"
+    ],
+    "summary": "All passed with 3 warning(s), 7 checks ok"
   }
 ]
