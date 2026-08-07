@@ -23,7 +23,6 @@ import { OrbitControls } from "@react-three/drei";
 import * as THREE from "three";
 
 import {
-  fallbackPlacement,
   fetchQvePlacement,
   toField,
 } from "./dataProvider";
@@ -174,8 +173,10 @@ export function QuantumField({
       })
       .catch(() => {
         if (!alive) return;
-        // deterministic offline fallback → dashboard never breaks
-        setResponse(fallbackPlacement({ commodity, limit, seed }));
+        // Honest degraded state: backend unreachable → no fabricated particles.
+        // The field renders empty and labels the outage; the user sees live
+        // data whenever the API is reachable, never invented numbers.
+        setResponse(null);
         setOffline(true);
       })
       .finally(() => {
@@ -234,7 +235,7 @@ export function QuantumField({
           {loading
             ? "COMPUTING…"
             : offline
-              ? "OFFLINE FIELD"
+              ? "QVE UNAVAILABLE"
               : `QVE ${response ? response.engine : ""}`.trim()}
         </span>
         <span style={{ color: "#9ca3af", fontFamily: "IBM Plex Mono, monospace", fontSize: 11 }}>
