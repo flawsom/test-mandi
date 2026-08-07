@@ -2482,6 +2482,22 @@ def eic_status():
         return JSONResponse(status_code=500, content={"error": str(e)})
 
 
+
+# ---- Live-data proxy (Vercel only) ----
+# Vercel auto-detects and serves this module`s `app` directly, so the full
+# DB must come from the live upstream. Northflank hosts the full 1.3M-row
+# hourly DuckDB but its edge proxy strips CORS for browsers; this wraps
+# `app` with LiveProxy ONLY when VERCEL env is set (Vercel injects it;
+# Northflank never has it) so the CORS-correct Vercel host serves live data
+# via server-to-server forwarding, with local fallback.
+def _maybe_wrap_liveproxy(app):
+    try:
+        from mandi_rdd.api.liveproxy import maybe_wrap
+        return maybe_wrap(app)
+    except Exception:
+        return app
+app = _maybe_wrap_liveproxy(app)
+
 if __name__ == "__main__":
     port = int(os.getenv("PORT", 8000))
     uvicorn.run("mandi_rdd.api.main:app", host="0.0.0.0", port=port, reload=True)
