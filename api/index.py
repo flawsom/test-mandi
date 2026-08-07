@@ -92,6 +92,7 @@ class LiveProxy:
             return await self.app(scope, receive, send)
 
         method = scope.get("method", "GET")
+        path = scope.get("path", "/")
 
         # Preflight — answer locally with CORS headers (no upstream hop).
         if method == "OPTIONS":
@@ -103,7 +104,29 @@ class LiveProxy:
             await send({"type": "http.response.body", "body": b""})
             return
 
-        path = scope.get("path", "/")
+        # Diagnostics: confirm the proxy is live and upstream is reachable.
+        if path == "/_proxy/status":
+            import json as _json
+            payload = {"proxy": True, "target": PROXY_TARGET}
+            try:
+                req = urllib.request.Request(PROXY_TARGET + "/health", timeout=15)
+                with urllib.request.urlopen(req) as r:
+                    payload["upstream_reachable"] = True
+                    payload["upstream_status"] = r.status
+            except Exception as e:
+                payload["upstream_reachable"] = False
+                payload["upstream_error"] = str(e)
+            body = _json.dumps(payload).encode()
+            await send({
+                "type": "http.response.start",
+                "status": 200,
+                "headers": [(b"content-type", b"application/json"),
+                            (b"content-length", str(len(body)).encode())]
+                          + _cors_headers(scope),
+            })
+            await send({"type": "http.response.body", "body": body})
+            return
+
         qs = scope.get("query_string", b"").decode("latin-1", "replace")
         url = PROXY_TARGET + path + (("?" + qs) if qs else "")
 
