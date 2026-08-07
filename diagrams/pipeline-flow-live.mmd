@@ -1,5 +1,5 @@
 ---
-title: "MandiIQ Pipeline Flow -- Last Successful Cycle<br/><span style='font-size:11px;color:#7e7e7e;'>2026-08-07 05:40 UTC ~ 23.9s total ~ Outcome: <b style='color:#8FAE89'>success</b></span>"
+title: "MandiIQ Pipeline Flow -- Last Successful Cycle<br/><span style='font-size:11px;color:#7e7e7e;'>2026-08-07 06:10 UTC ~ 25.7s total ~ Outcome: <b style='color:#8FAE89'>success</b></span>"
 ---
 %%{init: {
   "theme": "dark",
@@ -30,27 +30,27 @@ flowchart TD
     %% Stage 1: DATA INGESTION
     subgraph S1["01 DATA INGESTION  | API + Archive + Satellite + Backfill + Provenance"]
         direction TB
-        A1["fetch_prices.py<br/>data.gov.in API <span style='color:#7e7e7e;font-size:10px;'>[3.4s]</span><br/><b>1,335,586</b> records ingested<br/><i>306 commodities ~ 36 states</i>"]
-        A2["prices_varietywise.py<br/>Archive scanner <span style='color:#7e7e7e;font-size:10px;'>[-]</span><br/>Supplementary 60d recent prices<br/><i>Resource 35985678</i>"]
-        A3["fetch_rainfall.py<br/>IMD Grids <br/><b>2,278</b> records<br/><i>34 sub-divisions ~ 2021--2026</i>"]
-        A4["fetch_ndvi.py<br/>Sentinel Hub <br/><b>3,663</b> vegetation records<br/><i>605 districts</i>"]
+        A1["fetch_prices.py<br/>data.gov.in API <span style='color:#7e7e7e;font-size:10px;'>[18.9s]</span><br/><b>10,000</b> records ingested<br/><i>178 commodities ~ 24 states</i>"]
+        A2["prices_varietywise.py<br/>Archive scanner <span style='color:#7e7e7e;font-size:10px;'>[0.1s]</span><br/>Supplementary 60d recent prices<br/><i>Resource 35985678</i>"]
+        A3["fetch_rainfall.py<br/>IMD Grids <br/><b>0</b> records<br/><i>0 sub-divisions ~ ----</i>"]
+        A4["fetch_ndvi.py<br/>Sentinel Hub <br/><b>0</b> vegetation records<br/><i>0 districts</i>"]
         A5["ingest_historical_csv.py <span style='color:#7e7e7e;font-size:10px;'>[-]</span><br/>CSV backfill ~ Ashoka archive"]
         A6["district_map.py<br/>Sub-division mapping <br/><b>860</b> mappings loaded<br/><i>State -> District -> Sub-division</i>"]
-        A7["backfill_state.py <span style='color:#7e7e7e;font-size:10px;'>[1.0s]</span><br/>State name resolution<br/><b>1,335,586</b> rows populated<br/><i>0 rows still empty</i>"]
-        A8["data_lineage.py<br/>Provenance tracking <br/><b>43</b> records<br/><i>2 source types: prices, varietywise, rainfall</i>"]
+        A7["backfill_state.py <span style='color:#7e7e7e;font-size:10px;'>[0.0s]</span><br/>State name resolution<br/><b>10,000</b> rows populated<br/><i>0 rows still empty</i>"]
+        A8["data_lineage.py<br/>Provenance tracking <br/><b>1</b> records<br/><i>1 source types: prices, varietywise, rainfall</i>"]
     end
 
     %% Stage 2: DUCKDB WAREHOUSE
     subgraph S2["02 DUCKDB WAREHOUSE  | Persistent Volume /data"]
-        B1["DuckDB Warehouse<br/>mandi_iq.duckdb<br/><b>1,335,586</b> prices ~ <b>2,278</b> rainfall<br/><b>3,663</b> NDVI ~ <b>444</b> forecast models"]
+        B1["DuckDB Warehouse<br/>mandi_iq.duckdb<br/><b>10,000</b> prices ~ <b>0</b> rainfall<br/><b>0</b> NDVI ~ <b>0</b> forecast models"]
     end
 
     %% Stage 3: ANALYSIS & ML
     subgraph S3["03 ANALYSIS & ML  | Causal + FE + Forecast + Risk"]
         direction TB
-        C1["rdd_engine.py <br/>Local linear RDD<br/><b>327</b> causal estimates<br/>Triangular kernel ~ McCrary test"]
-        C2["fixed_effects.py <br/>FE cross-check<br/><b>244</b> effects with FE<br/>District + month fixed effects"]
-        C3["forecast.py <br/>Seasonal naive + ensemble<br/><b>444</b> models<br/><span style='color:#8FAE89'>[OK] 444 valid</span> <span style='color:#D9663B'>[!] 30 noisy</span><br/>Best: Maize @ 4.7%"]
+        C1["rdd_engine.py <br/>Local linear RDD<br/><b>0</b> causal estimates<br/>Triangular kernel ~ McCrary test"]
+        C2["fixed_effects.py <br/>FE cross-check<br/><b>0</b> effects with FE<br/>District + month fixed effects"]
+        C3["forecast.py <br/>Seasonal naive + ensemble<br/><b>0</b> models"]
         C4["classifier.py <br/>XGBoost + SHAP<br/>Price spike risk scoring<br/>ROC-AUC tracking"]
         C5["prescriptive.py<br/>Procurement recommendations<br/>RDD-grounded ~ Confidence scoring"]
     end
@@ -59,7 +59,7 @@ flowchart TD
     subgraph S4["04 AI ORCHESTRATOR  | Multi-Model Router"]
         D1["router.py<br/>Multi-provider LLM<br/>Circuit breaker ~ Fallback chain"]
         D2["orchestrator.py<br/>Tool-grounding<br/>Endpoint selection"]
-        D3["nightly narratives<br/><b>300</b> commodity reports<br/>AI-generated summaries"]
+        D3["nightly narratives<br/><b>0</b> commodity reports<br/>AI-generated summaries"]
     end
 
     %% Stage 5: SERVING
