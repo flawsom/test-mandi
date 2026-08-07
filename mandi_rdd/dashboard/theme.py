@@ -354,6 +354,61 @@ footer {{ display: none; }}
 .status-dot.amber  {{ background: #E8B14D; }}
 .status-dot.red    {{ background: #C84B4B; }}
 
+
+/* ── Seamless quantum-glow hover language (matches landing hover-language) ── */
+.stApp .stButton > button, .stApp .stDownloadButton button {{
+    transition: transform .32s cubic-bezier(.2,.9,.2,1), box-shadow .32s ease,
+        border-color .3s ease, color .3s ease, background-color .3s ease;
+    will-change: transform;
+}}
+.stApp .stButton > button:hover, .stApp .stDownloadButton button:hover,
+.stApp .stButton > button:focus-visible {{
+    transform: translateY(-3px);
+    box-shadow: 0 0 0 1px var(--color-glow, rgba(95,242,255,.18)) inset,
+        0 18px 40px rgba(95,242,255,.22), var(--color-lift, rgba(95,242,255,.18));
+}}
+/* sidebar nav links: underline sweep + glow on hover */
+.stApp div[data-testid="stSidebarNav"] a,
+.stApp div[data-testid="stSidebarNav"] a[data-testid="stSidebarNavLink"] {{
+    position: relative;
+    transition: color .3s ease, transform .32s ease, text-shadow .3s ease;
+}}
+.stApp div[data-testid="stSidebarNav"] a::after {{
+    content: "";
+    position: absolute; left: 0.4em; bottom: .4em; height: 2px; width: 0;
+    background: linear-gradient(90deg, var(--color-primary,#d7ff00),
+        var(--glow-mag,#ff5fe0));
+    border-radius: 2px; transition: width .4s cubic-bezier(.2,.9,.2,1);
+}}
+.stApp div[data-testid="stSidebarNav"] a:hover {{
+    transform: translateX(4px) translateY(-1px);
+    text-shadow: 0 0 16px rgba(215,255,0,.4);
+}}
+.stApp div[data-testid="stSidebarNav"] a:hover::after {{ width: 100%; }}
+/* live tabs: glow underline on active/hover */
+.stApp div[data-testid="stTabs"] button[data-baseweb="tab"] {{
+    transition: color .3s ease, text-shadow .3s ease, transform .3s ease;
+}}
+.stApp div[data-testid="stTabs"] button[data-baseweb="tab"]:hover {{
+    transform: translateY(-2px);
+    text-shadow: 0 0 16px rgba(215,255,0,.55);
+}}
+/* metric cards: magnetic lift + inner glow */
+.stApp div[data-testid="stMetric"] {{
+    transition: transform .32s cubic-bezier(.2,.9,.2,1), box-shadow .34s ease,
+        border-color .3s ease;
+}}
+.stApp div[data-testid="stMetric"]:hover {{
+    transform: translateY(-4px);
+    border-color: var(--m-glow-dim, rgba(215,255,0,.4)) !important;
+    box-shadow: 0 22px 46px rgba(0,0,0,.5), 0 0 28px rgba(215,255,0,.16);
+}}
+@media (prefers-reduced-motion: reduce) {{
+    .stApp .stButton > button, .stApp div[data-testid="stMetric"],
+    .stApp div[data-testid="stSidebarNav"] a {{
+        transition: none !important;
+    }}
+}}
 </style>""",
         unsafe_allow_html=True,
     )    # Inject flowing dots + cursor trail (via inject_flowing_dots_and_cursor in app.py)
