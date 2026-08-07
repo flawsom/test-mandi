@@ -414,7 +414,7 @@ jobs:
             # artifact commits.
             git fetch origin master 2>&1 || true
             git rebase origin/master 2>&1 || true
-git push --force-with-lease origin master 2>&1
+            git push --force-with-lease origin master 2>&1
             echo "committed=true" >> "$GITHUB_OUTPUT"
           fi
 
