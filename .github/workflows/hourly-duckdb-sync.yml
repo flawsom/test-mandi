@@ -60,6 +60,15 @@ env:
   # GitHub Actions does not allow secrets.* inside `if:` conditions, so the
   # token is exposed via job env and the Vercel step gates on env.VERCEL_TOKEN.
   VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
+  # NEVER smudge/push LFS blobs: the committed mandi_iq.duckdb (151MB) exceeded
+  # the free git-LFS quota, so `git lfs fetch` aborts the checkout and
+  # run_hourly.py never runs (root cause of stale data). The DB is now a
+  # runtime artifact delivered via the R2 data-bus + Northflank /data volume,
+  # restored by duckdb_store.resolve_db_path()/get_connection(); it is NOT
+  # committed to git each hour.
+  GIT_LFS_SKIP_SMUDGE: "1"
+  GIT_LFS_SKIP_PUSH: "1"
+  GIT_LFS_SKIP_DOWNLOAD: "1"
   # Northflank API that owns the /data volume — the restore target below.
   API_BASE: "https://p01--mandiiq--zbvjrztgjqgw.code.run"
 
@@ -71,7 +80,10 @@ jobs:
       - uses: actions/checkout@v4
         with:
           fetch-depth: 0
-          lfs: true            # pull the committed 151MB DuckDB for real
+          lfs: false            # do NOT smudge the 151MB LFS DB (quota-exceeded
+                                # LFS fetch aborts the checkout & blocks ingestion).
+                                # GIT_LFS_SKIP_SMUDGE is belt-and-suspenders; the
+                                # DB itself is restored/built at runtime instead.
 
       - name: Validate render.yaml
         uses: ./.github/actions/validate-render
@@ -100,7 +112,13 @@ jobs:
           def signature(path):
               if not os.path.exists(path):
                   return ""
-              conn = duckdb.connect(path, read_only=True)
+              try:
+                  conn = duckdb.connect(path, read_only=True)
+              except Exception:
+                  # Stale git-LFS pointer (checkout lfs:false) or not a real
+                  # DuckDB file yet — treat as "no committed DB" so the run
+                  # proceeds to ingestion/restore instead of crashing.
+                  return ""
               try:
                   parts = []
                   for t in TABLES:
@@ -195,7 +213,13 @@ jobs:
           def signature(path):
               if not os.path.exists(path):
                   return ""
-              conn = duckdb.connect(path, read_only=True)
+              try:
+                  conn = duckdb.connect(path, read_only=True)
+              except Exception:
+                  # Stale git-LFS pointer (checkout lfs:false) or not a real
+                  # DuckDB file yet — treat as "no committed DB" so the run
+                  # proceeds to ingestion/restore instead of crashing.
+                  return ""
               try:
                   parts = []
                   for t in TABLES:
@@ -352,7 +376,8 @@ jobs:
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
-          git lfs install --local 2>/dev/null || true
+          # NO git-lfs here: the 151MB DuckDB is a runtime artifact shipped via
+          # the R2 data-bus + Northflank /data volume, not committed to git.
           # Some files (r2_backup_metrics.json, _last_full_analysis.txt) only exist
           # after later steps / 24h full runs. An unmatched `git add` pathspec is a
           # hard fatal (exit 128) even with --ignore-errors, so guard each path
@@ -362,7 +387,6 @@ jobs:
           # status JSONs (ndvi_latest.json, last_hourly_run.json, ...), analysis
           # PNGs, and live pipeline diagrams all travel with the DuckDB.
           for f in \
-            mandi_rdd/data/mandi_iq.duckdb \
             mandi_rdd/data/ndvi_latest.json \
             mandi_rdd/data/last_hourly_run.json \
             mandi_rdd/data/last_ingest_status.json \
@@ -383,11 +407,9 @@ jobs:
             echo "No database changes to commit."
             echo "committed=false" >> "$GITHUB_OUTPUT"
           else
-            git commit -m "chore: hourly duckdb sync ($(date -u +%Y-%m-%dT%H:%M:%SZ))"
-            # Force-with-lease: safe for bot-only repo. Rebasing binary DuckDB
-            # files causes merge conflicts between concurrent workflow runs.
+            git commit -m "chore: hourly duckdb sync artifacts ($(date -u +%Y-%m-%dT%H:%M:%SZ))"
+            # Force-with-lease: safe for bot-only repo. Artifact JSONs/PNGs only.
             git push --force-with-lease origin master 2>&1
-            git lfs push origin master 2>&1 || echo "LFS push skipped (may not be needed)"
             echo "committed=true" >> "$GITHUB_OUTPUT"
           fi
 
