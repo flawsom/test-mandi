@@ -134,26 +134,8 @@ const COLORS = {
   threadFaded: 0x3a4a80
 };
 
-/* ────────────────────────── sample fallback (landing / offline) ────────────────────────── */
-const SAMPLE = {
-  n_particles: 12, n_alerts: 21, n_edges: 14, energy: -1.53,
-  state_hash: 'sample-embedded',
-  particles: [
-    ["Turmeric","ALL",1657.8,0.49,0.64,1.38,[0.0,4.0,0.0],[0.394,0.695,0.854]],
-    ["Onion","ALL",412.5,0.72,0.81,1.71,[3.2,-2.1,1.4],[0.843,1.0,0.0]],
-    ["Potato","ALL",28.9,0.66,0.58,1.22,[-2.8,3.1,-0.9],[0.9,0.5,0.3]],
-    ["Tomato","ALL",31.2,0.81,0.73,1.64,[1.2,1.8,3.4],[1.0,0.3,0.2]],
-    ["Chickpea","ALL",62.4,0.58,0.62,1.31,[-1.9,-3.4,2.2],[0.6,0.8,0.5]],
-    ["Lentil (urad)","ALL",118.3,0.74,0.79,1.66,[2.4,2.6,-2.8],[0.8,0.9,0.4]],
-    ["Rice","ALL",42.1,0.91,0.88,1.82,[-0.6,-0.4,4.6],[0.9,0.9,0.9]],
-    ["Wheat","ALL",29.8,0.87,0.82,1.7,[0.8,-3.9,0.5],[0.95,0.8,0.55]],
-    ["Arhar","ALL",95.2,0.7,0.71,1.5,[-3.4,-0.8,-2.4],[0.7,0.9,0.3]],
-    ["Bajra","ALL",24.7,0.77,0.69,1.45,[3.9,0.6,-1.8],[0.55,0.9,0.4]],
-    ["Mustard oil","ALL",146.9,0.83,0.85,1.75,[-1.2,3.6,2.6],[0.95,0.6,0.2]],
-    ["Salt (iodised)","ALL",18.4,0.95,0.9,1.85,[2.2,-2.9,-3.3],[0.4,0.8,0.95]]
-  ],
-  drivers: [["Oil (palm)",7],["Lentil (urad)",5],["Arhar",4],["Bajra",3],["Carrot",3]]
-};
+/* ---- live-only data (offline state never fabricates numbers) ---- */
+;
 
 let data = null;
 let particles = [];   // {id, commodity, mesh, glow, size, conf, pred, energy, color}
@@ -315,11 +297,11 @@ function renderDrivers(drivers) {
 function updateHUD() {
   if (!data) return;
   setKPI('k-particles', data.n_particles ?? particles.length);
-  setKPI('k-energy', (data.energy ?? 0).toFixed(2));
+  setKPI('k-energy', data.offline ? '\u2014' : (data.energy ?? 0).toFixed(2));
   setKPI('k-alerts', data.n_alerts ?? '—');
   setKPI('k-edges', data.n_edges ?? (data.insights?.length ?? '—'));
   document.getElementById('state-hash').textContent = 'state ' + (data.state_hash || '—');
-  document.getElementById('live-state').textContent = data.degraded ? 'degraded' : 'live';
+  document.getElementById('live-state').textContent = data.offline ? 'offline' : (data.degraded ? 'degraded' : 'live');
   document.getElementById('live-state').style.color = data.degraded ? '#ff5a5a' : 'inherit';
   renderDrivers(data.drivers || data.market_drivers);
 }
@@ -351,32 +333,12 @@ function normalizePayload(raw) {
     drivers: raw.market_drivers || stage.market_drivers || []
   };
 }
-function normalizeSample() {
+function normalizeOffline() {
+  // Honest offline state: empty data, explicit degraded flag. No fabricated numbers.
   return {
-    n_particles: SAMPLE.n_particles, energy: SAMPLE.energy, n_alerts: SAMPLE.n_alerts,
-    n_edges: SAMPLE.n_edges, state_hash: SAMPLE.state_hash, degraded: false,
-    particles: SAMPLE.particles.map(r => ({
-      id: 'rdd:' + r[0] + ':' + r[1], commodity: r[0], region: r[1],
-      prediction: r[2], confidence: r[3], significance: r[4], size: r[5],
-      position: r[6], color: r[7], energy: -0.12, glow: r[4]
-    })),
-    insights: [
-      { cause: 'Lentil (urad)', effect: 'Arhar', strength: 0.9 },
-      { cause: 'Lentil (urad)', effect: 'Bajra', strength: 0.7 },
-      { cause: 'Oil (palm)', effect: 'Mustard oil', strength: 0.85 },
-      { cause: 'Arhar', effect: 'Chickpea', strength: 0.6 },
-      { cause: 'Bajra', effect: 'Wheat', strength: 0.55 },
-      { cause: 'Tomato', effect: 'Onion', strength: 0.7 },
-      { cause: 'Rice', effect: 'Wheat', strength: 0.5 },
-      { cause: 'Oil (palm)', effect: 'Salt (iodised)', strength: 0.65 },
-      { cause: 'Bajra', effect: 'Rice', strength: 0.45 },
-      { cause: 'Turmeric', effect: 'Potato', strength: 0.4 },
-      { cause: 'Onion', effect: 'Tomato', strength: 0.6 },
-      { cause: 'Mustard oil', effect: 'Arhar', strength: 0.5 },
-      { cause: 'Chickpea', effect: 'Lentil (urad)', strength: 0.55 },
-      { cause: 'Wheat', effect: 'Bajra', strength: 0.42 }
-    ],
-    drivers: SAMPLE.drivers.map(([c, n]) => ({ commodity: c, out_degree: n }))
+    n_particles: 0, energy: 0, n_alerts: 0, n_edges: 0,
+    state_hash: 'offline', degraded: true, offline: true,
+    particles: [], insights: [], drivers: []
   };
 }
 
@@ -401,13 +363,13 @@ async function loadData() {
         if (!resp.ok) throw new Error('HTTP ' + resp.status);
         data = normalizePayload(await resp.json());
       } catch {
-        data = normalizeSample();
+        data = normalizeOffline();
       }
     }
   } catch {
-    data = normalizeSample();
+    data = normalizeOffline();
   }
-  if (!data.particles || !data.particles.length) data = normalizeSample();
+  if (!data.particles || !data.particles.length) data = normalizeOffline();
   buildParticles(data.particles);
   particles.forEach(attachGlow);
   const nThreads = buildThreads();
