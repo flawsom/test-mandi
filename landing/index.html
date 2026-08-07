@@ -250,7 +250,7 @@ html{scrollbar-width:none;-ms-overflow-style:none}
         <nav class="header-nav" aria-label="Main Navigation">
             <a class="nav-link active" href="#overview" data-scramble>Overview</a>
             <a class="nav-link" href="docs/index.html" data-scramble>Documentation</a>
-            <a class="nav-link" href="dashboards/omega-field.html" data-scramble>3D Field</a>
+            <a class="nav-link" href="#omega-field" data-scramble>OMEGA Field</a>
             <a class="nav-link" href="https://github.com/flawsom/test-mandi" target="_blank" data-scramble>GitHub</a>
         </nav>
         <div class="header-actions">
@@ -384,7 +384,516 @@ flowchart TB
         </div>
     </section>
 
-    <section id="navigation">
+    <style id="omega-embed-style">
+.omega-section{position:relative;padding:5rem 1.5rem 6rem;max-width:1200px;margin:0 auto}
+.omega-embed{position:relative;width:100%;min-height:70vh;border-radius:20px;overflow:hidden;
+  background:#05070f;border:1px solid rgba(120,200,255,0.14);
+  box-shadow:0 0 0 1px rgba(255,255,255,0.02),0 40px 100px rgba(0,0,0,0.6)}
+.omega-embed #scene{position:absolute;inset:0;z-index:1}
+.omega-embed .hud{position:absolute;z-index:5;pointer-events:none;color:#dbe9ff;font-family:var(--font-mono,monospace)}
+.omega-embed .hud a,.omega-embed .hud button,.omega-embed .hud input{pointer-events:auto}
+.omega-embed .hud .brand{top:16px;left:18px}
+.omega-embed .hud .kpis{top:16px;right:18px;display:flex;gap:10px;flex-wrap:wrap;justify-content:flex-end}
+.omega-embed .hud .controls{bottom:16px;left:50%;transform:translateX(-50%);display:flex;gap:10px;flex-wrap:wrap;justify-content:center}
+.omega-embed .hud .state{bottom:16px;right:18px;text-align:right;font-size:.7rem;opacity:.85}
+.omega-embed .hud .drivers{bottom:16px;left:18px;max-width:260px;font-size:.72rem}
+.omega-embed #tip{position:absolute;z-index:9;pointer-events:none}
+.omega-embed .loading{position:absolute;inset:0;z-index:12;display:flex;align-items:center;justify-content:center;flex-direction:column;gap:12px;background:#05070f}
+@media (max-width:760px){.omega-embed .hud .kpis{top:auto;bottom:76px;left:50%;transform:translateX(-50%);justify-content:center;gap:8px}
+  .omega-embed .hud .drivers,.omega-embed .hud .state{display:none}}
+</style>
+
+
+<section class="section omega-section" id="omega-field">
+    <span class="section-num">03 · OMEGA QUANTUM FIELD</span>
+    <h2 class="section-title">Autonomous Quantum Field</h2>
+    <p class="section-desc">Live causal-agency swarm — QVE simulated-annealing placement, rendered in Three.js from the live pipeline.</p>
+    <div class="omega-embed" id="omega-stage" style="min-height:72vh">
+<body>
+
+<div id="scene"></div>
+
+<div class="hud brand">
+  <div class="mark">MandiIQ · OMEGA</div>
+  <h1>Quantum Particle Field</h1>
+  <div class="sub">QVE simulated-annealing placement</div>
+</div>
+
+<div class="hud kpis">
+  <div class="kpi"><div class="v" id="k-particles">—</div><div class="l">Particles</div></div>
+  <div class="kpi"><div class="v" id="k-energy">—</div><div class="l">QUBO Energy</div></div>
+  <div class="kpi"><div class="v" id="k-alerts">—</div><div class="l">Agent Alerts</div></div>
+  <div class="kpi"><div class="v" id="k-edges">—</div><div class="l">Causal Edges</div></div>
+</div>
+
+<div class="hud drivers" id="drivers">
+  <div class="ttl">Market Drivers · out-degree</div>
+</div>
+
+<div class="hud controls">
+  <button id="btn-threads" class="active">Threads</button>
+  <button id="btn-rotate">Auto-rotate</button>
+  <button id="btn-collapse">Collapse</button>
+  <button id="btn-reload">Re-run pipeline</button>
+</div>
+
+<div class="hud state">
+  <div class="live"><b id="live-state">—</b></div>
+  <div class="hash" id="state-hash">state —</div>
+</div>
+
+<div id="tip"><div class="t-name" id="tip-name"></div><div class="t-reg" id="tip-reg"></div>
+  <div class="t-row"><span>prediction</span><b id="tip-pred"></b></div>
+  <div class="t-row"><span>confidence</span><b id="tip-conf"></b></div>
+  <div class="t-row"><span>energy</span><b id="tip-energy"></b></div>
+  <div class="t-bar"><i id="tip-bar" style="width:50%"></i></div>
+</div>
+
+<div class="loading" id="loading"><div class="pulse"></div><div class="txt">Collapsing superposition…</div></div>
+
+<!-- Three.js core from CDN (fallback embedded sample data if API unreachable) -->
+
+
+
+
+
+</body>
+    </div>
+    <div style="display:flex;gap:1rem;flex-wrap:wrap;justify-content:center;margin-top:1.6rem">
+        <a class="slot-btn" href="#metrics">↖ Live Metrics</a>
+        <a class="slot-btn" href="#architecture">↖ Architecture</a>
+        <a class="slot-btn" href="#navigation">Explore All Pages →</a>
+    </div>
+<script type="importmap">
+{
+  "imports": {
+    "three": "https://unpkg.com/three@0.160.0/build/three.module.js",
+    "three/addons/": "https://unpkg.com/three@0.160.0/examples/jsm/"
+  }
+}
+</script>
+<script type="module">
+
+import * as THREE from 'three';
+import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
+import { CSS2DRenderer, CSS2DObject } from 'three/addons/renderers/CSS2DRenderer.js';
+
+/* ────────────────────────── config ────────────────────────── */
+const API_BASE = (window.OMEGA_API_BASE || window.__MANDIIQ_API_BASE__ || 'https://p01--mandiiq--zbvjrztgjqgw.code.run');
+let STAGE = document.getElementById('omega-stage');
+const SZ = () => STAGE ? [STAGE.clientWidth, STAGE.clientHeight] : [window.innerWidth, window.innerHeight];
+const COLORS = {
+  default: 0xd7ff00,
+  bg: 0x000000,
+  thread: 0x8fa9ff,
+  threadFaded: 0x3a4a80
+};
+
+/* ────────────────────────── sample fallback (landing / offline) ────────────────────────── */
+const SAMPLE = {
+  n_particles: 12, n_alerts: 21, n_edges: 14, energy: -1.53,
+  state_hash: 'sample-embedded',
+  particles: [
+    ["Turmeric","ALL",1657.8,0.49,0.64,1.38,[0.0,4.0,0.0],[0.394,0.695,0.854]],
+    ["Onion","ALL",412.5,0.72,0.81,1.71,[3.2,-2.1,1.4],[0.843,1.0,0.0]],
+    ["Potato","ALL",28.9,0.66,0.58,1.22,[-2.8,3.1,-0.9],[0.9,0.5,0.3]],
+    ["Tomato","ALL",31.2,0.81,0.73,1.64,[1.2,1.8,3.4],[1.0,0.3,0.2]],
+    ["Chickpea","ALL",62.4,0.58,0.62,1.31,[-1.9,-3.4,2.2],[0.6,0.8,0.5]],
+    ["Lentil (urad)","ALL",118.3,0.74,0.79,1.66,[2.4,2.6,-2.8],[0.8,0.9,0.4]],
+    ["Rice","ALL",42.1,0.91,0.88,1.82,[-0.6,-0.4,4.6],[0.9,0.9,0.9]],
+    ["Wheat","ALL",29.8,0.87,0.82,1.7,[0.8,-3.9,0.5],[0.95,0.8,0.55]],
+    ["Arhar","ALL",95.2,0.7,0.71,1.5,[-3.4,-0.8,-2.4],[0.7,0.9,0.3]],
+    ["Bajra","ALL",24.7,0.77,0.69,1.45,[3.9,0.6,-1.8],[0.55,0.9,0.4]],
+    ["Mustard oil","ALL",146.9,0.83,0.85,1.75,[-1.2,3.6,2.6],[0.95,0.6,0.2]],
+    ["Salt (iodised)","ALL",18.4,0.95,0.9,1.85,[2.2,-2.9,-3.3],[0.4,0.8,0.95]]
+  ],
+  drivers: [["Oil (palm)",7],["Lentil (urad)",5],["Arhar",4],["Bajra",3],["Carrot",3]]
+};
+
+let data = null;
+let particles = [];   // {id, commodity, mesh, glow, size, conf, pred, energy, color}
+let threadLines = [];
+let autoRotate = true;
+let threadsVisible = true;
+
+/* ────────────────────────── scene setup ────────────────────────── */
+const scene = new THREE.Scene();
+scene.background = new THREE.Color(COLORS.bg);
+const camera = new THREE.PerspectiveCamera(60, 1, 0.1, 200);
+const setCamAspectResize = () => { const [w, h] = SZ(); camera.aspect = w / Math.max(1, h); camera.updateProjectionMatrix(); };
+camera.position.set(9, 6, 13);
+
+const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: false });
+renderer.setSize(SZ()[0], SZ()[1]);
+renderer.setPixelRatio(Math.min(devicePixelRatio, 2));
+document.getElementById('scene').appendChild(renderer.domElement);
+
+const labelRenderer = new CSS2DRenderer();
+labelRenderer.setSize(SZ()[0], SZ()[1]);
+labelRenderer.domElement.style.position = 'fixed';
+labelRenderer.domElement.style.inset = '0';
+labelRenderer.domElement.style.pointerEvents = 'none';
+labelRenderer.domElement.style.position = 'absolute';
+  labelRenderer.domElement.style.inset = '0';
+  labelRenderer.domElement.style.pointerEvents = 'none';
+  labelRenderer.domElement.style.zIndex = '5';
+  if (STAGE) STAGE.appendChild(labelRenderer.domElement);
+
+const controls = new OrbitControls(camera, renderer.domElement);
+controls.enableDamping = true;
+controls.dampingFactor = 0.06;
+controls.autoRotate = true;
+controls.autoRotateSpeed = 0.9;
+
+/* starfield backdrop */
+(function stars(){
+  const g = new THREE.BufferGeometry();
+  const n = 900, pos = new Float32Array(n*3);
+  for (let i = 0; i < n; i++) {
+    pos[i*3]   = (Math.random()-0.5)*140;
+    pos[i*3+1] = (Math.random()-0.5)*140;
+    pos[i*3+2] = (Math.random()-0.5)*140;
+  }
+  g.setAttribute('position', new THREE.BufferAttribute(pos, 3));
+  const m = new THREE.PointsMaterial({ color: 0x222233, size: 0.12, transparent: true, opacity: 0.7 });
+  scene.add(new THREE.Points(g, m));
+})();
+
+/* faint center guide */
+const guide = new THREE.Mesh(
+  new THREE.SphereGeometry(0.12, 24, 24),
+  new THREE.MeshBasicMaterial({ color: 0x111111 })
+);
+scene.add(guide);
+
+/* ────────────────────────── render particles ────────────────────────── */
+function addLabel(particle, text) {
+  const el = document.createElement('div');
+  el.textContent = text;
+  el.style.cssText = 'font-family:var(--font-mono);font-size:0.6rem;color:rgba(255,255,255,0.55);' +
+    'letter-spacing:0.08em;white-space:nowrap;text-shadow:0 0 8px #000;user-select:none';
+  const obj = new CSS2DObject(el);
+  obj.position.set(0, particle.size + 0.45, 0);
+  particle.mesh.add(obj);
+}
+
+function buildParticles(list) {
+  particles.forEach(p => { scene.remove(p.mesh); p.mesh.geometry.dispose(); });
+  particles = [];
+  list.forEach(p => {
+    const [x, y, z] = p.position;
+    const geo = new THREE.SphereGeometry(p.size, 32, 32);
+    const col = new THREE.Color(p.color[0], p.color[1], p.color[2]);
+    const mat = new THREE.MeshBasicMaterial({ color: col });
+    const mesh = new THREE.Mesh(geo, mat);
+    mesh.position.set(x, y, z);
+    scene.add(mesh);
+    const rec = {
+      id: p.id, commodity: p.commodity, region: p.region, mesh,
+      size: p.size, conf: p.confidence, pred: p.prediction,
+      energy: p.energy, color: col, glow: p.glow || 0.5
+    };
+    particles.push(rec);
+    addLabel(rec, p.commodity.length > 14 ? p.commodity.slice(0, 12) + '…' : p.commodity);
+  });
+}
+
+/* glow sprites for particles */
+function attachGlow(p) {
+  const spriteMat = new THREE.SpriteMaterial({
+    map: makeGlowTexture(),
+    color: p.color,
+    transparent: true,
+    opacity: 0.35 * Math.min(1, p.glow + 0.3),
+    blending: THREE.AdditiveBlending,
+    depthWrite: false
+  });
+  const sprite = new THREE.Sprite(spriteMat);
+  sprite.scale.set(p.size * 4.2, p.size * 4.2, 1);
+  p.mesh.add(sprite);
+}
+let _glowTex = null;
+function makeGlowTexture() {
+  if (_glowTex) return _glowTex;
+  const c = document.createElement('canvas'); c.width = c.height = 128;
+  const ctx = c.getContext('2d');
+  const g = ctx.createRadialGradient(64, 64, 0, 64, 64, 64);
+  g.addColorStop(0, 'rgba(255,255,255,1)');
+  g.addColorStop(0.35, 'rgba(255,255,255,0.45)');
+  g.addColorStop(1, 'rgba(255,255,255,0)');
+  ctx.fillStyle = g; ctx.fillRect(0, 0, 128, 128);
+  _glowTex = new THREE.CanvasTexture(c);
+  return _glowTex;
+}
+
+/* ────────────────────────── entanglement threads (EIC edges) ────────────────────────── */
+function buildThreads() {
+  threadLines.forEach(l => { scene.remove(l); l.geometry.dispose(); l.material.dispose(); });
+  threadLines = [];
+  const edges = (data && data.insights) || [];
+  const byCommodity = new Map(particles.map(p => [p.commodity, p]));
+  let drawn = 0;
+  edges.forEach(e => {
+    const a = byCommodity.get(e.cause), b = byCommodity.get(e.effect);
+    if (!a || !b || a === b) return;
+    const pts = [a.mesh.position.clone(), b.mesh.position.clone()];
+    // curve through midpoint pulled toward center for organic thread look
+    const mid = a.mesh.position.clone().add(b.mesh.position).multiplyScalar(0.5);
+    mid.multiplyScalar(0.72);
+    const curve = new THREE.QuadraticBezierCurve3(pts[0], mid, pts[1]);
+    const g = new THREE.BufferGeometry().setFromPoints(curve.getPoints(24));
+    const strength = Math.min(1, (e.strength || 0.5) * 1.4);
+    const mat = new THREE.LineBasicMaterial({
+      color: strength > 0.7 ? COLORS.thread : COLORS.threadFaded,
+      transparent: true,
+      opacity: 0.28 + 0.5 * strength,
+      depthWrite: false
+    });
+    const line = new THREE.Line(g, mat);
+    scene.add(line);
+    threadLines.push(line);
+    drawn++;
+  });
+  return drawn;
+}
+
+/* ────────────────────────── HUD updates ────────────────────────── */
+function setKPI(id, val) {
+  const el = document.getElementById(id);
+  if (el) el.textContent = val;
+}
+function renderDrivers(drivers) {
+  const box = document.getElementById('drivers');
+  box.innerHTML = '<div class="ttl">Market Drivers · out-degree</div>';
+  (drivers || []).slice(0, 5).forEach(d => {
+    const row = document.createElement('div');
+    row.className = 'row';
+    row.innerHTML = `<span>${d.commodity}</span><span class="n">${d.out_degree}</span>`;
+    box.appendChild(row);
+  });
+}
+function updateHUD() {
+  if (!data) return;
+  setKPI('k-particles', data.n_particles ?? particles.length);
+  setKPI('k-energy', (data.energy ?? 0).toFixed(2));
+  setKPI('k-alerts', data.n_alerts ?? '—');
+  setKPI('k-edges', data.n_edges ?? (data.insights?.length ?? '—'));
+  document.getElementById('state-hash').textContent = 'state ' + (data.state_hash || '—');
+  document.getElementById('live-state').textContent = data.degraded ? 'degraded' : 'live';
+  document.getElementById('live-state').style.color = data.degraded ? '#ff5a5a' : 'inherit';
+  renderDrivers(data.drivers || data.market_drivers);
+}
+
+/* ────────────────────────── data loading ────────────────────────── */
+function normalizePayload(raw) {
+  // Accept either /qve/placement ({particles}) or /omega/pipeline (top-level).
+  if (raw.particles) {
+    return {
+      n_particles: raw.n_particles ?? raw.particles.length,
+      energy: raw.energy, n_alerts: raw.n_alerts, n_edges: raw.n_edges,
+      state_hash: raw.state_hash, degraded: raw.degraded,
+      particles: raw.particles,
+      insights: raw.insights || [],
+      drivers: raw.market_drivers || raw.drivers || []
+    };
+  }
+  const stages = raw.stages || {};
+  const stage = stages.eic || {};
+  const qve = stages.qve || {};
+  return {
+    n_particles: raw.n_particles ?? qve.n_particles,
+    energy: raw.energy ?? qve.energy,
+    n_alerts: raw.n_alerts ?? (stages.aas ? stages.aas.n_alerts : undefined),
+    n_edges: raw.n_edges,
+    state_hash: raw.state_hash, degraded: raw.degraded,
+    particles: raw.particles || qve.particles || [],
+    insights: raw.insights || stage.insights || [],
+    drivers: raw.market_drivers || stage.market_drivers || []
+  };
+}
+function normalizeSample() {
+  return {
+    n_particles: SAMPLE.n_particles, energy: SAMPLE.energy, n_alerts: SAMPLE.n_alerts,
+    n_edges: SAMPLE.n_edges, state_hash: SAMPLE.state_hash, degraded: false,
+    particles: SAMPLE.particles.map(r => ({
+      id: 'rdd:' + r[0] + ':' + r[1], commodity: r[0], region: r[1],
+      prediction: r[2], confidence: r[3], significance: r[4], size: r[5],
+      position: r[6], color: r[7], energy: -0.12, glow: r[4]
+    })),
+    insights: [
+      { cause: 'Lentil (urad)', effect: 'Arhar', strength: 0.9 },
+      { cause: 'Lentil (urad)', effect: 'Bajra', strength: 0.7 },
+      { cause: 'Oil (palm)', effect: 'Mustard oil', strength: 0.85 },
+      { cause: 'Arhar', effect: 'Chickpea', strength: 0.6 },
+      { cause: 'Bajra', effect: 'Wheat', strength: 0.55 },
+      { cause: 'Tomato', effect: 'Onion', strength: 0.7 },
+      { cause: 'Rice', effect: 'Wheat', strength: 0.5 },
+      { cause: 'Oil (palm)', effect: 'Salt (iodised)', strength: 0.65 },
+      { cause: 'Bajra', effect: 'Rice', strength: 0.45 },
+      { cause: 'Turmeric', effect: 'Potato', strength: 0.4 },
+      { cause: 'Onion', effect: 'Tomato', strength: 0.6 },
+      { cause: 'Mustard oil', effect: 'Arhar', strength: 0.5 },
+      { cause: 'Chickpea', effect: 'Lentil (urad)', strength: 0.55 },
+      { cause: 'Wheat', effect: 'Bajra', strength: 0.42 }
+    ],
+    drivers: SAMPLE.drivers.map(([c, n]) => ({ commodity: c, out_degree: n }))
+  };
+}
+
+async function loadData() {
+  const loading = document.getElementById('loading');
+  try {
+    let resp;
+    if (API_BASE) {
+      const ctl = new AbortController();
+      const t = setTimeout(() => ctl.abort(), 45000);
+      resp = await fetch(API_BASE + '/omega/pipeline?n_agents=1500', { method: 'POST', signal: ctl.signal });
+      clearTimeout(t);
+      if (!resp.ok) throw new Error('HTTP ' + resp.status);
+      const raw = await resp.json();
+      data = normalizePayload(raw);
+    } else {
+      // Try the API on localhost defaults, else fall back to sample.
+      const ctl = new AbortController();
+      const t = setTimeout(() => ctl.abort(), 30000);
+      try {
+        resp = await fetch('http://localhost:8000/omega/pipeline?n_agents=1500', { method: 'POST', signal: ctl.signal });
+        if (!resp.ok) throw new Error('HTTP ' + resp.status);
+        data = normalizePayload(await resp.json());
+      } catch {
+        data = normalizeSample();
+      }
+    }
+  } catch {
+    data = normalizeSample();
+  }
+  if (!data.particles || !data.particles.length) data = normalizeSample();
+  buildParticles(data.particles);
+  particles.forEach(attachGlow);
+  const nThreads = buildThreads();
+  setKPI('k-edges', data.n_edges ?? nThreads);
+  updateHUD();
+  loading.style.opacity = '0';
+  setTimeout(() => loading.remove(), 600);
+}
+
+/* ────────────────────────── interaction: observer collapse ────────────────────────── */
+const tip = document.getElementById('tip');
+const raycaster = new THREE.Raycaster();
+const pointer = new THREE.Vector2();
+let hovered = null;
+
+function onMove(e) {
+  const _r = STAGE.getBoundingClientRect(); pointer.x = ((e.clientX - _r.left) / Math.max(1, _r.width)) * 2 - 1;
+  pointer.y = -((e.clientY - _r.top) / Math.max(1, _r.height)) * 2 + 1;
+  raycaster.setFromCamera(pointer, camera);
+  const hits = raycaster.intersectObjects(particles.map(p => p.mesh), false);
+  if (hits.length) {
+    const mesh = hits[0].object;
+    const p = particles.find(q => q.mesh === mesh);
+    if (p) showTip(p, e.clientX, e.clientY);
+    else hideTip();
+  } else hideTip();
+}
+function showTip(p, x, y) {
+  document.getElementById('tip-name').textContent = p.commodity;
+  document.getElementById('tip-reg').textContent = p.region || 'ALL';
+  document.getElementById('tip-pred').textContent = p.pred != null ? '₹' + Number(p.pred).toFixed(1) : '—';
+  document.getElementById('tip-conf').textContent = p.conf != null ? (p.conf * 100).toFixed(0) + '%' : '—';
+  document.getElementById('tip-energy').textContent = p.energy != null ? p.energy.toFixed(3) : '—';
+  document.getElementById('tip-bar').style.width = Math.max(4, (p.conf || 0) * 100) + '%';
+  const _rr = STAGE.getBoundingClientRect(); tip.style.left = Math.min(x + 14, _rr.width - 210) + 'px';
+  tip.style.top = Math.min(y + 14, _rr.height - 150) + 'px';
+  tip.classList.add('show');
+  // collapse: focused particle brightens, others dim
+  particles.forEach(o => {
+    if (o === p) o.mesh.material.opacity = 1;
+    else o.mesh.material.opacity = 0.22;
+    o.mesh.material.transparent = true;
+  });
+  hovered = p;
+}
+function hideTip() {
+  tip.classList.remove('show');
+  particles.forEach(o => {
+    o.mesh.material.opacity = 1;
+    o.mesh.material.transparent = false;
+  });
+  hovered = null;
+}
+window.addEventListener('pointermove', onMove);
+window.addEventListener('pointerleave', hideTip);
+
+/* ────────────────────────── controls ────────────────────────── */
+document.getElementById('btn-threads').addEventListener('click', function () {
+  threadsVisible = !threadsVisible;
+  this.classList.toggle('active', threadsVisible);
+  threadLines.forEach(l => (l.visible = threadsVisible));
+});
+document.getElementById('btn-rotate').addEventListener('click', function () {
+  autoRotate = !autoRotate;
+  controls.autoRotate = autoRotate;
+  this.classList.toggle('active', autoRotate);
+});
+document.getElementById('btn-collapse').addEventListener('click', () => {
+  // burst: brief positional jitter then re-converge
+  const orig = particles.map(p => p.mesh.position.clone());
+  particles.forEach(p => {
+    p.mesh.position.x += (Math.random() - 0.5) * 3.2;
+    p.mesh.position.y += (Math.random() - 0.5) * 3.2;
+    p.mesh.position.z += (Math.random() - 0.5) * 3.2;
+  });
+  setTimeout(() => {
+    particles.forEach((p, i) => {
+      const target = orig[i];
+      const step = () => {
+        p.mesh.position.lerp(target, 0.12);
+        if (p.mesh.position.distanceTo(target) > 0.02) requestAnimationFrame(step);
+      };
+      step();
+    });
+  }, 220);
+});
+document.getElementById('btn-reload').addEventListener('click', () => {
+  if (STAGE) STAGE.appendChild(Object.assign(document.getElementById('loading').cloneNode(true), { id: 'loading' }));
+  const old = document.querySelectorAll('.loading'); old.forEach(o => o.style.display = 'none');
+  loadData().then(() => {
+    old.forEach(o => o.remove());
+    loadData();
+  });
+});
+
+/* resize */
+window.addEventListener('resize', () => {
+  const [w, h] = SZ(); camera.aspect = w / Math.max(1, h); camera.updateProjectionMatrix();
+  camera.updateProjectionMatrix();
+  renderer.setSize(SZ()[0], SZ()[1]);
+  labelRenderer.setSize(SZ()[0], SZ()[1]);
+});
+
+/* ────────────────────────── animation loop ────────────────────────── */
+const clock = new THREE.Clock();
+function animate() {
+  if (!STAGE) STAGE = document.getElementById('omega-stage');
+  if (STAGE) { const [w, h] = SZ(); renderer.setSize(w, h); labelRenderer.setSize(w, h); if (camera) { camera.aspect = w / Math.max(1, h); camera.updateProjectionMatrix(); } }
+  requestAnimationFrame(animate);
+  const t = clock.getElapsedTime();
+  controls.update();
+  // ambient particle breathing
+  particles.forEach((p, i) => {
+    const s = p.size * (1 + 0.05 * Math.sin(t * 1.4 + i * 1.7));
+    p.mesh.scale.setScalar(s / p.size);
+  });
+  renderer.render(scene, camera);
+  labelRenderer.render(scene, camera);
+}
+animate();
+loadData();
+
+</script>
+</section>
+
+<section id="navigation">
         <span class="section-num">04 / NAVIGATION</span>
         <h2 class="section-title">Explore the Platform</h2>
         <div class="mandiq-nav">
@@ -427,7 +936,17 @@ flowchart TB
                     <span class="mandiq-portal__subtitle">API &amp; Architecture Guides</span>
                 </div>
                 <span class="mandiq-portal__arrow" aria-hidden="true"><svg viewBox="0 0 16 16" width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M3 8h10M9 4l4 4-4 4"/></svg></span>
+            </a>            <a href="#omega-field" class="mandiq-portal stagger-ready stagger-d5" data-type="field" aria-label="OMEGA Quantum Field -- live 3D causal-agency swarm">
+                <canvas class="mandiq-portal__canvas" aria-hidden="true"></canvas>
+                <span class="mandiq-portal__tag">05 &middot; OMEGA</span>
+                <div class="mandiq-portal__content">
+                    <svg class="mandiq-portal__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="2.2"/><path d="M12 2v4M12 18v4M2 12h4M18 12h4M5 5l2.8 2.8M16.2 16.2 19 19M19 5l-2.8 2.8M7.8 16.2 5 19"/></svg>
+                    <span class="mandiq-portal__title">OMEGA Field</span>
+                    <span class="mandiq-portal__subtitle">Live 3D Quantum Causal Field</span>
+                </div>
+                <span class="mandiq-portal__arrow" aria-hidden="true"><svg viewBox="0 0 16 16" width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M3 8h10M9 4l4 4-4 4"/></svg></span>
             </a>
+
         </div>
     </section>
 
