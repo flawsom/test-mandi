@@ -88,6 +88,22 @@ jobs:
       - name: Validate render.yaml
         uses: ./.github/actions/validate-render
 
+      - name: Keep Northflank warm (wake Render free-tier)
+        run: |
+          echo "Pinging $API_BASE/health to wake the Render free-tier service..."
+          # Vercel LiveProxy serves the full live DB by proxying here; Render
+          # free-tier sleeps after ~15 min idle (503 during cold-start).
+          for i in 1 2 3 4 5 6; do
+            code=$(curl -s -o /tmp/nf_health.json -w "%{http_code}" \
+              -H "Origin: https://flawsom.github.io" "$API_BASE/health" || echo 000)
+            echo "attempt $i -> HTTP $code"
+            if [ "$code" = "200" ]; then
+              echo "Northflank is live:"; head -c 200 /tmp/nf_health.json; echo
+              break
+            fi
+            sleep 12
+          done
+
       - name: Set up Python
         uses: actions/setup-python@v5
         with:
