@@ -14,10 +14,14 @@
 # that branch fail with "No FastAPI entrypoint found" (see git.deploymentEnabled
 # in vercel.json, which disables auto-builds of gh-pages).
 #
-# WHY: The Vercel serverless function exposes a read-only subset of the
-# FastAPI endpoints (/health, /prices, /rdd-result, /forecast, /risk-score)
-# using the Git-LFS-bundled DuckDB.  Full pipeline execution requires
-# Northflank or Render (persistent volume, no 60 s timeout).
+# WHY: The Vercel serverless function is CORS-correct (FastAPI CORSMiddleware,
+# allow_origins=["*"]). In mandi_rdd/api/main.py it wraps the app in LiveProxy
+# (gated on Vercel's VERCEL env) which forwards requests server-to-server to
+# the Northflank host holding the FULL 1.3M-row hourly DuckDB (Northflank's
+# envoy proxy strips CORS for browsers, but not for servers) and streams the
+# live response back with echoed ACAO. The Git-LFS-bundled DuckDB is NOT used
+# on Vercel (LFS budget exhausted breaks lfs:true checkouts), and full pipeline
+# execution lives on Northflank/Render (persistent volume, no 60 s timeout).
 
 name: Deploy API to Vercel
 
@@ -83,18 +87,21 @@ jobs:
     steps:
       - uses: actions/checkout@v4
         with:
-          lfs: true                           # pull the DuckDB via Git LFS
+          lfs: false                          # do NOT pull LFS (budget exhausted);
+          # the DB is now served live via the Northflank proxy in main.py,
+          # so a bundled DuckDB is not needed in the Vercel function at all.
+        env:
+          GIT_LFS_SKIP_SMUDGE: '1'
+          GIT_LFS_SKIP_FETCH: '1'
+          GIT_LFS_SKIP_DOWNLOAD: '1'
+          GIT_LFS_SKIP_PUSH: '1'
 
-      - name: Check LFS files are pulled (not pointers)
+      - name: Report DB strategy (live proxy, not bundled)
         run: |
-          git lfs ls-files --long | head -5
+          echo "DB strategy: live proxy -> https://p01--mandiiq--zbvjrztgjqgw.code.run"
           if [ -f mandi_rdd/data/mandi_iq.duckdb ]; then
             SIZE=$(stat --format=%s mandi_rdd/data/mandi_iq.duckdb 2>/dev/null || echo 0)
-            if [ "$SIZE" -lt 1024 ]; then
-              echo "::warning ::DuckDB file appears to be a Git LFS pointer (<1 KB) — did LFS pull succeed?"
-            else
-              echo "DuckDB: $(numfmt --to=iec $SIZE) OK"
-            fi
+            echo "bundled duckdb (optional fallback): $(numfmt --to=iec $SIZE 2>/dev/null || echo $SIZE B)"
           fi
 
       - name: Strip .git before deploy (LFS objects would bloat the upload)
@@ -140,8 +147,8 @@ jobs:
           URL: ${{ steps.deploy.outputs.deploy_url }}
         run: |
           echo "Smoke-testing $URL/health ..."
-          # First cold start downloads the DuckDB from R2 into /tmp (~35 MB),
-          # so allow up to ~120 s for the first 200 with real row counts.
+          # The function proxies to the Northflank live DB (no bundled DB, no
+          # R2 download), so the first 200 should be quick even on cold start.
           for i in 1 2 3 4 5 6 7 8; do
             if python scripts/vercel_smoke_test.py "$URL"; then
               echo "OK at attempt $i"
