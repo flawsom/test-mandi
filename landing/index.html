@@ -658,7 +658,7 @@ import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
 import { CSS2DRenderer, CSS2DObject } from 'three/addons/renderers/CSS2DRenderer.js';
 
 /* ────────────────────────── config ────────────────────────── */
-const API_BASE = (window.OMEGA_API_BASE || window.__MANDIIQ_API_BASE__ || 'https://p01--mandiiq--zbvjrztgjqgw.code.run');
+const API_BASE = (window.OMEGA_API_BASE || window.__MANDIIQ_API_BASE__ || 'https://test-mandi.vercel.app');
 let STAGE = document.getElementById('omega-stage');
 const SZ = () => STAGE ? [STAGE.clientWidth, STAGE.clientHeight] : [window.innerWidth, window.innerHeight];
 const COLORS = {
@@ -1120,7 +1120,7 @@ loadData();
 const API_CONFIG = {
   get baseUrl() {
     const h = window.location.hostname;
-    return (h === 'localhost' || h === '127.0.0.1') ? 'http://127.0.0.1:18765' : 'https://p01--mandiiq--zbvjrztgjqgw.code.run';
+    return (h === 'localhost' || h === '127.0.0.1') ? 'http://127.0.0.1:18765' : 'https://test-mandi.vercel.app';
   },
   get dashboardUrl() { return 'https://test-mandi-keae7eruks2n4cqvumjfu8.streamlit.app'; },
   endpoints: { health: '/health', freshness: '/freshness', pipeline: '/pipeline.mmd' },

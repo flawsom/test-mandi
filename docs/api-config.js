@@ -18,10 +18,10 @@ const API_CONFIG = {
       return 'http://127.0.0.1:18765';
     }
     if (isGitHub) {
-      return 'https://p01--mandiiq--zbvjrztgjqgw.code.run';
+      return 'https://test-mandi.vercel.app';
     }
     // Northflank / production
-    return 'https://p01--mandiiq--zbvjrztgjqgw.code.run';
+    return 'https://test-mandi.vercel.app';
   },
 
   /**
