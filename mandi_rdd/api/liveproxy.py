@@ -102,8 +102,8 @@ class LiveProxy:
         if path == "/_proxy/status":
             payload = {"proxy": True, "target": PROXY_TARGET}
             try:
-                req = urllib.request.Request(PROXY_TARGET + "/health", timeout=15)
-                with urllib.request.urlopen(req) as r:
+                req = urllib.request.Request(PROXY_TARGET + "/health")
+                with urllib.request.urlopen(req, timeout=15) as r:
                     payload["upstream_reachable"] = True
                     payload["upstream_status"] = r.status
             except Exception as e:  # noqa: BLE001
