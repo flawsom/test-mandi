@@ -204,6 +204,11 @@ def gzip_db(db_path: Path) -> tuple[bytes, int]:
 
 
 _MIN_UPLOAD_ROWS = 100_000
+
+# Restore-side twin: never replace the local/volume DB with a backup
+# that has fewer than this many prices (the raw `gzip | aws s3 cp` shell
+# step can still upload a tiny DB if run manually; restore refuses it).
+_MIN_RESTORE_ROWS = 100_000
 """Clobber guard: refuse to upload a DB with fewer prices than this.
 
 The Northflank cron runs volumeless on the free tier, so its ephemeral DB
@@ -346,7 +351,7 @@ def restore_db(db_path: Optional[Path] = None) -> dict:
         gz_tmp.unlink(missing_ok=True)
         tmp.unlink(missing_ok=True)
         raise ValueError(f"R2 restore: downloaded backup is not a valid DuckDB (prices query failed): {e}") from e
-    if not isinstance(n, int) or n <= 0:
+    if not isinstance(n, int) or n < _MIN_RESTORE_ROWS:
         gz_tmp.unlink(missing_ok=True)
         tmp.unlink(missing_ok=True)
         raise ValueError(f"R2 restore: backup has {n} prices — refusing to replace the DB.")

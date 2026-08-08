@@ -212,6 +212,10 @@ jobs:
           SENTINEL_CLIENT_SECRET: ${{ secrets.SENTINEL_CLIENT_SECRET }}
           OPENROUTER_API_KEY: ${{ secrets.OPENROUTER_API_KEY }}
           GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+          R2_ACCOUNT_ID: ${{ secrets.R2_ACCOUNT_ID }}
+          R2_ACCESS_KEY_ID: ${{ secrets.R2_ACCESS_KEY_ID }}
+          R2_SECRET_ACCESS_KEY: ${{ secrets.R2_SECRET_ACCESS_KEY }}
+          R2_BUCKET: ${{ secrets.R2_BUCKET }}
         run: |
           python run_hourly.py || echo "::warning::run_hourly.py exited non-zero — continuing to check for data changes"
 
@@ -465,6 +469,15 @@ jobs:
           fi
           BACKUP_FILE="/tmp/mandi_iq.duckdb.gz"
           METRICS_FILE="mandi_rdd/data/r2_backup_metrics.json"
+          # Row-count guard: never let a tiny/fresh DB clobber the last-good R2
+          # backup. The Python upload_db() gate (_MIN_UPLOAD_ROWS=100000) is
+          # bypassed by this raw shell step, so re-implement it here.
+          PRICES=$(python3 -c "import duckdb; print(duckdb.connect('mandi_rdd/data/mandi_iq.duckdb', read_only=True).execute('SELECT COUNT(*) FROM prices').fetchone()[0])" 2>/dev/null || echo 0)
+          if [ -z "$PRICES" ] || [ "$PRICES" -lt 100000 ] 2>/dev/null; then
+            echo "::warning::Row-count guard: prices=$PRICES < 100000 — refusing to overwrite last-good R2 backup (preserving existing object)"
+            rm -f /tmp/r2_backup_ok
+            exit 0
+          fi
           gzip -c mandi_rdd/data/mandi_iq.duckdb > "$BACKUP_FILE"
           if [ ! -s "$BACKUP_FILE" ]; then
             echo "::warning::gzip compression failed — skipping backup"
@@ -511,9 +524,20 @@ jobs:
       - name: Restore fresh DB onto Northflank volume (R2 data-bus)
         if: steps.commit.outputs.committed == 'true'
         continue-on-error: true
+        env:
+          AWS_ACCESS_KEY_ID: ${{ secrets.R2_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.R2_SECRET_ACCESS_KEY }}
+          R2_ACCOUNT_ID: ${{ secrets.R2_ACCOUNT_ID }}
+          R2_BUCKET: ${{ secrets.R2_BUCKET }}
         run: |
           if [ ! -f /tmp/r2_backup_ok ]; then
             echo "::warning::R2 backup did not report success this run — skipping volume restore (never overwrite a newer volume DB with a stale R2 object)"
+            exit 0
+          fi
+          # Restore safety: skip if the R2 object is suspiciously small (<10MB gz).
+          R2_SIZE=$(aws s3api head-object --bucket "$R2_BUCKET" --key "mandi_iq.duckdb.gz" --endpoint-url "https://${R2_ACCOUNT_ID}.r2.cloudflarestorage.com" --query ContentLength --output text 2>/dev/null || echo 0)
+          if [ -n "$R2_SIZE" ] && [ "$R2_SIZE" -lt 10485760 ] 2>/dev/null; then
+            echo "::warning::R2 object is ${R2_SIZE} bytes (<10MB) — skipping volume restore (tiny object likely a stale LFS pointer/fresh DB)"
             exit 0
           fi
           echo "Restoring DuckDB onto the Northflank volume via POST ${API_BASE}/admin/restore-from-r2 ..."

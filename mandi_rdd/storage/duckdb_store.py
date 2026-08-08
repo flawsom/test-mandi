@@ -299,6 +299,22 @@ def get_connection(db_path: Optional[Path] = None, read_only: bool = False) -> "
 
         )
 
+        # Corrupt-but-present DB (e.g. a partial write from a failed restore
+        # step) bypasses the missing/LFS-pointer bootstrap above and would
+        # crash-loop the pod forever. Quarantine the bad file and re-bootstrap
+        # once from R2; fall through to the original error if that fails too.
+        if path.exists() and not _is_lfs_pointer(path):
+            try:
+                quarantined = path.with_suffix(path.suffix + ".corrupt")
+                path.rename(quarantined)
+                logger.warning(
+                    "Quarantined unreadable DB %s -> %s; re-bootstrapping from R2",
+                    path, quarantined,
+                )
+                return get_connection(db_path, read_only)
+            except Exception as qe:  # noqa: BLE001
+                logger.warning("Quarantine + re-bootstrap failed: %s", qe)
+
         raise
 
 def init_schema(conn) -> None:
