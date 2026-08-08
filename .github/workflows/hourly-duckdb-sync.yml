@@ -543,7 +543,7 @@ jobs:
           echo "Restoring DuckDB onto the Northflank volume via POST ${API_BASE}/admin/restore-from-r2 ..."
           RESPONSE=$(curl -s -X POST "${API_BASE}/admin/restore-from-r2" --max-time 600 2>/dev/null || true)
           echo "$RESPONSE"
-          if echo "$RESPONSE" | grep -q '"status": "ok"'; then
+          if echo "$RESPONSE" | grep -qE '"status"[[:space:]]*:[[:space:]]*"ok"'; then
             echo "::notice::Volume DB restored from R2 backup — /health should now serve the fresh GH-committed rows"
           else
             echo "::error::Restore response did not report status ok — check the API logs (response above)"
