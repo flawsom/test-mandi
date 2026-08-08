@@ -1,29 +1,29 @@
 {
-  "run_utc": "2026-08-08T00:00:54.961059+00:00",
-  "overall": "fail",
+  "run_utc": "2026-08-08T02:29:19.673479+00:00",
+  "overall": "warn",
   "checks": {
     "connectivity": {
       "status": "ok",
       "message": "Connected. Tables: 10"
     },
     "min_commodities": {
-      "status": "fail",
-      "message": "Only 4 distinct commodities (min 5)"
+      "status": "ok",
+      "message": "42 distinct commodities"
     },
     "min_districts": {
-      "status": "fail",
-      "message": "Only 1 distinct districts (min 10)"
+      "status": "ok",
+      "message": "13 distinct districts"
     },
     "row_count": {
       "status": "ok",
-      "message": "4 price rows across 4 commodities, 1 states",
+      "message": "106 price rows across 42 commodities, 8 states",
       "extras": {
-        "n_prices": 4
+        "n_prices": 106
       }
     },
     "row_count_drift": {
-      "status": "fail",
-      "message": "Row count dropped 100.0% (10,000 -> 4)"
+      "status": "ok",
+      "message": "Row count grew 2550.0% (4 -> 106)"
     },
     "date_sanity": {
       "status": "ok",
@@ -47,12 +47,9 @@
     }
   },
   "alerts": [
-    "[FAIL] min_commodities: Only 4 distinct commodities (min 5)",
-    "[FAIL] min_districts: Only 1 distinct districts (min 10)",
-    "[FAIL] row_count_drift: Row count dropped 100.0% (10,000 -> 4)",
     "[WARN] forecast_mape: No forecast metrics recorded yet \u2014 skipping",
     "[WARN] rdd_sanity: No RDD results recorded yet",
     "[WARN] rainfall: No rainfall data recorded yet"
   ],
-  "summary": "3 check(s) FAILED, 3 warning(s), 4 passed"
+  "summary": "All passed with 3 warning(s), 7 checks ok"
 }
