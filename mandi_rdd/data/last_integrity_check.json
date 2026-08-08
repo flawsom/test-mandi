@@ -1,5 +1,5 @@
 {
-  "run_utc": "2026-08-08T15:57:32.194190+00:00",
+  "run_utc": "2026-08-08T17:04:16.806702+00:00",
   "overall": "warn",
   "checks": {
     "connectivity": {
@@ -12,19 +12,19 @@
     },
     "min_districts": {
       "status": "ok",
-      "message": "410 distinct districts"
+      "message": "421 distinct districts"
     },
     "row_count": {
       "status": "ok",
       "message": "10,000 price rows across 223 commodities, 27 states",
       "extras": {
         "n_prices": 10000,
-        "consecutive_stagnant_runs": 7
+        "consecutive_stagnant_runs": 8
       }
     },
     "row_count_drift": {
       "status": "warn",
-      "message": "Row count stagnant for 7 consecutive checks (10,000 rows, no change)"
+      "message": "Row count stagnant for 8 consecutive checks (10,000 rows, no change)"
     },
     "date_sanity": {
       "status": "ok",
@@ -48,7 +48,7 @@
     }
   },
   "alerts": [
-    "[WARN] row_count_drift: Row count stagnant for 7 consecutive checks (10,000 rows, no change)",
+    "[WARN] row_count_drift: Row count stagnant for 8 consecutive checks (10,000 rows, no change)",
     "[WARN] forecast_mape: No forecast metrics recorded yet \u2014 skipping",
     "[WARN] rdd_sanity: No RDD results recorded yet",
     "[WARN] rainfall: No rainfall data recorded yet"
