@@ -1,5 +1,5 @@
 {
-  "run_utc": "2026-08-09T18:00:22.111701+00:00",
+  "run_utc": "2026-08-09T19:13:41.007309+00:00",
   "overall": "warn",
   "checks": {
     "connectivity": {
@@ -19,12 +19,12 @@
       "message": "1,335,555 price rows across 303 commodities, 36 states",
       "extras": {
         "n_prices": 1335555,
-        "consecutive_stagnant_runs": 1
+        "consecutive_stagnant_runs": 2
       }
     },
     "row_count_drift": {
       "status": "ok",
-      "message": "Row count stable at 1,335,555 (run 1/3 before warning)"
+      "message": "Row count stable at 1,335,555 (run 2/3 before warning)"
     },
     "date_sanity": {
       "status": "ok",
