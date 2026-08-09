@@ -1,5 +1,5 @@
 {
-  "run_utc": "2026-08-09T20:00:28.905438+00:00",
+  "run_utc": "2026-08-09T21:04:38.814362+00:00",
   "overall": "warn",
   "checks": {
     "connectivity": {
@@ -16,15 +16,14 @@
     },
     "row_count": {
       "status": "ok",
-      "message": "1,335,555 price rows across 303 commodities, 36 states",
+      "message": "1,335,564 price rows across 303 commodities, 36 states",
       "extras": {
-        "n_prices": 1335555,
-        "consecutive_stagnant_runs": 3
+        "n_prices": 1335564
       }
     },
     "row_count_drift": {
-      "status": "warn",
-      "message": "Row count stagnant for 3 consecutive checks (1,335,555 rows, no change)"
+      "status": "ok",
+      "message": "Row count grew 0.0% (1,335,555 -> 1,335,564)"
     },
     "date_sanity": {
       "status": "ok",
@@ -48,8 +47,7 @@
     }
   },
   "alerts": [
-    "[WARN] row_count_drift: Row count stagnant for 3 consecutive checks (1,335,555 rows, no change)",
     "[WARN] forecast_mape: No NaN/Inf. 22 valid, 2 noisy: Garlic, Wheat"
   ],
-  "summary": "All passed with 2 warning(s), 8 checks ok"
+  "summary": "All passed with 1 warning(s), 9 checks ok"
 }
