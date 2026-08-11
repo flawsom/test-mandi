@@ -1,57 +1,5 @@
 [
   {
-    "run_utc": "2026-08-08T18:00:21.629688+00:00",
-    "overall": "fail",
-    "checks": {
-      "connectivity": {
-        "status": "ok",
-        "message": "Connected. Tables: 10"
-      },
-      "min_commodities": {
-        "status": "fail",
-        "message": "Only 0 distinct commodities (min 5)"
-      },
-      "min_districts": {
-        "status": "fail",
-        "message": "Only 0 distinct districts (min 10)"
-      },
-      "row_count": {
-        "status": "fail",
-        "message": "prices table is empty"
-      },
-      "date_sanity": {
-        "status": "warn",
-        "message": "Could not determine date range (table may be empty)"
-      },
-      "forecast_mape": {
-        "status": "warn",
-        "message": "No forecast metrics recorded yet \u2014 skipping"
-      },
-      "rdd_sanity": {
-        "status": "warn",
-        "message": "No RDD results recorded yet"
-      },
-      "rainfall": {
-        "status": "warn",
-        "message": "No rainfall data recorded yet"
-      },
-      "ndvi": {
-        "status": "ok",
-        "message": "NDVI table exists but is empty (no credentials?)"
-      }
-    },
-    "alerts": [
-      "[FAIL] min_commodities: Only 0 distinct commodities (min 5)",
-      "[FAIL] min_districts: Only 0 distinct districts (min 10)",
-      "[FAIL] row_count: prices table is empty",
-      "[WARN] date_sanity: Could not determine date range (table may be empty)",
-      "[WARN] forecast_mape: No forecast metrics recorded yet \u2014 skipping",
-      "[WARN] rdd_sanity: No RDD results recorded yet",
-      "[WARN] rainfall: No rainfall data recorded yet"
-    ],
-    "summary": "3 check(s) FAILED, 4 warning(s), 2 passed"
-  },
-  {
     "run_utc": "2026-08-08T19:10:23.488439+00:00",
     "overall": "warn",
     "checks": {
@@ -2632,6 +2580,59 @@
       "row_count_drift": {
         "status": "ok",
         "message": "Row count grew 0.0% (1,359,404 -> 1,359,408)"
+      },
+      "date_sanity": {
+        "status": "ok",
+        "message": "Data range: 1994-01-15 \u2192 2026-08-11 (0:00:00 days old)"
+      },
+      "forecast_mape": {
+        "status": "warn",
+        "message": "No NaN/Inf. 22 valid, 2 noisy: Garlic, Wheat"
+      },
+      "rdd_sanity": {
+        "status": "ok",
+        "message": "All 33 RDD results within bounds and valid"
+      },
+      "rainfall": {
+        "status": "ok",
+        "message": "2278 records, 34 sub-divisions, 2021\u20132026"
+      },
+      "ndvi": {
+        "status": "ok",
+        "message": "3663 records across 605 districts"
+      }
+    },
+    "alerts": [
+      "[WARN] forecast_mape: No NaN/Inf. 22 valid, 2 noisy: Garlic, Wheat"
+    ],
+    "summary": "All passed with 1 warning(s), 9 checks ok"
+  },
+  {
+    "run_utc": "2026-08-11T17:34:08.529746+00:00",
+    "overall": "warn",
+    "checks": {
+      "connectivity": {
+        "status": "ok",
+        "message": "Connected. Tables: 10"
+      },
+      "min_commodities": {
+        "status": "ok",
+        "message": "334 distinct commodities"
+      },
+      "min_districts": {
+        "status": "ok",
+        "message": "632 distinct districts"
+      },
+      "row_count": {
+        "status": "ok",
+        "message": "1,359,409 price rows across 334 commodities, 36 states",
+        "extras": {
+          "n_prices": 1359409
+        }
+      },
+      "row_count_drift": {
+        "status": "ok",
+        "message": "Row count grew 0.0% (1,359,408 -> 1,359,409)"
       },
       "date_sanity": {
         "status": "ok",
