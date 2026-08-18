@@ -1,60 +1,5 @@
 [
   {
-    "run_utc": "2026-08-15T21:48:49.859309+00:00",
-    "overall": "warn",
-    "checks": {
-      "connectivity": {
-        "status": "ok",
-        "message": "Connected. Tables: 10"
-      },
-      "min_commodities": {
-        "status": "ok",
-        "message": "336 distinct commodities"
-      },
-      "min_districts": {
-        "status": "ok",
-        "message": "632 distinct districts"
-      },
-      "row_count": {
-        "status": "ok",
-        "message": "1,369,664 price rows across 336 commodities, 36 states",
-        "extras": {
-          "n_prices": 1369664,
-          "consecutive_stagnant_runs": 3
-        }
-      },
-      "row_count_drift": {
-        "status": "warn",
-        "message": "Row count stagnant for 3 consecutive checks (1,369,664 rows, no change)"
-      },
-      "date_sanity": {
-        "status": "ok",
-        "message": "Data range: 1994-01-15 \u2192 2026-08-15 (0:00:00 days old)"
-      },
-      "forecast_mape": {
-        "status": "warn",
-        "message": "No NaN/Inf. 22 valid, 2 noisy: Garlic, Wheat"
-      },
-      "rdd_sanity": {
-        "status": "ok",
-        "message": "All 33 RDD results within bounds and valid"
-      },
-      "rainfall": {
-        "status": "ok",
-        "message": "2278 records, 34 sub-divisions, 2021\u20132026"
-      },
-      "ndvi": {
-        "status": "ok",
-        "message": "3663 records across 605 districts"
-      }
-    },
-    "alerts": [
-      "[WARN] row_count_drift: Row count stagnant for 3 consecutive checks (1,369,664 rows, no change)",
-      "[WARN] forecast_mape: No NaN/Inf. 22 valid, 2 noisy: Garlic, Wheat"
-    ],
-    "summary": "All passed with 2 warning(s), 8 checks ok"
-  },
-  {
     "run_utc": "2026-08-15T22:51:19.908335+00:00",
     "overall": "warn",
     "checks": {
@@ -2647,6 +2592,59 @@
       "row_count_drift": {
         "status": "ok",
         "message": "Row count grew 0.0% (1,386,823 -> 1,386,955)"
+      },
+      "date_sanity": {
+        "status": "ok",
+        "message": "Data range: 1994-01-15 \u2192 2026-08-18 (0:00:00 days old)"
+      },
+      "forecast_mape": {
+        "status": "warn",
+        "message": "No NaN/Inf. 22 valid, 2 noisy: Garlic, Wheat"
+      },
+      "rdd_sanity": {
+        "status": "ok",
+        "message": "All 33 RDD results within bounds and valid"
+      },
+      "rainfall": {
+        "status": "ok",
+        "message": "2278 records, 34 sub-divisions, 2021\u20132026"
+      },
+      "ndvi": {
+        "status": "ok",
+        "message": "3663 records across 605 districts"
+      }
+    },
+    "alerts": [
+      "[WARN] forecast_mape: No NaN/Inf. 22 valid, 2 noisy: Garlic, Wheat"
+    ],
+    "summary": "All passed with 1 warning(s), 9 checks ok"
+  },
+  {
+    "run_utc": "2026-08-18T04:09:47.150984+00:00",
+    "overall": "warn",
+    "checks": {
+      "connectivity": {
+        "status": "ok",
+        "message": "Connected. Tables: 10"
+      },
+      "min_commodities": {
+        "status": "ok",
+        "message": "352 distinct commodities"
+      },
+      "min_districts": {
+        "status": "ok",
+        "message": "637 distinct districts"
+      },
+      "row_count": {
+        "status": "ok",
+        "message": "1,393,308 price rows across 352 commodities, 36 states",
+        "extras": {
+          "n_prices": 1393308
+        }
+      },
+      "row_count_drift": {
+        "status": "ok",
+        "message": "Row count grew 0.5% (1,386,955 -> 1,393,308)"
       },
       "date_sanity": {
         "status": "ok",
