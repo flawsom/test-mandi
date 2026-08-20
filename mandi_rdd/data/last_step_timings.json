@@ -1,15 +1,15 @@
 {
   "steps": {
     "historical_backfill": 0.0,
-    "fetch_prices": 12.69,
-    "upsert_prices": 34.62,
-    "prices_varietywise": 0.0,
-    "backfill_state": 1.46
+    "fetch_prices": 12.59,
+    "upsert_prices": 50.11,
+    "prices_varietywise": 0.02,
+    "backfill_state": 1.39
   },
   "rows_fetched": {
     "fetch_prices": 10000
   },
   "rows_new": {
-    "fetch_prices": 855
+    "fetch_prices": 889
   }
 }
