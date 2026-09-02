@@ -1,5 +1,5 @@
 ---
-title: "MandiIQ Pipeline Flow -- Last Successful Cycle<br/><span style='font-size:11px;color:#7e7e7e;'>2026-09-02 01:16 UTC ~ 8.5s total ~ Outcome: <b style='color:#8FAE89'>success</b></span>"
+title: "MandiIQ Pipeline Flow -- Last Successful Cycle<br/><span style='font-size:11px;color:#7e7e7e;'>2026-09-02 06:17 UTC ~ 1m 16s total ~ Outcome: <b style='color:#8FAE89'>success</b></span>"
 ---
 %%{init: {
   "theme": "dark",
@@ -30,19 +30,19 @@ flowchart TD
     %% Stage 1: DATA INGESTION
     subgraph S1["01 DATA INGESTION  | API + Archive + Satellite + Backfill + Provenance"]
         direction TB
-        A1["fetch_prices.py<br/>data.gov.in API <span style='color:#7e7e7e;font-size:10px;'>[1.5s]</span><br/><b>1,618,582</b> records ingested<br/><i>402 commodities ~ 36 states</i>"]
+        A1["fetch_prices.py<br/>data.gov.in API <span style='color:#7e7e7e;font-size:10px;'>[16.0s]</span><br/><b>1,628,308</b> records ingested<br/><i>402 commodities ~ 36 states</i>"]
         A2["prices_varietywise.py<br/>Archive scanner <span style='color:#7e7e7e;font-size:10px;'>[0.0s]</span><br/>Supplementary 60d recent prices<br/><i>Resource 35985678</i>"]
         A3["fetch_rainfall.py<br/>IMD Grids <br/><b>2,278</b> records<br/><i>34 sub-divisions ~ 2021--2026</i>"]
         A4["fetch_ndvi.py<br/>Sentinel Hub <br/><b>3,663</b> vegetation records<br/><i>605 districts</i>"]
         A5["ingest_historical_csv.py <span style='color:#7e7e7e;font-size:10px;'>[-]</span><br/>CSV backfill ~ Ashoka archive"]
         A6["district_map.py<br/>Sub-division mapping <br/><b>860</b> mappings loaded<br/><i>State -> District -> Sub-division</i>"]
-        A7["backfill_state.py <span style='color:#7e7e7e;font-size:10px;'>[1.6s]</span><br/>State name resolution<br/><b>1,618,582</b> rows populated<br/><i>0 rows still empty</i>"]
-        A8["data_lineage.py<br/>Provenance tracking <br/><b>408</b> records<br/><i>1 source types: prices, varietywise, rainfall</i>"]
+        A7["backfill_state.py <span style='color:#7e7e7e;font-size:10px;'>[1.9s]</span><br/>State name resolution<br/><b>1,628,308</b> rows populated<br/><i>0 rows still empty</i>"]
+        A8["data_lineage.py<br/>Provenance tracking <br/><b>410</b> records<br/><i>1 source types: prices, varietywise, rainfall</i>"]
     end
 
     %% Stage 2: DUCKDB WAREHOUSE
     subgraph S2["02 DUCKDB WAREHOUSE  | Persistent Volume /data"]
-        B1["DuckDB Warehouse<br/>mandi_iq.duckdb<br/><b>1,618,582</b> prices ~ <b>2,278</b> rainfall<br/><b>3,663</b> NDVI ~ <b>24</b> forecast models"]
+        B1["DuckDB Warehouse<br/>mandi_iq.duckdb<br/><b>1,628,308</b> prices ~ <b>2,278</b> rainfall<br/><b>3,663</b> NDVI ~ <b>24</b> forecast models"]
     end
 
     %% Stage 3: ANALYSIS & ML
