@@ -1,7 +1,7 @@
 {
-  "last_run_utc": "2026-09-04T19:49:02.477412+00:00",
-  "outcome": "failure",
-  "new_price_rows": 0,
-  "duration_s": 43.0,
-  "error": "The read operation timed out"
+  "last_run_utc": "2026-09-04T22:30:34.458614+00:00",
+  "outcome": "success",
+  "new_price_rows": 648,
+  "duration_s": 75.7,
+  "error": null
 }
