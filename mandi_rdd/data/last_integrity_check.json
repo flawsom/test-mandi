@@ -1,5 +1,5 @@
 {
-  "run_utc": "2026-09-07T05:06:51.994514+00:00",
+  "run_utc": "2026-09-07T10:40:34.853109+00:00",
   "overall": "warn",
   "checks": {
     "connectivity": {
@@ -8,7 +8,7 @@
     },
     "min_commodities": {
       "status": "ok",
-      "message": "407 distinct commodities"
+      "message": "409 distinct commodities"
     },
     "min_districts": {
       "status": "ok",
@@ -16,14 +16,14 @@
     },
     "row_count": {
       "status": "ok",
-      "message": "1,698,730 price rows across 407 commodities, 36 states",
+      "message": "1,703,650 price rows across 409 commodities, 36 states",
       "extras": {
-        "n_prices": 1698730
+        "n_prices": 1703650
       }
     },
     "row_count_drift": {
       "status": "ok",
-      "message": "Row count grew 0.4% (1,691,845 -> 1,698,730)"
+      "message": "Row count grew 0.3% (1,698,730 -> 1,703,650)"
     },
     "date_sanity": {
       "status": "ok",
