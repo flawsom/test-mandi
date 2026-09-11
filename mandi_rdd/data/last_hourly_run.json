@@ -1,7 +1,7 @@
 {
-  "last_run_utc": "2026-09-11T14:37:07.049114+00:00",
-  "outcome": "success",
-  "new_price_rows": 3098,
-  "duration_s": 77.6,
-  "error": null
+  "last_run_utc": "2026-09-11T18:44:38.056224+00:00",
+  "outcome": "failure",
+  "new_price_rows": 0,
+  "duration_s": 15.7,
+  "error": "HTTP Error 500: Internal Server Error"
 }
