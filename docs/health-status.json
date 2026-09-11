@@ -1,10 +1,10 @@
 {
   "schema": 2,
-  "generated_at": "2026-09-11T10:44:50Z",
+  "generated_at": "2026-09-11T16:00:28Z",
   "overall": "unhealthy",
   "exit_code": 1,
   "min_prices": 1000000,
-  "latest_db_reference": 1774160,
+  "latest_db_reference": 1777258,
   "serving_latest": [
     "Vercel"
   ],
@@ -19,10 +19,10 @@
   "surfaces": {
     "Vercel": {
       "verdict": "LATEST",
-      "n_prices": 1774160,
+      "n_prices": 1777258,
       "http_status": 200,
       "kind": "api",
-      "note": "matches latest DB (1,774,160 rows)",
+      "note": "matches latest DB (1,777,258 rows)",
       "url": "https://test-mandi.vercel.app/health",
       "attempts": 1,
       "retried": false
@@ -58,7 +58,7 @@
       "retried": false
     }
   },
-  "table": "  Surface        | Verdict       |    n_prices | Notes\n  ---------------+---------------+-------------+-----------------------------\n  Vercel         | LATEST        |   1,774,160 | matches latest DB (1,774,160 rows)\n  Northflank     | DOWN          |           - | HTTP 503: Service Unavailable (after 3 attempts) [retried 3x]\n  Streamlit      | UP (auth)     |           - | auth redirect \u2014 count unavailable\n  GitHub Pages   | UP (static)   |           - | HTTP 200 \u2014 no JSON count expected\n\n  Latest DB reference: 1,774,160 rows\n  Serving latest DB : Vercel\n  Down surfaces     : Northflank\n  Count unavailable : Streamlit, GitHub Pages",
+  "table": "  Surface        | Verdict       |    n_prices | Notes\n  ---------------+---------------+-------------+-----------------------------\n  Vercel         | LATEST        |   1,777,258 | matches latest DB (1,777,258 rows)\n  Northflank     | DOWN          |           - | HTTP 503: Service Unavailable (after 3 attempts) [retried 3x]\n  Streamlit      | UP (auth)     |           - | auth redirect \u2014 count unavailable\n  GitHub Pages   | UP (static)   |           - | HTTP 200 \u2014 no JSON count expected\n\n  Latest DB reference: 1,777,258 rows\n  Serving latest DB : Vercel\n  Down surfaces     : Northflank\n  Count unavailable : Streamlit, GitHub Pages",
   "history": [
     {
       "generated_at": "2026-08-04T08:37:18Z",
@@ -421,5 +421,5 @@
       }
     }
   ],
-  "signature": "77f3be90de9387f8"
+  "signature": "99d3ae81867d247d"
 }
