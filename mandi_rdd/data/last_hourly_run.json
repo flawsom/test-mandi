@@ -1,7 +1,7 @@
 {
-  "last_run_utc": "2026-09-17T06:34:17.133996+00:00",
-  "outcome": "failure",
-  "new_price_rows": 0,
-  "duration_s": 67.1,
-  "error": "IncompleteRead(1326908 bytes read, 610336 more expected)"
+  "last_run_utc": "2026-09-17T12:46:31.020347+00:00",
+  "outcome": "success",
+  "new_price_rows": 9204,
+  "duration_s": 78.4,
+  "error": null
 }
