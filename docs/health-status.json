@@ -1,10 +1,10 @@
 {
   "schema": 2,
-  "generated_at": "2026-09-24T03:30:24Z",
+  "generated_at": "2026-09-24T11:14:10Z",
   "overall": "healthy",
   "exit_code": 0,
   "min_prices": 1000000,
-  "latest_db_reference": 1962475,
+  "latest_db_reference": 1974156,
   "serving_latest": [
     "Vercel",
     "Northflank"
@@ -18,20 +18,20 @@
   "surfaces": {
     "Vercel": {
       "verdict": "LATEST",
-      "n_prices": 1962475,
+      "n_prices": 1974156,
       "http_status": 200,
       "kind": "api",
-      "note": "matches latest DB (1,962,475 rows)",
+      "note": "matches latest DB (1,974,156 rows)",
       "url": "https://test-mandi.vercel.app/health",
       "attempts": 1,
       "retried": false
     },
     "Northflank": {
       "verdict": "LATEST",
-      "n_prices": 1962475,
+      "n_prices": 1974156,
       "http_status": 200,
       "kind": "api",
-      "note": "matches latest DB (1,962,475 rows)",
+      "note": "matches latest DB (1,974,156 rows)",
       "url": "https://p01--mandiiq--zbvjrztgjqgw.code.run/health",
       "attempts": 1,
       "retried": false
@@ -57,7 +57,7 @@
       "retried": false
     }
   },
-  "table": "  Surface        | Verdict       |    n_prices | Notes\n  ---------------+---------------+-------------+-----------------------------\n  Vercel         | LATEST        |   1,962,475 | matches latest DB (1,962,475 rows)\n  Northflank     | LATEST        |   1,962,475 | matches latest DB (1,962,475 rows)\n  Streamlit      | UP (auth)     |           - | auth redirect \u2014 count unavailable\n  GitHub Pages   | UP (static)   |           - | HTTP 200 \u2014 no JSON count expected\n\n  Latest DB reference: 1,962,475 rows\n  Serving latest DB : Vercel, Northflank\n  Count unavailable : Streamlit, GitHub Pages",
+  "table": "  Surface        | Verdict       |    n_prices | Notes\n  ---------------+---------------+-------------+-----------------------------\n  Vercel         | LATEST        |   1,974,156 | matches latest DB (1,974,156 rows)\n  Northflank     | LATEST        |   1,974,156 | matches latest DB (1,974,156 rows)\n  Streamlit      | UP (auth)     |           - | auth redirect \u2014 count unavailable\n  GitHub Pages   | UP (static)   |           - | HTTP 200 \u2014 no JSON count expected\n\n  Latest DB reference: 1,974,156 rows\n  Serving latest DB : Vercel, Northflank\n  Count unavailable : Streamlit, GitHub Pages",
   "history": [
     {
       "generated_at": "2026-08-05T04:23:06Z",
@@ -420,5 +420,5 @@
       }
     }
   ],
-  "signature": "024134d38fc9dae8"
+  "signature": "8e373b0f72bbe22a"
 }
