@@ -1,7 +1,7 @@
 {
-  "last_run_utc": "2026-09-27T08:30:19.499819+00:00",
+  "last_run_utc": "2026-09-27T14:16:47.561183+00:00",
   "outcome": "failure",
   "new_price_rows": 0,
-  "duration_s": 50.2,
+  "duration_s": 87.2,
   "error": "HTTP Error 502: Bad Gateway"
 }
