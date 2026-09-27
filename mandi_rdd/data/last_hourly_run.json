@@ -1,7 +1,7 @@
 {
-  "last_run_utc": "2026-09-26T23:07:00.430344+00:00",
+  "last_run_utc": "2026-09-27T01:41:24.937221+00:00",
   "outcome": "failure",
   "new_price_rows": 0,
-  "duration_s": 93.4,
-  "error": "The read operation timed out"
+  "duration_s": 30.5,
+  "error": "HTTP Error 502: Bad Gateway"
 }
