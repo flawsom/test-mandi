@@ -1,7 +1,7 @@
 {
-  "last_run_utc": "2026-09-28T07:27:13.441060+00:00",
+  "last_run_utc": "2026-09-28T15:48:48.193134+00:00",
   "outcome": "failure",
   "new_price_rows": 0,
-  "duration_s": 98.1,
-  "error": "The read operation timed out"
+  "duration_s": 45.8,
+  "error": "HTTP Error 503: Service Unavailable"
 }
