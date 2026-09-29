@@ -1,7 +1,7 @@
 {
-  "last_run_utc": "2026-09-29T08:56:38.778793+00:00",
+  "last_run_utc": "2026-09-29T16:05:33.958936+00:00",
   "outcome": "failure",
   "new_price_rows": 0,
-  "duration_s": 45.1,
-  "error": "HTTP Error 500: Internal Server Error"
+  "duration_s": 41.8,
+  "error": "<urlopen error timed out>"
 }
