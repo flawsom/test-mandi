@@ -1,7 +1,7 @@
 {
-  "last_run_utc": "2026-10-05T07:33:22.474556+00:00",
+  "last_run_utc": "2026-10-05T17:19:36.161594+00:00",
   "outcome": "failure",
   "new_price_rows": 0,
-  "duration_s": 41.1,
-  "error": "<urlopen error timed out>"
+  "duration_s": 12.4,
+  "error": "<urlopen error [Errno 111] Connection refused>"
 }
