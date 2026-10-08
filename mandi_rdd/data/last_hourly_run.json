@@ -1,7 +1,7 @@
 {
-  "last_run_utc": "2026-10-07T22:13:29.300064+00:00",
+  "last_run_utc": "2026-10-08T02:13:27.057726+00:00",
   "outcome": "failure",
   "new_price_rows": 0,
-  "duration_s": 41.2,
+  "duration_s": 47.1,
   "error": "<urlopen error timed out>"
 }
