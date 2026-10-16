@@ -1,7 +1,7 @@
 {
-  "last_run_utc": "2026-10-16T17:48:32.723151+00:00",
+  "last_run_utc": "2026-10-16T21:36:26.707100+00:00",
   "outcome": "failure",
   "new_price_rows": 0,
-  "duration_s": 606.7,
-  "error": "IncompleteRead(1319077 bytes read, 587301 more expected)"
+  "duration_s": 42.0,
+  "error": "<urlopen error timed out>"
 }
