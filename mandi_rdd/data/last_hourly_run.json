@@ -1,7 +1,7 @@
 {
-  "last_run_utc": "2026-11-23T15:12:44.644939+00:00",
+  "last_run_utc": "2026-11-24T02:30:31.121509+00:00",
   "outcome": "failure",
   "new_price_rows": 0,
-  "duration_s": 41.9,
-  "error": "<urlopen error timed out>"
+  "duration_s": 11.4,
+  "error": "<urlopen error [Errno 113] No route to host>"
 }
